@@ -27,4 +27,80 @@ public class UserInfo {
     private int sellCounts;
     @Column(name = "buy_counts", length = 5, comment = "购买数量")
     private int buyCounts;
+    /**
+     * 头像
+     */
+    private ImageObj imageObj;
+
+    public ImageObj getImageObj() {
+        return imageObj;
+    }
+
+    public void setImageObj(ImageObj imageObj) {
+        this.imageObj = imageObj;
+    }
+
+    public String getUserId() {
+        return userId;
+    }
+
+    public void setUserId(String userId) {
+        this.userId = userId;
+    }
+
+    public String getMobile() {
+        return mobile;
+    }
+
+    public void setMobile(String mobile) {
+        this.mobile = mobile;
+    }
+
+    public String getUserName() {
+        return userName;
+    }
+
+    public void setUserName(String userName) {
+        this.userName = userName;
+    }
+
+    public String getNickName() {
+        return nickName;
+    }
+
+    public void setNickName(String nickName) {
+        this.nickName = nickName;
+    }
+
+    public BigDecimal getIncome() {
+        return income;
+    }
+
+    public void setIncome(BigDecimal income) {
+        this.income = income;
+    }
+
+    public BigDecimal getSumCost() {
+        return sumCost;
+    }
+
+    public void setSumCost(BigDecimal sumCost) {
+        this.sumCost = sumCost;
+    }
+
+    public int getSellCounts() {
+        return sellCounts;
+    }
+
+    public void setSellCounts(int sellCounts) {
+        this.sellCounts = sellCounts;
+    }
+
+    public int getBuyCounts() {
+        return buyCounts;
+    }
+
+    public void setBuyCounts(int buyCounts) {
+        this.buyCounts = buyCounts;
+    }
 }
