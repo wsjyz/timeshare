@@ -27,10 +27,19 @@ public class UserInfo {
     private int sellCounts;
     @Column(name = "buy_counts", length = 5, comment = "购买数量")
     private int buyCounts;
+    private String description;
     /**
      * 头像
      */
     private ImageObj imageObj;
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
 
     public ImageObj getImageObj() {
         return imageObj;

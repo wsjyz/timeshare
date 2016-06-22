@@ -30,9 +30,9 @@
                         <div class="item-content">
                             <div class="item-media"><i class="icon icon-form-name"></i></div>
                             <div class="item-inner">
-                                <div class="item-title label">话题名称</div>
+                                <div class="item-title label">话题名称：</div>
                                 <div class="item-input">
-                                    <input type="text" placeholder="Your name" name="title" id="titleId">
+                                    <input type="text" placeholder="请填写名称" name="title" id="titleId" value="<#if item??>${item.title}<#else></#if>">
                                 </div>
                             </div>
                         </div>
@@ -41,7 +41,7 @@
                         <div class="item-content">
                             <div class="item-media"><i class="icon icon-form-email"></i></div>
                             <div class="item-inner">
-                                <div class="item-title label">类型</div>
+                                <div class="item-title label">类型：</div>
                                 <div class="item-input">
                                     <div class="row">
                                         <div class="col-50"><input type="radio" name="itemType" value="tel" checked>电话直连</div>
@@ -55,8 +55,8 @@
                         <div class="item-content">
                             <div class="item-media"><i class="icon icon-form-password"></i></div>
                             <div class="item-inner">
-                                <div class="item-title label">费用：50元/次<input type="hidden" name="price" value="50"/> </div>
-                                <div class="item-input"><span class="pull-right">时间：<input type="text" name="useCount" id="useCountId" style="width: 2rem;display: inline">小时</span></div>
+                                <div class="item-input">费用：<input type="text" name="price" value="50" style="width: 2rem;display: inline"/>元/次 </div>
+                                <div class="item-input">时间：<input type="text" name="useCount" id="useCountId" value="60" style="width: 2rem;display: inline">分钟</div>
 
                             </div>
                         </div>
@@ -67,7 +67,7 @@
                             <div class="item-inner">
                                 <div class="item-title label">介绍：</div>
                                 <div class="item-input">
-                                    <textarea name="description" style="width: 100%"></textarea>
+                                    <textarea name="description" style="width: 100%" placeholder="请填写介绍"><#if item??>${item.description}<#else></#if></textarea>
                                 </div>
                             </div>
                         </div>
@@ -78,7 +78,7 @@
             <div class="content-block">
                 <div class="row">
                     <div class="col-33"><a href="#" class="button button-big button-fill button-danger" id="saveDraftBtn">保存草稿</a></div>
-                    <div class="col-33"><a href="#" class="button button-big button-fill button-success">预览</a></div>
+                    <div class="col-33"><a href="#" class="button button-big button-fill button-success" id="previewBtn">预览</a></div>
                     <div class="col-33"><a href="#" class="button button-big button-fill" id="savePreBtn">申请上架</a></div>
                 </div>
             </div>
@@ -118,6 +118,14 @@
             $('#itemStatusId').val('apply_for_online');
             $(this).attr('disabled',false);
             $.showIndicator();
+            $('form').submit();
+        }
+    });
+    $("#previewBtn").on('click', function () {
+        var vali = checkForm();
+        if(vali){
+            $.showIndicator();
+            $('form').attr('action','${request.contextPath}/item/preview');
             $('form').submit();
         }
     });

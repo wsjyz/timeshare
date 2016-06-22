@@ -1,8 +1,10 @@
 package com.timeshare.service.impl;
 
+import com.timeshare.dao.UserDAO;
 import com.timeshare.domain.OpenPage;
 import com.timeshare.domain.UserInfo;
 import com.timeshare.service.UserService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 /**
@@ -10,6 +12,9 @@ import org.springframework.stereotype.Service;
  */
 @Service("UserService")
 public class UserServiceImpl implements UserService{
+
+    @Autowired
+    UserDAO userDAO;
 
     @Override
     public void saveUser(UserInfo info) {
@@ -23,7 +28,7 @@ public class UserServiceImpl implements UserService{
 
     @Override
     public UserInfo findUserByUserId(String userId) {
-        return null;
+        return userDAO.findUserByUserId(userId);
     }
 
     @Override
