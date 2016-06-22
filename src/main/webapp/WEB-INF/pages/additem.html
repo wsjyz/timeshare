@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>新增项目</title>
+    <meta name="viewport" content="initial-scale=1, maximum-scale=1">
+    <link rel="shortcut icon" href="/favicon.ico">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+
+    <link rel="stylesheet" href="//g.alicdn.com/msui/sm/0.6.2/css/sm.min.css">
+    <link rel="stylesheet" href="//g.alicdn.com/msui/sm/0.6.2/css/sm-extend.min.css">
+
+</head>
+<body>
+<div class="page-group">
+    <div class="page page-current">
+        <!-- 你的html代码 -->
+        <header class="bar bar-nav">
+            <h1 class='title'>新增项目</h1>
+        </header>
+        <div class="content">
+            <div class="list-block">
+                <ul>
+                    <form method="post" action="/time/item/save">
+                        <input type="hidden" name="itemStatus" id="itemStatusId">
+                    <!-- Text inputs -->
+                    <li>
+                        <div class="item-content">
+                            <div class="item-media"><i class="icon icon-form-name"></i></div>
+                            <div class="item-inner">
+                                <div class="item-title label">话题名称</div>
+                                <div class="item-input">
+                                    <input type="text" placeholder="Your name" name="title" id="titleId">
+                                </div>
+                            </div>
+                        </div>
+                    </li>
+                    <li>
+                        <div class="item-content">
+                            <div class="item-media"><i class="icon icon-form-email"></i></div>
+                            <div class="item-inner">
+                                <div class="item-title label">类型</div>
+                                <div class="item-input">
+                                    <div class="row">
+                                        <div class="col-50"><input type="radio" name="itemType" value="tel" checked>电话直连</div>
+                                        <div class="col-50"><input type="radio" name="itemType" value="meet">直约面对面</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </li>
+                    <li>
+                        <div class="item-content">
+                            <div class="item-media"><i class="icon icon-form-password"></i></div>
+                            <div class="item-inner">
+                                <div class="item-title label">费用：50元/次<input type="hidden" name="price" value="50"/> </div>
+                                <div class="item-input"><span class="pull-right">时间：<input type="text" name="useCount" id="useCountId" style="width: 2rem;display: inline">小时</span></div>
+
+                            </div>
+                        </div>
+                    </li>
+                    <li>
+                        <div class="item-content">
+                            <div class="item-media"><i class="icon icon-form-gender"></i></div>
+                            <div class="item-inner">
+                                <div class="item-title label">介绍：</div>
+                                <div class="item-input">
+                                    <textarea name="description" style="width: 100%"></textarea>
+                                </div>
+                            </div>
+                        </div>
+                    </li>
+                    </form>
+                </ul>
+            </div>
+            <div class="content-block">
+                <div class="row">
+                    <div class="col-33"><a href="#" class="button button-big button-fill button-danger" id="saveDraftBtn">保存草稿</a></div>
+                    <div class="col-33"><a href="#" class="button button-big button-fill button-success">预览</a></div>
+                    <div class="col-33"><a href="#" class="button button-big button-fill" id="savePreBtn">申请上架</a></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script type='text/javascript' src='//g.alicdn.com/sj/lib/zepto/zepto.min.js' charset='utf-8'></script>
+<script type='text/javascript' src='//g.alicdn.com/msui/sm/0.6.2/js/sm.min.js' charset='utf-8'></script>
+<script type='text/javascript' src='//g.alicdn.com/msui/sm/0.6.2/js/sm-extend.min.js' charset='utf-8'></script>
+<script>
+    function checkForm(){
+        var title = $('#titleId').val();
+        if(title == ''){
+            $.toast('请填写标题');
+            return false;
+        }
+        var useCount = $('#useCountId').val();
+        if(useCount == ''){
+            $.toast('请填写时间');
+            return false;
+        }
+        return true;
+    }
+    $("#saveDraftBtn").on('click', function () {
+        var vali = checkForm();
+        if(vali){
+            $('#itemStatusId').val('draft');
+            $(this).attr('disabled',false);
+            $.showIndicator();
+            $('form').submit();
+        }
+    });
+    $("#savePreBtn").on('click', function () {
+        var vali = checkForm();
+        if(vali){
+            $('#itemStatusId').val('apply_for_online');
+            $(this).attr('disabled',false);
+            $.showIndicator();
+            $('form').submit();
+        }
+    });
+</script>
+</body>
+</html>

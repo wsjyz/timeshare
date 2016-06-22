@@ -8,7 +8,7 @@ import com.timeshare.domain.OpenPage;
  */
 public interface ItemService {
 
-    void saveItem(Item info);
+    String saveItem(Item info);
 
     String modifyItem(Item Item);
 

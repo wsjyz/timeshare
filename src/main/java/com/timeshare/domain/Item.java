@@ -12,7 +12,16 @@ public class Item extends BaseDomain{
     private BigDecimal score;
     private String description;
     private String itemType;
+    private String itemStatus;
     private int useCount;
+
+    public String getItemStatus() {
+        return itemStatus;
+    }
+
+    public void setItemStatus(String itemStatus) {
+        this.itemStatus = itemStatus;
+    }
 
     public String getTitle() {
         return title;

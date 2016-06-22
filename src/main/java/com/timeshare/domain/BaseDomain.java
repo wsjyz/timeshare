@@ -10,19 +10,19 @@ import java.util.Date;
  */
 public class BaseDomain implements java.io.Serializable {
 
-    @Column(name="user_id",length = 32,comment = "创建人")
-    private String corpId;
+    @Column(name="create_user_id",length = 32,comment = "创建人")
+    private String userId;
     @Column(name="create_user_name",length = 32,comment = "创建人姓名")
     private String createUserName;
     @Column(name="opt_time",length = 20,comment = "操作时间yyyy-MM-dd HH:mm:ss")
     String optTime;//操作时间
 
-    public String getCorpId() {
-        return corpId;
+    public String getUserId() {
+        return userId;
     }
 
-    public void setCorpId(String corpId) {
-        this.corpId = corpId;
+    public void setUserId(String userId) {
+        this.userId = userId;
     }
 
     public String getOptTime() {

@@ -8,7 +8,7 @@ import com.timeshare.domain.Item;
  */
 public interface ItemDAO {
 
-    void saveItem(Item info);
+    String saveItem(Item info);
 
     String modifyItem(Item Item);
 
