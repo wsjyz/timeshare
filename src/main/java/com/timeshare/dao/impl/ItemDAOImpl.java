@@ -5,11 +5,15 @@ import com.timeshare.dao.ItemDAO;
 import com.timeshare.domain.Item;
 import com.timeshare.domain.OpenPage;
 import com.timeshare.utils.CommonStringUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.jdbc.core.PreparedStatementSetter;
+import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Repository;
 
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.List;
 
 /**
  * Created by user on 2016/6/21.
@@ -60,7 +64,39 @@ public class ItemDAOImpl extends BaseDAO implements ItemDAO {
     }
 
     @Override
-    public OpenPage<Item> findItemPage(String mobile, String nickName, OpenPage page) {
-        return null;
+    public List<Item> findItemPage(Item item, int startIndex, int loadSize) {
+        StringBuilder reviewSql = new StringBuilder("");
+        reviewSql.append("select * from t_item where 1=1");
+        if(item != null){
+            if (StringUtils.isNotEmpty(item.getTitle())) {
+                reviewSql.append(" and title ='"+item.getTitle()+"' ");
+            }
+            if (StringUtils.isNotEmpty(item.getItemStatus())) {
+                reviewSql.append(" and item_status = '"+item.getItemStatus()+"' ");
+            }
+        }
+
+        reviewSql.append(" limit ?,?");
+        List<Item> itemList = getJdbcTemplate().query(reviewSql.toString(),new Object[]{startIndex,loadSize},new ItemMapper());
+
+        return itemList;
+    }
+    public class ItemMapper implements RowMapper<Item>{
+
+        @Override
+        public Item mapRow(ResultSet rs, int i) throws SQLException {
+            Item item = new Item();
+            item.setCreateUserName(rs.getString("create_user_name"));
+            item.setUserId(rs.getString("create_user_id"));
+            item.setOptTime(rs.getString("opt_time"));
+            item.setDescription(rs.getString("description"));
+            item.setItemStatus(rs.getString("item_status"));
+            item.setPrice(rs.getBigDecimal("price"));
+            item.setScore(rs.getBigDecimal("score"));
+            item.setItemType(rs.getString("item_type"));
+            item.setTitle(rs.getString("title"));
+            item.setUseCount(rs.getInt("use_count"));
+            return item;
+        }
     }
 }

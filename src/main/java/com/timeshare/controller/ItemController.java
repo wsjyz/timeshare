@@ -13,11 +13,15 @@ import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
 import java.net.URLEncoder;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by user on 2016/6/21.
@@ -45,10 +49,22 @@ public class ItemController {
 
         return "additem";
     }
+
     @RequestMapping(value = "/to-list")
     public String itemList() {
         return "selltime";
     }
+
+    @RequestMapping(value = "/list")
+    @ResponseBody
+    public List<Item> findItemList(@RequestParam int startIndex, @RequestParam int loadSize) {
+        List<Item> itemList = new ArrayList<Item>();
+        Item parms = new Item();
+        parms.setUserId("admin");
+        itemList = itemService.findItemPage(parms,startIndex,loadSize);
+        return itemList;
+    }
+
     @RequestMapping(value = "/save",method = RequestMethod.POST)
     public ModelAndView save(Item item) {
         ModelAndView modelAndView = new ModelAndView("info");

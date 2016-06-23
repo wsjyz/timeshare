@@ -56,7 +56,7 @@
                             <div class="item-media"><i class="icon icon-form-password"></i></div>
                             <div class="item-inner">
                                 <div class="item-input">费用：<input type="text" name="price" value="50" style="width: 2rem;display: inline"/>元/次 </div>
-                                <div class="item-input">时间：<input type="text" name="useCount" id="useCountId" value="60" style="width: 2rem;display: inline">分钟</div>
+                                <div class="item-input">时间：<input type="text" name="duration" id="durationId" value="60" style="width: 2rem;display: inline">分钟</div>
 
                             </div>
                         </div>
@@ -96,8 +96,8 @@
             $.toast('请填写标题');
             return false;
         }
-        var useCount = $('#useCountId').val();
-        if(useCount == ''){
+        var duration = $('#durationId').val();
+        if(duration == ''){
             $.toast('请填写时间');
             return false;
         }

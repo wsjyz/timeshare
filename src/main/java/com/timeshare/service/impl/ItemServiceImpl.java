@@ -7,6 +7,8 @@ import com.timeshare.service.ItemService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 /**
  * Created by user on 2016/6/21.
  */
@@ -36,7 +38,7 @@ public class ItemServiceImpl implements ItemService {
     }
 
     @Override
-    public OpenPage<Item> findItemPage(String mobile, String nickName, OpenPage page) {
-        return null;
+    public List<Item> findItemPage(Item item,int startIndex,int loadSize) {
+        return itemDAO.findItemPage(item,startIndex,loadSize);
     }
 }

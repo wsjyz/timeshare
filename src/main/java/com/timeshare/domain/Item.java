@@ -14,6 +14,15 @@ public class Item extends BaseDomain{
     private String itemType;
     private String itemStatus;
     private int useCount;
+    private int duration;
+
+    public int getDuration() {
+        return duration;
+    }
+
+    public void setDuration(int duration) {
+        this.duration = duration;
+    }
 
     public String getItemStatus() {
         return itemStatus;
@@ -40,6 +49,9 @@ public class Item extends BaseDomain{
     }
 
     public BigDecimal getScore() {
+        if(score == null){
+            return new BigDecimal(0);
+        }
         return score;
     }
 

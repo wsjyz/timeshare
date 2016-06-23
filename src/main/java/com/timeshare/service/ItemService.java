@@ -1,7 +1,7 @@
 package com.timeshare.service;
 
 import com.timeshare.domain.Item;
-import com.timeshare.domain.OpenPage;
+import java.util.List;
 
 /**
  * Created by adam on 2016/6/11.
@@ -16,6 +16,6 @@ public interface ItemService {
 
     String deleteById(String itemId);
 
-    OpenPage<Item> findItemPage(String mobile, String nickName, OpenPage page);
+    List<Item> findItemPage(Item item,int startIndex,int loadSize);
 
 }
