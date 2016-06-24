@@ -54,7 +54,17 @@ public class ItemDAOImpl extends BaseDAO implements ItemDAO {
     }
 
     @Override
-    public Item findItemByItemId(String ItemId) {
+    public Item findItemByItemId(String itemId) {
+
+        StringBuilder reviewSql = new StringBuilder("");
+        reviewSql.append("select * from t_item where item_id = ?");
+        if(StringUtils.isNotBlank(itemId)){
+            List<Item> itemList = getJdbcTemplate().query(reviewSql.toString(),new Object[]{itemId},new ItemMapper());
+            if(itemList != null && itemList.size() > 0){
+                Item item = itemList.get(0);
+                return item;
+            }
+        }
         return null;
     }
 
@@ -86,6 +96,7 @@ public class ItemDAOImpl extends BaseDAO implements ItemDAO {
         @Override
         public Item mapRow(ResultSet rs, int i) throws SQLException {
             Item item = new Item();
+            item.setItemId(rs.getString("item_id"));
             item.setCreateUserName(rs.getString("create_user_name"));
             item.setUserId(rs.getString("create_user_id"));
             item.setOptTime(rs.getString("opt_time"));

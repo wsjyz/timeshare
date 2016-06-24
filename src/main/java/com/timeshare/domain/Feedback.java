@@ -11,6 +11,16 @@ public class Feedback extends BaseDomain {
 
     private String itemId;
 
+    private String itemTitle;
+
+    public String getItemTitle() {
+        return itemTitle;
+    }
+
+    public void setItemTitle(String itemTitle) {
+        this.itemTitle = itemTitle;
+    }
+
     public String getItemId() {
         return itemId;
     }

@@ -7,6 +7,7 @@ import java.math.BigDecimal;
  */
 public class Item extends BaseDomain{
 
+    private String itemId;
     private String title;
     private BigDecimal price;
     private BigDecimal score;
@@ -15,6 +16,14 @@ public class Item extends BaseDomain{
     private String itemStatus;
     private int useCount;
     private int duration;
+
+    public String getItemId() {
+        return itemId;
+    }
+
+    public void setItemId(String itemId) {
+        this.itemId = itemId;
+    }
 
     public int getDuration() {
         return duration;

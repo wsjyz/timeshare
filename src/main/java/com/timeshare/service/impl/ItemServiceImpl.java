@@ -28,8 +28,8 @@ public class ItemServiceImpl implements ItemService {
     }
 
     @Override
-    public Item findItemByItemId(String ItemId) {
-        return null;
+    public Item findItemByItemId(String itemId) {
+        return itemDAO.findItemByItemId(itemId);
     }
 
     @Override

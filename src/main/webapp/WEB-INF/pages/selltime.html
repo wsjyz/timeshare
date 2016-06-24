@@ -81,9 +81,6 @@
 <script>
     $.init();
     $.showIndicator();
-    setTimeout(function () {
-        $.hideIndicator();
-    }, 2000);
     $("#toAddBtn").on('click', function () {
         $('form').submit();
     });
@@ -109,7 +106,7 @@
             }
             html += '<ul>'+
                     '<li>'+
-                    '<a href="#" class="item-link item-content">'+
+                    '<a href="#" class="item-link item-content" onclick="toView(\''+item.itemId+'\')">'+
                     '<div class="item-inner">'+
                     '<div class="item-title-row">'+
                     '<div class="item-title">'+item.title+'</div>'+
@@ -135,7 +132,7 @@
             // 添加新条目
             $('.infinite-scroll-bottom .list-block').append(html);
         }
-
+        $.hideIndicator();
 
     }
     $.post('${request.contextPath}/item/list', {startIndex: 0,loadSize:itemsPerLoad}, function (response) {
@@ -181,6 +178,9 @@
 
 
     });
+    function toView(id){
+        window.location.href = "${request.contextPath}/item/to-view/"+id;
+    }
 </script>
 </body>
 </html>

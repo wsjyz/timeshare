@@ -11,10 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
 import java.io.UnsupportedEncodingException;
@@ -28,12 +25,10 @@ import java.util.List;
  */
 @Controller
 @RequestMapping(value = "/item")
-public class ItemController {
+public class ItemController extends BaseController{
 
     @Autowired
     ItemService itemService;
-    @Autowired
-    UserService userService;
 
     @RequestMapping(value = "/to-add")
     public String toAdd(String itemJson,ModelMap modelMap) {
@@ -53,6 +48,27 @@ public class ItemController {
     @RequestMapping(value = "/to-list")
     public String itemList() {
         return "selltime";
+    }
+
+    @RequestMapping(value = "/to-view/{itemId}")
+    public String toView(@PathVariable String itemId,Model model) {
+        model.addAttribute("itemId",itemId);
+        return "iteminfo";
+    }
+
+    @RequestMapping(value = "/get-item")
+    @ResponseBody
+    public ItemDTO getItem(@RequestParam String itemId,@CookieValue(value="user-id", defaultValue="") String userId) {
+        Item item = new Item();
+        if(StringUtils.isNotBlank(itemId)){
+            item = itemService.findItemByItemId(itemId);
+        }
+        UserInfo userInfo = getCurrentUser(userId);
+        ItemDTO itemDTO = new ItemDTO();
+        itemDTO.setItem(item);
+        itemDTO.setUserInfo(userInfo);
+        return itemDTO;
+
     }
 
     @RequestMapping(value = "/list")
@@ -84,9 +100,9 @@ public class ItemController {
     }
 
     @RequestMapping(value = "/preview")
-    public String preview(Item item, ModelMap modelMap) {
+    public String preview(Item item, ModelMap modelMap,@CookieValue(value="user-id", defaultValue="") String userId) {
         modelMap.addAttribute("item",item);
-        UserInfo userInfo = userService.findUserByUserId("admin");
+        UserInfo userInfo = getCurrentUser(userId);
         modelMap.addAttribute("user",userInfo);
         String itemJson = JSON.toJSONString(item);
         try {
