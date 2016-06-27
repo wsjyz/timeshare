@@ -17,6 +17,10 @@
 </div>
 <!-- ▲头部 -->
 <!-- ▼主体 -->
+<input type="hidden" id="objId" value="${objId}"/>
+<input type="hidden" id="objType" value="${imageType}"/>
+<input type="hidden" id="imageId" value="${imageId}"/>
+<img src="${imgPath}" id="imageUrl" style="display: none;margin: 0 auto;"/>
 <div class="main-wrap">
     <div id="uploader">
         <div class="queueList fix">
@@ -34,6 +38,22 @@
         </div>
     </div>
 </div>
+<input type="button" value="确定" id="saveImgBtn"/>
 <script type='text/javascript' src='${request.contextPath}/js/upload.js' charset='utf-8'></script>
+<script>
+    (function(){
+        var objId = $('#objId').val();
+        if(objId != ""){
+            ('#imageUrl').css('display','block');
+        }
+        $("#saveImgBtn").on('click', function () {
+            var imageId = $('#imageId').val();
+            var imageUrl = $('#imageUrl').src;
+            $.post('${request.contextPath}/user/save-img', { imageId: imageId, imgUrl:imageUrl}, function(response){
+
+            })
+        });
+    });
+</script>
 </body>
 </html>

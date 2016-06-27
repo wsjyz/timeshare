@@ -24,7 +24,7 @@ public class UploadListener implements ProgressListener {
         ps.setpContentLength(pContentLength);
         ps.setpItems(pItems);
         //更新
-        System.out.println(ps.toString());
+        //System.out.println(ps.toString());
         session.setAttribute("upload_ps", ps);
     }
 }

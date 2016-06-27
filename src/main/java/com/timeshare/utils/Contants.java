@@ -10,5 +10,7 @@ public interface Contants {
 
     String CORPSECRET = "y29rsSXWXEShXkmyBx8mskVSNonvSqvqzQWqMWGbRIXtMkiWxbKRVLRDYqykB2tI";
 
+    String ITEM_SHOW_IMG = "ITEM_SHOW_IMG";
+
 
 }

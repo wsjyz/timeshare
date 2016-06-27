@@ -29,7 +29,7 @@ public class UserInfo {
     private int buyCounts;
     private String description;
     /**
-     * 头像
+     * 展示图片
      */
     private ImageObj imageObj;
 

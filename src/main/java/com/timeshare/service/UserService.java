@@ -1,5 +1,6 @@
 package com.timeshare.service;
 
+import com.timeshare.domain.ImageObj;
 import com.timeshare.domain.OpenPage;
 import com.timeshare.domain.UserInfo;
 
@@ -13,6 +14,10 @@ public interface UserService {
     String modifyUser(UserInfo userInfo);
 
     UserInfo findUserByUserId(String userId);
+
+    ImageObj findUserImg(String userId,String imgType);
+
+    void saveOrUpdateImg(ImageObj obj);
 
     String deleteById(String userId);
 

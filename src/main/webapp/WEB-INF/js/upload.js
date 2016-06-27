@@ -21,6 +21,7 @@
         var inputFile = $filePickerInput[0].files[0];
         var form = new FormData();
         form.append("inputFile", inputFile);
+
         //视图
         var $li = $('<div class="item" data-name=""><p class="imgWrap"></p></div>');
         $li.appendTo($queue);
@@ -41,9 +42,12 @@
             //渲染缩略图
             if (res.success) {
                 var imgUrl = res.thumbUrl;
-                var temp = '<img src="' + imgUrl + '" alt="">';
-                $li.find('.imgWrap').append(temp);
+                // var temp = '<img src="' + imgUrl + '" alt="">';
+                // $li.find('.imgWrap').append(temp);
+                $('#imageUrl').src= imgUrl;
+                $('#imageUrl').css('display','block');
                 $filePickerInput.val('');
+                $filePicker.hide();
             }
         }).fail(function () {
             alert('服务器故障，上传失败');
