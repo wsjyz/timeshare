@@ -17,10 +17,10 @@
 </div>
 <!-- ▲头部 -->
 <!-- ▼主体 -->
-<input type="hidden" id="objId" value="${objId}"/>
+
 <input type="hidden" id="objType" value="${imageType}"/>
 <input type="hidden" id="imageId" value="${imageId}"/>
-<img src="${imgPath}" id="imageUrl" style="display: none;margin: 0 auto;"/>
+<img src="${imgPath}" id="imageUrl" style="display: none;margin: 0 auto;height: 9rem;width: 16rem;"/>
 <div class="main-wrap">
     <div id="uploader">
         <div class="queueList fix">
@@ -41,18 +41,21 @@
 <input type="button" value="确定" id="saveImgBtn"/>
 <script type='text/javascript' src='${request.contextPath}/js/upload.js' charset='utf-8'></script>
 <script>
-    (function(){
-        var objId = $('#objId').val();
-        if(objId != ""){
-            ('#imageUrl').css('display','block');
-        }
-        $("#saveImgBtn").on('click', function () {
-            var imageId = $('#imageId').val();
-            var imageUrl = $('#imageUrl').src;
-            $.post('${request.contextPath}/user/save-img', { imageId: imageId, imgUrl:imageUrl}, function(response){
 
-            })
-        });
+    Zepto(function($) {
+        var imageId = $('#imageId').val();
+        if(imageId != ''){
+            $('#imageUrl').css('display','block');
+        }
+    });
+    $("#saveImgBtn").on('click', function () {
+        var imageId = $('#imageId').val();
+        var imageUrl = $('#imageUrl')[0].src;
+        $.post('${request.contextPath}/user/save-img', { imageId: imageId, imgUrl:imageUrl}, function(response){
+                if(response == 'success'){
+                    alert('修改成功');
+                }
+        })
     });
 </script>
 </body>

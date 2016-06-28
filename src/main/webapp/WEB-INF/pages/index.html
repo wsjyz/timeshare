@@ -1,0 +1,202 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>时刻</title>
+    <meta name="viewport" content="initial-scale=1, maximum-scale=1">
+    <link rel="shortcut icon" href="/favicon.ico">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+
+    <!--<link rel="stylesheet" href="//g.alicdn.com/msui/sm/0.6.2/css/sm.min.css">-->
+    <!--<link rel="stylesheet" href="//g.alicdn.com/msui/sm/0.6.2/css/sm-extend.min.css">-->
+
+    <link rel="stylesheet" href="//g.alicdn.com/msui/sm/0.6.2/css/sm.min.css">
+    <link rel="stylesheet" href="//g.alicdn.com/msui/sm/0.6.2/css/sm-extend.min.css">
+
+    <link rel="apple-touch-icon-precomposed" href="/assets/img/apple-touch-icon-114x114.png">
+    <style type="text/css">
+        .infinite-scroll-preloader {
+            margin-top:-20px;
+        }
+    </style>
+    <script src="//g.alicdn.com/sj/lib/zepto/zepto.min.js"></script>
+
+</head>
+<body>
+<div class="page-group" >
+    <div id="page-swiper" class="page">
+        <div class="bar">
+            <div class="searchbar">
+                <div class="search-input">
+                    <label class="icon icon-search" for="search"></label>
+                    <input type="search" id='search' placeholder='输入关键字...'/>
+                </div>
+            </div>
+        </div>
+        <nav class="bar bar-tab">
+            <a class="tab-item active" href="#">
+                <span class="icon icon-cart"></span>
+                <span class="tab-label">买时间</span>
+            </a>
+            <a class="tab-item" href="sui/selltime.html">
+                <span class="icon icon-star"></span>
+                <span class="tab-label">卖时间</span>
+            </a>
+            <a class="tab-item" href="#">
+                <span class="icon icon-me"></span>
+                <span class="tab-label">我的</span>
+            </a>
+        </nav>
+        <div class="content" id=''>
+            <div class="swiper-container" data-space-between='10' style="position: relative;padding-bottom: 0px;">
+                <div class="swiper-wrapper">
+                    <div class="swiper-slide"><img  src="http://img.pconline.com.cn/images/upload/upc/tx/wallpaper/1208/11/c0/12830511_1344652782663_320x480.jpg" alt="" style='width: 100%'></div>
+                    <div class="swiper-slide"><img  src="http://read.pudn.com/downloads114/sourcecode/embed/480584/04-EduKit2410%20Linux/examples/0801_gui-qt/root/Documents/images/HeHua_320x240.jpg" alt="" style='width: 100%'></div>
+                    <div class="swiper-slide"><img  src="http://comment.b0.upaiyun.com/system/comments/attachments/006/269/881/original/1379816944-320x240.jpg" alt="" style='width: 100%'></div>
+                </div>
+                <div class="swiper-pagination" style="position: absolute;right: 20px;width: 20%;bottom: 20px"></div>
+                <div  style="position: absolute;right: 10px;width: 70%;bottom: 20px;z-index: 999;font-weight: bold;color: #ffffff">让你培训尖叫的5种武器</div>
+            </div>
+            <div class="buttons-tab">
+                <a href="#tab1" class="tab-link active button">推荐</a>
+                <a href="#tab2" class="tab-link button">最新</a>
+                <a href="#tab3" class="tab-link button">最火</a>
+                <a href="#tab4" class="tab-link button">最优</a>
+            </div>
+            <div class="content-block" style="padding: 0px;margin: 0px;">
+                <div class="tabs">
+                    <div id="tab1" class="tab active infinite-scroll infinite-scroll-bottom" data-distance="100">
+
+                        <div class="list-block media-list" style="margin-top:  0px;">
+
+                        </div>
+
+                    </div>
+                    <div id="tab2" class="tab">
+                        <div class="content-block">
+                            <p>This is tab 2 content</p>
+                        </div>
+                    </div>
+                    <div id="tab3" class="tab">
+                        <div class="content-block">
+                            <p>This is tab 3 content</p>
+                        </div>
+                    </div>
+                    <div id="tab4" class="tab">
+                        <div class="content-block">
+                            <p>This is tab 4 content</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+<script src="//g.alicdn.com/msui/sm/0.6.2/js/sm.min.js"></script>
+<script src="//g.alicdn.com/msui/sm/0.6.2/js/sm-extend.min.js"></script>
+<script>
+    $.init();
+    $.showIndicator();
+    var loading = false;
+    // 最多可加载的条目
+    var maxItems = 100;
+
+    // 每次加载添加多少条目
+    var itemsPerLoad = 10;
+
+    function addItems(number, lastIndex,data) {
+        // 生成新条目的HTML
+        var html = '';
+        var dataLength = 0;
+        $.each(data, function(i, item){
+            var itemStatus = "";
+            if(item.itemStatus == 'for_sale'){
+                itemStatus = "销售中";
+            }else if(item.itemStatus == 'undercarriage'){
+                itemStatus = "已下架";
+            }else if(item.itemStatus == 'draft'){
+                itemStatus = "草稿";
+            }
+
+            html += '<ul>'+
+                    '<li>'+
+                    '<a href="#" class="item-link item-content" onclick="toView(\''+item.itemId+'\')">'+
+                    '<div class="item-media"><img src="http://gqianniu.alicdn.com/bao/uploaded/i4//tfscom/i3/TB10LfcHFXXXXXKXpXXXXXXXXXX_!!0-item_pic.jpg_250x250q60.jpg" style="width: 4rem;"></div>'+
+                    '<div class="item-inner">'+
+                    '<div class="item-title-row">'+
+                    '<div class="item-title">'+item.title+'</div>'+
+                    '<div class="item-after">'+itemStatus+'</div>'+
+                    '</div>'+
+                    '<div class="item-text">'+
+                    '<div class="row">'+
+                    '<div class="col-60">'+item.useCount+'人咨询过</div>'+
+                    '<div class="col-40">'+item.score+'分</div>'+
+                    '</div>'+
+                    '</div>'+
+                    '</div>'+
+                    '</a>'+
+                    '</li>'+
+                    '</ul>';
+            dataLength += 1;
+        });
+        if(dataLength == 0){
+            $('.no-record').show();
+            $('.infinite-scroll-preloader').remove();
+        }else{
+            $('.no-record').hide();
+            // 添加新条目
+            $('.infinite-scroll-bottom .list-block').append(html);
+        }
+        $.hideIndicator();
+
+    }
+    $.post('${request.contextPath}/item/list', {startIndex: 0,loadSize:itemsPerLoad}, function (response) {
+        //预先加载20条
+        addItems(itemsPerLoad, 0,response);
+    });
+
+
+    // 上次加载的序号
+
+    var lastIndex = 10;
+
+    // 注册'infinite'事件处理函数
+    $(document).on('infinite', '.infinite-scroll-bottom',function() {
+        // 如果正在加载，则退出
+        if (loading) return;
+
+        // 设置flag
+        loading = true;
+        $.post('${request.contextPath}/item/list', {startIndex: lastIndex,loadSize:itemsPerLoad}, function (response) {
+
+            // 模拟1s的加载过程
+            setTimeout(function() {
+                // 重置加载flag
+                loading = false;
+
+                if (lastIndex >= maxItems) {
+                    // 加载完毕，则注销无限加载事件，以防不必要的加载
+                    $.detachInfiniteScroll($('.infinite-scroll'));
+                    // 删除加载提示符
+                    $('.infinite-scroll-preloader').remove();
+                    return;
+                }
+
+                // 添加新条目
+                addItems(itemsPerLoad, lastIndex,response);
+                // 更新最后加载的序号
+                lastIndex = $('.list-block ul').length;
+                //容器发生改变,如果是js滚动，需要刷新滚动
+                $.refreshScroller();
+            }, 1000);
+        });
+
+
+    });
+</script>
+</body>
+</html>

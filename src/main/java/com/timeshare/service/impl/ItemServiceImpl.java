@@ -41,4 +41,9 @@ public class ItemServiceImpl implements ItemService {
     public List<Item> findItemPage(Item item,int startIndex,int loadSize) {
         return itemDAO.findItemPage(item,startIndex,loadSize);
     }
+
+    @Override
+    public List<Item> findSellItemListByCondition(String condition, int startIndex, int loadSize) {
+        return itemDAO.findSellItemListByCondition(condition,startIndex,loadSize);
+    }
 }

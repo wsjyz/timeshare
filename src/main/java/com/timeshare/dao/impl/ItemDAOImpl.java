@@ -13,6 +13,7 @@ import org.springframework.stereotype.Repository;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -23,8 +24,8 @@ public class ItemDAOImpl extends BaseDAO implements ItemDAO {
 
     @Override
     public String saveItem(final Item info) {
-        StringBuilder sql = new StringBuilder("insert into t_item (item_id,title,price,score,description,item_type,use_count,create_user_id,opt_time,create_user_name,item_status)" +
-                " values(?,?,?,?,?,?,?,?,?,?,?)");
+        StringBuilder sql = new StringBuilder("insert into t_item (item_id,title,price,score,description,item_type,use_count,create_user_id,opt_time,create_user_name,item_status,recommend)" +
+                " values(?,?,?,?,?,?,?,?,?,?,?,?)");
         int result = getJdbcTemplate().update(sql.toString(), new PreparedStatementSetter() {
             @Override
             public void setValues(PreparedStatement ps) throws SQLException {
@@ -39,6 +40,7 @@ public class ItemDAOImpl extends BaseDAO implements ItemDAO {
                 ps.setString(9,info.getOptTime());
                 ps.setString(10,info.getCreateUserName());
                 ps.setString(11,info.getItemStatus());
+                ps.setBoolean(12,info.isRecommend());
             }
         });
         if(result > 0){
@@ -91,6 +93,24 @@ public class ItemDAOImpl extends BaseDAO implements ItemDAO {
 
         return itemList;
     }
+
+    public List<Item> findSellItemListByCondition(String condition, int startIndex, int loadSize){
+        StringBuilder sql = new StringBuilder("");
+
+        if(condition.equals("recommend")){//推荐
+            sql.append("select * from t_item where recommend = true ");
+        }else if(condition.equals("new")){//最新
+            sql.append("select * from t_item ");
+        }else if(condition.equals("hot")){//最火
+            sql.append("select * from t_item ");
+        }else if(condition.equals("good")){//最优
+            sql.append("select * from t_item ");
+        }
+        sql.append("order by opt_time desc limit ?,?");
+        List<Item> itemList = getJdbcTemplate().query(sql.toString(),new Object[]{startIndex,loadSize},new ItemMapper());
+        return itemList;
+    }
+
     public class ItemMapper implements RowMapper<Item>{
 
         @Override
@@ -107,6 +127,7 @@ public class ItemDAOImpl extends BaseDAO implements ItemDAO {
             item.setItemType(rs.getString("item_type"));
             item.setTitle(rs.getString("title"));
             item.setUseCount(rs.getInt("use_count"));
+            item.setRecommend(rs.getBoolean("recommend"));
             return item;
         }
     }

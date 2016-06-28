@@ -81,6 +81,13 @@ public class ItemController extends BaseController{
         return itemList;
     }
 
+    @RequestMapping(value = "/list-by-condition")
+    @ResponseBody
+    public List<Item> listByCondition(@RequestParam String condition ,@RequestParam int startIndex, @RequestParam int loadSize) {
+        List<Item> itemList = itemService.findSellItemListByCondition(condition,startIndex,loadSize);
+        return itemList;
+    }
+
     @RequestMapping(value = "/save",method = RequestMethod.POST)
     public ModelAndView save(Item item) {
         ModelAndView modelAndView = new ModelAndView("info");

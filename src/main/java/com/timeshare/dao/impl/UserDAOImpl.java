@@ -56,6 +56,7 @@ public class UserDAOImpl extends BaseDAO implements UserDAO {
         @Override
         public UserInfo mapRow(ResultSet rs, int i) throws SQLException {
             UserInfo userInfo = new UserInfo();
+            userInfo.setUserId(rs.getString("user_id"));
             userInfo.setBuyCounts(rs.getInt("buy_counts"));
             userInfo.setDescription(rs.getString("description"));
             userInfo.setIncome(rs.getBigDecimal("income"));

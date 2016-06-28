@@ -12,5 +12,5 @@ public interface Contants {
 
     String ITEM_SHOW_IMG = "ITEM_SHOW_IMG";
 
-
+    String SUCCESS = "success";
 }

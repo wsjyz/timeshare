@@ -67,7 +67,7 @@ public class ImageObjDAOImpl extends BaseDAO implements ImageObjDAO {
         @Override
         public ImageObj mapRow(ResultSet rs, int i) throws SQLException {
             ImageObj obj = new ImageObj();
-            obj.setObjId(rs.getString("image_id"));
+            obj.setImageId(rs.getString("image_id"));
             obj.setImageType(rs.getString("image_type"));
             obj.setObjId(rs.getString("obj_id"));
             obj.setUserId(rs.getString("create_user_id"));

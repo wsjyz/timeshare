@@ -44,8 +44,9 @@
                 var imgUrl = res.thumbUrl;
                 // var temp = '<img src="' + imgUrl + '" alt="">';
                 // $li.find('.imgWrap').append(temp);
-                $('#imageUrl').src= imgUrl;
+                $('#imageUrl').attr('src',imgUrl);
                 $('#imageUrl').css('display','block');
+                $('.item').css('display','none');
                 $filePickerInput.val('');
                 $filePicker.hide();
             }

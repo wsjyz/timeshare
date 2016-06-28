@@ -18,4 +18,6 @@ public interface ItemService {
 
     List<Item> findItemPage(Item item,int startIndex,int loadSize);
 
+    List<Item> findSellItemListByCondition(String condition, int startIndex, int loadSize);
+
 }
