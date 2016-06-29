@@ -61,37 +61,42 @@
                 <div  style="position: absolute;right: 10px;width: 70%;bottom: 20px;z-index: 999;font-weight: bold;color: #ffffff">让你培训尖叫的5种武器</div>
             </div>
             <div class="buttons-tab">
-                <a href="#tab1" class="tab-link active button">推荐</a>
-                <a href="#tab2" class="tab-link button">最新</a>
-                <a href="#tab3" class="tab-link button">最火</a>
-                <a href="#tab4" class="tab-link button">最优</a>
+                <a href="#recommendTab" class="tab-link active button">推荐</a>
+                <a href="#newTab" class="tab-link button">最新</a>
+                <a href="#hotTab" class="tab-link button">最火</a>
+                <a href="#goodTab" class="tab-link button">最优</a>
             </div>
-            <div class="content-block" style="padding: 0px;margin: 0px;">
+
                 <div class="tabs">
-                    <div id="tab1" class="tab active infinite-scroll infinite-scroll-bottom" data-distance="100">
+                    <div id="recommendTab" class="tab active infinite-scroll">
 
                         <div class="list-block media-list" style="margin-top:  0px;">
 
                         </div>
+                        <!-- 加载提示符 -->
+                        <div class="infinite-scroll-preloader">
+                            <div class="preloader">
+                            </div>
+                        </div>
+                    </div>
+                    <div id="newTab" class="tab">
+                        <div class="list-block media-list" style="margin-top:  0px;">
+x
+                        </div>
+                    </div>
+                    <div id="hotTab" class="tab">
+                        <div class="list-block media-list" style="margin-top:  0px;">
 
-                    </div>
-                    <div id="tab2" class="tab">
-                        <div class="content-block">
-                            <p>This is tab 2 content</p>
                         </div>
                     </div>
-                    <div id="tab3" class="tab">
-                        <div class="content-block">
-                            <p>This is tab 3 content</p>
-                        </div>
-                    </div>
-                    <div id="tab4" class="tab">
-                        <div class="content-block">
-                            <p>This is tab 4 content</p>
+                    <div id="goodTab" class="tab">
+                        <div class="list-block media-list" style="margin-top:  0px;">
+
                         </div>
                     </div>
                 </div>
-            </div>
+
+
         </div>
     </div>
 
@@ -99,104 +104,115 @@
 <script src="//g.alicdn.com/msui/sm/0.6.2/js/sm.min.js"></script>
 <script src="//g.alicdn.com/msui/sm/0.6.2/js/sm-extend.min.js"></script>
 <script>
-    $.init();
-    $.showIndicator();
-    var loading = false;
-    // 最多可加载的条目
-    var maxItems = 100;
 
-    // 每次加载添加多少条目
-    var itemsPerLoad = 10;
+    //$.showIndicator();
 
-    function addItems(number, lastIndex,data) {
-        // 生成新条目的HTML
-        var html = '';
-        var dataLength = 0;
-        $.each(data, function(i, item){
-            var itemStatus = "";
-            if(item.itemStatus == 'for_sale'){
-                itemStatus = "销售中";
-            }else if(item.itemStatus == 'undercarriage'){
-                itemStatus = "已下架";
-            }else if(item.itemStatus == 'draft'){
-                itemStatus = "草稿";
+
+
+
+
+
+    $(document).on("pageInit", function() {
+        //多个标签页下的无限滚动
+        var loading = false;
+        // 每次加载添加多少条目
+        var itemsPerLoad = 10;
+        // 最多可加载的条目
+        var maxItems = 30;
+
+
+        var  lastIndex = $('.list-block ul').length;
+
+
+        function addItems(number, lastIndex,data) {
+            // 生成新条目的HTML
+            var html = '';
+            var dataLength = 0;
+            $.each(data, function(i, item){
+                var itemStatus = "";
+                if(item.itemStatus == 'for_sale'){
+                    itemStatus = "销售中";
+                }else if(item.itemStatus == 'undercarriage'){
+                    itemStatus = "已下架";
+                }else if(item.itemStatus == 'draft'){
+                    itemStatus = "草稿";
+                }
+
+                html += '<ul>'+
+                        '<li>'+
+                        '<a href="#" class="item-link item-content" onclick="toView(\''+item.itemId+'\')">'+
+                        '<div class="item-media"><img src="http://gqianniu.alicdn.com/bao/uploaded/i4//tfscom/i3/TB10LfcHFXXXXXKXpXXXXXXXXXX_!!0-item_pic.jpg_250x250q60.jpg" style="width: 4rem;"></div>'+
+                        '<div class="item-inner">'+
+                        '<div class="item-title-row">'+
+                        '<div class="item-title">'+item.title+'</div>'+
+                        '<div class="item-after">'+itemStatus+'</div>'+
+                        '</div>'+
+                        '<div class="item-text">'+
+                        '<div class="row">'+
+                        '<div class="col-60">'+item.useCount+'人咨询过</div>'+
+                        '<div class="col-40">'+item.score+'分</div>'+
+                        '</div>'+
+                        '</div>'+
+                        '</div>'+
+                        '</a>'+
+                        '</li>'+
+                        '</ul>';
+                dataLength += 1;
+            });
+            if(dataLength == 0){
+                $('.no-record').show();
+                $('.infinite-scroll-preloader').remove();
+            }else{
+                $('.no-record').hide();
+                // 添加新条目
+                $('.infinite-scroll .list-block').append(html);
             }
 
-            html += '<ul>'+
-                    '<li>'+
-                    '<a href="#" class="item-link item-content" onclick="toView(\''+item.itemId+'\')">'+
-                    '<div class="item-media"><img src="http://gqianniu.alicdn.com/bao/uploaded/i4//tfscom/i3/TB10LfcHFXXXXXKXpXXXXXXXXXX_!!0-item_pic.jpg_250x250q60.jpg" style="width: 4rem;"></div>'+
-                    '<div class="item-inner">'+
-                    '<div class="item-title-row">'+
-                    '<div class="item-title">'+item.title+'</div>'+
-                    '<div class="item-after">'+itemStatus+'</div>'+
-                    '</div>'+
-                    '<div class="item-text">'+
-                    '<div class="row">'+
-                    '<div class="col-60">'+item.useCount+'人咨询过</div>'+
-                    '<div class="col-40">'+item.score+'分</div>'+
-                    '</div>'+
-                    '</div>'+
-                    '</div>'+
-                    '</a>'+
-                    '</li>'+
-                    '</ul>';
-            dataLength += 1;
-        });
-        if(dataLength == 0){
-            $('.no-record').show();
-            $('.infinite-scroll-preloader').remove();
-        }else{
-            $('.no-record').hide();
-            // 添加新条目
-            $('.infinite-scroll-bottom .list-block').append(html);
-        }
-        $.hideIndicator();
 
-    }
-    $.post('${request.contextPath}/item/list', {startIndex: 0,loadSize:itemsPerLoad}, function (response) {
+        }
+console.log('xx');
+    $.post('${request.contextPath}/item/list-by-condition', {condition:'new',startIndex: 0,loadSize:itemsPerLoad}, function (response) {
         //预先加载20条
         addItems(itemsPerLoad, 0,response);
     });
+        $(document).on('infinite', function() {
+            // 如果正在加载，则退出
+            if (loading) return;
+            // 设置flag
+            loading = true;
+            var tabIndex = 0;
+            if($(this).find('.infinite-scroll.active').attr('id') == "tab2"){
+                tabIndex = 0;
+            }
+            if($(this).find('.infinite-scroll.active').attr('id') == "tab3"){
+                tabIndex = 1;
+            }
+            lastIndex = $('.list-block').eq(tabIndex).find('ul').length;
+            $.post('${request.contextPath}/item/list-by-condition', {condition:'new',startIndex: lastIndex,loadSize:itemsPerLoad}, function (response) {
 
+                // 模拟1s的加载过程
+                setTimeout(function() {
+                    // 重置加载flag
+                    loading = false;
 
-    // 上次加载的序号
-
-    var lastIndex = 10;
-
-    // 注册'infinite'事件处理函数
-    $(document).on('infinite', '.infinite-scroll-bottom',function() {
-        // 如果正在加载，则退出
-        if (loading) return;
-
-        // 设置flag
-        loading = true;
-        $.post('${request.contextPath}/item/list', {startIndex: lastIndex,loadSize:itemsPerLoad}, function (response) {
-
-            // 模拟1s的加载过程
-            setTimeout(function() {
-                // 重置加载flag
-                loading = false;
-
-                if (lastIndex >= maxItems) {
-                    // 加载完毕，则注销无限加载事件，以防不必要的加载
-                    $.detachInfiniteScroll($('.infinite-scroll'));
-                    // 删除加载提示符
-                    $('.infinite-scroll-preloader').remove();
-                    return;
-                }
-
-                // 添加新条目
-                addItems(itemsPerLoad, lastIndex,response);
-                // 更新最后加载的序号
-                lastIndex = $('.list-block ul').length;
-                //容器发生改变,如果是js滚动，需要刷新滚动
-                $.refreshScroller();
-            }, 1000);
+                    if (lastIndex >= maxItems) {
+                        // 加载完毕，则注销无限加载事件，以防不必要的加载
+                        $.detachInfiniteScroll($('.infinite-scroll'));
+                        // 删除加载提示符
+                        $('.infinite-scroll-preloader').remove();
+                        return;
+                    }
+                    // 添加新条目
+                    addItems(itemsPerLoad, lastIndex,response);
+                    // 更新最后加载的序号
+                    lastIndex = $('.list-block ul').length;
+                    //容器发生改变,如果是js滚动，需要刷新滚动
+                    $.refreshScroller();
+                }, 1000);
+            });
         });
-
-
     });
+    $.init();
 </script>
 </body>
 </html>
