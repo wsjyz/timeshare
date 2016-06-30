@@ -13,4 +13,14 @@ public interface Contants {
     String ITEM_SHOW_IMG = "ITEM_SHOW_IMG";
 
     String SUCCESS = "success";
+
+    enum ITEM_STATUS {
+        draft,for_sale,undercarriage
+    }
+    enum ITEM_TYPE {
+        tel,meet
+    }
+    enum IMAGE_TYPE {
+        ITEM_SHOW_IMG
+    }
 }

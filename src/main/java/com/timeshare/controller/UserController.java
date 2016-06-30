@@ -1,18 +1,19 @@
 package com.timeshare.controller;
 
 import com.timeshare.domain.ImageObj;
+import com.timeshare.domain.Item;
 import com.timeshare.domain.UserInfo;
+import com.timeshare.service.ItemService;
 import com.timeshare.service.UserService;
 import com.timeshare.utils.Contants;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.List;
 
 /**
  * Created by adam on 2016/6/11.
@@ -23,6 +24,8 @@ public class UserController extends BaseController{
 
     @Autowired
     UserService userService;
+    @Autowired
+    ItemService itemService;
 
     @RequestMapping(value = "/to-userinfo")
     public String toUserInfo() {
@@ -64,6 +67,25 @@ public class UserController extends BaseController{
         obj.setImageType(Contants.ITEM_SHOW_IMG);
         userService.saveOrUpdateImg(obj);
         return Contants.SUCCESS;
+    }
+
+    @RequestMapping(value = "/to-view-items/{userId}")
+    public String toViewUserItems(@PathVariable String userId, Model model) {
+        model.addAttribute("userId",userId);
+        return "useritems";
+    }
+    @RequestMapping(value = "/get-user-items")
+    @ResponseBody
+    public UserInfo getUserItems(@RequestParam String userId) {
+
+        UserInfo userInfo = getCurrentUser(userId);
+        Item params = new Item();
+        params.setUserId(userId);
+        params.setItemStatus(Contants.ITEM_STATUS.for_sale.toString());
+        //TODO 最大显示10个项目
+        List<Item> items = itemService.findItemPage(params,0,10);
+        userInfo.setUserItemList(items);
+        return userInfo;
     }
 
 }

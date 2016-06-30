@@ -10,6 +10,15 @@ public class ItemDTO {
 
     private Item item;
     private UserInfo userInfo;
+    private String imgPath;
+
+    public String getImgPath() {
+        return imgPath;
+    }
+
+    public void setImgPath(String imgPath) {
+        this.imgPath = imgPath;
+    }
 
     public Item getItem() {
         return item;

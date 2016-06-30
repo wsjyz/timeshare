@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <title>项目介绍</title>
+    <title>我的生活</title>
     <meta name="viewport" content="initial-scale=1, maximum-scale=1">
     <link rel="shortcut icon" href="/favicon.ico">
     <meta name="apple-mobile-web-app-capable" content="yes">
@@ -11,99 +11,57 @@
 
     <link rel="stylesheet" href="//g.alicdn.com/msui/sm/0.6.2/css/sm.min.css">
     <link rel="stylesheet" href="//g.alicdn.com/msui/sm/0.6.2/css/sm-extend.min.css">
-
     <style type="text/css">
-        .commentAvatarDiv{
-            width: 100px;
-            height: 100px;
-            padding:2px;
-            background: #ececec;
-            border-radius:100px;
-            box-shadow: 0px 0px 1px rgba(0,0,0,0.4);
-            -moz-border-radius: 100px;
-            -webkit-border-radius: 100px;
+        p{
+            font-family: "Helvetica Neue",Helvetica,"PingFang SC","Hiragino Sans GB","Microsoft YaHei","微软雅黑",Arial,sans-serif;
+            font-size: 16px;;
         }
-        .commentAvatarImage{
-            width:100px;
-            height:100px;
-            line-height: 0;	 /* remove line-height */
-            display: inline-block;	/* circle wraps image */
-            border-radius: 50%;	/* relative value */
-            -moz-border-radius: 50%;
-            -webkit-border-radius: 50%;
-            transition: linear 0.25s;
+        .biaoqian{
+            display: inline-block;
+            width: 54px;
+            height: 18px;
+            line-height: 18px;
+            text-align: center;
+            border-radius: 3px;
+            font-family: simsun;
+            border: 1px solid #ccc;
+            color: #ffffff;
+            background: #999999;
+            font-size: 12px;
         }
     </style>
 </head>
 <body>
+<input type="hidden" id="itemId" value="${itemId}">
+<input type="hidden" id="userId" value="${userId}">
 <div class="page-group">
     <div class="page page-current">
         <!-- 你的html代码 -->
         <header class="bar bar-nav">
             <a class="icon icon-left pull-left"></a>
             <a class="icon icon-refresh pull-right"></a>
-            <h1 class="title">详情</h1>
+            <h1 class="title">子项目详情</h1>
         </header>
-
-        <input type="hidden" id="itemId" value="${itemId}">
         <div class="content">
-            <div style="position: relative;">
-                <img src="${request.contextPath}/images/item.jpg" style="display: block;margin: 0 auto;"/>
-                <div class="commentAvatarDiv" style="position: absolute;top: 30%;left: 35%">
-                    <img class="commentAvatarImage" src="${request.contextPath}/images/head.jpg">
+            <div class="content-padded grid-demo">
+                <div class="row">
+                    <div class="col-100"><h2 style="color: #666;"><span id="titleSp"></span></h2><span id="itemTypeSp" class="biaoqian"></span></div>
                 </div>
-            </div>
-            <div class="list-block cards-list" style="margin-top: 0px;">
-                <ul>
-                    <li class="card">
-                        <div class="card-header"><span id="itemTypeSp"></span></div>
-                        <div class="card-content">
-                            <div class="content-padded">
-                                <div class="row">
-                                    <div class="col-80"><span id="priceSp"></span>元/次（约1小时）</div>
-                                    <div class="col-20"><span id="scoreSp"></span>分</div>
-                                </div>
-                                <div class="row">
-                                    <div class="col-100"><h1><span id="titleSp"></span></h1></div>
-                                </div>
-                            </div>
+                <div class="row">
+                    <div class="col-40"><span id="corpSp"></span></div>
+                    <div class="col-60" style="padding-left: 6.5rem;"><span id="nicknameSp"></span></div>
+                </div>
+                <div class="row" style="height:4rem;margin-left:1px;padding-top:1.6rem;background-color: #b5dbe8;font-weight: bold">
+                    <div class="col-50" style="margin-left: 0px;"><span id="priceSp"></span>元/次（早鸟价）</div>
+                    <div class="col-50" style="padding-left: 4.5rem;">约<span id="durationSp"></span>分钟</div>
+                </div>
+                <div id="descriptionDiv"></div>
 
-                            <div class="card-content-inner" id="descriptionDiv"></div>
-                        </div>
-                        <div class="card-footer" id="useCountSp"></div>
-                    </li>
-                    <li class="card">
-                        <div class="card-header">关于我</div>
-                        <div class="card-content">
-                            <div class="card-content-inner">
-                                <p><img src="${request.contextPath}/images/banshen.jpg" style="width: 360px;"/></p>
-                                <p id="userDesP"></p>
-                                </div>
-                        </div>
-                    </li>
 
-                    <li class="card">
-                        <div class="card-header">Ta们的反馈</div>
-                        <div class="card-content">
-                            <div class="content-padded">
-                                <div class="row">
-                                    <div class="col-60">200元/次（约1小时）</div>
-                                    <div class="col-40">评分次数不足5次</div>
-                                </div>
-                                <div class="row">
-                                    <div class="col-100"><h1>增加贫困地区学生的入学比例</h1></div>
-                                </div>
-                            </div>
-
-                            <div class="card-content-inner">在清华大学图书馆，李克强回忆起自己读大学时吃过早饭就去图书馆占位时的情景，并问学生们现在情况如何；在北京大学食堂，当得知对面的学生来自贵州遵义农村时，李克强又关心地询问有无国家助学金、一个月花费多少和一天吃饭多少钱。</div>
-                        </div>
-                        <div class="card-footer">已约2次</div>
-                    </li>
-                </ul>
             </div>
 
             <div class="card">
-                <div class="card-header">Ta们的反馈:</div>
+                <div class="card-header"><h4>评价:</h4><span style="padding-left: 5rem">查看全部30条评论</span></div>
                 <div class="card-content">
                     <div class="list-block media-list">
                         <ul>
@@ -121,12 +79,11 @@
                         </ul>
                     </div>
                 </div>
-                <div class="card-footer">
-                    <span>查看全部30条评论</span>
-                </div>
+
             </div>
-
-
+        </div>
+        <div class="bar bar-standard bar-footer" style="padding-bottom: 2.5rem">
+            <p><a href="#" class="button button-fill button-danger" style="top:0;">立即预约</a></p>
         </div>
     </div>
 </div>
@@ -136,22 +93,27 @@
 <script type='text/javascript' src='//g.alicdn.com/msui/sm/0.6.2/js/sm-extend.min.js' charset='utf-8'></script>
 <script>
     $.showIndicator();
-    $.get('${request.contextPath}/item/get-item', {itemId: $('#itemId').val()}, function (response) {
+    $.get('${request.contextPath}/item/get-item', {itemId: $('#itemId').val(),userId: $('#userId').val()}, function (response) {
         if(response){
-            if(response.itemType == 'tel'){
+            if(response.item.itemType == 'tel'){
                 $('#itemTypeSp').text('电话直连');
             }else if(response.itemType == 'meet'){
                 $('#itemTypeSp').text('直约面对面');
             }
             $('#priceSp').text(response.item.price);
-            $('#scoreSp').text(response.item.score);
+            //$('#scoreSp').text(response.item.score);
             $('#titleSp').text(response.item.title);
             $('#descriptionDiv').text(response.item.description);
-            $('#useCountSp').text('已约'+response.item.useCount+'次');
-            $('#userDesP').text(response.userInfo.description);
+            $('#durationSp').text(response.item.duration);
+            $('#corpSp').text(response.userInfo.corp);
+            $('#nicknameSp').text(response.userInfo.nickName);
+            //$('#useCountSp').text('已约'+response.item.useCount+'次');
+            //$('#userDesP').text(response.userInfo.description);
             $.hideIndicator();
         }
     });
 </script>
+
 </body>
 </html>
+

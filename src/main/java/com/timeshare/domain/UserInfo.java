@@ -4,6 +4,7 @@ import com.timeshare.domain.annotation.Column;
 import com.timeshare.domain.annotation.Table;
 
 import java.math.BigDecimal;
+import java.util.List;
 
 /**
  * Created by adam on 2016/6/7.
@@ -28,10 +29,66 @@ public class UserInfo {
     @Column(name = "buy_counts", length = 5, comment = "购买数量")
     private int buyCounts;
     private String description;
+    private String position;//职位
+    private String corp;//任职机构
+    private String industry;//行业
+    private String city;
+    private String ageGroup;//年龄段
     /**
      * 展示图片
      */
     private ImageObj imageObj;
+
+    //数据传输用
+    private List<Item> userItemList;
+
+    public String getPosition() {
+        return position;
+    }
+
+    public void setPosition(String position) {
+        this.position = position;
+    }
+
+    public String getCorp() {
+        return corp;
+    }
+
+    public void setCorp(String corp) {
+        this.corp = corp;
+    }
+
+    public String getIndustry() {
+        return industry;
+    }
+
+    public void setIndustry(String industry) {
+        this.industry = industry;
+    }
+
+    public String getCity() {
+        return city;
+    }
+
+    public void setCity(String city) {
+        this.city = city;
+    }
+
+    public String getAgeGroup() {
+        return ageGroup;
+    }
+
+    public void setAgeGroup(String ageGroup) {
+        this.ageGroup = ageGroup;
+    }
+
+    public List<Item> getUserItemList() {
+        return userItemList;
+    }
+
+    public void setUserItemList(List<Item> userItemList) {
+        this.userItemList = userItemList;
+    }
 
     public String getDescription() {
         return description;

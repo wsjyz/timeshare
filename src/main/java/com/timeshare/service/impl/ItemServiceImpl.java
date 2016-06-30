@@ -1,5 +1,6 @@
 package com.timeshare.service.impl;
 
+import com.timeshare.controller.ItemDTO;
 import com.timeshare.dao.ItemDAO;
 import com.timeshare.domain.Item;
 import com.timeshare.domain.OpenPage;
@@ -43,7 +44,7 @@ public class ItemServiceImpl implements ItemService {
     }
 
     @Override
-    public List<Item> findSellItemListByCondition(String condition, int startIndex, int loadSize) {
+    public List<ItemDTO> findSellItemListByCondition(String condition, int startIndex, int loadSize) {
         return itemDAO.findSellItemListByCondition(condition,startIndex,loadSize);
     }
 }

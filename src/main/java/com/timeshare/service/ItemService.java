@@ -1,5 +1,6 @@
 package com.timeshare.service;
 
+import com.timeshare.controller.ItemDTO;
 import com.timeshare.domain.Item;
 import java.util.List;
 
@@ -18,6 +19,6 @@ public interface ItemService {
 
     List<Item> findItemPage(Item item,int startIndex,int loadSize);
 
-    List<Item> findSellItemListByCondition(String condition, int startIndex, int loadSize);
+    List<ItemDTO> findSellItemListByCondition(String condition, int startIndex, int loadSize);
 
 }

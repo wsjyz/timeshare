@@ -1,10 +1,11 @@
 package com.timeshare.dao.impl;
 
+import com.timeshare.controller.ItemDTO;
 import com.timeshare.dao.BaseDAO;
 import com.timeshare.dao.ItemDAO;
 import com.timeshare.domain.Item;
-import com.timeshare.domain.OpenPage;
 import com.timeshare.utils.CommonStringUtils;
+import com.timeshare.utils.Contants;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.jdbc.core.PreparedStatementSetter;
 import org.springframework.jdbc.core.RowMapper;
@@ -13,7 +14,6 @@ import org.springframework.stereotype.Repository;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -86,19 +86,21 @@ public class ItemDAOImpl extends BaseDAO implements ItemDAO {
             if (StringUtils.isNotEmpty(item.getItemStatus())) {
                 reviewSql.append(" and item_status = '"+item.getItemStatus()+"' ");
             }
+            if (StringUtils.isNotEmpty(item.getUserId())) {
+                reviewSql.append(" and create_user_id = '"+item.getUserId()+"' ");
+            }
         }
-
-        reviewSql.append(" limit ?,?");
+        reviewSql.append(" order by opt_time desc limit ?,?");
         List<Item> itemList = getJdbcTemplate().query(reviewSql.toString(),new Object[]{startIndex,loadSize},new ItemMapper());
 
         return itemList;
     }
 
-    public List<Item> findSellItemListByCondition(String condition, int startIndex, int loadSize){
+    public List<ItemDTO> findSellItemListByCondition(String condition, int startIndex, int loadSize){
         StringBuilder sql = new StringBuilder("");
 
         if(condition.equals("recommend")){//推荐
-            sql.append("select * from t_item where recommend = true ");
+            sql.append("select * from t_item i ,t_img_obj io where i.recommend = true and i.item_status = '"+ Contants.ITEM_STATUS.for_sale+"'");
         }else if(condition.equals("new")){//最新
             sql.append("select * from t_item ");
         }else if(condition.equals("hot")){//最火
@@ -106,8 +108,13 @@ public class ItemDAOImpl extends BaseDAO implements ItemDAO {
         }else if(condition.equals("good")){//最优
             sql.append("select * from t_item ");
         }
-        sql.append("order by opt_time desc limit ?,?");
-        List<Item> itemList = getJdbcTemplate().query(sql.toString(),new Object[]{startIndex,loadSize},new ItemMapper());
+        if(sql.indexOf("where") == -1){
+            sql.append(" where");
+        }
+
+        sql.append(" and i.create_user_id = io.obj_id");
+        sql.append(" order by i.opt_time desc limit ?,?");
+        List<ItemDTO> itemList = getJdbcTemplate().query(sql.toString(),new Object[]{startIndex,loadSize},new ItemDTOMapper());
         return itemList;
     }
 
@@ -129,6 +136,29 @@ public class ItemDAOImpl extends BaseDAO implements ItemDAO {
             item.setUseCount(rs.getInt("use_count"));
             item.setRecommend(rs.getBoolean("recommend"));
             return item;
+        }
+    }
+    public class ItemDTOMapper implements RowMapper<ItemDTO>{
+
+        @Override
+        public ItemDTO mapRow(ResultSet rs, int i) throws SQLException {
+            ItemDTO itemDTO = new ItemDTO();
+            Item item = new Item();
+            item.setItemId(rs.getString("item_id"));
+            item.setCreateUserName(rs.getString("create_user_name"));
+            item.setUserId(rs.getString("create_user_id"));
+            item.setOptTime(rs.getString("opt_time"));
+            item.setDescription(rs.getString("description"));
+            item.setItemStatus(rs.getString("item_status"));
+            item.setPrice(rs.getBigDecimal("price"));
+            item.setScore(rs.getBigDecimal("score"));
+            item.setItemType(rs.getString("item_type"));
+            item.setTitle(rs.getString("title"));
+            item.setUseCount(rs.getInt("use_count"));
+            item.setRecommend(rs.getBoolean("recommend"));
+            itemDTO.setItem(item);
+            itemDTO.setImgPath(rs.getString("image_url"));
+            return itemDTO;
         }
     }
 }

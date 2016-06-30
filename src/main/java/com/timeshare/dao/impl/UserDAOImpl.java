@@ -2,8 +2,10 @@ package com.timeshare.dao.impl;
 
 import com.timeshare.dao.BaseDAO;
 import com.timeshare.dao.UserDAO;
+import com.timeshare.domain.ImageObj;
 import com.timeshare.domain.OpenPage;
 import com.timeshare.domain.UserInfo;
+import com.timeshare.utils.Contants;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Repository;
 import org.springframework.util.CollectionUtils;
@@ -31,7 +33,9 @@ public class UserDAOImpl extends BaseDAO implements UserDAO {
     @Override
     public UserInfo findUserByUserId(String userId) {
         StringBuilder sql = new StringBuilder("");
-        sql.append("select * from t_user_info where user_id = ?");
+        sql.append("select u.*,i.image_url from t_user_info u,t_img_obj i " +
+                "where u.user_id = ? and u.user_id = i.obj_id " +
+                "and i.image_type = '"+ Contants.IMAGE_TYPE.ITEM_SHOW_IMG+"'");
         List<UserInfo> auntInfoList = getJdbcTemplate().query(sql.toString(),
                 new String[] { userId }, new UserInfoMapper());
         if (!CollectionUtils.isEmpty(auntInfoList)) {
@@ -65,6 +69,14 @@ public class UserDAOImpl extends BaseDAO implements UserDAO {
             userInfo.setSellCounts(rs.getInt("sell_counts"));
             userInfo.setSumCost(rs.getBigDecimal("sum_cost"));
             userInfo.setUserName(rs.getString("user_name"));
+            userInfo.setPosition(rs.getString("position"));
+            userInfo.setCorp(rs.getString("corp"));
+            userInfo.setIndustry(rs.getString("industry"));
+            userInfo.setCity(rs.getString("city"));
+            userInfo.setAgeGroup(rs.getString("ageGroup"));
+            ImageObj img = new ImageObj();
+            img.setImageUrl(rs.getString("image_url"));
+            userInfo.setImageObj(img);
             return userInfo;
         }
     }

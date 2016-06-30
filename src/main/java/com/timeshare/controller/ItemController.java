@@ -50,15 +50,16 @@ public class ItemController extends BaseController{
         return "selltime";
     }
 
-    @RequestMapping(value = "/to-view/{itemId}")
-    public String toView(@PathVariable String itemId,Model model) {
+    @RequestMapping(value = "/to-view/{itemId}/{userId}")
+    public String toView(@PathVariable String itemId,@PathVariable String userId,Model model) {
         model.addAttribute("itemId",itemId);
+        model.addAttribute("userId",userId);
         return "iteminfo";
     }
 
     @RequestMapping(value = "/get-item")
     @ResponseBody
-    public ItemDTO getItem(@RequestParam String itemId,@CookieValue(value="user-id", defaultValue="") String userId) {
+    public ItemDTO getItem(@RequestParam String itemId,@RequestParam String userId) {
         Item item = new Item();
         if(StringUtils.isNotBlank(itemId)){
             item = itemService.findItemByItemId(itemId);
@@ -83,8 +84,8 @@ public class ItemController extends BaseController{
 
     @RequestMapping(value = "/list-by-condition")
     @ResponseBody
-    public List<Item> listByCondition(@RequestParam String condition ,@RequestParam int startIndex, @RequestParam int loadSize) {
-        List<Item> itemList = itemService.findSellItemListByCondition(condition,startIndex,loadSize);
+    public List<ItemDTO> listByCondition(@RequestParam String condition ,@RequestParam int startIndex, @RequestParam int loadSize) {
+        List<ItemDTO> itemList = itemService.findSellItemListByCondition(condition,startIndex,loadSize);
         return itemList;
     }
 

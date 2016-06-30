@@ -1,5 +1,6 @@
 package com.timeshare.dao;
 
+import com.timeshare.controller.ItemDTO;
 import com.timeshare.domain.OpenPage;
 import com.timeshare.domain.Item;
 
@@ -20,6 +21,6 @@ public interface ItemDAO {
 
     List<Item> findItemPage(Item item, int startIndex, int loadSize);
 
-    List<Item> findSellItemListByCondition(String condition, int startIndex, int loadSize);
+    List<ItemDTO> findSellItemListByCondition(String condition, int startIndex, int loadSize);
 
 }
