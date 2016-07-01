@@ -83,7 +83,7 @@
             </div>
         </div>
         <div class="bar bar-standard bar-footer" style="padding-bottom: 2.5rem">
-            <p><a href="#" class="button button-fill button-danger" style="top:0;">立即预约</a></p>
+            <p><a href="#" id="orderBtn" class="button button-fill button-danger" style="top:0;">立即预约</a></p>
         </div>
     </div>
 </div>
@@ -93,6 +93,11 @@
 <script type='text/javascript' src='//g.alicdn.com/msui/sm/0.6.2/js/sm-extend.min.js' charset='utf-8'></script>
 <script>
     $.showIndicator();
+    $("#orderBtn").on('click', function () {
+        var itemId = $('#itemId').val();
+        var userId = $('#userId').val();
+        window.location.href = '${request.contextPath}/order/to-start/'+itemId+'/'+userId;
+    });
     $.get('${request.contextPath}/item/get-item', {itemId: $('#itemId').val(),userId: $('#userId').val()}, function (response) {
         if(response){
             if(response.item.itemType == 'tel'){

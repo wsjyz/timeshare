@@ -29,6 +29,8 @@ public class ItemController extends BaseController{
 
     @Autowired
     ItemService itemService;
+    @Autowired
+    UserService userService;
 
     @RequestMapping(value = "/to-add")
     public String toAdd(String itemJson,ModelMap modelMap) {
@@ -64,13 +66,14 @@ public class ItemController extends BaseController{
         if(StringUtils.isNotBlank(itemId)){
             item = itemService.findItemByItemId(itemId);
         }
-        UserInfo userInfo = getCurrentUser(userId);
+        UserInfo userInfo = userService.findUserByUserId(userId);
         ItemDTO itemDTO = new ItemDTO();
         itemDTO.setItem(item);
         itemDTO.setUserInfo(userInfo);
         return itemDTO;
 
     }
+
 
     @RequestMapping(value = "/list")
     @ResponseBody

@@ -135,6 +135,7 @@ public class ItemDAOImpl extends BaseDAO implements ItemDAO {
             item.setTitle(rs.getString("title"));
             item.setUseCount(rs.getInt("use_count"));
             item.setRecommend(rs.getBoolean("recommend"));
+            item.setDuration(rs.getInt("duration"));
             return item;
         }
     }
@@ -156,6 +157,7 @@ public class ItemDAOImpl extends BaseDAO implements ItemDAO {
             item.setTitle(rs.getString("title"));
             item.setUseCount(rs.getInt("use_count"));
             item.setRecommend(rs.getBoolean("recommend"));
+            item.setDuration(rs.getInt("duration"));
             itemDTO.setItem(item);
             itemDTO.setImgPath(rs.getString("image_url"));
             return itemDTO;
