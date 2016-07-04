@@ -41,7 +41,7 @@
                 <span class="icon icon-star"></span>
                 <span class="tab-label">卖时间</span>
             </a>
-            <a class="tab-item" href="#">
+            <a class="tab-item" href="#" id="myPageBtn">
                 <span class="icon icon-me"></span>
                 <span class="tab-label">我的</span>
             </a>
@@ -237,6 +237,10 @@
                 }, 1000);
             });
         });
+    });
+
+    $("#myPageBtn").on('click', function () {
+        window.location.href = '${request.contextPath}/user/to-my-page';
     });
     $.init();
 </script>

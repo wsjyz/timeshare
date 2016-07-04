@@ -37,4 +37,7 @@ public interface Contants {
         NEED_RATED,//待评价
         FINISH,//已完成
     }
+    enum REMIND_TYPE {
+        ORDER
+    }
 }

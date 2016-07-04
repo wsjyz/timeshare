@@ -18,6 +18,17 @@ public class Item extends BaseDomain{
     private int duration;
     private boolean recommend;
 
+    //传值用
+    private int remindCount;
+
+    public int getRemindCount() {
+        return remindCount;
+    }
+
+    public void setRemindCount(int remindCount) {
+        this.remindCount = remindCount;
+    }
+
     public boolean isRecommend() {
         return recommend;
     }

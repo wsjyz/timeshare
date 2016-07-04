@@ -25,7 +25,7 @@
         <!-- 这里是页面内容区 -->
         <div class="content">
             <div class="content-block">${message.content}</div>
-            <div style="margin: 2rem"><a href="${request.contextPath}${jumpUrl}" class="button button-big button-fill button-danger">确定</a></div>
+            <div style="margin: 2rem"><a href="#" id="jumpBtn" class="button button-big button-fill button-danger">确定</a></div>
         </div>
     </div>
 
@@ -38,5 +38,11 @@
 <script type='text/javascript' src='//g.alicdn.com/sj/lib/zepto/zepto.min.js' charset='utf-8'></script>
 <script type='text/javascript' src='//g.alicdn.com/msui/sm/0.6.2/js/sm.min.js' charset='utf-8'></script>
 <script type='text/javascript' src='//g.alicdn.com/msui/sm/0.6.2/js/sm-extend.min.js' charset='utf-8'></script>
+<script>
+
+    $("#jumpBtn").on('click', function () {
+        window.location.href = '${request.contextPath}${jumpUrl}';
+    });
+</script>
 </body>
 </html>

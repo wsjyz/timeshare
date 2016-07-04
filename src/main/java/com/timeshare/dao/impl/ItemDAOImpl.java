@@ -78,19 +78,20 @@ public class ItemDAOImpl extends BaseDAO implements ItemDAO {
     @Override
     public List<Item> findItemPage(Item item, int startIndex, int loadSize) {
         StringBuilder reviewSql = new StringBuilder("");
-        reviewSql.append("select * from t_item where 1=1");
+        //TODO sql need optimize ,two full table scan
+        reviewSql.append("select i.*,count(r.remind_id) remindCount from t_item i left join t_remind r on i.item_id = r.obj_id where 1=1 ");
         if(item != null){
             if (StringUtils.isNotEmpty(item.getTitle())) {
-                reviewSql.append(" and title ='"+item.getTitle()+"' ");
+                reviewSql.append(" and i.title ='"+item.getTitle()+"' ");
             }
             if (StringUtils.isNotEmpty(item.getItemStatus())) {
-                reviewSql.append(" and item_status = '"+item.getItemStatus()+"' ");
+                reviewSql.append(" and i.item_status = '"+item.getItemStatus()+"' ");
             }
             if (StringUtils.isNotEmpty(item.getUserId())) {
-                reviewSql.append(" and create_user_id = '"+item.getUserId()+"' ");
+                reviewSql.append(" and i.create_user_id = '"+item.getUserId()+"' ");
             }
         }
-        reviewSql.append(" order by opt_time desc limit ?,?");
+        reviewSql.append(" group by i.item_id order by i.opt_time desc limit ?,?");
         List<Item> itemList = getJdbcTemplate().query(reviewSql.toString(),new Object[]{startIndex,loadSize},new ItemMapper());
 
         return itemList;
@@ -136,6 +137,7 @@ public class ItemDAOImpl extends BaseDAO implements ItemDAO {
             item.setUseCount(rs.getInt("use_count"));
             item.setRecommend(rs.getBoolean("recommend"));
             item.setDuration(rs.getInt("duration"));
+            item.setRemindCount(rs.getInt("remindCount"));
             return item;
         }
     }

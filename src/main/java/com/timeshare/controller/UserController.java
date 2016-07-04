@@ -2,8 +2,10 @@ package com.timeshare.controller;
 
 import com.timeshare.domain.ImageObj;
 import com.timeshare.domain.Item;
+import com.timeshare.domain.MyRemind;
 import com.timeshare.domain.UserInfo;
 import com.timeshare.service.ItemService;
+import com.timeshare.service.RemindService;
 import com.timeshare.service.UserService;
 import com.timeshare.utils.Contants;
 import org.apache.commons.lang3.StringUtils;
@@ -26,10 +28,17 @@ public class UserController extends BaseController{
     UserService userService;
     @Autowired
     ItemService itemService;
+    @Autowired
+    RemindService remindService;
 
     @RequestMapping(value = "/to-userinfo")
     public String toUserInfo() {
         return "userinfo";
+    }
+
+    @RequestMapping(value = "/to-my-page")
+    public String toMyPage() {
+        return "mypage";
     }
 
     @RequestMapping(value = "/to-upload-img")
@@ -88,4 +97,14 @@ public class UserController extends BaseController{
         return userInfo;
     }
 
+
+    @RequestMapping(value = "/get-remind")
+    @ResponseBody
+    public MyRemind getRemind() {
+
+        MyRemind remind = new MyRemind();
+        int sellCount = remindService.queryCountByObjIdAndType("admin","",Contants.REMIND_TYPE.ORDER.toString());
+        remind.setSellRemindCount(sellCount);
+        return remind;
+    }
 }

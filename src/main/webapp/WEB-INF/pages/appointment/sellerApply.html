@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <title>预约</title>
+    <title>卖家答复啦</title>
     <meta name="viewport" content="initial-scale=1, maximum-scale=1">
     <link rel="shortcut icon" href="/favicon.ico">
     <meta name="apple-mobile-web-app-capable" content="yes">
@@ -36,8 +36,8 @@
                                     <div class="item-subtitle content-padded">
                                         <div class="row">
                                             <div class="col-33"><span id="createUserNameSp" ></span></div>
-                                            <div class="col-33"><span id="priceSp" ></span>元/次</div>
-                                            <div class="col-33"><span id="dateSp" ></span></div>
+                                            <div class="col-33"><span id="priceSp" >${order.price}</span>元/次</div>
+                                            <div class="col-33"><span id="dateSp" >${order.optTime}</span></div>
                                         </div>
                                     </div>
                                 </div>
@@ -47,27 +47,39 @@
                 </div>
             </div>
             <form action="${request.contextPath}/order/save" method="post">
-                <input type="hidden" id="itemId" name="itemId" value="${itemId}">
-                <input type="hidden" id="orderStatus" name="orderStatus" value="SELLER_APPLY">
+                <input type="hidden" id="orderId" name="orderId" value="${orderId}">
+                <input type="hidden" id="orderStatus" name="orderStatus" value="BEGIN">
                 <div class="list-block cards-list">
                     <ul>
                         <li class="card">
-                            <div class="card-header">描述一下您的问题</div>
+                            <div class="card-header">买家的问题</div>
                             <div class="card-content">
-                                <div class="card-content-inner">
-                                    <div class="item-input">
-                                        <textarea name="orderProblem" id="orderProblem"></textarea>
-                                    </div>
+                                <div class="card-content-inner" id="orderProblem">
+                                    ${order.orderProblem}
                                 </div>
                             </div>
                         </li>
                         <li class="card">
-                            <div class="card-header">简单介绍一下自己</div>
+                            <div class="card-header">卖家的自我介绍</div>
                             <div class="card-content">
-                                <div class="card-content-inner">
-                                    <div class="item-input">
-                                        <textarea name="orderUserDescription" id="orderUserDescription"></textarea>
-                                    </div>
+                                <div class="card-content-inner" id="orderUserDescription">
+                                    ${order.orderUserDescription}
+                                </div>
+                            </div>
+                        </li>
+                        <li class="card">
+                            <div class="card-header">请填写建议的时间</div>
+                            <div class="card-content">
+                                <div class="item-input">
+                                    <input type="text" name="suggestAppointmentTime">
+                                </div>
+                            </div>
+                        </li>
+                        <li class="card">
+                            <div class="card-header">请填写您的联系手机号</div>
+                            <div class="card-content">
+                                <div class="item-input">
+                                    <input type="text" name="sellerPhone">
                                 </div>
                             </div>
                         </li>
@@ -91,25 +103,25 @@
 <script>$.init()</script>
 <script>
 
-    $.showIndicator();
-    $.get('${request.contextPath}/item/get-item', {itemId: $('#itemId').val(),userId: $('#userId').val()}, function (response) {
-        $('#priceSp').text(response.item.price);
-        $('#titleSp').text(response.item.title);
-        var createDate = response.item.optTime.substring(0,10);
-        $('#dateSp').text(createDate);
-        $('#createUserNameSp').text(response.userInfo.nickName);
-        $.hideIndicator();
-    });
+//    $.showIndicator();
+//    $.get('${request.contextPath}/item/get-item', {itemId: $('#itemId').val(),userId: $('#userId').val()}, function (response) {
+//        $('#priceSp').text(response.item.price);
+//        $('#titleSp').text(response.item.title);
+//        var createDate = response.item.optTime.substring(0,10);
+//        $('#dateSp').text(createDate);
+//        $('#createUserNameSp').text(response.userInfo.nickName);
+//        $.hideIndicator();
+//    });
     function checkForm(){
-        var orderProblem = $('#orderProblem').val();
-        var orderUserDescription = $('#orderUserDescription').val();
-        if(orderProblem.length < 10 || orderProblem.length > 200){
-            $.toast('问题字数为10-200');
+        var suggestAppointmentTime = $('#suggestAppointmentTime').val();
+        var sellerPhone = $('#sellerPhone').val();
+        if(suggestAppointmentTime.length == 0){
+            $.toast('建议的时间段不能为空');
             return false;
         }
 
-        if(orderUserDescription.length < 10 || orderUserDescription.length > 200){
-            $.toast('介绍字数为10-200');
+        if(sellerPhone.length < 11 ){
+            $.toast('请填写正确的手机号');
             return false;
         }
         return true;

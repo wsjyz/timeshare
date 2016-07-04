@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>我卖的</title>
+    <meta name="viewport" content="initial-scale=1, maximum-scale=1">
+    <link rel="shortcut icon" href="/favicon.ico">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <style type="text/css">
+        .infinite-scroll-preloader {
+            margin-top:-20px;
+        }
+
+    </style>
+    <link rel="stylesheet" href="//g.alicdn.com/msui/sm/0.6.2/css/sm.min.css">
+    <link rel="stylesheet" href="//g.alicdn.com/msui/sm/0.6.2/css/sm-extend.min.css">
+    <script src="//g.alicdn.com/sj/lib/zepto/zepto.min.js"></script>
+
+</head>
+<body>
+<div class="page-group">
+    <div id="page-swiper" class="page">
+    <header class="bar bar-nav">
+        <h1 class="title">我的订单</h1>
+    </header>
+    <div class="content">
+        <div class="content-block">
+            <div class="buttons-row" style="margin-top: 1rem">
+                <a href="#ongoingTab" class="tab-link active button">进行中</a>
+                <a href="#needRatedTab" class="tab-link button">待评价</a>
+                <a href="#finishTab" class="tab-link button">已完成</a>
+            </div>
+            <div class="tabs">
+                <div id="ongoingTab" class="tab active infinite-scroll">
+
+                    <div class="list-block media-list" style="margin-top:  0px;">
+
+
+                    </div>
+                    <!-- 加载提示符 -->
+                    <div class="infinite-scroll-preloader">
+                        <div class="preloader">
+                        </div>
+                    </div>
+
+                </div>
+                <div id="needRatedTab" class="tab infinite-scroll">
+
+                    <div class="list-block media-list" style="margin-top:  0px;">
+
+                    </div>
+                    <!-- 加载提示符 -->
+                    <div class="infinite-scroll-preloader">
+                        <div class="preloader">
+                        </div>
+                    </div>
+                </div>
+                <div id="finishTab" class="tab infinite-scroll">
+
+                    <div class="list-block media-list" style="margin-top:  0px;">
+
+                    </div>
+                    <!-- 加载提示符 -->
+                    <div class="infinite-scroll-preloader">
+                        <div class="preloader">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    </div>
+</div>
+
+
+<script type='text/javascript' src='//g.alicdn.com/msui/sm/0.6.2/js/sm.min.js' charset='utf-8'></script>
+<script type='text/javascript' src='//g.alicdn.com/msui/sm/0.6.2/js/sm-extend.min.js' charset='utf-8'></script>
+<script>
+    $(document).on("pageInit", function() {
+        $.showIndicator();
+        //多个标签页下的无限滚动
+        var loading = false;
+        // 每次加载添加多少条目
+        var itemsPerLoad = 10;
+        // 最多可加载的条目
+        var maxItems = 30;
+        var  lastIndex = $('.list-block ul').length;
+        function addItems(number, lastIndex,data) {
+            // 生成新条目的HTML
+            var html = '';
+            var dataLength = 0;
+            $.each(data, function(i, order){
+                var orderStatus = "";
+
+                if(order.orderStatus == 'BEGIN'){
+                    orderStatus = "有人向您发出邀请";
+                }else if(order.itemStatus == 'SELLER_APPLY'){
+                    orderStatus = "已经回复买家";
+                }else if(order.itemStatus == 'BUYER_CONFIRM'){
+                    orderStatus = "买家已付款，请确认";
+                }else if(order.itemStatus == 'SELLER_CONFIRM'){
+                    orderStatus = "买家已经确认沟通时间，沟通时间是"+order.finalAppointmentTime;
+                }else if(order.itemStatus == 'SELLER_FINISH'){
+                    orderStatus = "您已经标记完成";
+                }else if(order.itemStatus == 'NEED_RATED'){
+                    orderStatus = "等待买家确认";
+                }else if(order.itemStatus == 'FINISH'){
+                    orderStatus = "已完成";
+                }
+                html += '<div class="card" >'+
+                            '<div class="card-content">'+
+                                '<div class="list-block media-list">'+
+                                    '<ul onclick="toFixOrder(\''+order.orderId+'\')">'+
+                                        '<li class="item-content">'+
+                                            '<div class="item-media">'+
+                                                '<img src="http://gqianniu.alicdn.com/bao/uploaded/i4//tfscom/i3/TB10LfcHFXXXXXKXpXXXXXXXXXX_!!0-item_pic.jpg_250x250q60.jpg" width="44">'+
+                                            '</div>'+
+                                            '<div class="item-inner">'+
+                                                '<div class="item-title-row">'+
+                                                    '<div class="item-title">'+order.itemTitle+'</div>'+
+                                                '</div>'+
+                                                '<div class="item-subtitle">'+orderStatus+'</div>'+
+                                                '<span class="badge" style="position: absolute;top: 1rem;right: 1rem;background:red;color: white;">1</span>'+
+                                            '</div>'+
+                                        '</li>'+
+                                    '</ul>'+
+                                '</div>'+
+                            '</div>'+
+                        '</div>';
+                dataLength += 1;
+            });
+            if(dataLength == 0){
+                $('.no-record').show();
+                $('.infinite-scroll-preloader').remove();
+            }else{
+                $('.no-record').hide();
+                $('.infinite-scroll-preloader').hide();
+                // 添加新条目
+                $('.active.infinite-scroll .list-block').append(html);
+            }
+
+
+        }
+        $.post('${request.contextPath}/order/my-order-list', {orderStatus:'ongoing',startIndex: 0,loadSize:itemsPerLoad}, function (response) {
+            //预先加载20条
+            addItems(itemsPerLoad, 0,response);
+            $.hideIndicator();
+        });
+        $(document).on('infinite', function() {
+            // 如果正在加载，则退出
+            if (loading) return;
+            // 设置flag
+            loading = true;
+            var tabIndex = 0;
+            var dataType = 'ongoing';
+            if($(this).find('.infinite-scroll.active').attr('id') == "needRatedTab"){
+                tabIndex = 1;
+                dataType = 'NEED_RATED';
+            }
+            if($(this).find('.infinite-scroll.active').attr('id') == "finishTab"){
+                tabIndex = 2;
+                dataType = 'FINISH';
+            }
+
+            lastIndex = $('.list-block').eq(tabIndex).find('ul').length;
+            $.post('${request.contextPath}/order/my-order-list', {orderStatus:dataType,startIndex: lastIndex,loadSize:itemsPerLoad}, function (response) {
+                setTimeout(function() {
+                    // 重置加载flag
+                    loading = false;
+
+                    if (lastIndex >= maxItems) {
+                        // 加载完毕，则注销无限加载事件，以防不必要的加载
+                        $.detachInfiniteScroll($('.infinite-scroll'));
+                        // 删除加载提示符
+                        $('.infinite-scroll-preloader').remove();
+                        return;
+                    }
+                    // 添加新条目
+                    addItems(itemsPerLoad, lastIndex,response);
+                    // 更新最后加载的序号
+                    lastIndex = $('.list-block ul').length;
+                    //容器发生改变,如果是js滚动，需要刷新滚动
+                    $.refreshScroller();
+                }, 1000);
+            });
+        });
+    });
+    function toFixOrder(id){
+        window.location.href = "${request.contextPath}/order/fix-buyer-order/"+id;
+    }
+</script>
+<script>$.init();</script>
+</body>
+</html>

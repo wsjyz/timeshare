@@ -62,7 +62,13 @@ public class OrderDAOImpl extends BaseDAO implements OrderDAO {
     }
 
     @Override
-    public ItemOrder findOrderByOrderId(String OrderId) {
+    public ItemOrder findOrderByOrderId(String orderId) {
+        StringBuilder sql = new StringBuilder("");
+        sql.append("select * from t_order where order_id = ?");
+        List<ItemOrder> itemList = getJdbcTemplate().query(sql.toString(),new Object[]{orderId},new OrderMapper());
+        if(itemList != null && !itemList.isEmpty()){
+            return itemList.get(0);
+        }
         return null;
     }
 

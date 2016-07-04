@@ -104,6 +104,11 @@
             }else if(item.itemStatus == 'draft'){
                 itemStatus = "草稿";
             }
+            var remindCount = item.remindCount;
+            var remindHtml = '';
+            if(remindCount > 0){
+                var remindHtml = '<span class="badge" style="position: absolute;top: 0.5rem;left:2rem;background:red;color: white;">'+remindCount+'</span>'
+            }
             html += '<ul>'+
                     '<li>'+
                     '<a href="#" class="item-link item-content" onclick="toView(\''+item.itemId+'\')">'+
@@ -111,6 +116,7 @@
                     '<div class="item-title-row">'+
                     '<div class="item-title">'+item.title+'</div>'+
                     '<div class="item-after">'+itemStatus+'</div>'+
+                    remindHtml+
                     '</div>'+
                     '<div class="item-text">'+
                     '<div class="row">'+
