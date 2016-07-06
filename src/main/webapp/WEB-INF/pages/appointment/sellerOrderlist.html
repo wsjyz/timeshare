@@ -97,17 +97,17 @@
 
                 if(order.orderStatus == 'BEGIN'){
                     orderStatus = "有人向您发出邀请";
-                }else if(order.itemStatus == 'SELLER_APPLY'){
+                }else if(order.orderStatus == 'SELLER_APPLY'){
                     orderStatus = "已经回复买家";
-                }else if(order.itemStatus == 'BUYER_CONFIRM'){
+                }else if(order.orderStatus == 'BUYER_CONFIRM'){
                     orderStatus = "买家已付款，请确认";
-                }else if(order.itemStatus == 'SELLER_CONFIRM'){
+                }else if(order.orderStatus == 'SELLER_CONFIRM'){
                     orderStatus = "买家已经确认沟通时间，沟通时间是"+order.finalAppointmentTime;
-                }else if(order.itemStatus == 'SELLER_FINISH'){
+                }else if(order.orderStatus == 'SELLER_FINISH'){
                     orderStatus = "您已经标记完成";
-                }else if(order.itemStatus == 'NEED_RATED'){
+                }else if(order.orderStatus == 'NEED_RATED'){
                     orderStatus = "等待买家确认";
-                }else if(order.itemStatus == 'FINISH'){
+                }else if(order.orderStatus == 'FINISH'){
                     orderStatus = "已完成";
                 }
                 html += '<div class="card" >'+

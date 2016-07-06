@@ -4,7 +4,13 @@ public interface Contants {
 
     String APPID = "wxcd8903dd6a9552eb";
 
-    String SECRET = "a172670e10ca24f85c3f2aa024d8dd99";
+    String SECRET = "4fde45504987eb0b54feeca4b9173622";
+
+    String MCHID = "1358876502";
+
+    String KEY = "5bab4e2c09194e6198fe351a04991949";
+
+    String DEVICEINFO = "WEB";
 
     String CORPID = "wxfb5ee1afc560a3be";
 

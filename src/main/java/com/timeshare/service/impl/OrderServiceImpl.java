@@ -29,10 +29,12 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     public String saveOrder(ItemOrder order) {
-        Item item = itemService.findItemByItemId(order.getItemId());
+
+        String result = "";
+
         switch (order.getOrderStatus()){
             case "BEGIN":
-
+                Item item = itemService.findItemByItemId(order.getItemId());
                 order.setPrice(item.getPrice());
                 order.setItemTitle(item.getTitle());
                 order.setOrderUserId(item.getUserId());
@@ -44,20 +46,33 @@ public class OrderServiceImpl implements OrderService {
                 remind.setUserId(item.getUserId());
 
                 remindService.saveRemind(remind);
+                result = orderDAO.saveOrder(order);
             break;
             case "SELLER_APPLY":
-
+                Item item1 = itemService.findItemByItemId(order.getItemId());
                 Remind sellerApplyRemind = new Remind();
-                sellerApplyRemind.setObjId(item.getItemId());
+                sellerApplyRemind.setObjId(order.getOrderId());
                 sellerApplyRemind.setRemindType(Contants.REMIND_TYPE.ORDER.toString());
                 sellerApplyRemind.setToUserId(order.getUserId());
-                sellerApplyRemind.setUserId(item.getUserId());
+                sellerApplyRemind.setUserId(item1.getUserId());
+
+                result = orderDAO.modifyOrder(order);
+                break;
+            case "BUYER_CONFIRM":
+                Item item2 = itemService.findItemByItemId(order.getItemId());
+                Remind buyConfirmRemind = new Remind();
+                buyConfirmRemind.setObjId(order.getOrderId());
+                buyConfirmRemind.setRemindType(Contants.REMIND_TYPE.ORDER.toString());
+                buyConfirmRemind.setToUserId(item2.getUserId());
+                buyConfirmRemind.setUserId(order.getUserId());
+
+                result = orderDAO.modifyOrder(order);
                 break;
         }
 
 
 
-        return orderDAO.saveOrder(order);
+        return result;
     }
 
     @Override

@@ -57,8 +57,34 @@ public class OrderDAOImpl extends BaseDAO implements OrderDAO {
     }
 
     @Override
-    public String modifyOrder(ItemOrder itemOrder) {
-        return null;
+    public String modifyOrder(ItemOrder order) {
+        StringBuilder sql = new StringBuilder("update t_order set ");
+
+        if(StringUtils.isNotBlank(order.getSuggestAppointmentTime())){
+            sql.append(" suggest_appointment_time = '"+order.getSuggestAppointmentTime()+"',");
+        }
+        if(StringUtils.isNotBlank(order.getFinalAppointmentTime())){
+            sql.append(" final_appointment_time = '"+order.getFinalAppointmentTime()+"',");
+        }
+        if(StringUtils.isNotBlank(order.getSellerPhone())){
+            sql.append(" seller_phone = '"+order.getSellerPhone()+"',");
+        }
+        if(StringUtils.isNotBlank(order.getPayType())){
+            sql.append(" pay_type = '"+order.getPayType()+"',");
+        }
+        if(StringUtils.isNotBlank(order.getOrderStatus())){
+            sql.append(" order_status = '"+order.getOrderStatus()+"',");
+        }
+        if (sql.lastIndexOf(",") + 1 == sql.length()) {
+            sql.delete(sql.lastIndexOf(","), sql.length());
+        }
+        sql.append(" where order_id='" + order.getOrderId() + "'");
+        int result = getJdbcTemplate().update(sql.toString());
+        if(result > 0){
+            return Contants.SUCCESS;
+        }else{
+            return "FAILED";
+        }
     }
 
     @Override

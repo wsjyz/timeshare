@@ -1,19 +1,25 @@
 package com.timeshare.controller;
 
 
+import com.alibaba.fastjson.JSON;
+import com.thoughtworks.xstream.XStream;
+import com.thoughtworks.xstream.io.xml.DomDriver;
+import com.thoughtworks.xstream.io.xml.XmlFriendlyNameCoder;
 import com.timeshare.domain.*;
 import com.timeshare.service.ItemService;
 import com.timeshare.service.OrderService;
 import com.timeshare.service.RemindService;
 import com.timeshare.service.UserService;
-import com.timeshare.utils.Contants;
+import com.timeshare.utils.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
-import java.util.List;
+import javax.servlet.http.HttpServletRequest;
+import java.io.UnsupportedEncodingException;
+import java.math.BigDecimal;
+import java.util.*;
 
 /**
  * Created by user on 2016/7/1.
@@ -31,6 +37,8 @@ public class OrderController extends BaseController{
     @Autowired
     RemindService remindService;
 
+    public static final String UNIFIEDORDER_URL = "https://api.mch.weixin.qq.com/pay/";
+
     @RequestMapping(value = "/to-start/{itemId}/{userId}")
     public String toStart(@PathVariable String itemId,@PathVariable String userId,Model model) {
         model.addAttribute("itemId",itemId);
@@ -46,11 +54,128 @@ public class OrderController extends BaseController{
             case "BEGIN":
                 toStr = "appointment/sellerApply";
                 break;
+            case "SELLER_APPLY":
+                toStr = "appointment/sellerApply";
+                break;
 
 
         }
         model.addAttribute("order",order);
         return toStr;
+    }
+
+    @RequestMapping(value = "/fix-seller-order/{orderId}")
+    public String toFixSellerOrder(@PathVariable String orderId,Model model) {
+
+        ItemOrder order = orderService.findOrderByOrderId(orderId);
+        String toStr = "";
+        switch (order.getOrderStatus()){
+            case "BEGIN":
+                toStr = "appointment/begin";
+                break;
+            case "SELLER_APPLY":
+                toStr = "appointment/buyerConfirm";
+                break;
+
+
+        }
+        model.addAttribute("order",order);
+        return toStr;
+    }
+    @RequestMapping(value = "/to-buyer-confirm/")
+    public String toByerConfirm(HttpServletRequest request,Model model) {
+
+        String code = request.getParameter("code");
+        String orderId = request.getParameter("state");
+        WeixinOauth weixinOauth = new WeixinOauth();
+        String openId = weixinOauth.obtainOpenId(code);
+        ItemOrder order = orderService.findOrderByOrderId(orderId);
+        request.setAttribute("order",order);
+        request.setAttribute("openId",openId);
+        WxPayConfigBean config = new WxPayConfigBean();
+        SortedMap parameters = new TreeMap<>();
+
+        config.setAppid(Contants.APPID);
+        parameters.put("appid",Contants.APPID);
+
+        config.setMch_id(Contants.MCHID);
+        parameters.put("mch_id",Contants.MCHID);
+
+        String noceStr = CommonStringUtils.genPK();
+        config.setNonce_str(noceStr);
+        parameters.put("nonce_str",noceStr);
+
+        String bodyStr = order.getItemTitle() + "|" + order.getOrderUserName();
+        config.setBody(bodyStr);
+        parameters.put("body",bodyStr);
+
+        config.setOut_trade_no(orderId);
+        parameters.put("out_trade_no",orderId);
+
+        int fenPrice = (order.getPrice().multiply(new BigDecimal(100))).intValue();
+        System.out.println(" 价格为 "+fenPrice);
+        config.setTotal_fee(fenPrice);
+        parameters.put("total_fee",fenPrice);
+
+        //ip sbwx
+        config.setSpbill_create_ip("123.0.1.2");
+        parameters.put("spbill_create_ip","123.0.1.2");
+
+        config.setTrade_type("JSAPI");
+        parameters.put("trade_type","JSAPI");
+
+        config.setNotify_url("http://jk.zhangqidong.cn/time/wxPay/notify-url");
+        parameters.put("notify_url","http://jk.zhangqidong.cn/time/wxPay/notify-url");
+
+        config.setOpenid(openId);
+        parameters.put("openid",openId);
+
+        parameters.put("key",Contants.KEY);
+
+        String signStr = WxUtils.createSign(parameters,Contants.KEY);
+        config.setSign(signStr);
+
+        XStream xs = new XStream(new DomDriver("UTF-8", new XmlFriendlyNameCoder("-_", "_")));
+        xs.processAnnotations(config.getClass());
+        String xml = xs.toXML(config);
+        System.out.println("xml is "+xml);
+
+        HTTPSClient client = new HTTPSClient();
+        client.setSERVER_HOST_URL(UNIFIEDORDER_URL);
+        client.setServiceUri("unifiedorder");
+        try {
+            client.setBodyParams(new String(xml.getBytes("UTF-8"),"ISO-8859-1"));//狗日的微信，神经病
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
+        String response = client.request();
+        System.out.println("response is "+response);
+
+
+        WxResponseBean responseBean = new WxResponseBean();
+        xs.processAnnotations(responseBean.getClass());
+        responseBean = (WxResponseBean)xs.fromXML(response);
+        String prepayId = "";
+        if(responseBean.getReturn_code() != null && responseBean.getReturn_code().equals("SUCCESS")){
+            prepayId = responseBean.getPrepay_id();
+            SortedMap signMap = new TreeMap<>();
+            signMap.put("appId",Contants.APPID);
+            String timestampStr = System.currentTimeMillis()+"";
+            signMap.put("timeStamp",timestampStr);
+            String randomStr = CommonStringUtils.genPK();
+            signMap.put("nonceStr",randomStr);
+            signMap.put("package","prepay_id="+prepayId);
+            signMap.put("signType","MD5");
+
+            String paySign = WxUtils.createSign(signMap,Contants.KEY);
+            signMap.put("paySign",paySign);
+            String jsApiParams = JSON.toJSONString(signMap);
+            System.out.println("jsApiParams "+jsApiParams);
+            model.addAttribute("jsApiParams",jsApiParams);
+        }
+        model.addAttribute("order",order);
+        return "appointment/buyerConfirm";
+
     }
 
     @RequestMapping(value = "/to-seller-order-list")
@@ -89,8 +214,20 @@ public class OrderController extends BaseController{
 
             String result = orderService.saveOrder(order);
             message.setMessageType(result);
+            String messageContent = "";
+            switch (order.getOrderStatus()) {
+                case "BEGIN":
+                    messageContent = "预约成功！已经向卖家发送短信通知！";
+                    break;
+                case "SELLER_APPLY":
+                    messageContent = "回复成功！已经向买家发送短信通知！";
+                    break;
+                case "BUYER_CONFIRM":
+                    messageContent = "操作成功！已经向卖家发送短信通知！";
+                    break;
+            }
             if(result.equals(Contants.SUCCESS)){
-                message.setContent("预约成功！已经向卖家发送短信通知！");
+                message.setContent(messageContent);
             }
 
         }

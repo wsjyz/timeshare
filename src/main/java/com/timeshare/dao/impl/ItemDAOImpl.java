@@ -14,6 +14,7 @@ import org.springframework.stereotype.Repository;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -61,7 +62,9 @@ public class ItemDAOImpl extends BaseDAO implements ItemDAO {
         StringBuilder reviewSql = new StringBuilder("");
         reviewSql.append("select * from t_item where item_id = ?");
         if(StringUtils.isNotBlank(itemId)){
-            List<Item> itemList = getJdbcTemplate().query(reviewSql.toString(),new Object[]{itemId},new ItemMapper());
+            List<String> excludeFields = new ArrayList<>();
+            excludeFields.add("remindCount");
+            List<Item> itemList = getJdbcTemplate().query(reviewSql.toString(),new Object[]{itemId},new ItemMapper(excludeFields));
             if(itemList != null && itemList.size() > 0){
                 Item item = itemList.get(0);
                 return item;
@@ -121,6 +124,15 @@ public class ItemDAOImpl extends BaseDAO implements ItemDAO {
 
     public class ItemMapper implements RowMapper<Item>{
 
+        private List<String> excludeField = new ArrayList<>();
+
+        public ItemMapper(){
+        }
+
+        public ItemMapper(List<String> excludeFields){
+            this.excludeField = excludeFields;
+        }
+
         @Override
         public Item mapRow(ResultSet rs, int i) throws SQLException {
             Item item = new Item();
@@ -137,7 +149,10 @@ public class ItemDAOImpl extends BaseDAO implements ItemDAO {
             item.setUseCount(rs.getInt("use_count"));
             item.setRecommend(rs.getBoolean("recommend"));
             item.setDuration(rs.getInt("duration"));
-            item.setRemindCount(rs.getInt("remindCount"));
+            if(!excludeField.contains("remindCount")){
+                item.setRemindCount(rs.getInt("remindCount"));
+            }
+
             return item;
         }
     }

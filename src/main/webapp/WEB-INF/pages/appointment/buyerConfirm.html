@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <title>买家约您</title>
+    <title>卖家答复啦</title>
     <meta name="viewport" content="initial-scale=1, maximum-scale=1">
     <link rel="shortcut icon" href="/favicon.ico">
     <meta name="apple-mobile-web-app-capable" content="yes">
@@ -11,7 +11,20 @@
 
     <link rel="stylesheet" href="//g.alicdn.com/msui/sm/0.6.2/css/sm.min.css">
     <link rel="stylesheet" href="//g.alicdn.com/msui/sm/0.6.2/css/sm-extend.min.css">
-
+    <style>
+        .payment-item{
+            float: left;
+            position: relative;
+            border: 1px solid #ddd;
+            height: 2rem;
+            padding: 0.5rem 5px;
+            margin-left: 1rem;
+            cursor: pointer;
+        }
+        .payment-item-selected{
+            border: 2px solid #e4393c;
+        }
+    </style>
 </head>
 <body>
 
@@ -49,11 +62,11 @@
             <form action="${request.contextPath}/order/save" method="post">
                 <input type="hidden" id="orderId" name="orderId" value="${order.orderId}">
                 <input type="hidden" id="itemId" name="itemId" value="${order.itemId}">
-                <input type="hidden" id="orderStatus" name="orderStatus" value="SELLER_APPLY">
+                <input type="hidden" id="orderStatus" name="orderStatus" value="BUYER_CONFIRM">
                 <div class="list-block cards-list">
                     <ul>
                         <li class="card">
-                            <div class="card-header">买家的问题</div>
+                            <div class="card-header">您填写的问题</div>
                             <div class="card-content">
                                 <div class="card-content-inner" id="orderProblem">
                                     ${order.orderProblem}
@@ -61,7 +74,7 @@
                             </div>
                         </li>
                         <li class="card">
-                            <div class="card-header">卖家的自我介绍</div>
+                            <div class="card-header">您的自我介绍</div>
                             <div class="card-content">
                                 <div class="card-content-inner" id="orderUserDescription">
                                     ${order.orderUserDescription}
@@ -69,18 +82,35 @@
                             </div>
                         </li>
                         <li class="card">
-                            <div class="card-header"><#if (order.suggestAppointmentTime)??>见面时间为<#else>请填写建议的时间</#if></div>
+                            <div class="card-header">卖家建议的沟通时间</div>
                             <div class="card-content">
-                                <div class="item-input">
-                                    <input type="text" name="suggestAppointmentTime" id="suggestAppointmentTime" value="${order.suggestAppointmentTime!''}">
+                                <div class="card-content-inner">
+                                    ${order.suggestAppointmentTime!''}
                                 </div>
                             </div>
                         </li>
                         <li class="card">
-                            <div class="card-header"><#if (order.suggestAppointmentTime)??>您填写的手机号为<#else>请填写您的联系手机号</#if></div>
+                            <div class="card-header">卖家填写的联系手机号</div>
                             <div class="card-content">
-                                <div class="item-input">
-                                    <input type="text" name="sellerPhone" id="sellerPhone" value="${order.sellerPhone!''}">
+                                <div class="card-content-inner">
+                                    ${order.sellerPhone!''}
+                                </div>
+                            </div>
+                        </li>
+                        <li class="card">
+                            <div class="card-header">选择具体见面时间</div>
+                            <div class="card-content">
+                                <div class="card-content-inner" >
+                                    <input type="text" name="finalAppointmentTime" id="finalAppointmentTime" value="${order.finalAppointmentTime!''}">
+                                </div>
+                            </div>
+                        </li>
+                        <li class="card">
+                            <div class="card-header">选择付款方式</div>
+                            <div class="card-content">
+                                <div class="card-content-inner" style="height: 4rem;">
+                                    <div id="div1" class="payment-item">微信支付</div>
+                                    <div id="div2" class="payment-item">线下支付</div>
                                 </div>
                             </div>
                         </li>
@@ -104,9 +134,8 @@
 <script>$.init()</script>
 <script>
     var orderStatus = '${order.orderStatus}';
-    if(orderStatus == 'SELLER_APPLY'){
-        $("#saveOrderBtn").hide();
-    }
+    alert('${jsApiParams}');
+
 //    $.showIndicator();
 //    $.get('${request.contextPath}/item/get-item', {itemId: $('#itemId').val(),userId: $('#userId').val()}, function (response) {
 //        $('#priceSp').text(response.item.price);
@@ -132,14 +161,51 @@
     }
     $("#saveOrderBtn").on('click', function () {
 
-        var vali = checkForm();
-        if(vali){
-            $.showIndicator();
-            $('form').submit();
-        }
+//        var vali = checkForm();
+//        if(vali){
+//            $.showIndicator();
+//            $('form').submit();
+//        }
+        $.confirm('您需要支付'+${order.price}+'元,确定吗？',
+                function () {
+                    payIt();
+                }
+        );
+
     });
-    var suggestAppointmentTime = "${order.suggestAppointmentTime!''}";
-    if(suggestAppointmentTime == ''){
+
+    $(".payment-item").on('click', function () {
+        $('.payment-item').removeClass('payment-item-selected');
+        $(this).addClass('payment-item-selected');
+    });
+
+    function onBridgeReady(){
+        WeixinJSBridge.invoke(
+                'getBrandWCPayRequest', ${jsApiParams},
+                function(res){
+                    if(res.err_msg == "get_brand_wcpay_request:ok" ) {
+                        $.alert('支付成功，卖家会与您联系', function () {
+
+                        });
+                    }	 // 使用以上方式判断前端返回,微信团队郑重提示：res.err_msg将在用户支付成功后返回	ok，但并不保证它绝对可靠。
+                }
+        );
+    }
+    function payIt(){
+        if (typeof WeixinJSBridge == "undefined"){
+            if( document.addEventListener ){
+                document.addEventListener('WeixinJSBridgeReady', onBridgeReady, false);
+            }else if (document.attachEvent){
+                document.attachEvent('WeixinJSBridgeReady', onBridgeReady);
+                document.attachEvent('onWeixinJSBridgeReady', onBridgeReady);
+            }
+        }else{
+            onBridgeReady();
+        }
+    }
+
+    var finalAppointmentTime = "${order.finalAppointmentTime!''}";
+    if(finalAppointmentTime == ''){
         var date = new Date();
         var month = date.getMonth() + 1;
         var strDate = date.getDate();
@@ -149,11 +215,12 @@
         if (strDate >= 0 && strDate <= 9) {
             strDate = "0" + strDate;
         }
-        $("#suggestAppointmentTime").datetimePicker({
+        $("#finalAppointmentTime").datetimePicker({
 
             value: [date.getFullYear(), month, strDate, date.getHours(), '00']
         });
     }
+
 
 </script>
 

@@ -34,7 +34,7 @@ public class HTTPSClient {
     //参数名和方法名
     private String serviceUri;
     //为了适应非form请求
-    private Object jsonBodyParams;
+    private Object bodyParams;
     //设置content-type
     private String contentType;
 
@@ -50,12 +50,12 @@ public class HTTPSClient {
         this.params = params;
     }
 
-    public Object getJsonBodyParams() {
-        return jsonBodyParams;
+    public Object getBodyParams() {
+        return bodyParams;
     }
 
-    public void setJsonBodyParams(Object jsonBodyParams) {
-        this.jsonBodyParams = jsonBodyParams;
+    public void setBodyParams(Object bodyParams) {
+        this.bodyParams = bodyParams;
     }
 
     public void setServiceUri(String serviceUri) {
@@ -105,12 +105,12 @@ public class HTTPSClient {
     public StringEntity packageStringParams(){
         StringEntity  postingString = null;
         try {
-            String jsonBodyParamsStr = (String)jsonBodyParams;
-            if(jsonBodyParams instanceof String == false){
-                jsonBodyParamsStr = JSON.toJSONString(jsonBodyParams);
+            String jsonBodyParamsStr = (String) bodyParams;
+            if(bodyParams instanceof String == false){
+                jsonBodyParamsStr = JSON.toJSONString(bodyParams);
             }
             postingString =new StringEntity(jsonBodyParamsStr);
-            System.out.println("body|"+JSON.toJSONString(jsonBodyParams));
+            System.out.println("body|"+JSON.toJSONString(bodyParams));
         } catch (UnsupportedEncodingException e) {
             e.printStackTrace();
         }
@@ -125,7 +125,7 @@ public class HTTPSClient {
         if(params.size() > 0){
             httpPost.setEntity(packageParams());
         }
-        if(jsonBodyParams != null){
+        if(bodyParams != null){
             httpPost.setEntity(packageStringParams());
         }
         if(StringUtils.isNotBlank(contentType)){
@@ -149,7 +149,7 @@ public class HTTPSClient {
         };
         String responseBody = "";
         try {
-            responseBody = httpClient.execute(httpPost,responseHandler);
+            responseBody = new String(httpClient.execute(httpPost,responseHandler).getBytes("ISO-8859-1"),"UTF-8");
         } catch (IOException e) {
             e.printStackTrace();
         }finally {

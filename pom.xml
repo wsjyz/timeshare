@@ -160,6 +160,16 @@
             <artifactId>org.dom4j.dom4j</artifactId>
             <version>1.6.1</version>
         </dependency>
+        <dependency>
+            <groupId>com.thoughtworks.xstream</groupId>
+            <artifactId>xstream</artifactId>
+            <version>1.4.9</version>
+        </dependency>
+        <dependency>
+            <groupId>com.alibaba</groupId>
+            <artifactId>druid</artifactId>
+            <version>1.0.21</version>
+        </dependency>
     </dependencies>
     <build>
     <plugins>
@@ -188,6 +198,14 @@
                 <overWriteSnapshots>true</overWriteSnapshots>
                 <type>jar</type>
                 <outputDirectory>${project.build.directory}/lib</outputDirectory>
+            </configuration>
+        </plugin>
+        <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-compiler-plugin</artifactId>
+            <configuration>
+                <source>1.8</source>
+                <target>1.8</target>
             </configuration>
         </plugin>
     </plugins>

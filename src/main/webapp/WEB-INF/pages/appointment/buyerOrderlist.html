@@ -88,32 +88,34 @@
         // 最多可加载的条目
         var maxItems = 30;
         var  lastIndex = $('.list-block ul').length;
+
         function addItems(number, lastIndex,data) {
             // 生成新条目的HTML
             var html = '';
             var dataLength = 0;
+            var orderStatus = "";
             $.each(data, function(i, order){
-                var orderStatus = "";
+
                 if(order.orderStatus == 'BEGIN'){
                     orderStatus = "已经向卖家发出邀请";
-                }else if(order.itemStatus == 'SELLER_APPLY'){
+                }else if(order.orderStatus == 'SELLER_APPLY'){
                     orderStatus = "卖家已经回复，可以付款了";
-                }else if(order.itemStatus == 'BUYER_CONFIRM'){
+                }else if(order.orderStatus == 'BUYER_CONFIRM'){
                     orderStatus = "已付款,等待卖家确认";
-                }else if(order.itemStatus == 'SELLER_CONFIRM'){
+                }else if(order.orderStatus == 'SELLER_CONFIRM'){
                     orderStatus = "卖家已经确认，沟通时间是"+order.finalAppointmentTime;
-                }else if(order.itemStatus == 'SELLER_FINISH'){
+                }else if(order.orderStatus == 'SELLER_FINISH'){
                     orderStatus = "卖家已经完成";
-                }else if(order.itemStatus == 'NEED_RATED'){
+                }else if(order.orderStatus == 'NEED_RATED'){
                     orderStatus = "请评价";
-                }else if(order.itemStatus == 'FINISH'){
+                }else if(order.orderStatus == 'FINISH'){
                     orderStatus = "已完成";
                 }
 
                 html += '<div class="card" >'+
                             '<div class="card-content">'+
                                 '<div class="list-block media-list">'+
-                                    '<ul>'+
+                                    '<ul onclick="toFixOrder(\''+order.orderId+'\',\''+order.orderStatus+'\')">'+
                                         '<li class="item-content">'+
                                             '<div class="item-media">'+
                                                 '<img src="http://gqianniu.alicdn.com/bao/uploaded/i4//tfscom/i3/TB10LfcHFXXXXXKXpXXXXXXXXXX_!!0-item_pic.jpg_250x250q60.jpg" width="44">'+
@@ -188,7 +190,14 @@
             });
         });
     });
+    function toFixOrder(id,orderStatus){
+        if(orderStatus == 'SELLER_APPLY'){
+            window.location.href = "https://open.weixin.qq.com/connect/oauth2/authorize?appid=wxcd8903dd6a9552eb&redirect_uri=http%3A%2F%2Fjk.zhangqidong.cn%2Ftime%2Forder%2Fto-buyer-confirm%2F&response_type=code&scope=snsapi_base&state="+id+"#wechat_redirect";
+        }else{
+            window.location.href = "${request.contextPath}/order/fix-seller-order/"+id;
+        }
 
+    }
 </script>
 <script>$.init();</script>
 </body>
