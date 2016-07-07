@@ -21,6 +21,44 @@ public class ItemOrder extends BaseDomain {
     private BigDecimal paidMoney;
     private String orderStatus;
     private String itemTitle;
+    private String sellerFinish;
+    private String buyerFinish;
+
+    //传值用
+    private String optUserType;//seller,buyer
+    private String orderFeedBack;
+
+    public String getOrderFeedBack() {
+        return orderFeedBack;
+    }
+
+    public void setOrderFeedBack(String orderFeedBack) {
+        this.orderFeedBack = orderFeedBack;
+    }
+
+    public String getSellerFinish() {
+        return sellerFinish;
+    }
+
+    public void setSellerFinish(String sellerFinish) {
+        this.sellerFinish = sellerFinish;
+    }
+
+    public String getBuyerFinish() {
+        return buyerFinish;
+    }
+
+    public void setBuyerFinish(String buyerFinish) {
+        this.buyerFinish = buyerFinish;
+    }
+
+    public String getOptUserType() {
+        return optUserType;
+    }
+
+    public void setOptUserType(String optUserType) {
+        this.optUserType = optUserType;
+    }
 
     public String getItemTitle() {
         return itemTitle;

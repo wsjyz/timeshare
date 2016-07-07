@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <title>卖家答复啦</title>
+    <title><#if (order.orderStatus == 'BUYER_CONFIRM')>您已付款<#else>卖家答复啦</#if></title>
     <meta name="viewport" content="initial-scale=1, maximum-scale=1">
     <link rel="shortcut icon" href="/favicon.ico">
     <meta name="apple-mobile-web-app-capable" content="yes">
@@ -63,6 +63,7 @@
                 <input type="hidden" id="orderId" name="orderId" value="${order.orderId}">
                 <input type="hidden" id="itemId" name="itemId" value="${order.itemId}">
                 <input type="hidden" id="orderStatus" name="orderStatus" value="BUYER_CONFIRM">
+                <input type="hidden" id="optUserType" name="optUserType" value="buyer">
                 <div class="list-block cards-list">
                     <ul>
                         <li class="card">
@@ -98,14 +99,14 @@
                             </div>
                         </li>
                         <li class="card">
-                            <div class="card-header">选择具体见面时间</div>
+                            <div class="card-header"><#if (order.finalAppointmentTime)??>最终沟通时间为<#else>选择具体沟通时间</#if></div>
                             <div class="card-content">
                                 <div class="card-content-inner" >
                                     <input type="text" name="finalAppointmentTime" id="finalAppointmentTime" value="${order.finalAppointmentTime!''}">
                                 </div>
                             </div>
                         </li>
-                        <li class="card">
+                        <li class="card" id="payType">
                             <div class="card-header">选择付款方式</div>
                             <div class="card-content">
                                 <div class="card-content-inner" style="height: 4rem;">
@@ -134,17 +135,14 @@
 <script>$.init()</script>
 <script>
     var orderStatus = '${order.orderStatus}';
-    alert('${jsApiParams}');
+    var payStatus = '${payStatus}';
 
-//    $.showIndicator();
-//    $.get('${request.contextPath}/item/get-item', {itemId: $('#itemId').val(),userId: $('#userId').val()}, function (response) {
-//        $('#priceSp').text(response.item.price);
-//        $('#titleSp').text(response.item.title);
-//        var createDate = response.item.optTime.substring(0,10);
-//        $('#dateSp').text(createDate);
-//        $('#createUserNameSp').text(response.userInfo.nickName);
-//        $.hideIndicator();
-//    });
+    if(payStatus == 'ORDERPAID'){
+        $('#payType').hide();
+        $('#saveOrderBtn').hide();
+    }
+
+
     function checkForm(){
         var suggestAppointmentTime = $('#suggestAppointmentTime').val();
         var sellerPhone = $('#sellerPhone').val();
@@ -185,7 +183,7 @@
                 function(res){
                     if(res.err_msg == "get_brand_wcpay_request:ok" ) {
                         $.alert('支付成功，卖家会与您联系', function () {
-
+                            $('form').submit();
                         });
                     }	 // 使用以上方式判断前端返回,微信团队郑重提示：res.err_msg将在用户支付成功后返回	ok，但并不保证它绝对可靠。
                 }

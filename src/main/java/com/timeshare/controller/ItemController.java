@@ -66,6 +66,9 @@ public class ItemController extends BaseController{
         if(StringUtils.isNotBlank(itemId)){
             item = itemService.findItemByItemId(itemId);
         }
+        if(StringUtils.isBlank(userId)){
+            userId = item.getUserId();
+        }
         UserInfo userInfo = userService.findUserByUserId(userId);
         ItemDTO itemDTO = new ItemDTO();
         itemDTO.setItem(item);

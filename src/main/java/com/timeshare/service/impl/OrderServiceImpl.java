@@ -68,6 +68,15 @@ public class OrderServiceImpl implements OrderService {
 
                 result = orderDAO.modifyOrder(order);
                 break;
+            case "SELLER_FINISH":
+                result = orderDAO.modifyOrder(order);
+                break;
+            case "BUYLLER_FINISH":
+                result = orderDAO.modifyOrder(order);
+                break;
+            case "FINISH":
+                result = orderDAO.modifyOrder(order);
+                break;
         }
 
 

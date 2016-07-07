@@ -47,8 +47,9 @@
                 </div>
             </div>
             <form action="${request.contextPath}/order/save" method="post">
-                <input type="hidden" id="itemId" name="itemId" value="${itemId}">
+                <input type="hidden" id="itemId" name="itemId" value="${order.itemId}">
                 <input type="hidden" id="orderStatus" name="orderStatus" value="SELLER_APPLY">
+                <input type="hidden" id="optUserType" name="optUserType" value="buyer">
                 <div class="list-block cards-list">
                     <ul>
                         <li class="card">
@@ -56,7 +57,7 @@
                             <div class="card-content">
                                 <div class="card-content-inner">
                                     <div class="item-input">
-                                        <textarea name="orderProblem" id="orderProblem"></textarea>
+                                        <textarea name="orderProblem" id="orderProblem">${order.orderProblem!''}</textarea>
                                     </div>
                                 </div>
                             </div>
@@ -66,7 +67,7 @@
                             <div class="card-content">
                                 <div class="card-content-inner">
                                     <div class="item-input">
-                                        <textarea name="orderUserDescription" id="orderUserDescription"></textarea>
+                                        <textarea name="orderUserDescription" id="orderUserDescription">${order.orderUserDescription!''}</textarea>
                                     </div>
                                 </div>
                             </div>
@@ -90,7 +91,10 @@
 <script type='text/javascript' src='//g.alicdn.com/msui/sm/0.6.2/js/sm-extend.min.js' charset='utf-8'></script>
 <script>$.init()</script>
 <script>
-
+    var orderStatus = '${order.orderStatus}';
+    if(orderStatus == 'BEGIN'){
+        $('#saveOrderBtn').hide();
+    }
     $.showIndicator();
     $.get('${request.contextPath}/item/get-item', {itemId: $('#itemId').val(),userId: $('#userId').val()}, function (response) {
         $('#priceSp').text(response.item.price);

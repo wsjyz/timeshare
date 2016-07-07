@@ -11,6 +11,7 @@ import com.timeshare.service.OrderService;
 import com.timeshare.service.RemindService;
 import com.timeshare.service.UserService;
 import com.timeshare.utils.*;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -19,6 +20,8 @@ import org.springframework.web.bind.annotation.*;
 import javax.servlet.http.HttpServletRequest;
 import java.io.UnsupportedEncodingException;
 import java.math.BigDecimal;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.*;
 
 /**
@@ -52,10 +55,29 @@ public class OrderController extends BaseController{
         String toStr = "";
         switch (order.getOrderStatus()){
             case "BEGIN":
-                toStr = "appointment/sellerApply";
+                toStr = "appointment/begin";
                 break;
             case "SELLER_APPLY":
-                toStr = "appointment/sellerApply";
+                toStr = "appointment/buyerConfirm";
+                break;
+            case "BUYER_CONFIRM":
+
+                String canFinish = "false";
+                if(new Date().after(CommonStringUtils.stringToDate(
+                        order.getFinalAppointmentTime()))){
+                    canFinish = "true";
+                }
+                model.addAttribute("canFinish",canFinish);
+                toStr = "appointment/buyerFinish";
+                break;
+            case "SELLER_FINISH":
+                String canFinish1 = "false";
+                if(new Date().after(CommonStringUtils.stringToDate(
+                        order.getFinalAppointmentTime()))){
+                    canFinish1 = "true";
+                }
+                model.addAttribute("canFinish",canFinish1);
+                toStr = "appointment/buyerFinish";
                 break;
 
 
@@ -71,10 +93,25 @@ public class OrderController extends BaseController{
         String toStr = "";
         switch (order.getOrderStatus()){
             case "BEGIN":
-                toStr = "appointment/begin";
+                toStr = "appointment/sellerApply";
                 break;
             case "SELLER_APPLY":
-                toStr = "appointment/buyerConfirm";
+                toStr = "appointment/sellerApply";
+                break;
+            case "BUYER_CONFIRM":
+
+                String canFinish = "false";
+                if(new Date().after(CommonStringUtils.stringToDate(
+                        order.getFinalAppointmentTime()))){
+                    canFinish = "true";
+                }
+                model.addAttribute("canFinish",canFinish);
+                toStr = "appointment/sellerFinish";
+                break;
+            case "SELLER_FINISH":
+
+                model.addAttribute("canFinish","false");
+                toStr = "appointment/sellerFinish";
                 break;
 
 
@@ -156,23 +193,36 @@ public class OrderController extends BaseController{
         xs.processAnnotations(responseBean.getClass());
         responseBean = (WxResponseBean)xs.fromXML(response);
         String prepayId = "";
+        String payStatus = "NOTPAY";
+        String jsApiParams = "\'\'";
         if(responseBean.getReturn_code() != null && responseBean.getReturn_code().equals("SUCCESS")){
-            prepayId = responseBean.getPrepay_id();
-            SortedMap signMap = new TreeMap<>();
-            signMap.put("appId",Contants.APPID);
-            String timestampStr = System.currentTimeMillis()+"";
-            signMap.put("timeStamp",timestampStr);
-            String randomStr = CommonStringUtils.genPK();
-            signMap.put("nonceStr",randomStr);
-            signMap.put("package","prepay_id="+prepayId);
-            signMap.put("signType","MD5");
 
-            String paySign = WxUtils.createSign(signMap,Contants.KEY);
-            signMap.put("paySign",paySign);
-            String jsApiParams = JSON.toJSONString(signMap);
-            System.out.println("jsApiParams "+jsApiParams);
-            model.addAttribute("jsApiParams",jsApiParams);
+            if(responseBean.getResult_code() != null && responseBean.getResult_code().equals("FAIL")){
+                if(responseBean.getErr_code().equals("ORDERPAID")){//已支付过了
+                    payStatus = "ORDERPAID";
+                }
+
+            }else if(responseBean.getResult_code() != null && responseBean.getResult_code().equals("SUCCESS")){
+                prepayId = responseBean.getPrepay_id();
+                SortedMap signMap = new TreeMap<>();
+                signMap.put("appId",Contants.APPID);
+                String timestampStr = System.currentTimeMillis()+"";
+                signMap.put("timeStamp",timestampStr);
+                String randomStr = CommonStringUtils.genPK();
+                signMap.put("nonceStr",randomStr);
+                signMap.put("package","prepay_id="+prepayId);
+                signMap.put("signType","MD5");
+
+                String paySign = WxUtils.createSign(signMap,Contants.KEY);
+                signMap.put("paySign",paySign);
+                jsApiParams = JSON.toJSONString(signMap);
+                System.out.println("jsApiParams "+jsApiParams);
+
+            }
+
         }
+        model.addAttribute("jsApiParams",jsApiParams);
+        model.addAttribute("payStatus",payStatus);
         model.addAttribute("order",order);
         return "appointment/buyerConfirm";
 
@@ -212,27 +262,51 @@ public class OrderController extends BaseController{
             order.setOrderUserName(user.getNickName());
             order.setUserId(user.getUserId());
 
+            if(order.getOrderStatus().equals("BUYER_CONFIRM")
+                    || order.getOrderStatus().equals("BUYER_FINISH")
+                    || order.getOrderStatus().equals("SELLER_FINISH")){
+
+                    ItemOrder tempOrder = orderService.findOrderByOrderId(order.getOrderId());
+                    if(order.getOptUserType().equals("seller")){
+
+                        if(StringUtils.isNotBlank(tempOrder.getBuyerFinish())//卖家
+                                && tempOrder.getBuyerFinish().equals("1")){
+                            order.setOrderStatus(Contants.ORDER_STATUS.FINISH.toString());
+                        }else{
+                            order.setOrderStatus(Contants.ORDER_STATUS.SELLER_FINISH.toString());
+                        }
+
+
+                    }else{//买家
+
+                        if(StringUtils.isNotBlank(tempOrder.getSellerFinish())
+                                && tempOrder.getSellerFinish().equals("1")){
+                            order.setOrderStatus(Contants.ORDER_STATUS.FINISH.toString());
+                        }else{
+                            order.setOrderStatus(Contants.ORDER_STATUS.BUYLLER_FINISH.toString());
+                        }
+
+                    }
+            }
+
             String result = orderService.saveOrder(order);
             message.setMessageType(result);
-            String messageContent = "";
-            switch (order.getOrderStatus()) {
-                case "BEGIN":
-                    messageContent = "预约成功！已经向卖家发送短信通知！";
-                    break;
-                case "SELLER_APPLY":
-                    messageContent = "回复成功！已经向买家发送短信通知！";
-                    break;
-                case "BUYER_CONFIRM":
-                    messageContent = "操作成功！已经向卖家发送短信通知！";
-                    break;
+            String toUserType = "";
+            if(order.getOptUserType().equals("buyer")){
+                toUserType = "卖家";
+            }else{
+                toUserType = "买家";
             }
+
+            String messageContent = "操作成功！已经向"+toUserType+"发送短信通知！";
+
             if(result.equals(Contants.SUCCESS)){
                 message.setContent(messageContent);
             }
 
         }
         model.addAttribute("message",message);
-        model.addAttribute("jumpUrl","/order/to-my-order-list");
+        model.addAttribute("jumpUrl","/order/to-"+order.getOptUserType()+"-order-list");
         return "info";
     }
 }

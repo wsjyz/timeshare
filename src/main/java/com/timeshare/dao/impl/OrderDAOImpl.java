@@ -31,7 +31,7 @@ public class OrderDAOImpl extends BaseDAO implements OrderDAO {
         int result = getJdbcTemplate().update(sql.toString(), new PreparedStatementSetter() {
             @Override
             public void setValues(PreparedStatement ps) throws SQLException {
-                ps.setString(1, CommonStringUtils.genPK());
+                ps.setString(1, CommonStringUtils.gen18RandomNumber());
                 ps.setString(2,info.getOrderUserId());
                 ps.setString(3,info.getOrderUserName());
                 ps.setString(4,info.getOrderProblem());
@@ -75,6 +75,13 @@ public class OrderDAOImpl extends BaseDAO implements OrderDAO {
         if(StringUtils.isNotBlank(order.getOrderStatus())){
             sql.append(" order_status = '"+order.getOrderStatus()+"',");
         }
+        if(StringUtils.isNotBlank(order.getSellerFinish())){
+            sql.append(" seller_finish = "+order.getSellerFinish()+",");
+        }
+        if(StringUtils.isNotBlank(order.getBuyerFinish())){
+            sql.append(" buyer_finish = "+order.getBuyerFinish()+",");
+        }
+
         if (sql.lastIndexOf(",") + 1 == sql.length()) {
             sql.delete(sql.lastIndexOf(","), sql.length());
         }
@@ -150,6 +157,8 @@ public class OrderDAOImpl extends BaseDAO implements OrderDAO {
             order.setOptTime(rs.getString("opt_time"));
             order.setItemId(rs.getString("item_id"));
             order.setItemTitle(rs.getString("item_title"));
+            order.setBuyerFinish(rs.getString("buyer_finish"));
+            order.setSellerFinish(rs.getString("seller_finish"));
             return order;
         }
     }

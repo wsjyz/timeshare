@@ -125,6 +125,7 @@
                                                     '<div class="item-title">'+order.itemTitle+'</div>'+
                                                 '</div>'+
                                                 '<div class="item-subtitle">'+orderStatus+'</div>'+
+                                                '<div class="item-subtitle">订单ID：'+order.orderId+'</div>'+
                                                 '<span class="badge" style="position: absolute;top: 1rem;right: 1rem;background:red;color: white;">1</span>'+
                                             '</div>'+
                                         '</li>'+
@@ -194,7 +195,7 @@
         if(orderStatus == 'SELLER_APPLY'){
             window.location.href = "https://open.weixin.qq.com/connect/oauth2/authorize?appid=wxcd8903dd6a9552eb&redirect_uri=http%3A%2F%2Fjk.zhangqidong.cn%2Ftime%2Forder%2Fto-buyer-confirm%2F&response_type=code&scope=snsapi_base&state="+id+"#wechat_redirect";
         }else{
-            window.location.href = "${request.contextPath}/order/fix-seller-order/"+id;
+            window.location.href = "${request.contextPath}/order/fix-buyer-order/"+id;
         }
 
     }
