@@ -6,6 +6,7 @@ import com.timeshare.domain.ImageObj;
 import com.timeshare.domain.OpenPage;
 import com.timeshare.domain.UserInfo;
 import com.timeshare.service.UserService;
+import com.timeshare.utils.CommonStringUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -22,18 +23,22 @@ public class UserServiceImpl implements UserService{
     ImageObjDAO imageObjDAO;
 
     @Override
-    public void saveUser(UserInfo info) {
+    public String saveUser(UserInfo info) {
 
+        if(StringUtils.isBlank(info.getUserId())){
+            info.setUserId(CommonStringUtils.genPK());
+        }
+        return userDAO.saveUser(info);
     }
 
     @Override
     public String modifyUser(UserInfo userInfo) {
-        return null;
+        return userDAO.modifyUser(userInfo);
     }
 
     @Override
-    public UserInfo findUserByUserId(String userId) {
-        return userDAO.findUserByUserId(userId);
+    public UserInfo findUserByUserId(String userId,ImageObj imageObj) {
+        return userDAO.findUserByUserId(userId,imageObj);
     }
 
     @Override
@@ -58,5 +63,10 @@ public class UserServiceImpl implements UserService{
     @Override
     public OpenPage<UserInfo> findUserPage(String mobile, String nickName, OpenPage page) {
         return null;
+    }
+
+    @Override
+    public UserInfo findUserByOpenId(String openId) {
+        return userDAO.findUserByOpenId(openId);
     }
 }

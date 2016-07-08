@@ -9,11 +9,11 @@ import com.timeshare.domain.UserInfo;
  */
 public interface UserService {
 
-    void saveUser(UserInfo info);
+    String saveUser(UserInfo info);
 
     String modifyUser(UserInfo userInfo);
 
-    UserInfo findUserByUserId(String userId);
+    UserInfo findUserByUserId(String userId,ImageObj imageObj);
 
     ImageObj findUserImg(String userId,String imgType);
 
@@ -22,5 +22,7 @@ public interface UserService {
     String deleteById(String userId);
 
     OpenPage<UserInfo> findUserPage(String mobile, String nickName, OpenPage page);
+
+    UserInfo findUserByOpenId(String openId);
 
 }

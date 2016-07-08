@@ -1,10 +1,12 @@
 package com.timeshare.controller;
 
 import com.alibaba.fastjson.JSON;
-import com.timeshare.utils.AccessTokenBean;
-import com.timeshare.utils.WeixinOauth;
-import com.timeshare.utils.WeixinUser;
+import com.timeshare.domain.ImageObj;
+import com.timeshare.domain.UserInfo;
+import com.timeshare.service.UserService;
+import com.timeshare.utils.*;
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -25,6 +27,9 @@ import java.util.Date;
 @Controller
 @RequestMapping(value = "/wx")
 public class WxController {
+
+    @Autowired
+    UserService userService;
 
     @ResponseBody
     @RequestMapping(value = "/sanctus",method = RequestMethod.GET)
@@ -58,7 +63,36 @@ public class WxController {
         }
         return result;
     }
+    @RequestMapping(value = "/to-get-open-id")
+    public String toOauth(){
+        String wxOauthUrl = "https://open.weixin.qq.com/connect/oauth2/authorize?appid="
+                + Contants.APPID+"&redirect_uri=http%3A%2F%2F"+Contants.DOMAIN+"%2Ftime%2Fwx%2Fget-open-id%2F&response_type=code&scope=snsapi_base&state=xx#wechat_redirect";
+        return "redirect:"+wxOauthUrl;
+    }
+    @RequestMapping(value = "/get-open-id")
+    public String getOpenId(HttpServletRequest request,Model model){
 
+        String toUrl = request.getContextPath()+"/"+request.getParameter("toUrl");
+        String code = request.getParameter("code");
+        WeixinOauth oauth = new WeixinOauth();
+        String openId = oauth.obtainOpenId(code);
+        UserInfo userInfo = userService.findUserByOpenId(openId);
+        String sendUrl = "";
+        if(userInfo == null){
+            sendUrl = "https://open.weixin.qq.com/connect/oauth2/authorize?appid="
+                    + Contants.APPID+"&redirect_uri=http%3A%2F%2F"+Contants.DOMAIN+"%2Ftime%2Fwx%2Foauth%2F&response_type=code&scope=snsapi_userinfo&state="+toUrl+"#wechat_redirect";
+        }else{
+            String mobile = userInfo.getMobile();
+            String nickName = userInfo.getNickName();
+            if(StringUtils.isNotBlank(mobile) && StringUtils.isNotBlank(nickName)){
+                sendUrl = "/user/to-my-page";
+            }else{
+
+                sendUrl = "/user/to-userinfo?userId="+userInfo.getUserId();
+            }
+        }
+        return "redirect:"+sendUrl;
+    }
 
 //https://open.weixin.qq.com/connect/oauth2/authorize?appid=wxcd8903dd6a9552eb&redirect_uri=http%3A%2F%2Flocalhost%3A8080%2Ftime%2Fwx%2Foauth&response_type=code&scope=snsapi_userinfo&state=http%3A%2F%2Fwww.baidu.com#wechat_redirect
     @RequestMapping(value = "/oauth")
@@ -69,6 +103,22 @@ public class WxController {
         AccessTokenBean accessTokenBean = weixinOauth.obtainOauthAccessToken(code);
         WeixinUser weixinUser = weixinOauth.getUserInfo(accessTokenBean.getAccess_token(), accessTokenBean.getOpenid());
         System.out.println(JSON.toJSONString(weixinUser));
-        return "redirect:"+state;
+
+        UserInfo user = new UserInfo();
+        String userId = CommonStringUtils.genPK();
+        if(weixinUser != null){
+            user.setUserId(userId);
+            user.setOpenId(weixinUser.getOpenId());
+            user.setNickName(weixinUser.getNickname());
+            user.setSex(weixinUser.getSex());
+            user.setCity(weixinUser.getCity());
+            ImageObj imageObj = new ImageObj();
+            imageObj.setImageUrl(weixinUser.getHeadimgurl());
+            user.setImageObj(imageObj);
+            userService.saveUser(user);
+        }
+
+        request.setAttribute("user",user);
+        return "redirect:"+"/user/to-userinfo?userId="+userId;
     }
 }

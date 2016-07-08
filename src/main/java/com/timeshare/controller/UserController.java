@@ -1,9 +1,6 @@
 package com.timeshare.controller;
 
-import com.timeshare.domain.ImageObj;
-import com.timeshare.domain.Item;
-import com.timeshare.domain.MyRemind;
-import com.timeshare.domain.UserInfo;
+import com.timeshare.domain.*;
 import com.timeshare.service.ItemService;
 import com.timeshare.service.RemindService;
 import com.timeshare.service.UserService;
@@ -13,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.List;
@@ -32,14 +30,26 @@ public class UserController extends BaseController{
     RemindService remindService;
 
     @RequestMapping(value = "/to-userinfo")
-    public String toUserInfo() {
+    public String toUserInfo(@RequestParam String userId,Model model) {
+        model.addAttribute("userId",userId);
         return "userinfo";
+    }
+
+    @ResponseBody
+    @RequestMapping(value = "/get-userinfo")
+    public UserInfo getUserInfo(@RequestParam String userId) {
+        ImageObj imageObj = new ImageObj();
+        imageObj.setImageType(Contants.IMAGE_TYPE.USER_HEAD.toString());
+        UserInfo userInfo = userService.findUserByUserId(userId,imageObj);
+        return userInfo;
     }
 
     @RequestMapping(value = "/to-my-page")
     public String toMyPage() {
+
         return "mypage";
     }
+
 
     @RequestMapping(value = "/to-upload-img")
     public String toUploadImg(HttpServletRequest request,Model model) {
@@ -96,6 +106,18 @@ public class UserController extends BaseController{
         userInfo.setUserItemList(items);
         return userInfo;
     }
+    @RequestMapping(value = "/get-user-img")
+    @ResponseBody
+    public String getUserImg(@RequestParam String userId) {
+
+        String hasImg = "no";
+
+        ImageObj imageObj = userService.findUserImg(userId, Contants.ITEM_SHOW_IMG);
+        if(imageObj != null){
+            hasImg = "yes";
+        }
+        return hasImg;
+    }
 
 
     @RequestMapping(value = "/get-remind")
@@ -106,5 +128,21 @@ public class UserController extends BaseController{
         int sellCount = remindService.queryCountByObjIdAndType("admin","",Contants.REMIND_TYPE.ORDER.toString());
         remind.setSellRemindCount(sellCount);
         return remind;
+    }
+
+    @RequestMapping(value = "/save")
+    public String save(UserInfo user,Model model) {
+        SystemMessage message = new SystemMessage();
+        if(user != null){
+
+            String result = userService.modifyUser(user);
+            message.setMessageType(result);
+            if(result.equals(Contants.SUCCESS)){
+                message.setContent("操作成功！");
+            }
+        }
+        model.addAttribute("message",message);
+        model.addAttribute("jumpUrl","/user/to-my-page");
+        return "info";
     }
 }

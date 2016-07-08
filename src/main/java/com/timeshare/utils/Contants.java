@@ -20,6 +20,8 @@ public interface Contants {
 
     String SUCCESS = "success";
 
+    String DOMAIN = "jk.zhangqidong.cn";
+
     enum ITEM_STATUS {
         draft,for_sale,undercarriage
     }
@@ -27,7 +29,7 @@ public interface Contants {
         tel,meet
     }
     enum IMAGE_TYPE {
-        ITEM_SHOW_IMG
+        ITEM_SHOW_IMG,USER_HEAD
     }
     enum ORDER_TYPE {
         ONLINE,OFFLINE

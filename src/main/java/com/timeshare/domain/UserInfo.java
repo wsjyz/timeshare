@@ -34,6 +34,9 @@ public class UserInfo {
     private String industry;//行业
     private String city;
     private String ageGroup;//年龄段
+    private String openId;
+    private int sex;
+
     /**
      * 展示图片
      */
@@ -41,6 +44,22 @@ public class UserInfo {
 
     //数据传输用
     private List<Item> userItemList;
+
+    public int getSex() {
+        return sex;
+    }
+
+    public void setSex(int sex) {
+        this.sex = sex;
+    }
+
+    public String getOpenId() {
+        return openId;
+    }
+
+    public void setOpenId(String openId) {
+        this.openId = openId;
+    }
 
     public String getPosition() {
         return position;

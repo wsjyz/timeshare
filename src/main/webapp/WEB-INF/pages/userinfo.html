@@ -28,6 +28,8 @@
                     <img class="commentAvatarImage" src="${request.contextPath}/images/head.jpg">
                 </div>
             </div>
+            <form action="${request.contextPath}/user/save" method="post">
+                <input type="hidden" id="userId" name="userId" value="${userId}">
             <div class="list-block" style="margin-top: 6rem;">
                 <ul>
 
@@ -36,9 +38,20 @@
                         <div class="item-content">
                             <div class="item-media"><i class="icon icon-form-name"></i></div>
                             <div class="item-inner">
-                                <div class="item-title label">姓名</div>
+                                <div class="item-title label">昵称</div>
                                 <div class="item-input">
-                                    <input type="text" placeholder="Your name">
+                                    <input type="text" placeholder="Your name" name="nickName" id="nickName" value="${user.nickName!''}">
+                                </div>
+                            </div>
+                        </div>
+                    </li>
+                    <li>
+                        <div class="item-content">
+                            <div class="item-media"><i class="icon icon-form-email"></i></div>
+                            <div class="item-inner">
+                                <div class="item-title label">手机号</div>
+                                <div class="item-input">
+                                    <input type="text" placeholder="请输入" id="mobile" name="mobile" value="${user.mobile!''}">
                                 </div>
                             </div>
                         </div>
@@ -49,7 +62,7 @@
                             <div class="item-inner">
                                 <div class="item-title label">所在城市</div>
                                 <div class="item-input">
-                                    <input type="text" placeholder="请输入" id="city" name="city">
+                                    <input type="text" placeholder="请输入" id="city" name="city" value="${user.city!''}">
                                 </div>
                             </div>
                         </div>
@@ -60,7 +73,7 @@
                             <div class="item-inner">
                                 <div class="item-title label">行业</div>
                                 <div class="item-input">
-                                    <input type="text" placeholder="请输入" id="industry" name="industry">
+                                    <input type="text" placeholder="请输入" id="industry" name="industry" value="${user.industry!''}">
                                 </div>
                             </div>
                         </div>
@@ -71,7 +84,7 @@
                             <div class="item-inner">
                                 <div class="item-title label">任职机构</div>
                                 <div class="item-input">
-                                    <input type="text" placeholder="请输入" name="corp" id="corp">
+                                    <input type="text" placeholder="请输入" name="corp" id="corp" value="${user.corp!''}">
                                 </div>
                             </div>
                         </div>
@@ -82,7 +95,7 @@
                             <div class="item-inner">
                                 <div class="item-title label">职位</div>
                                 <div class="item-input">
-                                    <input type="text" placeholder="请输入" name="position" id="position">
+                                    <input type="text" placeholder="请输入" name="position" id="position" value="${user.position!''}">
                                 </div>
                             </div>
                         </div>
@@ -93,7 +106,7 @@
                             <div class="item-inner">
                                 <div class="item-title label">年龄段</div>
                                 <div class="item-input">
-                                    <input type="text" id="ageInput" id="ageGroup" name="ageGroup">
+                                    <input type="text" id="ageInput" id="ageGroup" name="ageGroup" value="${user.ageGroup!''}">
                                 </div>
                             </div>
                         </div>
@@ -105,8 +118,8 @@
                                 <div class="item-title label">性别</div>
                                 <div class="item-input">
                                     <select id="sex" name="sex">
-                                        <option>男性</option>
-                                        <option>女性</option>
+                                        <option value="1">男性</option>
+                                        <option value="0">女性</option>
                                     </select>
                                 </div>
                             </div>
@@ -123,10 +136,11 @@
                     </li>
                 </ul>
             </div>
+            </form>
             <div class="content-block">
                 <div class="row">
                     <div class="col-50"><a href="#" class="button button-big button-fill button-danger">取消</a></div>
-                    <div class="col-50"><a href="#" class="button button-big button-fill button-success">提交</a></div>
+                    <div class="col-50"><a href="#" id="saveUserBtn" class="button button-big button-fill button-success">提交</a></div>
                 </div>
             </div>
         </div>
@@ -140,6 +154,20 @@
 <script type='text/javascript' src='//g.alicdn.com/msui/sm/0.6.2/js/sm.min.js' charset='utf-8'></script>
 <script type='text/javascript' src='//g.alicdn.com/msui/sm/0.6.2/js/sm-extend.min.js' charset='utf-8'></script>
 <script>
+    $.get('${request.contextPath}/user/get-userinfo', {userId: $('#userId').val()}, function (response) {
+        if(response && response != ''){
+            $('.commentAvatarImage').attr("src",response.imageObj.imageUrl);
+            $('#nickName').val(response.nickName);
+            $('#mobile').val(response.mobile);
+            $('#city').val(response.city);
+            $('#industry').val(response.industry);
+            $('#position').val(response.position);
+            $('#corp').val(response.corp);
+            $('#ageGroup').val(response.ageGroup);
+            $('#sex').val(response.sex);
+        }
+
+    });
     $("#ageInput").picker({
         toolbarTemplate: '<header class="bar bar-nav">\
           <button class="button button-link pull-right close-picker">确定</button>\
@@ -152,6 +180,29 @@
                     }
                 ]
             });
+    function checkForm(){
+        var mobile = $('#mobile').val();
+        var userId = $('#userId').val();
+        if(mobile.length != 11){
+            $.toast('请输入正确的手机号');
+            return false;
+        }
+
+//        $.get('${request.contextPath}/user/get-user-img', {userId:userId}, function (response) {
+//            if(response == 'no'){
+//                $.toast('请上传展示图片');
+//                return false;
+//            }
+//        });
+        return true;
+    }
+    $("#saveUserBtn").on('click', function () {
+        var vali = checkForm();
+        if(vali){
+            $.showIndicator();
+            $('form').submit();
+        }
+    });
 </script>
 <!-- 默认必须要执行$.init(),实际业务里一般不会在HTML文档里执行，通常是在业务页面代码的最后执行 -->
 <script>$.init()</script>

@@ -1,11 +1,13 @@
 package com.timeshare.controller;
 
 import com.alibaba.fastjson.JSON;
+import com.timeshare.domain.ImageObj;
 import com.timeshare.domain.Item;
 import com.timeshare.domain.SystemMessage;
 import com.timeshare.domain.UserInfo;
 import com.timeshare.service.ItemService;
 import com.timeshare.service.UserService;
+import com.timeshare.utils.Contants;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -69,7 +71,9 @@ public class ItemController extends BaseController{
         if(StringUtils.isBlank(userId)){
             userId = item.getUserId();
         }
-        UserInfo userInfo = userService.findUserByUserId(userId);
+        ImageObj imageObj = new ImageObj();
+        imageObj.setImageType(Contants.IMAGE_TYPE.ITEM_SHOW_IMG.toString());
+        UserInfo userInfo = userService.findUserByUserId(userId,imageObj);
         ItemDTO itemDTO = new ItemDTO();
         itemDTO.setItem(item);
         itemDTO.setUserInfo(userInfo);
