@@ -47,8 +47,8 @@
                 </div>
             </div>
             <form action="${request.contextPath}/order/save" method="post">
-                <input type="hidden" id="itemId" name="itemId" value="${order.itemId}">
-                <input type="hidden" id="orderStatus" name="orderStatus" value="SELLER_APPLY">
+                <input type="hidden" id="itemId" name="itemId" value="<#if (order.itemId)??>${order.itemId}<#else>${itemId}</#if>">
+                <input type="hidden" id="orderStatus" name="orderStatus" value="BEGIN">
                 <input type="hidden" id="optUserType" name="optUserType" value="buyer">
                 <div class="list-block cards-list">
                     <ul>

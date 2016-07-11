@@ -17,7 +17,7 @@ public class BaseController {
     public UserInfo getCurrentUser(String userId){
         ImageObj imageObj = new ImageObj();
         imageObj.setImageType(Contants.IMAGE_TYPE.USER_HEAD.toString());
-        UserInfo userInfo = userService.findUserByUserId("admin",imageObj);
+        UserInfo userInfo = userService.findUserByUserId(userId,imageObj);
         return userInfo;
     }
 }

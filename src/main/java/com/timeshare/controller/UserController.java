@@ -5,12 +5,10 @@ import com.timeshare.service.ItemService;
 import com.timeshare.service.RemindService;
 import com.timeshare.service.UserService;
 import com.timeshare.utils.Contants;
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.List;
@@ -52,8 +50,8 @@ public class UserController extends BaseController{
 
 
     @RequestMapping(value = "/to-upload-img")
-    public String toUploadImg(HttpServletRequest request,Model model) {
-        UserInfo userInfo = getCurrentUser("");
+    public String toUploadImg(HttpServletRequest request,Model model,@CookieValue(value="time_sid", defaultValue="admin") String userId) {
+        UserInfo userInfo = getCurrentUser(userId);
         ImageObj imageObj = userService.findUserImg(userInfo.getUserId(), Contants.ITEM_SHOW_IMG);
         String objId = "";
         String imgType = "";
@@ -69,18 +67,17 @@ public class UserController extends BaseController{
         model.addAttribute("objId",objId);
         model.addAttribute("imageType",imgType);
         model.addAttribute("imageId",imageId);
-        model.addAttribute("imgPath",request.getContextPath()+imageObj.getImageUrl());
+        //model.addAttribute("imgPath",request.getContextPath()+imageObj.getImageUrl());
         return "uploadimg";
     }
     @ResponseBody
     @RequestMapping(value = "/save-img")
-    public String saveUserImg(@RequestParam String imageId,@RequestParam String imgUrl){
+    public String saveUserImg(@RequestParam String imageId,@RequestParam String imgUrl,@CookieValue(value="time_sid", defaultValue="admin") String userId){
         ImageObj obj = new ImageObj();
-        //TODO userId
         obj.setImageId(imageId);
-        obj.setObjId("admin");
+        obj.setObjId(userId);
         if(imgUrl.indexOf("images") != -1){
-            imgUrl = imgUrl.substring(imgUrl.indexOf("images") - 1,imgUrl.length());
+            imgUrl = imgUrl.substring(imgUrl.indexOf("images") - 1,imgUrl.indexOf("_"));
         }
         obj.setImageUrl(imgUrl);
         obj.setImageType(Contants.ITEM_SHOW_IMG);
@@ -122,10 +119,10 @@ public class UserController extends BaseController{
 
     @RequestMapping(value = "/get-remind")
     @ResponseBody
-    public MyRemind getRemind() {
+    public MyRemind getRemind(@CookieValue(value="time_sid", defaultValue="") String userId) {
 
         MyRemind remind = new MyRemind();
-        int sellCount = remindService.queryCountByObjIdAndType("admin","",Contants.REMIND_TYPE.ORDER.toString());
+        int sellCount = remindService.queryCountByObjIdAndType(userId,"",Contants.REMIND_TYPE.ORDER.toString());
         remind.setSellRemindCount(sellCount);
         return remind;
     }

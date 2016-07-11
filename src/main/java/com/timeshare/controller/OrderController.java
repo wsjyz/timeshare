@@ -242,23 +242,25 @@ public class OrderController extends BaseController{
 
     @RequestMapping(value = "/my-order-list")
     @ResponseBody
-    public List<ItemOrder> findOrderList(@RequestParam String orderStatus,@RequestParam int startIndex, @RequestParam int loadSize) {
-        List<ItemOrder> itemList = new ArrayList<ItemOrder>();
+    public List<ItemOrder> findOrderList(@RequestParam String orderStatus,
+                                         @RequestParam int startIndex, @RequestParam int loadSize
+                                        ,@CookieValue(value="time_sid", defaultValue="") String userId) {
+        List<ItemOrder> itemList = new ArrayList<>();
         ItemOrder parms = new ItemOrder();
-        parms.setOrderUserId("admin");
+        parms.setOrderUserId(userId);
         parms.setOrderStatus(orderStatus);
         itemList = orderService.findItemPage(parms,startIndex,loadSize);
         return itemList;
     }
 
     @RequestMapping(value = "/save",method = RequestMethod.POST)
-    public String save(ItemOrder order,Model model) {
+    public String save(ItemOrder order,Model model,@CookieValue(value="time_sid", defaultValue="") String userId) {
 
         SystemMessage message = new SystemMessage();
         if(order != null){
-            //TODO createuser
 
-            UserInfo user = getCurrentUser("admin");
+
+            UserInfo user = getCurrentUser(userId);
             order.setOrderUserName(user.getNickName());
             order.setUserId(user.getUserId());
 

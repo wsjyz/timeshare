@@ -81,6 +81,7 @@
 <script>
     $.init();
     $.showIndicator();
+    $('.infinite-scroll-preloader').hide();
     $("#toAddBtn").on('click', function () {
         $('form').submit();
     });
@@ -103,6 +104,8 @@
                 itemStatus = "已下架";
             }else if(item.itemStatus == 'draft'){
                 itemStatus = "草稿";
+            }else if(item.itemStatus == 'apply_for_online'){
+                itemStatus = "审核中";
             }
             var remindCount = item.remindCount;
             var remindHtml = '';

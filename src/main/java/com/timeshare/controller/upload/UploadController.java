@@ -2,6 +2,7 @@ package com.timeshare.controller.upload;
 
 import com.timeshare.domain.ImageObj;
 import com.timeshare.utils.CommonStringUtils;
+import com.timeshare.utils.ImgUtils;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -50,8 +51,11 @@ public class UploadController {
             }
             file.transferTo(targetFile);
 
+            //压缩裁剪图片
+            ImgUtils.cropImageCenter(targetFile.getAbsolutePath(),path+"/"+name+"_320x240.jpg",320,240);
+
             result.setSuccess(true);
-            result.setThumbUrl(request.getContextPath()+"/images/" + month + "/" + day + "/" +fileName);
+            result.setThumbUrl(request.getContextPath()+"/images/" + month + "/" + day + "/" +name+"_320x240.jpg");
         } catch (IOException e) {
             e.printStackTrace();
             result.setSuccess(false);

@@ -84,10 +84,11 @@ public class ItemController extends BaseController{
 
     @RequestMapping(value = "/list")
     @ResponseBody
-    public List<Item> findItemList(@RequestParam int startIndex, @RequestParam int loadSize) {
+    public List<Item> findItemList(@RequestParam int startIndex, @RequestParam int loadSize,
+                                   @CookieValue(value="time_sid", defaultValue="") String userId) {
         List<Item> itemList = new ArrayList<Item>();
         Item parms = new Item();
-        parms.setUserId("admin");
+        parms.setUserId(userId);
         itemList = itemService.findItemPage(parms,startIndex,loadSize);
         return itemList;
     }
@@ -99,26 +100,27 @@ public class ItemController extends BaseController{
         return itemList;
     }
 
-    @RequestMapping(value = "/save",method = RequestMethod.POST)
-    public ModelAndView save(Item item) {
-        ModelAndView modelAndView = new ModelAndView("info");
+    @RequestMapping(value = "/save")
+    public String save(Item item,@CookieValue(value="time_sid", defaultValue="") String userId,Model model) {
         SystemMessage message = new SystemMessage();
         if(item != null){
-            item.setCreateUserName("admin");
-            item.setUserId("admin");
+            UserInfo user = getCurrentUser(userId);
+            item.setCreateUserName(user.getNickName());
+            item.setUserId(userId);
             String result = itemService.saveItem(item);
             message.setMessageType(result);
-            if(result.equals("success")){
+            if(result.equals(Contants.SUCCESS)){
                 message.setContent("添加成功！");
+                message.setMessageType(result);
             }
         }
-        modelAndView.addObject("message",message);
-        modelAndView.addObject("content","添加成功！");
-        return modelAndView;
+        model.addAttribute("message",message);
+        model.addAttribute("jumpUrl","/item/to-list");
+        return "info";
     }
 
     @RequestMapping(value = "/preview")
-    public String preview(Item item, ModelMap modelMap,@CookieValue(value="user-id", defaultValue="") String userId) {
+    public String preview(Item item, ModelMap modelMap,@CookieValue(value="time_sid", defaultValue="") String userId) {
         modelMap.addAttribute("item",item);
         UserInfo userInfo = getCurrentUser(userId);
         modelMap.addAttribute("user",userInfo);

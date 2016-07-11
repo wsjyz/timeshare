@@ -15,8 +15,12 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.io.UnsupportedEncodingException;
 import java.math.BigInteger;
+import java.net.URLDecoder;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.Date;
@@ -64,15 +68,15 @@ public class WxController {
         return result;
     }
     @RequestMapping(value = "/to-get-open-id")
-    public String toOauth(){
+    public String toOauth(@RequestParam(value = "backUrl",required = false,defaultValue = "") String backUrl){
         String wxOauthUrl = "https://open.weixin.qq.com/connect/oauth2/authorize?appid="
-                + Contants.APPID+"&redirect_uri=http%3A%2F%2F"+Contants.DOMAIN+"%2Ftime%2Fwx%2Fget-open-id%2F&response_type=code&scope=snsapi_base&state=xx#wechat_redirect";
+                + Contants.APPID+"&redirect_uri=http%3A%2F%2F"+Contants.DOMAIN+"%2Ftime%2Fwx%2Fget-open-id%2F&response_type=code&scope=snsapi_base&state="+backUrl+"#wechat_redirect";
         return "redirect:"+wxOauthUrl;
     }
     @RequestMapping(value = "/get-open-id")
     public String getOpenId(HttpServletRequest request,Model model){
 
-        String toUrl = request.getContextPath()+"/"+request.getParameter("toUrl");
+        String toUrl = request.getParameter("state");
         String code = request.getParameter("code");
         WeixinOauth oauth = new WeixinOauth();
         String openId = oauth.obtainOpenId(code);
@@ -85,7 +89,16 @@ public class WxController {
             String mobile = userInfo.getMobile();
             String nickName = userInfo.getNickName();
             if(StringUtils.isNotBlank(mobile) && StringUtils.isNotBlank(nickName)){
-                sendUrl = "/user/to-my-page";
+                if(StringUtils.isNotBlank(toUrl)){
+                    try {
+                        sendUrl = URLDecoder.decode(toUrl,"UTF-8");
+                    } catch (UnsupportedEncodingException e) {
+                        e.printStackTrace();
+                    }
+                }else{
+                    sendUrl = "/user/to-my-page";
+                }
+
             }else{
 
                 sendUrl = "/user/to-userinfo?userId="+userInfo.getUserId();
@@ -96,9 +109,9 @@ public class WxController {
 
 //https://open.weixin.qq.com/connect/oauth2/authorize?appid=wxcd8903dd6a9552eb&redirect_uri=http%3A%2F%2Flocalhost%3A8080%2Ftime%2Fwx%2Foauth&response_type=code&scope=snsapi_userinfo&state=http%3A%2F%2Fwww.baidu.com#wechat_redirect
     @RequestMapping(value = "/oauth")
-    public String oauth(HttpServletRequest request){
+    public String oauth(HttpServletRequest request, HttpServletResponse response){
         String code = request.getParameter("code");
-        String state = request.getParameter("state");
+        String toUrl = request.getParameter("state");
         WeixinOauth weixinOauth = new WeixinOauth();
         AccessTokenBean accessTokenBean = weixinOauth.obtainOauthAccessToken(code);
         WeixinUser weixinUser = weixinOauth.getUserInfo(accessTokenBean.getAccess_token(), accessTokenBean.getOpenid());
@@ -115,10 +128,25 @@ public class WxController {
             ImageObj imageObj = new ImageObj();
             imageObj.setImageUrl(weixinUser.getHeadimgurl());
             user.setImageObj(imageObj);
-            userService.saveUser(user);
+            String result = userService.saveUser(user);
+            if(result.equals(Contants.SUCCESS)){
+                Cookie cookie = new Cookie("time_sid", userId);
+                cookie.setPath("/");
+                response.addCookie(cookie);
+            }
         }
 
         request.setAttribute("user",user);
-        return "redirect:"+"/user/to-userinfo?userId="+userId;
+        String sendUrl = "";
+        if(StringUtils.isNotBlank(toUrl)){
+            try {
+                sendUrl = URLDecoder.decode(toUrl,"UTF-8");
+            } catch (UnsupportedEncodingException e) {
+                e.printStackTrace();
+            }
+        }else{
+            sendUrl = "/user/to-userinfo?userId="+userId;
+        }
+        return "redirect:"+sendUrl;
     }
 }

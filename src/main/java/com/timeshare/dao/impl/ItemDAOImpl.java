@@ -25,8 +25,8 @@ public class ItemDAOImpl extends BaseDAO implements ItemDAO {
 
     @Override
     public String saveItem(final Item info) {
-        StringBuilder sql = new StringBuilder("insert into t_item (item_id,title,price,score,description,item_type,use_count,create_user_id,opt_time,create_user_name,item_status,recommend)" +
-                " values(?,?,?,?,?,?,?,?,?,?,?,?)");
+        StringBuilder sql = new StringBuilder("insert into t_item (item_id,title,price,score,description,item_type,use_count,create_user_id,opt_time,create_user_name,item_status,recommend,duration)" +
+                " values(?,?,?,?,?,?,?,?,?,?,?,?,?)");
         int result = getJdbcTemplate().update(sql.toString(), new PreparedStatementSetter() {
             @Override
             public void setValues(PreparedStatement ps) throws SQLException {
@@ -42,10 +42,11 @@ public class ItemDAOImpl extends BaseDAO implements ItemDAO {
                 ps.setString(10,info.getCreateUserName());
                 ps.setString(11,info.getItemStatus());
                 ps.setBoolean(12,info.isRecommend());
+                ps.setInt(13,info.getDuration());
             }
         });
         if(result > 0){
-            return "SUCCESS";
+            return Contants.SUCCESS;
         }else{
             return "FAILED";
         }

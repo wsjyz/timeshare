@@ -96,7 +96,8 @@
     $("#orderBtn").on('click', function () {
         var itemId = $('#itemId').val();
         var userId = $('#userId').val();
-        window.location.href = '${request.contextPath}/order/to-start/'+itemId+'/'+userId;
+        var backUrl = '/order/to-start/'+itemId+'/'+userId;
+        window.location.href = '${request.contextPath}/wx/to-get-open-id?backUrl='+encodeURIComponent(backUrl);
     });
     $.get('${request.contextPath}/item/get-item', {itemId: $('#itemId').val(),userId: $('#userId').val()}, function (response) {
         if(response){
