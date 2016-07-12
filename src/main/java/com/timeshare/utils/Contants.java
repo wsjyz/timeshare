@@ -23,7 +23,9 @@ public interface Contants {
     String DOMAIN = "jk.zhangqidong.cn";
 
     enum ITEM_STATUS {
-        draft,for_sale,undercarriage
+        draft,for_sale,
+        undercarriage,//下架
+        apply_for_online//待审核
     }
     enum ITEM_TYPE {
         tel,meet

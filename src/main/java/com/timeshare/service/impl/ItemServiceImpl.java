@@ -24,8 +24,8 @@ public class ItemServiceImpl implements ItemService {
     }
 
     @Override
-    public String modifyItem(Item Item) {
-        return null;
+    public String modifyItem(Item item) {
+        return itemDAO.modifyItem(item);
     }
 
     @Override
@@ -46,5 +46,15 @@ public class ItemServiceImpl implements ItemService {
     @Override
     public List<ItemDTO> findSellItemListByCondition(String condition, int startIndex, int loadSize) {
         return itemDAO.findSellItemListByCondition(condition,startIndex,loadSize);
+    }
+
+    @Override
+    public List<Item> findItemList(Item item, int startIndex, int loadSize) {
+        return itemDAO.findItemList(item,startIndex,loadSize);
+    }
+
+    @Override
+    public int findItemCount(Item item) {
+        return itemDAO.findItemCount(item);
     }
 }

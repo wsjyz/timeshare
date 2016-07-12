@@ -5,6 +5,7 @@ import com.timeshare.service.ItemService;
 import com.timeshare.service.RemindService;
 import com.timeshare.service.UserService;
 import com.timeshare.utils.Contants;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -63,18 +64,24 @@ public class UserController extends BaseController{
             objId = imageObj.getObjId();
             imgType = imageObj.getImageType();
             imageId = imageObj.getImageId();
+            model.addAttribute("imgPath",request.getContextPath()+imageObj.getImageUrl()+"_320x240.jpg");
         }
         model.addAttribute("objId",objId);
         model.addAttribute("imageType",imgType);
         model.addAttribute("imageId",imageId);
-        //model.addAttribute("imgPath",request.getContextPath()+imageObj.getImageUrl());
+
         return "uploadimg";
     }
     @ResponseBody
     @RequestMapping(value = "/save-img")
-    public String saveUserImg(@RequestParam String imageId,@RequestParam String imgUrl,@CookieValue(value="time_sid", defaultValue="admin") String userId){
+    public String saveUserImg(@RequestParam String imageId,@RequestParam String imgUrl,
+                              @RequestParam(defaultValue = "",required = false) String objId,
+                              @CookieValue(value="time_sid", defaultValue="") String userId){
         ImageObj obj = new ImageObj();
         obj.setImageId(imageId);
+        if(StringUtils.isBlank(userId)){
+            userId = objId;
+        }
         obj.setObjId(userId);
         if(imgUrl.indexOf("images") != -1){
             imgUrl = imgUrl.substring(imgUrl.indexOf("images") - 1,imgUrl.indexOf("_"));

@@ -63,20 +63,20 @@ public class ItemController extends BaseController{
 
     @RequestMapping(value = "/get-item")
     @ResponseBody
-    public ItemDTO getItem(@RequestParam String itemId,@RequestParam String userId) {
+    public ItemDTO getItem(@RequestParam String itemId,@RequestParam(required = false,defaultValue = "") String userId) {
         Item item = new Item();
+        ItemDTO itemDTO = new ItemDTO();
         if(StringUtils.isNotBlank(itemId)){
             item = itemService.findItemByItemId(itemId);
-        }
-        if(StringUtils.isBlank(userId)){
-            userId = item.getUserId();
+            itemDTO.setItem(item);
         }
         ImageObj imageObj = new ImageObj();
-        imageObj.setImageType(Contants.IMAGE_TYPE.ITEM_SHOW_IMG.toString());
-        UserInfo userInfo = userService.findUserByUserId(userId,imageObj);
-        ItemDTO itemDTO = new ItemDTO();
-        itemDTO.setItem(item);
-        itemDTO.setUserInfo(userInfo);
+        if(StringUtils.isBlank(userId)){
+            userId = item.getUserId();
+            imageObj.setImageType(Contants.IMAGE_TYPE.ITEM_SHOW_IMG.toString());
+            UserInfo userInfo = userService.findUserByUserId(userId,imageObj);
+            itemDTO.setUserInfo(userInfo);
+        }
         return itemDTO;
 
     }

@@ -53,8 +53,46 @@ public class ItemDAOImpl extends BaseDAO implements ItemDAO {
     }
 
     @Override
-    public String modifyItem(Item Item) {
-        return null;
+    public String modifyItem(Item item) {
+        StringBuilder sql = new StringBuilder("update t_item set ");
+
+        if(StringUtils.isNotBlank(item.getTitle())){
+            sql.append(" title = '"+item.getTitle()+"',");
+        }
+        if(item.getPrice() != null && item.getPrice().intValue() != 0){
+            sql.append(" price = '"+item.getPrice()+"',");
+        }
+        if(item.getDuration() != 0){
+            sql.append(" duration = '"+item.getDuration()+"',");
+        }
+        if(StringUtils.isNotBlank(item.getItemStatus())){
+            sql.append(" item_status = '"+item.getItemStatus()+"',");
+        }
+        if(item.getScore() != null && item.getScore().intValue() != 0){
+            sql.append(" score = '"+item.getScore()+"',");
+        }
+        if(StringUtils.isNotBlank(item.getDescription())){
+            sql.append(" description = "+item.getDescription()+",");
+        }
+        if(StringUtils.isNotBlank(item.getItemType())){
+            sql.append(" item_type = "+item.getItemType()+",");
+        }
+        if(item.getUseCount() != 0){
+            sql.append(" use_count = '"+item.getUseCount()+"',");
+        }
+        if(item.isRecommend()){
+            sql.append(" recommend = "+item.isRecommend()+",");
+        }
+        if (sql.lastIndexOf(",") + 1 == sql.length()) {
+            sql.delete(sql.lastIndexOf(","), sql.length());
+        }
+        sql.append(" where item_id='" + item.getItemId() + "'");
+        int result = getJdbcTemplate().update(sql.toString());
+        if(result > 0){
+            return Contants.SUCCESS;
+        }else{
+            return "FAILED";
+        }
     }
 
     @Override
@@ -121,6 +159,39 @@ public class ItemDAOImpl extends BaseDAO implements ItemDAO {
         sql.append(" order by i.opt_time desc limit ?,?");
         List<ItemDTO> itemList = getJdbcTemplate().query(sql.toString(),new Object[]{startIndex,loadSize},new ItemDTOMapper());
         return itemList;
+    }
+
+    @Override
+    public List<Item> findItemList(Item item, int startIndex, int loadSize) {
+        StringBuilder reviewSql = new StringBuilder("");
+
+        reviewSql.append("select i.* from t_item i where 1=1 ");
+        if(item != null){
+            if (StringUtils.isNotEmpty(item.getTitle())) {
+                reviewSql.append(" and i.title like '%"+item.getTitle()+"%' ");
+            }
+            if (StringUtils.isNotEmpty(item.getItemStatus())) {
+                reviewSql.append(" and i.item_status = '"+item.getItemStatus()+"' ");
+            }
+            if (StringUtils.isNotEmpty(item.getUserId())) {
+                reviewSql.append(" and i.create_user_id = '"+item.getUserId()+"' ");
+            }
+        }
+        reviewSql.append("  order by i.opt_time desc limit ?,?");
+        List<String> excludeFields = new ArrayList<>();
+        excludeFields.add("remindCount");
+        List<Item> itemList = getJdbcTemplate().query(reviewSql.toString(),new Object[]{startIndex,loadSize},new ItemMapper(excludeFields));
+
+        return itemList;
+    }
+    @Override
+    public int findItemCount(Item item) {
+        StringBuilder countSql = new StringBuilder(
+                "select count(*) from t_item where 1=1 ");
+        if (StringUtils.isNotEmpty(item.getItemStatus())) {
+            countSql.append(" and i.item_status = '"+item.getItemStatus()+"' ");
+        }
+        return getJdbcTemplate().queryForObject(countSql.toString(), Integer.class);
     }
 
     public class ItemMapper implements RowMapper<Item>{

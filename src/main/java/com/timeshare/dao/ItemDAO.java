@@ -23,4 +23,15 @@ public interface ItemDAO {
 
     List<ItemDTO> findSellItemListByCondition(String condition, int startIndex, int loadSize);
 
+    /**
+     * 用于后台管理
+     * @param item
+     * @param startIndex
+     * @param loadSize
+     * @return
+     */
+    List<Item> findItemList(Item item, int startIndex, int loadSize);
+
+    int findItemCount(Item item);
+
 }

@@ -20,6 +20,7 @@
 
 <input type="hidden" id="objType" value="${imageType}"/>
 <input type="hidden" id="imageId" value="${imageId}"/>
+<input type="hidden" id="objId" value="${objId}"/>
 <img src="${imgPath}" id="imageUrl" style="display: none;margin: 0 auto;height: 9rem;width: 16rem;"/>
 <div class="main-wrap">
     <div id="uploader">
@@ -50,8 +51,9 @@
     });
     $("#saveImgBtn").on('click', function () {
         var imageId = $('#imageId').val();
+        var objId = $('#objId').val();
         var imageUrl = $('#imageUrl')[0].src;
-        $.post('${request.contextPath}/user/save-img', { imageId: imageId, imgUrl:imageUrl}, function(response){
+        $.post('${request.contextPath}/user/save-img', { imageId: imageId, imgUrl:imageUrl,objId:objId}, function(response){
                 if(response == 'success'){
                     alert('修改成功');
                 }
