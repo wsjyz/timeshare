@@ -2,6 +2,7 @@ package com.timeshare.controller;
 
 import com.timeshare.domain.*;
 import com.timeshare.service.ItemService;
+import com.timeshare.service.OrderService;
 import com.timeshare.service.RemindService;
 import com.timeshare.service.UserService;
 import com.timeshare.utils.Contants;
@@ -28,20 +29,25 @@ public class UserController extends BaseController{
     @Autowired
     RemindService remindService;
 
+
     @RequestMapping(value = "/to-userinfo")
-    public String toUserInfo(@RequestParam String userId,Model model) {
+    public String toUserInfo(HttpServletRequest request,@CookieValue(value="time_sid", defaultValue="") String userId,Model model) {
+        if (StringUtils.isBlank(userId)){
+            userId = request.getParameter("userId");
+        }
         model.addAttribute("userId",userId);
         return "userinfo";
     }
 
     @ResponseBody
     @RequestMapping(value = "/get-userinfo")
-    public UserInfo getUserInfo(@RequestParam String userId) {
+    public UserInfo getUserInfo(@CookieValue(value="time_sid", defaultValue="admin") String userId) {
         ImageObj imageObj = new ImageObj();
         imageObj.setImageType(Contants.IMAGE_TYPE.USER_HEAD.toString());
         UserInfo userInfo = userService.findUserByUserId(userId,imageObj);
         return userInfo;
     }
+
 
     @RequestMapping(value = "/to-my-page")
     public String toMyPage() {

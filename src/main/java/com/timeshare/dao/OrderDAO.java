@@ -3,6 +3,7 @@ package com.timeshare.dao;
 import com.timeshare.domain.OpenPage;
 import com.timeshare.domain.ItemOrder;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 /**
@@ -21,4 +22,12 @@ public interface OrderDAO {
     OpenPage<ItemOrder> findOrderPage(String mobile, String nickName, OpenPage page);
 
     List<ItemOrder> findItemPage(ItemOrder order, int startIndex, int loadSize);
+
+    /**
+     * 暂时不用
+     * @param userId
+     * @param type
+     * @return
+     */
+    BigDecimal findUsersMoneyByType(String userId, String type);
 }

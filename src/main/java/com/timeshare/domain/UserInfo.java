@@ -22,7 +22,7 @@ public class UserInfo {
     private String nickName;// 昵称
     @Column(name = "income", length = 8, decimal = 2, comment = "收入")
     private BigDecimal income;
-    @Column(name = "income", length = 8, decimal = 2, comment = "支出")
+    @Column(name = "sum_cost", length = 8, decimal = 2, comment = "支出")
     private BigDecimal sumCost;
     @Column(name = "sell_counts", length = 5, comment = "售卖数量")
     private int sellCounts;

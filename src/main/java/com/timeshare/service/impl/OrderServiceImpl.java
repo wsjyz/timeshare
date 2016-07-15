@@ -12,6 +12,7 @@ import com.timeshare.utils.Contants;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 /**
@@ -107,6 +108,11 @@ public class OrderServiceImpl implements OrderService {
     @Override
     public List<ItemOrder> findItemPage(ItemOrder order, int startIndex, int loadSize) {
         return orderDAO.findItemPage(order,startIndex,loadSize);
+    }
+
+    @Override
+    public BigDecimal findUsersMoneyByType(String userId, String type) {
+        return orderDAO.findUsersMoneyByType(userId,type);
     }
 }
 

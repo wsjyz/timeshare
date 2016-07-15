@@ -11,6 +11,7 @@ import org.springframework.jdbc.core.PreparedStatementSetter;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Repository;
 
+import java.math.BigDecimal;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -103,6 +104,19 @@ public class OrderDAOImpl extends BaseDAO implements OrderDAO {
             return itemList.get(0);
         }
         return null;
+    }
+    @Override
+    public BigDecimal findUsersMoneyByType(String userId,String type) {
+        StringBuilder sql = new StringBuilder("");
+        sql.append("select sum(price) from t_order ");
+        if(type.equals("income")){
+            sql.append(" where order_user_id = ?");
+        }else if(type.equals("outcome")){
+            sql.append(" where create_user_id = ?");
+        }
+        BigDecimal money = getJdbcTemplate().queryForObject(sql.toString(),new Object[]{userId}, BigDecimal.class);
+
+        return money;
     }
 
     @Override
