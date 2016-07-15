@@ -21,7 +21,7 @@ public interface ItemDAO {
 
     List<Item> findItemPage(Item item, int startIndex, int loadSize);
 
-    List<ItemDTO> findSellItemListByCondition(String condition, int startIndex, int loadSize);
+    List<Item> findSellItemListByCondition(String condition, int startIndex, int loadSize);
 
     /**
      * 用于后台管理

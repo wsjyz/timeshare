@@ -11,7 +11,28 @@
 
     <link rel="stylesheet" href="//g.alicdn.com/msui/sm/0.6.2/css/sm.min.css">
     <link rel="stylesheet" href="//g.alicdn.com/msui/sm/0.6.2/css/sm-extend.min.css">
-
+    <style>
+        .commentAvatarDiv{
+            width: 50px;
+            height: 50px;
+            padding:2px;
+            background: #ececec;
+            border-radius:50px;
+            box-shadow: 0px 0px 1px rgba(0,0,0,0.4);
+            -moz-border-radius: 50px;
+            -webkit-border-radius: 50px;
+        }
+        .commentAvatarImage{
+            width:50px;
+            height:50px;
+            line-height: 0;	 /* remove line-height */
+            display: inline-block;	/* circle wraps image */
+            border-radius: 50%;	/* relative value */
+            -moz-border-radius: 50%;
+            -webkit-border-radius: 50%;
+            transition: linear 0.25s;
+        }
+    </style>
 </head>
 <body>
 
@@ -37,7 +58,7 @@
                                         <div class="row">
                                             <div class="col-33"><span id="createUserNameSp" ></span></div>
                                             <div class="col-33"><span id="priceSp" >${order.price}</span>元/次</div>
-                                            <div class="col-33"><span id="dateSp" >${order.optTime}</span></div>
+                                            <div class="col-33"><span id="dateSp" ></span></div>
                                         </div>
                                     </div>
                                 </div>
@@ -78,7 +99,7 @@
                             </div>
                         </li>
                         <li class="card">
-                            <div class="card-header"><#if (order.sellerPhone)??>您填写的手机号为<#else>请填写您的联系手机号</#if></div>
+                            <div class="card-header"><#if (order.sellerPhone)??>您填写的手机号为<#else>请填写您的联系手机号(买家付款后可见)</#if></div>
                             <div class="card-content">
                                 <div class="item-input">
                                     <input type="text" name="sellerPhone" id="sellerPhone" value="${order.sellerPhone!''}">
@@ -108,15 +129,16 @@
     if(orderStatus == 'SELLER_APPLY'){
         $("#saveOrderBtn").hide();
     }
-//    $.showIndicator();
-//    $.get('${request.contextPath}/item/get-item', {itemId: $('#itemId').val(),userId: $('#userId').val()}, function (response) {
-//        $('#priceSp').text(response.item.price);
-//        $('#titleSp').text(response.item.title);
-//        var createDate = response.item.optTime.substring(0,10);
-//        $('#dateSp').text(createDate);
-//        $('#createUserNameSp').text(response.userInfo.nickName);
-//        $.hideIndicator();
-//    });
+    $.showIndicator();
+    $.get('${request.contextPath}/item/get-item', {itemId: $('#itemId').val(),userId: $('#userId').val()}, function (response) {
+        $('#priceSp').text(response.item.price);
+        $('#titleSp').text(response.item.title);
+        $('.commentAvatarImage').attr("src",response.userInfo.headImgPath);
+        var createDate = response.item.optTime.substring(0,10);
+        $('#dateSp').text(createDate);
+        $('#createUserNameSp').text(response.userInfo.nickName);
+        $.hideIndicator();
+    });
     function checkForm(){
         var suggestAppointmentTime = $('#suggestAppointmentTime').val();
         var sellerPhone = $('#sellerPhone').val();

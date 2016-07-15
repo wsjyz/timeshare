@@ -105,7 +105,9 @@
                 }else if(order.orderStatus == 'SELLER_CONFIRM'){
                     orderStatus = "卖家已经确认，沟通时间是"+order.finalAppointmentTime;
                 }else if(order.orderStatus == 'SELLER_FINISH'){
-                    orderStatus = "卖家已经完成";
+                    orderStatus = "卖家已经确认完成双方邀约";
+                }else if(order.orderStatus == 'BUYLLER_FINISH'){
+                    orderStatus = "您已经确认完成双方邀约";
                 }else if(order.orderStatus == 'NEED_RATED'){
                     orderStatus = "请评价";
                 }else if(order.orderStatus == 'FINISH'){

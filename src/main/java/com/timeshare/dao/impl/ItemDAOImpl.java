@@ -60,25 +60,25 @@ public class ItemDAOImpl extends BaseDAO implements ItemDAO {
             sql.append(" title = '"+item.getTitle()+"',");
         }
         if(item.getPrice() != null && item.getPrice().intValue() != 0){
-            sql.append(" price = '"+item.getPrice()+"',");
+            sql.append(" price = "+item.getPrice()+",");
         }
         if(item.getDuration() != 0){
-            sql.append(" duration = '"+item.getDuration()+"',");
+            sql.append(" duration = "+item.getDuration()+",");
         }
         if(StringUtils.isNotBlank(item.getItemStatus())){
             sql.append(" item_status = '"+item.getItemStatus()+"',");
         }
         if(item.getScore() != null && item.getScore().intValue() != 0){
-            sql.append(" score = '"+item.getScore()+"',");
+            sql.append(" score = "+item.getScore()+",");
         }
         if(StringUtils.isNotBlank(item.getDescription())){
-            sql.append(" description = "+item.getDescription()+",");
+            sql.append(" description = '"+item.getDescription()+"',");
         }
         if(StringUtils.isNotBlank(item.getItemType())){
-            sql.append(" item_type = "+item.getItemType()+",");
+            sql.append(" item_type = '"+item.getItemType()+"',");
         }
         if(item.getUseCount() != 0){
-            sql.append(" use_count = '"+item.getUseCount()+"',");
+            sql.append(" use_count = "+item.getUseCount()+",");
         }
         if(item.isRecommend()){
             sql.append(" recommend = "+item.isRecommend()+",");
@@ -139,11 +139,12 @@ public class ItemDAOImpl extends BaseDAO implements ItemDAO {
         return itemList;
     }
 
-    public List<ItemDTO> findSellItemListByCondition(String condition, int startIndex, int loadSize){
+    public List<Item> findSellItemListByCondition(String condition, int startIndex, int loadSize){
         StringBuilder sql = new StringBuilder("");
 
         if(condition.equals("recommend")){//推荐
-            sql.append("select * from t_item i ,t_img_obj io where i.recommend = true and i.item_status = '"+ Contants.ITEM_STATUS.for_sale+"'");
+            sql.append("select * from t_item  " +
+                    " where recommend = true and item_status = '"+ Contants.ITEM_STATUS.for_sale+"'");
         }else if(condition.equals("new")){//最新
             sql.append("select * from t_item ");
         }else if(condition.equals("hot")){//最火
@@ -154,10 +155,10 @@ public class ItemDAOImpl extends BaseDAO implements ItemDAO {
         if(sql.indexOf("where") == -1){
             sql.append(" where");
         }
-
-        sql.append(" and i.create_user_id = io.obj_id");
-        sql.append(" order by i.opt_time desc limit ?,?");
-        List<ItemDTO> itemList = getJdbcTemplate().query(sql.toString(),new Object[]{startIndex,loadSize},new ItemDTOMapper());
+        List<String> excludeFields = new ArrayList<>();
+        excludeFields.add("remindCount");
+        sql.append(" order by opt_time desc limit ?,?");
+        List<Item> itemList = getJdbcTemplate().query(sql.toString(),new Object[]{startIndex,loadSize},new ItemMapper(excludeFields));
         return itemList;
     }
 
@@ -249,6 +250,7 @@ public class ItemDAOImpl extends BaseDAO implements ItemDAO {
             item.setDuration(rs.getInt("duration"));
             itemDTO.setItem(item);
             itemDTO.setImgPath(rs.getString("image_url"));
+            itemDTO.setImgType(rs.getString("image_type"));
             return itemDTO;
         }
     }

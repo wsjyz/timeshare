@@ -36,14 +36,23 @@ public class UserInfo {
     private String ageGroup;//年龄段
     private String openId;
     private int sex;
-
+    //数据传输用
     /**
      * 展示图片
      */
     private ImageObj imageObj;
+    //头像
+    private String headImgPath;
 
-    //数据传输用
     private List<Item> userItemList;
+
+    public String getHeadImgPath() {
+        return headImgPath;
+    }
+
+    public void setHeadImgPath(String headImgPath) {
+        this.headImgPath = headImgPath;
+    }
 
     public int getSex() {
         return sex;

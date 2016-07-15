@@ -82,9 +82,12 @@
 
             </div>
         </div>
-        <div class="bar bar-standard bar-footer" style="padding-bottom: 2.5rem">
-            <p><a href="#" id="orderBtn" class="button button-fill button-danger" style="top:0;">立即预约</a></p>
-        </div>
+        <#if selfItem == 'yes'??><#else>
+            <div class="bar bar-standard bar-footer" style="padding-bottom: 2.5rem">
+                <p><a href="#" id="orderBtn" class="button button-fill button-danger button-big" style="top:0;">立即预约</a></p>
+            </div>
+        </#if>
+
     </div>
 </div>
 
@@ -95,10 +98,10 @@
     $.showIndicator();
     $("#orderBtn").on('click', function () {
         var itemId = $('#itemId').val();
-        var userId = $('#userId').val();
-        var backUrl = '/order/to-start/'+itemId+'/'+userId;
+        var backUrl = '/order/to-start/'+itemId;
         window.location.href = '${request.contextPath}/wx/to-get-open-id?backUrl='+encodeURIComponent(backUrl);
     });
+
     $.get('${request.contextPath}/item/get-item', {itemId: $('#itemId').val(),userId: $('#userId').val()}, function (response) {
         if(response){
             if(response.item.itemType == 'tel'){
@@ -113,6 +116,7 @@
             $('#durationSp').text(response.item.duration);
             $('#corpSp').text(response.userInfo.corp);
             $('#nicknameSp').text(response.userInfo.nickName);
+
             //$('#useCountSp').text('已约'+response.item.useCount+'次');
             //$('#userDesP').text(response.userInfo.description);
             $.hideIndicator();

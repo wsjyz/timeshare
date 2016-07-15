@@ -10,7 +10,25 @@ public class ItemDTO {
 
     private Item item;
     private UserInfo userInfo;
-    private String imgPath;
+    private String imgPath;//ITEM_SHOW_IMG
+    private String headImgPath;
+    private String imgType;
+
+    public String getImgType() {
+        return imgType;
+    }
+
+    public void setImgType(String imgType) {
+        this.imgType = imgType;
+    }
+
+    public String getHeadImgPath() {
+        return headImgPath;
+    }
+
+    public void setHeadImgPath(String headImgPath) {
+        this.headImgPath = headImgPath;
+    }
 
     public String getImgPath() {
         return imgPath;

@@ -1,14 +1,20 @@
 package com.timeshare.service.impl;
 
 import com.timeshare.controller.ItemDTO;
+import com.timeshare.dao.ImageObjDAO;
 import com.timeshare.dao.ItemDAO;
+import com.timeshare.domain.ImageObj;
 import com.timeshare.domain.Item;
 import com.timeshare.domain.OpenPage;
 import com.timeshare.service.ItemService;
+import com.timeshare.utils.Contants;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by user on 2016/6/21.
@@ -18,6 +24,8 @@ public class ItemServiceImpl implements ItemService {
 
     @Autowired
     ItemDAO itemDAO;
+    @Autowired
+    ImageObjDAO imageObjDAO;
     @Override
     public String saveItem(Item info) {
         return itemDAO.saveItem(info);
@@ -45,7 +53,34 @@ public class ItemServiceImpl implements ItemService {
 
     @Override
     public List<ItemDTO> findSellItemListByCondition(String condition, int startIndex, int loadSize) {
-        return itemDAO.findSellItemListByCondition(condition,startIndex,loadSize);
+
+        List<Item> dtoDbList = itemDAO.findSellItemListByCondition(condition,startIndex,loadSize);
+        List<ItemDTO> dtoList = new ArrayList<>();
+        if(dtoDbList != null && !dtoDbList.isEmpty()){
+
+            StringBuilder inStr = new StringBuilder("(");
+            for(Item item:dtoDbList){
+                inStr.append("'"+item.getUserId()+"',");
+            }
+            if (inStr.lastIndexOf(",") + 1 == inStr.length()) {
+                inStr.delete(inStr.lastIndexOf(","), inStr.length());
+            }
+            inStr.append(")");
+            List<ImageObj> imageObjList = imageObjDAO.findImgByObjIds(inStr.toString());
+            Map<String,String> imgMap = new HashMap<>();
+            for(ImageObj obj:imageObjList){
+                imgMap.put(obj.getObjId()+obj.getImageType().toString(),obj.getImageUrl());
+            }
+            for(Item item:dtoDbList){
+                ItemDTO itemDTO = new ItemDTO();
+                itemDTO.setItem(item);
+                itemDTO.setHeadImgPath(imgMap.get(item.getUserId()+Contants.IMAGE_TYPE.USER_HEAD.toString()));
+                itemDTO.setImgPath(imgMap.get(item.getUserId()+Contants.IMAGE_TYPE.ITEM_SHOW_IMG.toString()));
+                dtoList.add(itemDTO);
+            }
+        }
+
+        return dtoList;
     }
 
     @Override

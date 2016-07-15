@@ -25,6 +25,7 @@
                 <ul>
                     <form method="post" action="/time/item/save">
                         <input type="hidden" name="itemStatus" id="itemStatusId">
+                        <input type="hidden" name="itemId" id="itemId" value="<#if item??>${item.itemId}<#else>${itemId}</#if>">
                     <!-- Text inputs -->
                     <li>
                         <div class="item-content">

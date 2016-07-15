@@ -11,7 +11,28 @@
 
     <link rel="stylesheet" href="//g.alicdn.com/msui/sm/0.6.2/css/sm.min.css">
     <link rel="stylesheet" href="//g.alicdn.com/msui/sm/0.6.2/css/sm-extend.min.css">
-
+    <style>
+        .commentAvatarDiv{
+            width: 50px;
+            height: 50px;
+            padding:2px;
+            background: #ececec;
+            border-radius:50px;
+            box-shadow: 0px 0px 1px rgba(0,0,0,0.4);
+            -moz-border-radius: 50px;
+            -webkit-border-radius: 50px;
+        }
+        .commentAvatarImage{
+            width:50px;
+            height:50px;
+            line-height: 0;	 /* remove line-height */
+            display: inline-block;	/* circle wraps image */
+            border-radius: 50%;	/* relative value */
+            -moz-border-radius: 50%;
+            -webkit-border-radius: 50%;
+            transition: linear 0.25s;
+        }
+    </style>
 </head>
 <body>
 
@@ -48,8 +69,9 @@
             </div>
             <form action="${request.contextPath}/order/save" method="post">
                 <input type="hidden" id="orderId" name="orderId" value="${order.orderId}">
+                <input type="hidden" id="itemId" name="itemId" value="${order.itemId}">
                 <input type="hidden" id="sellerFinish" name="buyerFinish" value="true">
-                <input type="hidden" id="orderStatus" name="orderStatus" value="BUYER_CONFIRM">
+                <input type="hidden" id="orderStatus" name="orderStatus" value="BUYLLER_FINISH">
                 <input type="hidden" id="optUserType" name="optUserType" value="buyer">
                 <div class="list-block cards-list">
                     <ul>
@@ -86,6 +108,14 @@
                             </div>
                         </li>
                         <li class="card">
+                            <div class="card-header">卖家手机号码</div>
+                            <div class="card-content">
+                                <div class="card-content-inner">
+                                    ${order.sellerPhone!''}
+                                </div>
+                            </div>
+                        </li>
+                        <li class="card">
                             <div class="card-header">顺便评价一下吧</div>
                             <div class="card-content">
                                 <div class="item-input">
@@ -112,6 +142,7 @@
 <script type='text/javascript' src='//g.alicdn.com/msui/sm/0.6.2/js/sm-extend.min.js' charset='utf-8'></script>
 <script>$.init()</script>
 <script>
+    $.showIndicator();
     var canFinish = '${canFinish}';
     if(canFinish == 'false'){
         $('#saveOrderBtn').addClass('disabled');
@@ -122,7 +153,7 @@
                 $.toast('评价一下吧');
                 return ;
             }
-            $.confirm('点击确定后卖家会受到您支付的款项,确定吗？',
+            $.confirm('点击确定后卖家会收到您支付的款项,确定吗？',
                     function () {
                         $('form').submit();
                     }
@@ -131,6 +162,15 @@
         });
     }
 
+    $.get('${request.contextPath}/item/get-item', {itemId: $('#itemId').val()}, function (response) {
+        $('#priceSp').text(response.item.price);
+        $('#titleSp').text(response.item.title);
+        $('.commentAvatarImage').attr("src",response.userInfo.headImgPath);
+        var createDate = response.item.optTime.substring(0,10);
+        $('#dateSp').text(createDate);
+        $('#createUserNameSp').text(response.userInfo.nickName);
+        $.hideIndicator();
+    });
 
 </script>
 

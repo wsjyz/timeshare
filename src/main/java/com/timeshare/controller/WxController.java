@@ -74,7 +74,7 @@ public class WxController {
         return "redirect:"+wxOauthUrl;
     }
     @RequestMapping(value = "/get-open-id")
-    public String getOpenId(HttpServletRequest request,Model model){
+    public String getOpenId(HttpServletRequest request, HttpServletResponse response,Model model){
 
         String toUrl = request.getParameter("state");
         String code = request.getParameter("code");
@@ -86,6 +86,11 @@ public class WxController {
             sendUrl = "https://open.weixin.qq.com/connect/oauth2/authorize?appid="
                     + Contants.APPID+"&redirect_uri=http%3A%2F%2F"+Contants.DOMAIN+"%2Ftime%2Fwx%2Foauth%2F&response_type=code&scope=snsapi_userinfo&state="+toUrl+"#wechat_redirect";
         }else{
+
+            String userId = CookieUtils.getCookie(request,"time_sid");
+            if(StringUtils.isBlank(userId)){
+                CookieUtils.setCookie(response,"time_sid",userInfo.getUserId(),60*60*24*7);
+            }
             String mobile = userInfo.getMobile();
             String nickName = userInfo.getNickName();
             if(StringUtils.isNotBlank(mobile) && StringUtils.isNotBlank(nickName)){
@@ -130,9 +135,7 @@ public class WxController {
             user.setImageObj(imageObj);
             String result = userService.saveUser(user);
             if(result.equals(Contants.SUCCESS)){
-                Cookie cookie = new Cookie("time_sid", userId);
-                cookie.setPath("/");
-                response.addCookie(cookie);
+                CookieUtils.setCookie(response,"time_sid",userId,60*60*24*7);
             }
         }
 

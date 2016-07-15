@@ -12,6 +12,8 @@ import com.timeshare.service.RemindService;
 import com.timeshare.service.UserService;
 import com.timeshare.utils.*;
 import org.apache.commons.lang3.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -31,6 +33,8 @@ import java.util.*;
 @RequestMapping(value = "/order")
 public class OrderController extends BaseController{
 
+    protected Logger logger = LoggerFactory.getLogger(OrderController.class);
+
     @Autowired
     OrderService orderService;
     @Autowired
@@ -42,8 +46,8 @@ public class OrderController extends BaseController{
 
     public static final String UNIFIEDORDER_URL = "https://api.mch.weixin.qq.com/pay/";
 
-    @RequestMapping(value = "/to-start/{itemId}/{userId}")
-    public String toStart(@PathVariable String itemId,@PathVariable String userId,Model model) {
+    @RequestMapping(value = "/to-start/{itemId}")
+    public String toStart(@PathVariable String itemId,@CookieValue(value="time_sid", defaultValue="") String userId,Model model) {
         model.addAttribute("itemId",itemId);
         model.addAttribute("userId",userId);
         return "appointment/begin";
@@ -113,6 +117,7 @@ public class OrderController extends BaseController{
                 model.addAttribute("canFinish","false");
                 toStr = "appointment/sellerFinish";
                 break;
+
 
 
         }
@@ -259,14 +264,18 @@ public class OrderController extends BaseController{
         SystemMessage message = new SystemMessage();
         if(order != null){
 
+            if(StringUtils.isNotBlank(userId)){
+                UserInfo user = getCurrentUser(userId);
+                if(StringUtils.isNotBlank(user.getNickName())){
+                    order.setOrderUserName(user.getNickName());
+                }
+                if(StringUtils.isNotBlank(user.getUserId())){
+                    order.setUserId(user.getUserId());
+                }
+            }
 
-            UserInfo user = getCurrentUser(userId);
-            order.setOrderUserName(user.getNickName());
-            order.setUserId(user.getUserId());
-
-            if(order.getOrderStatus().equals("BUYER_CONFIRM")
-                    || order.getOrderStatus().equals("BUYER_FINISH")
-                    || order.getOrderStatus().equals("SELLER_FINISH")){
+            if(order.getOrderStatus().toString().equals("BUYLLER_FINISH")
+                    || order.getOrderStatus().toString().equals("SELLER_FINISH")){
 
                     ItemOrder tempOrder = orderService.findOrderByOrderId(order.getOrderId());
                     if(order.getOptUserType().equals("seller")){
@@ -310,5 +319,38 @@ public class OrderController extends BaseController{
         model.addAttribute("message",message);
         model.addAttribute("jumpUrl","/order/to-"+order.getOptUserType()+"-order-list");
         return "info";
+    }
+
+    public void sendMms(String orderStatus,String fromUserName,String time,String toUserMobile){
+//        卖家收到：买家[李四]预约了您的项目，请进入服务号[邂逅时刻]查看
+//        买家收到：卖家[张三]答复了您的邀请，请进入服务号[邂逅时刻]查看
+//        卖家收到：买家[李四]确认了邂逅时间，具体沟通时间为[2016-12-10 12:00]，请进入服务号[邂逅时刻]查看
+//        买家收到：卖家[张三]已经确认完成双方邀约，请进入服务号[邂逅时刻]查看
+//        卖家收到：买家[李四]已经确认完成双方邀约，项目款项已入账，请进入服务号[邂逅时刻]查收
+        SmsContentBean bean = new SmsContentBean();
+        bean.setContent("{\"name\":\""+fromUserName+"\"}");
+        bean.setToMobile(toUserMobile);
+        switch (orderStatus){
+            case "BEGIN":
+                bean.setTemplateCode("1");
+                break;
+            case "SELLER_APPLY":
+                bean.setTemplateCode("2");
+                break;
+            case "BUYER_CONFIRM":
+                bean.setContent("{\"name\":\""+fromUserName+"\",\"time\":\""+time+"\"}");
+                break;
+            case "SELLER_FINISH":
+                bean.setTemplateCode("3");
+                break;
+            case "BUYLLER_FINISH":
+                bean.setTemplateCode("4");
+                break;
+
+        }
+        String response = SmsUtils.senMessage(bean);
+        if(response.indexOf("error_response") != -1){
+            logger.error(response);
+        }
     }
 }

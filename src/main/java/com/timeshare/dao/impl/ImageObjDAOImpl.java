@@ -12,6 +12,7 @@ import org.springframework.stereotype.Repository;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -60,6 +61,17 @@ public class ImageObjDAOImpl extends BaseDAO implements ImageObjDAO {
         }else{
             return "FAILED";
         }
+    }
+
+    @Override
+    public List<ImageObj> findImgByObjIds(String objIds) {
+        List<ImageObj> imgObjList = new ArrayList<>();
+        StringBuilder reviewSql = new StringBuilder("");
+        reviewSql.append("select * from t_img_obj where obj_id in "+objIds+"");
+        if(StringUtils.isNotBlank(objIds)){
+            imgObjList = getJdbcTemplate().query(reviewSql.toString(),new ImageObjMapper());
+        }
+        return imgObjList;
     }
 
     public class ImageObjMapper implements RowMapper<ImageObj>{

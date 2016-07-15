@@ -121,7 +121,7 @@
     $.showIndicator();
     $.get('${request.contextPath}/user/get-user-items', {userId: $('#userId').val()}, function (response) {
         if(response){
-            $('#userShowPic').attr('src','${request.contextPath}'+response.imageObj.imageUrl);
+            $('#userShowPic').attr('src',response.imageObj.imageUrl);
             $('#userDesP').text(response.description);
 
             $.each(response.userItemList, function(i, item){
@@ -155,7 +155,7 @@
         }
     });
     function toView(itemId,userId){
-        window.location.href = "${request.contextPath}/item/to-view/"+itemId+"/"+userId;
+        window.location.href = "${request.contextPath}/item/to-view/"+itemId;
     }
 </script>
 </body>

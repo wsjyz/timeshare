@@ -24,6 +24,26 @@
         .payment-item-selected{
             border: 2px solid #e4393c;
         }
+        .commentAvatarDiv{
+            width: 50px;
+            height: 50px;
+            padding:2px;
+            background: #ececec;
+            border-radius:50px;
+            box-shadow: 0px 0px 1px rgba(0,0,0,0.4);
+            -moz-border-radius: 50px;
+            -webkit-border-radius: 50px;
+        }
+        .commentAvatarImage{
+            width:50px;
+            height:50px;
+            line-height: 0;	 /* remove line-height */
+            display: inline-block;	/* circle wraps image */
+            border-radius: 50%;	/* relative value */
+            -moz-border-radius: 50%;
+            -webkit-border-radius: 50%;
+            transition: linear 0.25s;
+        }
     </style>
 </head>
 <body>
@@ -64,6 +84,8 @@
                 <input type="hidden" id="itemId" name="itemId" value="${order.itemId}">
                 <input type="hidden" id="orderStatus" name="orderStatus" value="BUYER_CONFIRM">
                 <input type="hidden" id="optUserType" name="optUserType" value="buyer">
+                <input type="hidden" id="sellerPhone" name="sellerPhone" value="${order.sellerPhone!''}">
+
                 <div class="list-block cards-list">
                     <ul>
                         <li class="card">
@@ -90,14 +112,7 @@
                                 </div>
                             </div>
                         </li>
-                        <li class="card">
-                            <div class="card-header">卖家填写的联系手机号</div>
-                            <div class="card-content">
-                                <div class="card-content-inner">
-                                    ${order.sellerPhone!''}
-                                </div>
-                            </div>
-                        </li>
+
                         <li class="card">
                             <div class="card-header"><#if (order.finalAppointmentTime)??>最终沟通时间为<#else>选择具体沟通时间</#if></div>
                             <div class="card-content">
@@ -136,7 +151,16 @@
 <script>
     var orderStatus = '${order.orderStatus}';
     var payStatus = '${payStatus}';
-
+    $.showIndicator();
+    $.get('${request.contextPath}/item/get-item', {itemId: $('#itemId').val()}, function (response) {
+        $('#priceSp').text(response.item.price);
+        $('#titleSp').text(response.item.title);
+        $('.commentAvatarImage').attr("src",response.userInfo.headImgPath);
+        var createDate = response.item.optTime.substring(0,10);
+        $('#dateSp').text(createDate);
+        $('#createUserNameSp').text(response.userInfo.nickName);
+        $.hideIndicator();
+    });
     if(payStatus == 'ORDERPAID'){
         $('#payType').hide();
         $('#saveOrderBtn').hide();
@@ -144,18 +168,7 @@
 
 
     function checkForm(){
-        var suggestAppointmentTime = $('#suggestAppointmentTime').val();
-        var sellerPhone = $('#sellerPhone').val();
-        if(suggestAppointmentTime.length == 0){
-            $.toast('建议的时间段不能为空');
-            return false;
-        }
 
-        if(sellerPhone.length < 11 ){
-            $.toast('请填写正确的手机号');
-            return false;
-        }
-        return true;
     }
     $("#saveOrderBtn").on('click', function () {
 
@@ -182,7 +195,7 @@
                 'getBrandWCPayRequest', ${jsApiParams},
                 function(res){
                     if(res.err_msg == "get_brand_wcpay_request:ok" ) {
-                        $.alert('支付成功，卖家会与您联系', function () {
+                        $.alert('支付成功，卖家的手机号是'+$('#sellerPhone').val(), function () {
                             $('form').submit();
                         });
                     }	 // 使用以上方式判断前端返回,微信团队郑重提示：res.err_msg将在用户支付成功后返回	ok，但并不保证它绝对可靠。

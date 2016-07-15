@@ -1,6 +1,7 @@
 package com.timeshare.controller;
 
 import com.alibaba.fastjson.JSON;
+import com.timeshare.dao.ImageObjDAO;
 import com.timeshare.domain.ImageObj;
 import com.timeshare.domain.Item;
 import com.timeshare.domain.SystemMessage;
@@ -33,6 +34,8 @@ public class ItemController extends BaseController{
     ItemService itemService;
     @Autowired
     UserService userService;
+    @Autowired
+    ImageObjDAO imageObjDAO;
 
     @RequestMapping(value = "/to-add")
     public String toAdd(String itemJson,ModelMap modelMap) {
@@ -54,11 +57,24 @@ public class ItemController extends BaseController{
         return "selltime";
     }
 
-    @RequestMapping(value = "/to-view/{itemId}/{userId}")
-    public String toView(@PathVariable String itemId,@PathVariable String userId,Model model) {
-        model.addAttribute("itemId",itemId);
-        model.addAttribute("userId",userId);
-        return "iteminfo";
+    @RequestMapping(value = "/to-view/{itemId}")
+    public String toView(@PathVariable String itemId,Model model,@CookieValue(value="time_sid", defaultValue="") String userId) {
+        String returnStr = "";
+        Item item = itemService.findItemByItemId(itemId);
+        if(item != null && item.getItemStatus().equals(Contants.ITEM_STATUS.draft)){
+            model.addAttribute("item", item);
+            returnStr = "additem";
+        }else{
+            String selfItem = "no";
+            if(StringUtils.isNotBlank(userId) && userId.equals(item.getUserId())){
+                selfItem = "yes";
+            }
+            returnStr = "iteminfo";
+            model.addAttribute("itemId",itemId);
+            model.addAttribute("selfItem",selfItem);
+        }
+
+        return returnStr;
     }
 
     @RequestMapping(value = "/get-item")
@@ -73,10 +89,12 @@ public class ItemController extends BaseController{
         ImageObj imageObj = new ImageObj();
         if(StringUtils.isBlank(userId)){
             userId = item.getUserId();
-            imageObj.setImageType(Contants.IMAGE_TYPE.ITEM_SHOW_IMG.toString());
-            UserInfo userInfo = userService.findUserByUserId(userId,imageObj);
-            itemDTO.setUserInfo(userInfo);
         }
+        imageObj.setImageType(Contants.IMAGE_TYPE.ITEM_SHOW_IMG.toString());
+        UserInfo userInfo = userService.findUserByUserId(userId,imageObj);
+        ImageObj headObj = imageObjDAO.findImgByObjIdAndType(userId,Contants.IMAGE_TYPE.USER_HEAD.toString());
+        userInfo.setHeadImgPath(headObj.getImageUrl());
+        itemDTO.setUserInfo(userInfo);
         return itemDTO;
 
     }
@@ -107,7 +125,12 @@ public class ItemController extends BaseController{
             UserInfo user = getCurrentUser(userId);
             item.setCreateUserName(user.getNickName());
             item.setUserId(userId);
-            String result = itemService.saveItem(item);
+            String result = "";
+            if(StringUtils.isNotBlank(item.getItemId())){
+                result = itemService.modifyItem(item);
+            }else{
+                result = itemService.saveItem(item);
+            }
             message.setMessageType(result);
             if(result.equals(Contants.SUCCESS)){
                 message.setContent("添加成功！");
