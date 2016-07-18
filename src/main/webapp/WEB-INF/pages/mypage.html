@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <title>项目介绍</title>
+    <title>我的信息</title>
     <meta name="viewport" content="initial-scale=1, maximum-scale=1">
     <link rel="shortcut icon" href="/favicon.ico">
     <meta name="apple-mobile-web-app-capable" content="yes">
@@ -20,7 +20,7 @@
     <div class="page page-current">
         <!-- 你的html代码 -->
         <header class="bar bar-nav">
-            <a class="icon icon-left pull-left"></a>
+            <a class="icon icon-left pull-left back"></a>
             <a href="#" id="toUserInfoBtn">
                 <button class="button pull-right">
                     设置
@@ -81,7 +81,7 @@
             <div class="list-block" style="margin: 0px;">
                 <ul>
                     <a href="#">
-                        <li class="item-content item-link">
+                        <li class="item-content ">
                             <div class="item-media"><i class="icon icon-f7"></i></div>
                             <div class="item-inner">
                                 <div class="item-title">我的收入</div>
@@ -92,7 +92,7 @@
                 </ul>
                 <ul>
                     <a href="#">
-                        <li class="item-content item-link">
+                        <li class="item-content ">
                             <div class="item-media"><i class="icon icon-f7"></i></div>
                             <div class="item-inner">
                                 <div class="item-title">我的支出</div>
@@ -143,6 +143,9 @@
 <script type='text/javascript' src='//g.alicdn.com/msui/sm/0.6.2/js/sm.min.js' charset='utf-8'></script>
 <script type='text/javascript' src='//g.alicdn.com/msui/sm/0.6.2/js/sm-extend.min.js' charset='utf-8'></script>
 <script>
+    window.onunload = function(){};
+</script>
+<script>
     $.showIndicator();
     $.post('${request.contextPath}/user/get-remind', function (response) {
         $('.badge').text(response.sellRemindCount);
@@ -162,22 +165,24 @@
         $('#buyCountsSp').text(response.buyCounts);
     });
 
-    $('#toSellerListBtn').on('click',function(){
+
+
+    $("body").on( "click", "#toSellerListBtn", function(){
         window.location.href = '${request.contextPath}/order/to-seller-order-list';
-    });
-    $('#toBuyerListBtn').on('click',function(){
+    } );
+    $("body").on( "click", "#toBuyerListBtn", function(){
         window.location.href = '${request.contextPath}/order/to-buyer-order-list';
-    });
-    $("#mySellBtn").on('click', function () {
+    } );
+    $("body").on( "click", "#mySellBtn", function(){
         var backUrl = '/item/to-list';
         window.location.href = '${request.contextPath}/wx/to-get-open-id?backUrl='+encodeURIComponent(backUrl);
-    });
-    $("#indexBtn").on('click', function () {
+    } );
+    $("body").on( "click", "#indexBtn", function(){
         window.location.href = "${request.contextPath}/index/to-index";
-    });
-    $("#toUserInfoBtn").on('click', function () {
+    } );
+    $("body").on( "click", "#toUserInfoBtn", function(){
         window.location.href = "${request.contextPath}/user/to-userinfo";
-    });
+    } );
     $.init();
 </script>
 </body>

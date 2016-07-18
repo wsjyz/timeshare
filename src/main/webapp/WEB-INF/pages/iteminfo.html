@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <title>我的生活</title>
+    <title>子项目详情</title>
     <meta name="viewport" content="initial-scale=1, maximum-scale=1">
     <link rel="shortcut icon" href="/favicon.ico">
     <meta name="apple-mobile-web-app-capable" content="yes">
@@ -11,11 +11,8 @@
 
     <link rel="stylesheet" href="//g.alicdn.com/msui/sm/0.6.2/css/sm.min.css">
     <link rel="stylesheet" href="//g.alicdn.com/msui/sm/0.6.2/css/sm-extend.min.css">
+    <link rel="stylesheet" href="${request.contextPath}/css/main.css">
     <style type="text/css">
-        p{
-            font-family: "Helvetica Neue",Helvetica,"PingFang SC","Hiragino Sans GB","Microsoft YaHei","微软雅黑",Arial,sans-serif;
-            font-size: 16px;;
-        }
         .biaoqian{
             display: inline-block;
             width: 54px;
@@ -38,28 +35,23 @@
     <div class="page page-current">
         <!-- 你的html代码 -->
         <header class="bar bar-nav">
-            <a class="icon icon-left pull-left"></a>
-            <a class="icon icon-refresh pull-right"></a>
+            <a class="icon icon-left pull-left back"></a>
             <h1 class="title">子项目详情</h1>
         </header>
         <div class="content">
-            <div class="content-padded grid-demo">
+            <div style="background: #fff;padding-left: 1rem;padding-right: 1rem" >
                 <div class="row">
-                    <div class="col-100"><h2 style="color: #666;"><span id="titleSp"></span></h2><span id="itemTypeSp" class="biaoqian"></span></div>
+                    <div class="col-100"><h2 style="color: #666;"><span id="titleSp"></span></h2></div>
                 </div>
-                <div class="row">
-                    <div class="col-40"><span id="corpSp"></span></div>
-                    <div class="col-60" style="padding-left: 6.5rem;"><span id="nicknameSp"></span></div>
+                <div class="row" >
+                    <div class="col-50" ><span id="priceSp"></span>元/次</div>
+                    <div class="col-50" >约<span id="durationSp"></span>分钟</div>
                 </div>
-                <div class="row" style="height:4rem;margin-left:1px;padding-top:1.6rem;background-color: #b5dbe8;font-weight: bold">
-                    <div class="col-50" style="margin-left: 0px;"><span id="priceSp"></span>元/次</div>
-                    <div class="col-50" style="padding-left: 4.5rem;">约<span id="durationSp"></span>分钟</div>
-                </div>
-                <div id="descriptionDiv"></div>
-
 
             </div>
-
+            <div class="content-padded">
+                <p><div id="descriptionDiv"></div></p>
+            </div>
             <div class="card">
                 <div class="card-header"><h4>评价:</h4><span style="padding-left: 5rem">查看全部30条评论</span></div>
                 <div class="card-content">
@@ -117,8 +109,8 @@
             $('#titleSp').text(response.item.title);
             $('#descriptionDiv').text(response.item.description);
             $('#durationSp').text(response.item.duration);
-            $('#corpSp').text(response.userInfo.corp);
-            $('#nicknameSp').text(response.userInfo.nickName);
+            //$('#corpSp').text(response.userInfo.corp);
+            //$('#nicknameSp').text(response.userInfo.nickName);
 
             //$('#useCountSp').text('已约'+response.item.useCount+'次');
             //$('#userDesP').text(response.userInfo.description);
