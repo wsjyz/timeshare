@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <title>新增项目</title>
+    <title>编辑项目</title>
     <meta name="viewport" content="initial-scale=1, maximum-scale=1">
     <link rel="shortcut icon" href="/favicon.ico">
     <meta name="apple-mobile-web-app-capable" content="yes">
@@ -11,14 +11,14 @@
 
     <link rel="stylesheet" href="//g.alicdn.com/msui/sm/0.6.2/css/sm.min.css">
     <link rel="stylesheet" href="//g.alicdn.com/msui/sm/0.6.2/css/sm-extend.min.css">
-
+    <link rel="stylesheet" href="${request.contextPath}/css/main.css">
 </head>
 <body>
 <div class="page-group">
     <div class="page page-current">
         <!-- 你的html代码 -->
         <header class="bar bar-nav">
-            <h1 class='title'>新增项目</h1>
+            <h1 class='title'>编辑项目</h1>
         </header>
         <div class="content">
             <div class="list-block">
@@ -27,6 +27,32 @@
                         <input type="hidden" name="itemStatus" id="itemStatusId">
                         <input type="hidden" name="itemId" id="itemId" value="<#if item??>${item.itemId}<#else>${itemId}</#if>">
                     <!-- Text inputs -->
+                    <#if (item.itemStatus == 'not_pass')>
+                        <li>
+                            <div class="item-content">
+                                <div class="item-media"><i class="icon icon-form-name"></i></div>
+                                <div class="item-inner">
+                                    <div class="item-title label">审核状态：</div>
+                                    <div class="item-input">
+                                        未通过
+                                    </div>
+                                </div>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="item-content">
+                                <div class="item-media"><i class="icon icon-form-name"></i></div>
+                                <div class="item-inner">
+                                    <div class="item-title label">未通过原因：</div>
+                                    <div class="item-input">
+                                        ${item.notPassReason}
+                                    </div>
+                                </div>
+                            </div>
+                        </li>
+                    <#else>
+                    </#if>
+
                     <li>
                         <div class="item-content">
                             <div class="item-media"><i class="icon icon-form-name"></i></div>
@@ -45,8 +71,8 @@
                                 <div class="item-title label">类型：</div>
                                 <div class="item-input">
                                     <div class="row">
-                                        <div class="col-50"><input type="radio" name="itemType" value="tel" checked>电话直连</div>
-                                        <div class="col-50"><input type="radio" name="itemType" value="meet">直约面对面</div>
+                                        <div class="col-45"><input type="radio" name="itemType" value="tel"><span style="font-size: 14px;" class="itemType_tel">电话直连</span></div>
+                                        <div class="col-55"><input type="radio" name="itemType" value="meet"><span style="font-size: 14px;" class="itemType_meet">直约面对面</span></div>
                                     </div>
                                 </div>
                             </div>
@@ -56,8 +82,10 @@
                         <div class="item-content">
                             <div class="item-media"><i class="icon icon-form-password"></i></div>
                             <div class="item-inner">
-                                <div class="item-input">费用：<input type="text" name="price" value="50" style="width: 2rem;display: inline"/>元/次 </div>
-                                <div class="item-input">时间：<input type="text" name="duration" id="durationId" value="60" style="width: 2rem;display: inline">分钟</div>
+                                <div class="item-input">费用：<input type="text" id="price" name="price"
+                                                                  value="<#if item.price??>${item.price}<#else>50</#if>" style="width: 2rem;display: inline"/>元/次 </div>
+                                <div class="item-input">时间：<input type="text" name="duration" id="durationId"
+                                                                  value="<#if item.duration??>${item.duration}<#else>60</#if>" style="width: 2rem;display: inline">分钟</div>
 
                             </div>
                         </div>
@@ -91,6 +119,22 @@
 <script type='text/javascript' src='//g.alicdn.com/msui/sm/0.6.2/js/sm.min.js' charset='utf-8'></script>
 <script type='text/javascript' src='//g.alicdn.com/msui/sm/0.6.2/js/sm-extend.min.js' charset='utf-8'></script>
 <script>
+    var itemType = '${item.itemType}';
+    if(itemType != ''){
+        $("input[name='itemType']").removeAttr("checked");
+        $("input[name='itemType'][value='"+itemType+"']").attr("checked","checked");
+    }else{
+        $("input[name='itemType']").removeAttr("checked");
+        $("input[name='itemType'][value='tel']").attr("checked","checked");
+    }
+    $(".itemType_tel").on('click', function () {
+        $("input[name='itemType']").removeAttr("checked");
+        $("input[name='itemType'][value='tel']").attr("checked","checked");
+    });
+    $(".itemType_meet").on('click', function () {
+        $("input[name='itemType']").removeAttr("checked");
+        $("input[name='itemType'][value='meet']").attr("checked","checked");
+    });
     function checkForm(){
         var title = $('#titleId').val();
         if(title == ''){
@@ -100,6 +144,15 @@
         var duration = $('#durationId').val();
         if(duration == ''){
             $.toast('请填写时间');
+            return false;
+        }
+        var itemType = $('input[name="itemType"]:checked ').val();
+        var price = $('#price').val();
+        if(itemType == 'tel' && price > 50){
+            $.toast('电话直连的价格不能超过50元');
+            return false;
+        }else if(itemType == 'meet' && price > 200){
+            $.toast('直约面对面的价格不能超过200元');
             return false;
         }
         return true;

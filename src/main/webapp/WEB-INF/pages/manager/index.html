@@ -265,11 +265,19 @@
                         <div class="row">
                             <div class="col-md-12"><div id="descriptionDiv"></div></div>
                         </div>
+                        <div class="row">
+                            <div class="col-md-4"><label  class="control-label">不通过原因：</label></div>
+                            <div class="col-md-8"></div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-12"><textarea id="notPassReason" style="width: 400px;"></textarea></div>
+                        </div>
                     </div>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
                     <button type="button" class="btn btn-primary" id="applyBtn">通过</button>
+                    <button type="button" class="btn btn-primary" id="notPassBtn">不通过</button>
                 </div>
             </div>
         </div>
@@ -369,6 +377,22 @@
     $("#applyBtn").on('click', function () {
         var itemId = $('#itemId').val();
         $.get('${request.contextPath}/manager/item/modify', {itemId: itemId,itemStatus: 'for_sale'}, function (response) {
+
+            if(response){
+                if(response == 'success'){
+                    alert('审批成功');
+                    window.location.reload();
+                }else{
+                    alert('审批失败');
+                }
+            }
+
+        });
+
+    });
+    $("#notPassBtn").on('click', function () {
+        var itemId = $('#itemId').val();
+        $.get('${request.contextPath}/manager/item/modify', {itemId: itemId,itemStatus: 'not_pass',notPassReason:$('#notPassReason').val()}, function (response) {
 
             if(response){
                 if(response == 'success'){

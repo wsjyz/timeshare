@@ -52,7 +52,7 @@
                     <div class="col-60" style="padding-left: 6.5rem;"><span id="nicknameSp"></span></div>
                 </div>
                 <div class="row" style="height:4rem;margin-left:1px;padding-top:1.6rem;background-color: #b5dbe8;font-weight: bold">
-                    <div class="col-50" style="margin-left: 0px;"><span id="priceSp"></span>元/次（早鸟价）</div>
+                    <div class="col-50" style="margin-left: 0px;"><span id="priceSp"></span>元/次</div>
                     <div class="col-50" style="padding-left: 4.5rem;">约<span id="durationSp"></span>分钟</div>
                 </div>
                 <div id="descriptionDiv"></div>
@@ -81,10 +81,13 @@
                 </div>
 
             </div>
+            <#if selfItem == 'yes'??><#else>
+                <div style="height: 12%">x</div>
+            </#if>
         </div>
         <#if selfItem == 'yes'??><#else>
-            <div class="bar bar-standard bar-footer" style="height: 11%">
-                <p><a href="#" id="orderBtn" class="button button-fill button-danger button-big" style="top:0;">立即预约</a></p>
+            <div class="bar bar-standard bar-footer" style="padding-top:0rem;height: 12%">
+                <p><a href="#" id="orderBtn" class="button button-fill button-danger button-big" style="top: -0.1rem;">立即预约</a></p>
             </div>
         </#if>
 

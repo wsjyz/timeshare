@@ -25,7 +25,8 @@ public interface Contants {
     enum ITEM_STATUS {
         draft,for_sale,
         undercarriage,//下架
-        apply_for_online//待审核
+        apply_for_online,//待审核
+        not_pass//审核未通过
     }
     enum ITEM_TYPE {
         tel,meet

@@ -83,6 +83,9 @@ public class ItemDAOImpl extends BaseDAO implements ItemDAO {
         if(item.isRecommend()){
             sql.append(" recommend = "+item.isRecommend()+",");
         }
+        if(StringUtils.isNotBlank(item.getNotPassReason())){
+            sql.append(" notPassReason = '"+item.getNotPassReason()+"',");
+        }
         if (sql.lastIndexOf(",") + 1 == sql.length()) {
             sql.delete(sql.lastIndexOf(","), sql.length());
         }
@@ -222,6 +225,7 @@ public class ItemDAOImpl extends BaseDAO implements ItemDAO {
             item.setUseCount(rs.getInt("use_count"));
             item.setRecommend(rs.getBoolean("recommend"));
             item.setDuration(rs.getInt("duration"));
+            item.setNotPassReason(rs.getString("notPassReason"));
             if(!excludeField.contains("remindCount")){
                 item.setRemindCount(rs.getInt("remindCount"));
             }
@@ -248,6 +252,7 @@ public class ItemDAOImpl extends BaseDAO implements ItemDAO {
             item.setUseCount(rs.getInt("use_count"));
             item.setRecommend(rs.getBoolean("recommend"));
             item.setDuration(rs.getInt("duration"));
+            item.setNotPassReason(rs.getString("notPassReason"));
             itemDTO.setItem(item);
             itemDTO.setImgPath(rs.getString("image_url"));
             itemDTO.setImgType(rs.getString("image_type"));

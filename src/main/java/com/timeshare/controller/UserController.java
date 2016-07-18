@@ -41,10 +41,19 @@ public class UserController extends BaseController{
 
     @ResponseBody
     @RequestMapping(value = "/get-userinfo")
-    public UserInfo getUserInfo(@CookieValue(value="time_sid", defaultValue="admin") String userId) {
+    public UserInfo getUserInfo(HttpServletRequest request,@CookieValue(value="time_sid", defaultValue="admin") String userId) {
         ImageObj imageObj = new ImageObj();
         imageObj.setImageType(Contants.IMAGE_TYPE.USER_HEAD.toString());
         UserInfo userInfo = userService.findUserByUserId(userId,imageObj);
+
+        ImageObj dbObj = userInfo.getImageObj();
+        if(StringUtils.isNotBlank(dbObj.getImageUrl())){
+            String headImg = dbObj.getImageUrl();
+            if(headImg.indexOf("http") == -1){//修改过头像
+                headImg = request.getContextPath()+headImg+"_320x240.jpg";
+            }
+            dbObj.setImageUrl(headImg);
+        }
         return userInfo;
     }
 
@@ -59,18 +68,18 @@ public class UserController extends BaseController{
     @RequestMapping(value = "/to-upload-img")
     public String toUploadImg(HttpServletRequest request,Model model,@CookieValue(value="time_sid", defaultValue="admin") String userId) {
         UserInfo userInfo = getCurrentUser(userId);
-        ImageObj imageObj = userService.findUserImg(userInfo.getUserId(), Contants.ITEM_SHOW_IMG);
+        ImageObj imageObj = userService.findUserImg(userInfo.getUserId(), Contants.IMAGE_TYPE.USER_HEAD.toString());
         String objId = "";
         String imgType = "";
         String imageId = "";
         if(imageObj == null){
             objId = userInfo.getUserId();
-            imgType = Contants.ITEM_SHOW_IMG;
+            imgType = Contants.IMAGE_TYPE.USER_HEAD.toString();
         }else{
             objId = imageObj.getObjId();
             imgType = imageObj.getImageType();
             imageId = imageObj.getImageId();
-            model.addAttribute("imgPath",request.getContextPath()+imageObj.getImageUrl()+"_320x240.jpg");
+            model.addAttribute("imgPath",imageObj.getImageUrl());
         }
         model.addAttribute("objId",objId);
         model.addAttribute("imageType",imgType);
@@ -93,7 +102,7 @@ public class UserController extends BaseController{
             imgUrl = imgUrl.substring(imgUrl.indexOf("images") - 1,imgUrl.indexOf("_"));
         }
         obj.setImageUrl(imgUrl);
-        obj.setImageType(Contants.ITEM_SHOW_IMG);
+        obj.setImageType(Contants.IMAGE_TYPE.USER_HEAD.toString());
         userService.saveOrUpdateImg(obj);
         return Contants.SUCCESS;
     }

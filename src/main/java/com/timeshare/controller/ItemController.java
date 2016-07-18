@@ -61,7 +61,7 @@ public class ItemController extends BaseController{
     public String toView(@PathVariable String itemId,Model model,@CookieValue(value="time_sid", defaultValue="") String userId) {
         String returnStr = "";
         Item item = itemService.findItemByItemId(itemId);
-        if(item != null && item.getItemStatus().equals(Contants.ITEM_STATUS.draft)){
+        if(item != null &&( item.getItemStatus().equals(Contants.ITEM_STATUS.draft.toString()) || item.getItemStatus().equals(Contants.ITEM_STATUS.not_pass.toString()))){
             model.addAttribute("item", item);
             returnStr = "additem";
         }else{

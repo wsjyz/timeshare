@@ -74,7 +74,11 @@ public class ItemServiceImpl implements ItemService {
             for(Item item:dtoDbList){
                 ItemDTO itemDTO = new ItemDTO();
                 itemDTO.setItem(item);
-                itemDTO.setHeadImgPath(imgMap.get(item.getUserId()+Contants.IMAGE_TYPE.USER_HEAD.toString()));
+                String headImg = imgMap.get(item.getUserId()+Contants.IMAGE_TYPE.USER_HEAD.toString());
+                if(headImg.indexOf("http") == -1){//修改过头像
+                    headImg = "/time"+headImg+"_320x240.jpg";
+                }
+                itemDTO.setHeadImgPath(headImg);
                 itemDTO.setImgPath(imgMap.get(item.getUserId()+Contants.IMAGE_TYPE.ITEM_SHOW_IMG.toString()));
                 dtoList.add(itemDTO);
             }

@@ -17,9 +17,18 @@ public class Item extends BaseDomain{
     private int useCount;
     private int duration;
     private boolean recommend;
+    private String notPassReason;
 
     //传值用
     private int remindCount;
+
+    public String getNotPassReason() {
+        return notPassReason;
+    }
+
+    public void setNotPassReason(String notPassReason) {
+        this.notPassReason = notPassReason;
+    }
 
     public int getRemindCount() {
         return remindCount;
