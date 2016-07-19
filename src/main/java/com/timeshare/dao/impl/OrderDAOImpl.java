@@ -137,7 +137,7 @@ public class OrderDAOImpl extends BaseDAO implements OrderDAO {
         if(order != null){
             if (StringUtils.isNotEmpty(order.getOrderStatus())) {
                 if(order.getOrderStatus().equals("ongoing")){
-                    sql.append(" and (order_status !='"+Contants.ORDER_STATUS.FINISH+"' or order_status !='"+Contants.ORDER_STATUS.NEED_RATED+"')");
+                    sql.append(" and order_status !='"+Contants.ORDER_STATUS.FINISH+"' ");
                 }else{
                     sql.append(" and order_status ='"+order.getOrderStatus()+"' ");
                 }
@@ -152,7 +152,7 @@ public class OrderDAOImpl extends BaseDAO implements OrderDAO {
 
         }
         sql.append(" order by opt_time desc limit ?,?");
-
+        //System.out.println(sql.toString());
         List<ItemOrder> itemList = getJdbcTemplate().query(sql.toString(),new Object[]{startIndex,loadSize},new OrderMapper());
 
         return itemList;

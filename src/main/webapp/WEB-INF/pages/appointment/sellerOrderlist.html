@@ -30,7 +30,6 @@
         <div class="content-block">
             <div class="buttons-row" style="margin-top: 1rem">
                 <a href="#ongoingTab" class="tab-link active button">进行中</a>
-                <a href="#needRatedTab" class="tab-link button">待评价</a>
                 <a href="#finishTab" class="tab-link button">已完成</a>
             </div>
             <div class="tabs">
@@ -46,17 +45,6 @@
                         </div>
                     </div>
 
-                </div>
-                <div id="needRatedTab" class="tab infinite-scroll">
-
-                    <div class="list-block media-list" style="margin-top:  0px;">
-
-                    </div>
-                    <!-- 加载提示符 -->
-                    <div class="infinite-scroll-preloader">
-                        <div class="preloader">
-                        </div>
-                    </div>
                 </div>
                 <div id="finishTab" class="tab infinite-scroll">
 
@@ -89,7 +77,7 @@
         // 最多可加载的条目
         var maxItems = 30;
         var  lastIndex = $('.list-block ul').length;
-        function addItems(number, lastIndex,data) {
+        function addItems(number, lastIndex,data,tabId) {
             // 生成新条目的HTML
             var html = '';
             var dataLength = 0;
@@ -140,14 +128,20 @@
                 $('.no-record').hide();
                 $('.infinite-scroll-preloader').hide();
                 // 添加新条目
-                $('.active.infinite-scroll .list-block').append(html);
+                //$('.active.infinite-scroll .list-block').append(html);
+                $('#'+tabId+'.infinite-scroll .list-block').append(html);
             }
 
 
         }
         $.post('${request.contextPath}/order/my-order-list', {orderStatus:'ongoing',optUserType:'seller',startIndex: 0,loadSize:itemsPerLoad}, function (response) {
             //预先加载20条
-            addItems(itemsPerLoad, 0,response);
+            addItems(itemsPerLoad, 0,response,'ongoingTab');
+            $.hideIndicator();
+        });
+        $.post('${request.contextPath}/order/my-order-list', {orderStatus:'FINISH',optUserType:'seller',startIndex: 0,loadSize:itemsPerLoad}, function (response) {
+            //预先加载20条
+            addItems(itemsPerLoad, 0,response,'finishTab');
             $.hideIndicator();
         });
         $(document).on('infinite', function() {
@@ -157,11 +151,8 @@
             loading = true;
             var tabIndex = 0;
             var dataType = 'ongoing';
-            if($(this).find('.infinite-scroll.active').attr('id') == "needRatedTab"){
-                tabIndex = 1;
-                dataType = 'NEED_RATED';
-            }
-            if($(this).find('.infinite-scroll.active').attr('id') == "finishTab"){
+            var tabId = $(this).find('.infinite-scroll.active').attr('id');
+            if(tabId == "finishTab"){
                 tabIndex = 2;
                 dataType = 'FINISH';
             }
@@ -180,7 +171,7 @@
                         return;
                     }
                     // 添加新条目
-                    addItems(itemsPerLoad, lastIndex,response);
+                    addItems(itemsPerLoad, lastIndex,response,tabId);
                     // 更新最后加载的序号
                     lastIndex = $('.list-block ul').length;
                     //容器发生改变,如果是js滚动，需要刷新滚动
@@ -192,6 +183,7 @@
     function toFixOrder(id){
         window.location.href = "${request.contextPath}/order/fix-seller-order/"+id;
     }
+
 </script>
 <script>$.init();</script>
 </body>

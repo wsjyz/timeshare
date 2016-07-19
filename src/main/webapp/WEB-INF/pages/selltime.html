@@ -193,12 +193,12 @@
     function toView(id){
         window.location.href = "${request.contextPath}/item/to-view/"+id;
     }
-    $("#indexBtn").on('click', function () {
+    $("body").on( "click", "#indexBtn", function(){
         window.location.href = "${request.contextPath}/index/to-index";
-    });
-    $("#myPageBtn").on('click', function () {
+    } );
+    $("body").on( "click", "#myPageBtn", function(){
         window.location.href = '${request.contextPath}/user/to-my-page';
-    });
+    } );
 </script>
 </body>
 </html>
