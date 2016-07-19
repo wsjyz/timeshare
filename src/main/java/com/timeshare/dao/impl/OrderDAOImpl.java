@@ -82,7 +82,9 @@ public class OrderDAOImpl extends BaseDAO implements OrderDAO {
         if(StringUtils.isNotBlank(order.getBuyerFinish())){
             sql.append(" buyer_finish = "+order.getBuyerFinish()+",");
         }
-
+        if(StringUtils.isNotBlank(order.getWxTradeNo())){
+            sql.append(" wx_trade_no = '"+order.getWxTradeNo()+"',");
+        }
         if (sql.lastIndexOf(",") + 1 == sql.length()) {
             sql.delete(sql.lastIndexOf(","), sql.length());
         }
@@ -135,16 +137,22 @@ public class OrderDAOImpl extends BaseDAO implements OrderDAO {
         if(order != null){
             if (StringUtils.isNotEmpty(order.getOrderStatus())) {
                 if(order.getOrderStatus().equals("ongoing")){
-                    sql.append(" and order_status !='"+Contants.ORDER_STATUS.FINISH+"' or order_status !='"+Contants.ORDER_STATUS.NEED_RATED+"'");
+                    sql.append(" and (order_status !='"+Contants.ORDER_STATUS.FINISH+"' or order_status !='"+Contants.ORDER_STATUS.NEED_RATED+"')");
+                }else{
+                    sql.append(" and order_status ='"+order.getOrderStatus()+"' ");
                 }
-                sql.append(" and order_status ='"+order.getOrderStatus()+"' ");
+
             }
-            if (StringUtils.isNotEmpty(order.getOrderUserId())) {
+
+            if(order.getOptUserType().equals(Contants.OPT_USER_TYPE.buyer.toString())){
+                sql.append(" and create_user_id = '"+order.getUserId()+"' ");
+            }else if(order.getOptUserType().equals(Contants.OPT_USER_TYPE.seller.toString())){
                 sql.append(" and order_user_id = '"+order.getOrderUserId()+"' ");
             }
 
         }
         sql.append(" order by opt_time desc limit ?,?");
+
         List<ItemOrder> itemList = getJdbcTemplate().query(sql.toString(),new Object[]{startIndex,loadSize},new OrderMapper());
 
         return itemList;
@@ -173,6 +181,7 @@ public class OrderDAOImpl extends BaseDAO implements OrderDAO {
             order.setItemTitle(rs.getString("item_title"));
             order.setBuyerFinish(rs.getString("buyer_finish"));
             order.setSellerFinish(rs.getString("seller_finish"));
+            order.setWxTradeNo(rs.getString("wx_trade_no"));
             return order;
         }
     }

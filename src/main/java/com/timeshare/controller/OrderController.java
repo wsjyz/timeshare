@@ -47,9 +47,11 @@ public class OrderController extends BaseController{
     public static final String UNIFIEDORDER_URL = "https://api.mch.weixin.qq.com/pay/";
 
     @RequestMapping(value = "/to-start/{itemId}")
-    public String toStart(@PathVariable String itemId,@CookieValue(value="time_sid", defaultValue="") String userId,Model model) {
+    public String toStart(@PathVariable String itemId,Model model) {
         model.addAttribute("itemId",itemId);
-        model.addAttribute("userId",userId);
+
+        Item item = itemService.findItemByItemId(itemId);
+        model.addAttribute("userId",item.getUserId());
         return "appointment/begin";
     }
     @RequestMapping(value = "/fix-buyer-order/{orderId}")
@@ -151,8 +153,10 @@ public class OrderController extends BaseController{
         config.setBody(bodyStr);
         parameters.put("body",bodyStr);
 
-        config.setOut_trade_no(orderId);
-        parameters.put("out_trade_no",orderId);
+        String outTradeNo = CommonStringUtils.gen18RandomNumber();
+        config.setOut_trade_no(outTradeNo);
+        parameters.put("out_trade_no",outTradeNo);
+        order.setWxTradeNo(outTradeNo);
 
         int fenPrice = (order.getPrice().multiply(new BigDecimal(100))).intValue();
         System.out.println(" 价格为 "+fenPrice);
@@ -248,12 +252,19 @@ public class OrderController extends BaseController{
     @RequestMapping(value = "/my-order-list")
     @ResponseBody
     public List<ItemOrder> findOrderList(@RequestParam String orderStatus,
+                                         @RequestParam String optUserType,
                                          @RequestParam int startIndex, @RequestParam int loadSize
                                         ,@CookieValue(value="time_sid", defaultValue="") String userId) {
         List<ItemOrder> itemList = new ArrayList<>();
         ItemOrder parms = new ItemOrder();
         parms.setOrderUserId(userId);
         parms.setOrderStatus(orderStatus);
+        parms.setOptUserType(optUserType);
+        if(optUserType.equals(Contants.OPT_USER_TYPE.buyer.toString())){
+            parms.setUserId(userId);
+        }else if(optUserType.equals(Contants.OPT_USER_TYPE.seller.toString())){
+            parms.setOrderUserId(userId);
+        }
         itemList = orderService.findItemPage(parms,startIndex,loadSize);
         return itemList;
     }

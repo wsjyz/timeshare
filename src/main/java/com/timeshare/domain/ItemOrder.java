@@ -8,6 +8,7 @@ import java.math.BigDecimal;
 public class ItemOrder extends BaseDomain {
 
     private String orderId;
+    private String wxTradeNo;
     private String itemId;
     private String orderUserId;
     private String orderUserName;
@@ -27,6 +28,14 @@ public class ItemOrder extends BaseDomain {
     //传值用
     private String optUserType;//seller,buyer
     private String orderFeedBack;
+
+    public String getWxTradeNo() {
+        return wxTradeNo;
+    }
+
+    public void setWxTradeNo(String wxTradeNo) {
+        this.wxTradeNo = wxTradeNo;
+    }
 
     public String getOrderFeedBack() {
         return orderFeedBack;

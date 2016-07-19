@@ -117,12 +117,9 @@
 
                 html += '<div class="card" >'+
                             '<div class="card-content">'+
-                                '<div class="list-block media-list">'+
+                                '<div class="list-block">'+
                                     '<ul onclick="toFixOrder(\''+order.orderId+'\',\''+order.orderStatus+'\')">'+
                                         '<li class="item-content">'+
-                                            '<div class="item-media">'+
-                                                '<img src="http://gqianniu.alicdn.com/bao/uploaded/i4//tfscom/i3/TB10LfcHFXXXXXKXpXXXXXXXXXX_!!0-item_pic.jpg_250x250q60.jpg" width="44">'+
-                                            '</div>'+
                                             '<div class="item-inner">'+
                                                 '<div class="item-title-row">'+
                                                     '<div class="item-title">'+order.itemTitle+'</div>'+
@@ -150,7 +147,7 @@
 
 
         }
-        $.post('${request.contextPath}/order/my-order-list', {orderStatus:'ongoing',startIndex: 0,loadSize:itemsPerLoad}, function (response) {
+        $.post('${request.contextPath}/order/my-order-list', {orderStatus:'ongoing',optUserType:'buyer',startIndex: 0,loadSize:itemsPerLoad}, function (response) {
             //预先加载20条
             addItems(itemsPerLoad, 0,response);
             $.hideIndicator();
@@ -172,7 +169,7 @@
             }
 
             lastIndex = $('.list-block').eq(tabIndex).find('ul').length;
-            $.post('${request.contextPath}/order/my-order-list', {orderStatus:dataType,startIndex: lastIndex,loadSize:itemsPerLoad}, function (response) {
+            $.post('${request.contextPath}/order/my-order-list', {orderStatus:dataType,optUserType:'buyer',startIndex: lastIndex,loadSize:itemsPerLoad}, function (response) {
                 setTimeout(function() {
                     // 重置加载flag
                     loading = false;

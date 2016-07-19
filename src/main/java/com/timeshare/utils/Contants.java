@@ -37,6 +37,9 @@ public interface Contants {
     enum ORDER_TYPE {
         ONLINE,OFFLINE
     }
+    enum OPT_USER_TYPE {
+        buyer,seller
+    }
     enum ORDER_STATUS {
         BEGIN,//买家填写问题，发出邀请
         SELLER_APPLY,//卖家答复，填写建议时间

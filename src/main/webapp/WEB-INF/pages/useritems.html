@@ -97,7 +97,7 @@
 <script>
     $.showIndicator();
     //背景图片
-    var headPicArr = [1,2,3,4,5];
+    var headPicArr = [1,2,3,4,5,6];
     var n = Math.floor(Math.random() * headPicArr.length + 1)-1;
     $('#headbackImg').attr('src','${request.contextPath}/images/headback'+headPicArr[n]+'.jpg');
     $.get('${request.contextPath}/user/get-user-items', {userId: $('#userId').val()}, function (response) {

@@ -11,7 +11,28 @@
 
     <link rel="stylesheet" href="//g.alicdn.com/msui/sm/0.6.2/css/sm.min.css">
     <link rel="stylesheet" href="//g.alicdn.com/msui/sm/0.6.2/css/sm-extend.min.css">
-
+    <style>
+        .commentAvatarDiv{
+            width: 50px;
+            height: 50px;
+            padding:2px;
+            background: #ececec;
+            border-radius:50px;
+            box-shadow: 0px 0px 1px rgba(0,0,0,0.4);
+            -moz-border-radius: 50px;
+            -webkit-border-radius: 50px;
+        }
+        .commentAvatarImage{
+            width:50px;
+            height:50px;
+            line-height: 0;	 /* remove line-height */
+            display: inline-block;	/* circle wraps image */
+            border-radius: 50%;	/* relative value */
+            -moz-border-radius: 50%;
+            -webkit-border-radius: 50%;
+            transition: linear 0.25s;
+        }
+    </style>
 </head>
 <body>
 
@@ -26,7 +47,7 @@
                             <li class="item-content">
                                 <div class="item-media">
                                     <div class="commentAvatarDiv" style="width: 44px;height: 44px">
-                                        <img class="commentAvatarImage" src="../images/head.jpg" style="width: 44px;height: 44px"   >
+                                        <img class="commentAvatarImage" src="../images/default_head.jpg" style="width: 44px;height: 44px"   >
                                     </div>
                                 </div>
                                 <div class="item-inner">
@@ -99,6 +120,7 @@
     $.get('${request.contextPath}/item/get-item', {itemId: $('#itemId').val(),userId: $('#userId').val()}, function (response) {
         $('#priceSp').text(response.item.price);
         $('#titleSp').text(response.item.title);
+        $('.commentAvatarImage').attr("src",response.userInfo.headImgPath);
         var createDate = response.item.optTime.substring(0,10);
         $('#dateSp').text(createDate);
         $('#createUserNameSp').text(response.userInfo.nickName);
