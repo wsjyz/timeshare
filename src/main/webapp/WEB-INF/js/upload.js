@@ -50,7 +50,8 @@
                 $filePickerInput.val('');
                 $filePicker.hide();
             }
-        }).fail(function () {
+        }).fail(function (jqXHR, textStatus, errorThrown) {
+            alert(errorThrown);
             alert('服务器故障，上传失败');
         }).always(function () {
             state = 'pedding';

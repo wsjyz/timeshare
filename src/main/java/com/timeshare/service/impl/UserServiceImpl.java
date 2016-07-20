@@ -42,6 +42,11 @@ public class UserServiceImpl implements UserService{
     }
 
     @Override
+    public UserInfo findUserByUserId(String userId) {
+        return userDAO.findUserByUserId(userId);
+    }
+
+    @Override
     public ImageObj findUserImg(String userId, String imgType) {
         return imageObjDAO.findImgByObjIdAndType(userId,imgType);
     }

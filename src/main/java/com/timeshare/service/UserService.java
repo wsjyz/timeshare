@@ -15,6 +15,8 @@ public interface UserService {
 
     UserInfo findUserByUserId(String userId,ImageObj imageObj);
 
+    UserInfo findUserByUserId(String userId);
+
     ImageObj findUserImg(String userId,String imgType);
 
     void saveOrUpdateImg(ImageObj obj);

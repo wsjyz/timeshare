@@ -15,6 +15,8 @@ public interface UserDAO {
 
     UserInfo findUserByUserId(String userId,ImageObj imageObj);
 
+    UserInfo findUserByUserId(String userId);
+
     String deleteById(String userId);
 
     OpenPage<UserInfo> findUserPage(String mobile, String nickName, OpenPage page);

@@ -1,6 +1,8 @@
 package com.timeshare.domain;
 
 import java.math.BigDecimal;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 /**
  * Created by adam on 2016/6/11.

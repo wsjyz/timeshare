@@ -140,16 +140,8 @@ public class WxController {
         }
 
         request.setAttribute("user",user);
-        String sendUrl = "";
-        if(StringUtils.isNotBlank(toUrl)){
-            try {
-                sendUrl = URLDecoder.decode(toUrl,"UTF-8");
-            } catch (UnsupportedEncodingException e) {
-                e.printStackTrace();
-            }
-        }else{
-            sendUrl = "/user/to-userinfo?userId="+userId;
-        }
+        String sendUrl = "/user/to-userinfo?userId="+userId;
+
         return "redirect:"+sendUrl;
     }
 }

@@ -35,7 +35,9 @@ public class UserController extends BaseController{
         if (StringUtils.isBlank(userId)){
             userId = request.getParameter("userId");
         }
+        String toUrl = request.getParameter("toUrl");
         model.addAttribute("userId",userId);
+        model.addAttribute("toUrl",toUrl);
         return "userinfo";
     }
 

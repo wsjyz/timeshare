@@ -1,18 +1,23 @@
 package com.timeshare.service.impl;
 
 import com.timeshare.dao.OrderDAO;
-import com.timeshare.domain.Item;
-import com.timeshare.domain.ItemOrder;
-import com.timeshare.domain.OpenPage;
-import com.timeshare.domain.Remind;
+import com.timeshare.domain.*;
 import com.timeshare.service.ItemService;
 import com.timeshare.service.OrderService;
 import com.timeshare.service.RemindService;
+import com.timeshare.service.UserService;
 import com.timeshare.utils.Contants;
+import com.timeshare.utils.SmsContentBean;
+import com.timeshare.utils.SmsUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -21,12 +26,16 @@ import java.util.List;
 @Service("OrderService")
 public class OrderServiceImpl implements OrderService {
 
+    protected Logger logger = LoggerFactory.getLogger(OrderServiceImpl.class);
+
     @Autowired
     OrderDAO orderDAO;
     @Autowired
     ItemService itemService;
     @Autowired
     RemindService remindService;
+    @Autowired
+    UserService userService;
 
     @Override
     public String saveOrder(ItemOrder order) {
@@ -79,6 +88,9 @@ public class OrderServiceImpl implements OrderService {
                 result = orderDAO.modifyOrder(order);
                 break;
         }
+        if(!order.getOrderStatus().equals("FINISH")){
+            sendMms(order);
+        }
 
 
 
@@ -113,6 +125,63 @@ public class OrderServiceImpl implements OrderService {
     @Override
     public BigDecimal findUsersMoneyByType(String userId, String type) {
         return orderDAO.findUsersMoneyByType(userId,type);
+    }
+    public void sendMms(ItemOrder order){
+//        卖家收到：买家[李四]预约了您的项目，请进入服务号[邂逅时刻]查看
+//        买家收到：卖家[张三]答复了您的邀请，请进入服务号[邂逅时刻]查看
+//        卖家收到：买家[李四]确认了邂逅时间，具体沟通时间为[2016-12-10 12:00]，请进入服务号[邂逅时刻]查看
+//        买家收到：卖家[张三]已经确认完成双方邀约，请进入服务号[邂逅时刻]查看
+//        卖家收到：买家[李四]已经确认完成双方邀约，项目款项已入账，请进入服务号[邂逅时刻]查收
+        UserInfo seller = userService.findUserByUserId(order.getOrderUserId());
+        UserInfo buyer = userService.findUserByUserId(order.getUserId());
+        SmsContentBean bean = new SmsContentBean();
+        switch (order.getOrderStatus()){
+            case "BEGIN":
+                bean.setTemplateCode("SMS_12405376");
+                bean.setToMobile(seller.getMobile());
+                bean.setContent("{\"name\":\""+buyer.getNickName()+"\"}");
+                System.out.println("向卖家"+seller.getMobile()+"发短信："+"买家["+buyer.getNickName()+"]预约了您的项目，请进入服务号[邂逅时刻]查看");
+                break;
+            case "SELLER_APPLY":
+                bean.setTemplateCode("SMS_12350337");
+                bean.setToMobile(buyer.getMobile());
+                bean.setContent("{\"name\":\""+seller.getNickName()+"\"}");
+                System.out.println("向买家"+buyer.getMobile()+"发短信："+"卖家["+seller.getNickName()+"]答复了您的邀请，请进入服务号[邂逅时刻]查看");
+                break;
+            case "BUYER_CONFIRM":
+                bean.setTemplateCode("SMS_12410324");
+                bean.setToMobile(seller.getMobile());
+                SimpleDateFormat sdf = new SimpleDateFormat("yy年MM月dd日 HH点mm");
+                SimpleDateFormat sdf1 = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+                Date date = null;
+                try {
+                    date = sdf1.parse(order.getFinalAppointmentTime());
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                }
+                String finalAppointmentTime = sdf.format(date);
+                bean.setContent("{\"name\":\""+buyer.getNickName()+"\",\"time\":\""+finalAppointmentTime+"\"}");
+                System.out.println("向卖家"+seller.getMobile()+"发短信："+"买家["+buyer.getNickName()+"]确认了邂逅时间，具体沟通时间为["+finalAppointmentTime+"]，请进入服务号[邂逅时刻]查看");
+                break;
+            case "SELLER_FINISH":
+                bean.setTemplateCode("SMS_12335356");
+                bean.setToMobile(buyer.getMobile());
+                bean.setContent("{\"name\":\""+seller.getNickName()+"\"}");
+                System.out.println("向买家"+buyer.getMobile()+"发短信："+"卖家["+seller.getNickName()+"]已经确认完成双方邀约，请进入服务号[邂逅时刻]查看");
+                break;
+            case "BUYLLER_FINISH":
+                bean.setTemplateCode("SMS_12360451");
+                bean.setToMobile(seller.getMobile());
+                bean.setContent("{\"name\":\""+buyer.getNickName()+"\"}");
+                System.out.println("向卖家"+seller.getMobile()+"发短信："+"买家["+buyer.getNickName()+"]已经确认完成双方邀约，项目款项已入账，请进入服务号[邂逅时刻]查收");
+                break;
+
+
+        }
+        String response = SmsUtils.senMessage(bean);
+        if(response.indexOf("error_response") != -1){
+            logger.error(response);
+        }
     }
 }
 

@@ -145,6 +145,21 @@ public class UserDAOImpl extends BaseDAO implements UserDAO {
     }
 
     @Override
+    public UserInfo findUserByUserId(String userId) {
+        StringBuilder sql = new StringBuilder("");
+        sql.append("select * from t_user_info where user_id = ? " );
+        List<String> excludeFields = new ArrayList<>();
+        excludeFields.add("image_url");
+        List<UserInfo> auntInfoList = getJdbcTemplate().query(sql.toString(),
+                new String[] { userId }, new UserInfoMapper(excludeFields));
+        if (!CollectionUtils.isEmpty(auntInfoList)) {
+            UserInfo userInfo = auntInfoList.get(0);
+            return userInfo;
+        }
+        return null;
+    }
+
+    @Override
     public UserInfo findUserByOpenId(String openId) {
         StringBuilder sql = new StringBuilder("");
         sql.append("select u.* from t_user_info u  where open_id = ?" );
