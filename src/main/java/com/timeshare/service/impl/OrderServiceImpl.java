@@ -152,7 +152,7 @@ public class OrderServiceImpl implements OrderService {
                 bean.setTemplateCode("SMS_12410324");
                 bean.setToMobile(seller.getMobile());
                 SimpleDateFormat sdf = new SimpleDateFormat("yy年MM月dd日 HH点mm");
-                SimpleDateFormat sdf1 = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+                SimpleDateFormat sdf1 = new SimpleDateFormat("yyyy-MM-dd HH:mm");
                 Date date = null;
                 try {
                     date = sdf1.parse(order.getFinalAppointmentTime());

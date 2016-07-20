@@ -5,6 +5,10 @@ package com.timeshare.domain;
  */
 public class Feedback extends BaseDomain {
 
+    private String feedBackId;
+
+    private String toUserId;
+
     private String title;
 
     private String content;
@@ -12,6 +16,22 @@ public class Feedback extends BaseDomain {
     private String itemId;
 
     private String itemTitle;
+
+    public String getFeedBackId() {
+        return feedBackId;
+    }
+
+    public void setFeedBackId(String feedBackId) {
+        this.feedBackId = feedBackId;
+    }
+
+    public String getToUserId() {
+        return toUserId;
+    }
+
+    public void setToUserId(String toUserId) {
+        this.toUserId = toUserId;
+    }
 
     public String getItemTitle() {
         return itemTitle;

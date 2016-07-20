@@ -6,10 +6,7 @@ import com.thoughtworks.xstream.XStream;
 import com.thoughtworks.xstream.io.xml.DomDriver;
 import com.thoughtworks.xstream.io.xml.XmlFriendlyNameCoder;
 import com.timeshare.domain.*;
-import com.timeshare.service.ItemService;
-import com.timeshare.service.OrderService;
-import com.timeshare.service.RemindService;
-import com.timeshare.service.UserService;
+import com.timeshare.service.*;
 import com.timeshare.utils.*;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -37,6 +34,8 @@ public class OrderController extends BaseController{
     ItemService itemService;
     @Autowired
     RemindService remindService;
+    @Autowired
+    FeedbackService feedbackService;
 
     public static final String UNIFIEDORDER_URL = "https://api.mch.weixin.qq.com/pay/";
 
@@ -68,6 +67,11 @@ public class OrderController extends BaseController{
                     canFinish = "true";
                 }
                 model.addAttribute("canFinish",canFinish);
+                toStr = "appointment/buyerFinish";
+                break;
+            case "BUYLLER_FINISH":
+
+                model.addAttribute("canFinish","false");
                 toStr = "appointment/buyerFinish";
                 break;
             case "SELLER_FINISH":
@@ -111,6 +115,16 @@ public class OrderController extends BaseController{
             case "SELLER_FINISH":
 
                 model.addAttribute("canFinish","false");
+                toStr = "appointment/sellerFinish";
+                break;
+            case "BUYLLER_FINISH":
+
+                String canFinish1 = "false";
+                if(new Date().after(CommonStringUtils.stringToDate(
+                        order.getFinalAppointmentTime()))){
+                    canFinish1 = "true";
+                }
+                model.addAttribute("canFinish",canFinish1);
                 toStr = "appointment/sellerFinish";
                 break;
 
@@ -268,15 +282,14 @@ public class OrderController extends BaseController{
 
         SystemMessage message = new SystemMessage();
         if(order != null){
-
+            Item item = itemService.findItemByItemId(order.getItemId());
             if(StringUtils.isNotBlank(userId) && order.getOrderStatus().equals(Contants.ORDER_STATUS.BEGIN.toString())){
+
+                UserInfo seller = userService.findUserByUserId(item.getUserId());
+                order.setOrderUserName(seller.getNickName());
                 UserInfo user = getCurrentUser(userId);
-                if(StringUtils.isNotBlank(user.getNickName())){
-                    order.setOrderUserName(user.getNickName());
-                }
-                if(StringUtils.isNotBlank(user.getUserId())){
-                    order.setUserId(user.getUserId());
-                }
+                order.setUserId(user.getUserId());
+                order.setCreateUserName(user.getNickName());
             }else{
                 ItemOrder tempOrder = orderService.findOrderByOrderId(order.getOrderId());
                 order.setUserId(tempOrder.getUserId());
@@ -293,6 +306,14 @@ public class OrderController extends BaseController{
                             order.setOrderStatus(Contants.ORDER_STATUS.SELLER_FINISH.toString());
                         }
 
+                        Feedback feedback = new Feedback();
+                        feedback.setItemTitle(item.getTitle());
+                        feedback.setItemId(item.getItemId());
+                        feedback.setCreateUserName(tempOrder.getOrderUserName());
+                        feedback.setContent(order.getOrderFeedBack());
+                        feedback.setToUserId(order.getUserId());
+                        feedback.setUserId(tempOrder.getOrderUserId());
+                        feedbackService.saveFeedback(feedback);
 
                     }else{//买家
 
@@ -303,6 +324,15 @@ public class OrderController extends BaseController{
                             order.setOrderStatus(Contants.ORDER_STATUS.BUYLLER_FINISH.toString());
                         }
 
+                        Feedback feedback = new Feedback();
+                        feedback.setItemTitle(item.getTitle());
+                        feedback.setItemId(item.getItemId());
+                        feedback.setCreateUserName(tempOrder.getCreateUserName());
+                        feedback.setContent(order.getOrderFeedBack());
+                        feedback.setToUserId(order.getOrderUserId());
+                        feedback.setUserId(tempOrder.getUserId());
+                        feedbackService.saveFeedback(feedback);
+
                     }
                 }
             }
@@ -310,6 +340,7 @@ public class OrderController extends BaseController{
 
 
             String result = orderService.saveOrder(order);
+
             message.setMessageType(result);
             String toUserType = "";
             if(order.getOptUserType().equals("buyer")){

@@ -27,8 +27,8 @@ public class OrderDAOImpl extends BaseDAO implements OrderDAO {
     public String saveOrder(final ItemOrder info) {
         StringBuilder sql = new StringBuilder("insert into t_order (order_id,order_user_id,order_user_name,order_problem," +
                 "order_user_description,suggest_appointment_time,final_appointment_time,seller_phone,price,pay_type," +
-                "paid_money,order_status,create_user_id,opt_time,item_id,item_title)" +
-                " values(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)");
+                "paid_money,order_status,create_user_id,opt_time,item_id,item_title,create_user_name)" +
+                " values(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)");
         int result = getJdbcTemplate().update(sql.toString(), new PreparedStatementSetter() {
             @Override
             public void setValues(PreparedStatement ps) throws SQLException {
@@ -48,6 +48,7 @@ public class OrderDAOImpl extends BaseDAO implements OrderDAO {
                 ps.setString(14,info.getOptTime());
                 ps.setString(15,info.getItemId());
                 ps.setString(16,info.getItemTitle());
+                ps.setString(17,info.getCreateUserName());
             }
         });
         if(result > 0){
@@ -182,6 +183,7 @@ public class OrderDAOImpl extends BaseDAO implements OrderDAO {
             order.setBuyerFinish(rs.getString("buyer_finish"));
             order.setSellerFinish(rs.getString("seller_finish"));
             order.setWxTradeNo(rs.getString("wx_trade_no"));
+            order.setCreateUserName(rs.getString("create_user_name"));
             return order;
         }
     }
