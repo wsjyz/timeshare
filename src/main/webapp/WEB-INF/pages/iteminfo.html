@@ -61,11 +61,12 @@
                 </div>
 
             </div>
-            <#if selfItem == 'yes'??><#else>
+            <#if selfItem == "yes"><#else>
                 <div style="height: 12%">&nbsp;</div>
             </#if>
         </div>
-        <#if selfItem == 'yes'??><#else>
+
+        <#if selfItem == "yes"><#else>
             <div class="bar bar-standard bar-footer" style="padding-top:0rem;height: 12%">
                 <p><a href="#" id="orderBtn" class="button button-fill button-danger button-big" style="top: -0.1rem;">立即预约</a></p>
             </div>
@@ -79,6 +80,7 @@
 <script type='text/javascript' src='//g.alicdn.com/msui/sm/0.6.2/js/sm-extend.min.js' charset='utf-8'></script>
 <script>
     $.showIndicator();
+
     $("#orderBtn").on('click', function () {
         var itemId = $('#itemId').val();
         var backUrl = '/order/to-start/'+itemId;

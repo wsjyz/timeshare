@@ -147,20 +147,18 @@ public class ItemDAOImpl extends BaseDAO implements ItemDAO {
 
         if(condition.equals("recommend")){//推荐
             sql.append("select * from t_item  " +
-                    " where recommend = true and item_status = '"+ Contants.ITEM_STATUS.for_sale+"'");
+                    " where recommend = true and item_status = '"+ Contants.ITEM_STATUS.for_sale+"' order by opt_time desc");
         }else if(condition.equals("new")){//最新
-            sql.append("select * from t_item ");
+            sql.append("select * from t_item where item_status = '"+ Contants.ITEM_STATUS.for_sale+"' order by opt_time desc");
         }else if(condition.equals("hot")){//最火
-            sql.append("select * from t_item ");
+            sql.append("SELECT i.*,count(o.order_id) c FROM `t_item` i ,t_order o where i.item_id = o.item_id and i.item_status = '"+ Contants.ITEM_STATUS.for_sale+"' order by c desc");
         }else if(condition.equals("good")){//最优
-            sql.append("select * from t_item ");
+            sql.append("SELECT i.*,sum(f.rating) c FROM `t_item` i ,t_feed_back f where i.item_id = f.item_id and i.item_status = '"+ Contants.ITEM_STATUS.for_sale+"' order by c desc");
         }
-        if(sql.indexOf("where") == -1){
-            sql.append(" where");
-        }
+
         List<String> excludeFields = new ArrayList<>();
         excludeFields.add("remindCount");
-        sql.append(" order by opt_time desc limit ?,?");
+        sql.append(" limit ?,?");
         List<Item> itemList = getJdbcTemplate().query(sql.toString(),new Object[]{startIndex,loadSize},new ItemMapper(excludeFields));
         return itemList;
     }

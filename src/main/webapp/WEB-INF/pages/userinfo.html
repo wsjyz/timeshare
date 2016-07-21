@@ -109,7 +109,7 @@
                             <div class="item-inner">
                                 <div class="item-title label">年龄段</div>
                                 <div class="item-input">
-                                    <input type="text" id="ageInput" id="ageGroup" name="ageGroup" value="${user.ageGroup!''}">
+                                    <input type="text" id="ageGroup" name="ageGroup" value="${user.ageGroup!''}">
                                 </div>
                             </div>
                         </div>
@@ -183,7 +183,7 @@
         }
 
     });
-    $("#ageInput").picker({
+    $("#ageGroup").picker({
         toolbarTemplate: '<header class="bar bar-nav">\
           <button class="button button-link pull-right close-picker">确定</button>\
           <h1 class="title">请选择您的年龄段</h1>\

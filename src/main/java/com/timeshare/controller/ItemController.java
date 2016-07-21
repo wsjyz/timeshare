@@ -67,6 +67,7 @@ public class ItemController extends BaseController{
             returnStr = "additem";
         }else{
             String selfItem = "no";
+            System.out.println(userId + " "+item.getUserId());
             if(StringUtils.isNotBlank(userId) && userId.equals(item.getUserId())){
                 selfItem = "yes";
             }

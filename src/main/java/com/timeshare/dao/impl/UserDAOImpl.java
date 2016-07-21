@@ -32,8 +32,8 @@ public class UserDAOImpl extends BaseDAO implements UserDAO {
 
     @Override
     public String saveUser(UserInfo info) {
-        StringBuilder sql = new StringBuilder("insert into t_user_info (user_id,mobile,open_id,user_name,nick_name,income,sum_cost,sell_counts,buy_counts,description,position,corp,industry,city,ageGroup)" +
-                " values(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)");
+        StringBuilder sql = new StringBuilder("insert into t_user_info (user_id,mobile,open_id,user_name,nick_name,income,sum_cost,sell_counts,buy_counts,description,position,corp,industry,city,ageGroup,sex)" +
+                " values(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)");
 
         int result = getJdbcTemplate().update(sql.toString(), new PreparedStatementSetter() {
             @Override
@@ -53,6 +53,7 @@ public class UserDAOImpl extends BaseDAO implements UserDAO {
                 ps.setString(13,info.getIndustry());
                 ps.setString(14,info.getCity());
                 ps.setString(15,info.getAgeGroup());
+                ps.setInt(16,info.getSex());
             }
         });
         ImageObj obj = info.getImageObj();
@@ -114,7 +115,7 @@ public class UserDAOImpl extends BaseDAO implements UserDAO {
             if(StringUtils.isNotBlank(userInfo.getAgeGroup())){
                 sql.append(" ageGroup = '"+userInfo.getAgeGroup()+"',");
             }
-
+            sql.append(" sex = "+userInfo.getSex()+",");
             if (sql.lastIndexOf(",") + 1 == sql.length()) {
                 sql.delete(sql.lastIndexOf(","), sql.length());
             }
@@ -213,6 +214,7 @@ public class UserDAOImpl extends BaseDAO implements UserDAO {
             userInfo.setCity(rs.getString("city"));
             userInfo.setAgeGroup(rs.getString("ageGroup"));
             userInfo.setOpenId(rs.getString("open_id"));
+            userInfo.setSex(rs.getInt("sex"));
             if(!excludeFields.contains("image_url")){
                 ImageObj img = new ImageObj();
                 img.setImageUrl(rs.getString("image_url"));

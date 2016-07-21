@@ -164,7 +164,7 @@
         // 最多可加载的条目
         var maxItems = 30;
         var  lastIndex = $('.list-block ul').length;
-        function addItems(number, lastIndex,data) {
+        function addItems(number, lastIndex,data,tabId) {
             // 生成新条目的HTML
             var html = '';
             var dataLength = 0;
@@ -208,16 +208,29 @@
                 $('.no-record').hide();
                 $('.infinite-scroll-preloader').hide();
                 // 添加新条目
-                $('.active.infinite-scroll .list-block').append(html);
+                //$('.active.infinite-scroll .list-block').append(html);
+                $('#'+tabId+'.infinite-scroll .list-block').append(html);
             }
 
 
         }
         $.post('${request.contextPath}/item/list-by-condition', {condition:'recommend',startIndex: 0,loadSize:itemsPerLoad}, function (response) {
             //预先加载20条
-            addItems(itemsPerLoad, 0,response);
+            addItems(itemsPerLoad, 0,response,'recommendTab');
             addLunboItem(response);
             $.hideIndicator();
+        });
+        $.post('${request.contextPath}/item/list-by-condition', {condition:'new',startIndex: 0,loadSize:itemsPerLoad}, function (response) {
+            //预先加载20条
+            addItems(itemsPerLoad, 0,response,'newTab');
+        });
+        $.post('${request.contextPath}/item/list-by-condition', {condition:'hot',startIndex: 0,loadSize:itemsPerLoad}, function (response) {
+            //预先加载20条
+            addItems(itemsPerLoad, 0,response,'hotTab');
+        });
+        $.post('${request.contextPath}/item/list-by-condition', {condition:'good',startIndex: 0,loadSize:itemsPerLoad}, function (response) {
+            //预先加载20条
+            addItems(itemsPerLoad, 0,response,'goodTab');
         });
         $(document).on('infinite', function() {
             // 如果正在加载，则退出
@@ -226,15 +239,16 @@
             loading = true;
             var tabIndex = 0;
             var dataType = 'recommend';
-            if($(this).find('.infinite-scroll.active').attr('id') == "newTab"){
+            var tabId = $(this).find('.infinite-scroll.active').attr('id');
+            if(tabId == "newTab"){
                 tabIndex = 1;
                 dataType = 'new';
             }
-            if($(this).find('.infinite-scroll.active').attr('id') == "hotTab"){
+            if(tabId == "hotTab"){
                 tabIndex = 2;
                 dataType = 'hot';
             }
-            if($(this).find('.infinite-scroll.active').attr('id') == "goodTab"){
+            if(tabId == "goodTab"){
                 tabIndex = 3;
                 dataType = 'good';
             }
@@ -252,7 +266,7 @@
                         return;
                     }
                     // 添加新条目
-                    addItems(itemsPerLoad, lastIndex,response);
+                    addItems(itemsPerLoad, lastIndex,response,tabId);
                     // 更新最后加载的序号
                     lastIndex = $('.list-block ul').length;
                     //容器发生改变,如果是js滚动，需要刷新滚动
