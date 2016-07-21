@@ -21,4 +21,11 @@ public class MainController {
 
         return "manager/index";
     }
+
+    @RequestMapping(value = "/test")
+    public String test() {
+
+        return "manager/test";
+    }
+
 }

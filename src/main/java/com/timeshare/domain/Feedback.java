@@ -17,6 +17,16 @@ public class Feedback extends BaseDomain {
 
     private String itemTitle;
 
+    private int rating;
+
+    public int getRating() {
+        return rating;
+    }
+
+    public void setRating(int rating) {
+        this.rating = rating;
+    }
+
     public String getFeedBackId() {
         return feedBackId;
     }

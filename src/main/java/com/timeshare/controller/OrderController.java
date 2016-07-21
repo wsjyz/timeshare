@@ -313,6 +313,7 @@ public class OrderController extends BaseController{
                         feedback.setContent(order.getOrderFeedBack());
                         feedback.setToUserId(order.getUserId());
                         feedback.setUserId(tempOrder.getOrderUserId());
+                        feedback.setRating(order.getRating());
                         feedbackService.saveFeedback(feedback);
 
                     }else{//买家
@@ -331,6 +332,7 @@ public class OrderController extends BaseController{
                         feedback.setContent(order.getOrderFeedBack());
                         feedback.setToUserId(order.getOrderUserId());
                         feedback.setUserId(tempOrder.getUserId());
+                        feedback.setRating(order.getRating());
                         feedbackService.saveFeedback(feedback);
 
                     }

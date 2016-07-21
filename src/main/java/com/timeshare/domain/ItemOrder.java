@@ -30,6 +30,15 @@ public class ItemOrder extends BaseDomain {
     //传值用
     private String optUserType;//seller,buyer
     private String orderFeedBack;
+    private int rating;
+
+    public int getRating() {
+        return rating;
+    }
+
+    public void setRating(int rating) {
+        this.rating = rating;
+    }
 
     public String getWxTradeNo() {
         return wxTradeNo;

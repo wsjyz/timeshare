@@ -24,8 +24,8 @@ import java.util.List;
 public class FeedbackDAOImpl extends BaseDAO implements FeedbackDAO {
     @Override
     public String saveFeedback(Feedback info) {
-        StringBuilder sql = new StringBuilder("insert into t_feed_back (feedback_id,title,content,item_id,item_title,to_user_id,create_user_name,create_user_id,opt_time)" +
-                " values(?,?,?,?,?,?,?,?,?)");
+        StringBuilder sql = new StringBuilder("insert into t_feed_back (feedback_id,title,content,item_id,item_title,to_user_id,create_user_name,create_user_id,opt_time,rating)" +
+                " values(?,?,?,?,?,?,?,?,?,?)");
         int result = getJdbcTemplate().update(sql.toString(), new PreparedStatementSetter() {
             @Override
             public void setValues(PreparedStatement ps) throws SQLException {
@@ -38,6 +38,7 @@ public class FeedbackDAOImpl extends BaseDAO implements FeedbackDAO {
                 ps.setString(7,info.getCreateUserName());
                 ps.setString(8,info.getUserId());
                 ps.setString(9,info.getOptTime());
+                ps.setInt(10,info.getRating());
             }
         });
         if(result > 0){
@@ -122,6 +123,7 @@ public class FeedbackDAOImpl extends BaseDAO implements FeedbackDAO {
             f.setToUserId(rs.getString("to_user_id"));
             f.setItemTitle(rs.getString("item_title"));
             f.setOptTime(rs.getString("opt_time"));
+            f.setRating(rs.getInt("rating"));
             return f;
         }
     }
