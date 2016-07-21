@@ -22,7 +22,7 @@ public interface FeedbackService {
 
     List<Feedback> findFeedbackListByToUserId(String toUserId);
 
-    List<Feedback> findFeedbackListByItemId(String toUserId);
+    List<Feedback> findFeedbackListByItemId(String itemId);
 
     Feedback findFeedBackByCreateUserId(String createUserId,String itemId);
 

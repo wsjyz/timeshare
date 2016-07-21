@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
 import java.io.UnsupportedEncodingException;
+import java.math.BigDecimal;
 import java.net.URLDecoder;
 import java.net.URLEncoder;
 import java.util.ArrayList;
@@ -126,6 +127,8 @@ public class ItemController extends BaseController{
             item.setCreateUserName(user.getNickName());
             item.setUserId(userId);
             String result = "";
+            //TODO 测试时为1分
+            item.setPrice(new BigDecimal("0.01"));
             if(StringUtils.isNotBlank(item.getItemId())){
                 result = itemService.modifyItem(item);
             }else{

@@ -65,25 +65,11 @@
             <div class="card">
                 <div class="card-header">Ta们的反馈:</div>
                 <div class="card-content">
-                    <div class="list-block media-list">
-                        <ul>
-                            <li class="item-content">
-                                <div class="item-media">
-                                    <img src="http://gqianniu.alicdn.com/bao/uploaded/i4//tfscom/i3/TB10LfcHFXXXXXKXpXXXXXXXXXX_!!0-item_pic.jpg_250x250q60.jpg" width="44">
-                                </div>
-                                <div class="item-inner">
-                                    <div class="item-title-row">
-                                        <div class="item-title">差差差</div>
-                                    </div>
-                                    <div class="item-subtitle">好好好</div>
-                                </div>
-                            </li>
-                        </ul>
+                    <div class="list-block media-list" id="feedbackDiv">
+
                     </div>
                 </div>
-                <div class="card-footer">
-                    <span>查看全部30条评论</span>
-                </div>
+
             </div>
 
 
@@ -137,6 +123,25 @@
                 $('#items-card').append(html);
             });
             $.hideIndicator();
+        }
+    });
+
+    $.get('${request.contextPath}/feedback/list-by-touser', {toUserId: $('#userId').val()}, function (response) {
+        if(response){
+            $.each(response, function(i, item){
+                var html = '<ul>'+
+                        '<li class="item-content">'+
+                        '<div class="item-inner">'+
+                        '<div class="item-title-row">'+
+                        '<div class="item-title">'+item.content+'</div>'+
+                        '</div>'+
+                        '<div class="item-subtitle">'+item.createUserName+'</div>'+
+                        '</div>'+
+                        '</li>'+
+                        '</ul>';
+                $('#feedbackDiv').append(html);
+            });
+
         }
     });
     function toView(itemId,userId){
