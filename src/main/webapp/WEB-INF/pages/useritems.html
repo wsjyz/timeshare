@@ -45,23 +45,7 @@
                 </div>
             </div>
 
-            <div class="card">
-                <div class="card-header">Ta们的反馈</div>
-                <div class="card-content">
-                    <div class="content-padded">
-                        <div class="row">
-                            <div class="col-60">200元/次（约1小时）</div>
-                            <div class="col-40">评分次数不足5次</div>
-                        </div>
-                        <div class="row">
-                            <div class="col-100"><h1>增加贫困地区学生的入学比例</h1></div>
-                        </div>
-                    </div>
 
-                    <div class="card-content-inner">在清华大学图书馆，李克强回忆起自己读大学时吃过早饭就去图书馆占位时的情景，并问学生们现在情况如何；在北京大学食堂，当得知对面的学生来自贵州遵义农村时，李克强又关心地询问有无国家助学金、一个月花费多少和一天吃饭多少钱。</div>
-                </div>
-                <div class="card-footer">已约2次</div>
-            </div>
             <div class="card">
                 <div class="card-header">Ta们的反馈:</div>
                 <div class="card-content">
@@ -94,7 +78,8 @@
                 userDes = '暂无简介';
             }
             $('#userDesP').text(userDes);
-            $('.commentAvatarImage').attr("src",response.imageObj.imageUrl);
+
+            $('.commentAvatarImage').attr("src",'${request.contextPath}'+response.imageObj.imageUrl+'_320x240.jpg');
             $.each(response.userItemList, function(i, item){
 
                 var itemType = '';
