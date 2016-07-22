@@ -140,6 +140,8 @@
         $.showIndicator();
 
         function addLunboItem(datas){
+            $(".swiper-wrapper").empty();
+            $(".swiper-pagination").empty();
             var dataLength = 3;
             if(datas.length < 3){
                 dataLength = datas.length;
@@ -217,20 +219,24 @@
 
         }
         $.post('${request.contextPath}/item/list-by-condition', {condition:'recommend',startIndex: 0,loadSize:itemsPerLoad}, function (response) {
+            $('#recommendTab.infinite-scroll .list-block').empty();
             //预先加载20条
             addItems(itemsPerLoad, 0,response,'recommendTab');
             addLunboItem(response);
             $.hideIndicator();
         });
         $.post('${request.contextPath}/item/list-by-condition', {condition:'new',startIndex: 0,loadSize:itemsPerLoad}, function (response) {
+            $('#newTab.infinite-scroll .list-block').empty();
             //预先加载20条
             addItems(itemsPerLoad, 0,response,'newTab');
         });
         $.post('${request.contextPath}/item/list-by-condition', {condition:'hot',startIndex: 0,loadSize:itemsPerLoad}, function (response) {
+            $('#hotTab.infinite-scroll .list-block').empty();
             //预先加载20条
             addItems(itemsPerLoad, 0,response,'hotTab');
         });
         $.post('${request.contextPath}/item/list-by-condition', {condition:'good',startIndex: 0,loadSize:itemsPerLoad}, function (response) {
+            $('#goodTab.infinite-scroll .list-block').empty();
             //预先加载20条
             addItems(itemsPerLoad, 0,response,'goodTab');
         });
@@ -277,14 +283,13 @@
             });
         });
     });
-
-    $("#myPageBtn").on('click', function () {
+    $("body").on( "click", "#myPageBtn", function(){
         window.location.href = '${request.contextPath}/wx/to-get-open-id';
-    });
-    $("#mySellBtn").on('click', function () {
+    } );
+    $("body").on( "click", "#mySellBtn", function(){
         var backUrl = '/item/to-list';
         window.location.href = '${request.contextPath}/wx/to-get-open-id?backUrl='+encodeURIComponent(backUrl);
-    });
+    } );
     $.init();
 </script>
 </body>

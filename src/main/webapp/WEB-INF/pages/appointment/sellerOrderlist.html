@@ -78,6 +78,7 @@
         var maxItems = 30;
         var  lastIndex = $('.list-block ul').length;
         function addItems(number, lastIndex,data,tabId) {
+            $('#'+tabId+'.infinite-scroll .list-block').empty();
             // 生成新条目的HTML
             var html = '';
             var dataLength = 0;
