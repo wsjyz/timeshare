@@ -1,24 +1,29 @@
 package com.timeshare.service.impl;
 
+import com.thoughtworks.xstream.XStream;
+import com.thoughtworks.xstream.io.xml.DomDriver;
+import com.thoughtworks.xstream.io.xml.XmlFriendlyNameCoder;
 import com.timeshare.dao.OrderDAO;
+import com.timeshare.dao.impl.OrderDTO;
 import com.timeshare.domain.*;
 import com.timeshare.service.ItemService;
 import com.timeshare.service.OrderService;
 import com.timeshare.service.RemindService;
 import com.timeshare.service.UserService;
-import com.timeshare.utils.Contants;
-import com.timeshare.utils.SmsContentBean;
-import com.timeshare.utils.SmsUtils;
+import com.timeshare.utils.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.io.UnsupportedEncodingException;
 import java.math.BigDecimal;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
+import java.util.SortedMap;
+import java.util.TreeMap;
 
 /**
  * Created by user on 2016/7/1.
@@ -83,9 +88,15 @@ public class OrderServiceImpl implements OrderService {
                 break;
             case "BUYLLER_FINISH":
                 result = orderDAO.modifyOrder(order);
+                if(order.getOptUserType().equals("buyer") && order.isBuyerPayed()){
+                    payToSeller(order.getOrderId());
+                }
                 break;
             case "FINISH":
                 result = orderDAO.modifyOrder(order);
+                if(order.getOptUserType().equals("buyer") && order.isBuyerPayed()){
+                    payToSeller(order.getOrderId());
+                }
                 break;
         }
         if(!order.getOrderStatus().equals("FINISH")){
@@ -95,6 +106,73 @@ public class OrderServiceImpl implements OrderService {
 
 
         return result;
+    }
+
+    private void payToSeller(String orderId){
+
+        OrderDTO orderDTO = orderDAO.findPayOrderByOrderId(orderId);
+        logger.info("处理订单:"+orderDTO.getOrder().getOrderId()+" 向"+orderDTO.getOpenId()+"付款");
+        WxPayParamsBean xmlParams = new WxPayParamsBean();
+        SortedMap parameters = new TreeMap<>();
+        xmlParams.setMch_appid(Contants.APPID);
+        parameters.put("mch_appid",Contants.APPID);
+
+        xmlParams.setMchid(Contants.MCHID);
+        parameters.put("mchid",Contants.MCHID);
+
+        String noceStr = CommonStringUtils.genPK();
+        xmlParams.setNonce_str(noceStr);
+        parameters.put("nonce_str",noceStr);
+
+        xmlParams.setPartner_trade_no(orderDTO.getOrder().getWxTradeNo());
+        parameters.put("partner_trade_no",orderDTO.getOrder().getWxTradeNo());
+
+        xmlParams.setOpenid(orderDTO.getOpenId());
+        parameters.put("openid",orderDTO.getOpenId());
+
+        xmlParams.setCheck_name("NO_CHECK");
+        parameters.put("check_name","NO_CHECK");
+
+        xmlParams.setAmount(orderDTO.getOrder().getPrice().multiply(new BigDecimal(100)).intValue());
+        parameters.put("amount",orderDTO.getOrder().getPrice().multiply(new BigDecimal(100)).intValue());
+
+        xmlParams.setDesc("佣金");
+        parameters.put("desc","佣金");
+
+        xmlParams.setSpbill_create_ip("115.159.30.163");
+        parameters.put("spbill_create_ip","115.159.30.163");
+
+        String sign = WxUtils.createSign(parameters,Contants.KEY);
+        xmlParams.setSign(sign);
+        XStream xs = new XStream(new DomDriver("UTF-8", new XmlFriendlyNameCoder("-_", "_")));
+        xs.processAnnotations(xmlParams.getClass());
+        String xml = xs.toXML(xmlParams);
+        logger.info("xml is "+xml);
+
+        HTTPSClient client = new HTTPSClient();
+        try {
+            client.setBodyParams(new String(xml.getBytes("UTF-8"),"ISO-8859-1"));//狗日的微信，神经病
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
+        String p12FilePath = "/work/cert/apiclient_cert.p12";
+        String postUri = "https://api.mch.weixin.qq.com/mmpaymkttransfers/promotion/transfers";
+        String response = client.httpsRequest(p12FilePath,Contants.MCHID,postUri);
+
+        //logger.info("调用返回:"+response);//微信变态啊，这个返回不需要转码
+
+        WxPayResponseBean bean = new WxPayResponseBean();
+        xs.processAnnotations(bean.getClass());
+        bean = (WxPayResponseBean)xs.fromXML(response);
+        if(bean != null){
+            if(bean.getReturn_code().equals("SUCCESS") && bean.getResult_code().equals("SUCCESS")){
+                //更新数据库
+                logger.info(orderDTO.getOrder().getOrderId()+"付款成功");
+            }else{
+                //打印错误日志
+                logger.info(orderDTO.getOrder().getOrderId()+"付款失败："+bean.getErr_code_des());
+            }
+        }
     }
 
     @Override

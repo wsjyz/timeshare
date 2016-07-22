@@ -335,6 +335,8 @@ public class OrderController extends BaseController{
                         feedback.setRating(order.getRating());
                         feedbackService.saveFeedback(feedback);
 
+                        order.setBuyerPayed(true);
+
                     }
                 }
             }

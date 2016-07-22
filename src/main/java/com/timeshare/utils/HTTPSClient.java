@@ -9,6 +9,8 @@ import org.apache.http.client.HttpClient;
 import org.apache.http.client.ResponseHandler;
 import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.HttpPost;
+import org.apache.http.conn.ssl.SSLConnectionSocketFactory;
+import org.apache.http.conn.ssl.SSLContexts;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.DefaultHttpClient;
@@ -16,8 +18,10 @@ import org.apache.http.impl.client.HttpClients;
 import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.util.EntityUtils;
 
-import java.io.IOException;
-import java.io.UnsupportedEncodingException;
+import javax.net.ssl.SSLContext;
+import java.io.*;
+import java.security.*;
+import java.security.cert.CertificateException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -160,6 +164,115 @@ public class HTTPSClient {
             }
         }
         return responseBody;
+    }
+
+    public String httpsRequest(String p12Path,String password,String postUri){
+
+        KeyStore keyStore  = null;
+        try {
+            keyStore = KeyStore.getInstance("PKCS12");
+        } catch (KeyStoreException e) {
+            e.printStackTrace();
+        }
+        File p12File = new File(p12Path);
+        if(!p12File.exists()){
+            return "ERROR:证书路径错误,"+p12Path;
+        }
+        FileInputStream instream = null;
+        try {
+            instream = new FileInputStream(p12File);
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
+
+        try {
+            keyStore.load(instream, password.toCharArray());
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (NoSuchAlgorithmException e) {
+            e.printStackTrace();
+        } catch (CertificateException e) {
+            e.printStackTrace();
+        }finally {
+            if(instream != null){
+                try {
+                    instream.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+
+
+        // Trust own CA and all self-signed certs
+        SSLContext sslcontext = null;
+        try {
+            sslcontext = SSLContexts.custom()
+                    .loadKeyMaterial(keyStore, password.toCharArray())
+                    .build();
+        } catch (NoSuchAlgorithmException e) {
+            e.printStackTrace();
+        } catch (KeyManagementException e) {
+            e.printStackTrace();
+        } catch (KeyStoreException e) {
+            e.printStackTrace();
+        } catch (UnrecoverableKeyException e) {
+            e.printStackTrace();
+        }
+        // Allow TLSv1 protocol only
+        SSLConnectionSocketFactory sslsf = new SSLConnectionSocketFactory(
+                sslcontext,
+                new String[] { "TLSv1" },
+                null,
+                SSLConnectionSocketFactory.BROWSER_COMPATIBLE_HOSTNAME_VERIFIER);
+        CloseableHttpClient httpClient = HttpClients.custom()
+                .setSSLSocketFactory(sslsf)
+                .build();
+
+
+        HttpPost httpPost = new HttpPost(postUri);
+
+        if(params.size() > 0){
+            httpPost.setEntity(packageParams());
+        }
+        if(bodyParams != null){
+            httpPost.setEntity(packageStringParams());
+        }
+        if(StringUtils.isNotBlank(contentType)){
+            httpPost.setHeader("Content-type", contentType);
+        }
+
+
+        ResponseHandler<String> responseHandler = new ResponseHandler<String>() {
+
+            public String handleResponse(
+                    final HttpResponse response) throws ClientProtocolException, IOException {
+                int status = response.getStatusLine().getStatusCode();
+                if (status >= 200 && status < 300) {
+                    HttpEntity entity = response.getEntity();
+                    return entity != null ? EntityUtils.toString(entity) : null;
+                } else {
+                    System.out.println("ERROR:微信API调用异常："+EntityUtils.toString(response.getEntity()));
+                    return "ERROR:微信API调用异常";
+                }
+            }
+
+        };
+        String responseBody = "";
+        try {
+            //responseBody = new String(httpClient.execute(httpPost,responseHandler).getBytes("ISO-8859-1"),"UTF-8");
+            responseBody = httpClient.execute(httpPost,responseHandler);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }finally {
+            try {
+                httpClient.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+        return responseBody;
+
     }
 
     public void testjson(){

@@ -108,6 +108,17 @@ public class OrderDAOImpl extends BaseDAO implements OrderDAO {
         }
         return null;
     }
+
+    @Override
+    public OrderDTO findPayOrderByOrderId(String orderId) {
+        StringBuilder sql = new StringBuilder("");
+        sql.append("select o.order_id,o.price,o.wx_trade_no,u.open_id from t_order o,t_user_info u where o.order_user_id = u.user_id and order_id = ?");
+        List<OrderDTO> itemList = getJdbcTemplate().query(sql.toString(),new Object[]{orderId},new OrderDTOMapper());
+        if(itemList != null && !itemList.isEmpty()){
+            return itemList.get(0);
+        }
+        return null;
+    }
     @Override
     public BigDecimal findUsersMoneyByType(String userId,String type) {
         StringBuilder sql = new StringBuilder("");
@@ -185,6 +196,21 @@ public class OrderDAOImpl extends BaseDAO implements OrderDAO {
             order.setWxTradeNo(rs.getString("wx_trade_no"));
             order.setCreateUserName(rs.getString("create_user_name"));
             return order;
+        }
+    }
+
+    private class OrderDTOMapper implements RowMapper<OrderDTO>{
+
+        @Override
+        public OrderDTO mapRow(ResultSet rs, int i) throws SQLException {
+            OrderDTO dto = new OrderDTO();
+            ItemOrder order = new ItemOrder();
+            order.setOrderId(rs.getString("order_id"));
+            order.setPrice(rs.getBigDecimal("price"));
+            order.setWxTradeNo(rs.getString("wx_trade_no"));
+            dto.setOrder(order);
+            dto.setOpenId(rs.getString("open_id"));
+            return dto;
         }
     }
 }

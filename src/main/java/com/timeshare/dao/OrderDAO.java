@@ -1,5 +1,6 @@
 package com.timeshare.dao;
 
+import com.timeshare.dao.impl.OrderDTO;
 import com.timeshare.domain.OpenPage;
 import com.timeshare.domain.ItemOrder;
 
@@ -16,6 +17,8 @@ public interface OrderDAO {
     String modifyOrder(ItemOrder itemOrder);
 
     ItemOrder findOrderByOrderId(String OrderId);
+
+    OrderDTO findPayOrderByOrderId(String orderId);
 
     String deleteById(String OrderId);
 

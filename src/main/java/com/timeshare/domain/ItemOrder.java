@@ -31,6 +31,15 @@ public class ItemOrder extends BaseDomain {
     private String optUserType;//seller,buyer
     private String orderFeedBack;
     private int rating;
+    private boolean buyerPayed;
+
+    public boolean isBuyerPayed() {
+        return buyerPayed;
+    }
+
+    public void setBuyerPayed(boolean buyerPayed) {
+        this.buyerPayed = buyerPayed;
+    }
 
     public int getRating() {
         return rating;
