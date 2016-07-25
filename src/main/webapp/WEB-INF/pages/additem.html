@@ -157,7 +157,7 @@
         }
         return true;
     }
-    $("#saveDraftBtn").on('click', function () {
+    $("body").on( "click", "#saveDraftBtn", function(){
         var vali = checkForm();
         if(vali){
             $('#itemStatusId').val('draft');
@@ -165,8 +165,8 @@
             $.showIndicator();
             $('form').submit();
         }
-    });
-    $("#savePreBtn").on('click', function () {
+    } );
+    $("body").on( "click", "#savePreBtn", function(){
         var vali = checkForm();
         if(vali){
             $('#itemStatusId').val('apply_for_online');
@@ -174,15 +174,16 @@
             $.showIndicator();
             $('form').submit();
         }
-    });
-    $("#previewBtn").on('click', function () {
+    } );
+
+    $("body").on( "click", "#previewBtn", function(){
         var vali = checkForm();
         if(vali){
             $.showIndicator();
             $('form').attr('action','${request.contextPath}/item/preview');
             $('form').submit();
         }
-    });
+    } );
 </script>
 </body>
 </html>

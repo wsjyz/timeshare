@@ -17,6 +17,7 @@ import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
+import javax.servlet.http.HttpServletRequest;
 import java.io.UnsupportedEncodingException;
 import java.math.BigDecimal;
 import java.net.URLDecoder;
@@ -81,7 +82,7 @@ public class ItemController extends BaseController{
 
     @RequestMapping(value = "/get-item")
     @ResponseBody
-    public ItemDTO getItem(@RequestParam String itemId,@RequestParam(required = false,defaultValue = "") String userId) {
+    public ItemDTO getItem(@RequestParam String itemId, @RequestParam(required = false,defaultValue = "") String userId, HttpServletRequest request) {
         Item item = new Item();
         ItemDTO itemDTO = new ItemDTO();
         if(StringUtils.isNotBlank(itemId)){
@@ -95,7 +96,11 @@ public class ItemController extends BaseController{
         imageObj.setImageType(Contants.IMAGE_TYPE.ITEM_SHOW_IMG.toString());
         UserInfo userInfo = userService.findUserByUserId(userId,imageObj);
         ImageObj headObj = imageObjDAO.findImgByObjIdAndType(userId,Contants.IMAGE_TYPE.USER_HEAD.toString());
-        userInfo.setHeadImgPath(headObj.getImageUrl());
+        String headImg = headObj.getImageUrl();
+        if(headImg.indexOf("http") == -1){//修改过头像
+            headImg = request.getContextPath()+headImg+"_320x240.jpg";
+        }
+        userInfo.setHeadImgPath(headImg);
         itemDTO.setUserInfo(userInfo);
         return itemDTO;
 

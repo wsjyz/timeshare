@@ -82,13 +82,13 @@ public class WxController {
         String openId = oauth.obtainOpenId(code);
         UserInfo userInfo = userService.findUserByOpenId(openId);
         String sendUrl = "";
-        if(userInfo == null){
+        if(userInfo == null || StringUtils.isBlank(openId)){//TODO openId貌似有空的情况，但微信还是给我跳转到这里
             sendUrl = "https://open.weixin.qq.com/connect/oauth2/authorize?appid="
                     + Contants.APPID+"&redirect_uri=http%3A%2F%2F"+Contants.DOMAIN+"%2Ftime%2Fwx%2Foauth%2F&response_type=code&scope=snsapi_userinfo&state="+toUrl+"#wechat_redirect";
         }else{
 
             String userId = CookieUtils.getCookie(request,"time_sid");
-            if(StringUtils.isBlank(userId)){
+            if(StringUtils.isBlank(userId)|| !userId.equals(userInfo.getUserId())){
                 CookieUtils.setCookie(response,"time_sid",userInfo.getUserId(),60*60*24*7);
             }
             String mobile = userInfo.getMobile();
@@ -124,19 +124,23 @@ public class WxController {
 
         UserInfo user = new UserInfo();
         String userId = CommonStringUtils.genPK();
-        if(weixinUser != null){
-            user.setUserId(userId);
-            user.setOpenId(weixinUser.getOpenId());
-            user.setNickName(weixinUser.getNickname());
-            user.setSex(weixinUser.getSex());
-            user.setCity(weixinUser.getCity());
-            ImageObj imageObj = new ImageObj();
-            imageObj.setImageUrl(weixinUser.getHeadimgurl());
-            user.setImageObj(imageObj);
-            String result = userService.saveUser(user);
-            if(result.equals(Contants.SUCCESS)){
-                CookieUtils.setCookie(response,"time_sid",userId,60*60*24*7);
+        if(weixinUser != null && StringUtils.isNotBlank(weixinUser.getOpenId())){
+            UserInfo userInfo = userService.findUserByOpenId(weixinUser.getOpenId());
+            if(userInfo == null){
+                user.setUserId(userId);
+                user.setOpenId(weixinUser.getOpenId());
+                user.setNickName(weixinUser.getNickname());
+                user.setSex(weixinUser.getSex());
+                user.setCity(weixinUser.getCity());
+                ImageObj imageObj = new ImageObj();
+                imageObj.setImageUrl(weixinUser.getHeadimgurl());
+                user.setImageObj(imageObj);
+                String result = userService.saveUser(user);
+                if(result.equals(Contants.SUCCESS)){
+                    CookieUtils.setCookie(response,"time_sid",userId,60*60*24*7);
+                }
             }
+
         }
 
         request.setAttribute("user",user);

@@ -19,6 +19,16 @@ public class Feedback extends BaseDomain {
 
     private int rating;
 
+    private String orderId;
+
+    public String getOrderId() {
+        return orderId;
+    }
+
+    public void setOrderId(String orderId) {
+        this.orderId = orderId;
+    }
+
     public int getRating() {
         return rating;
     }

@@ -16,7 +16,7 @@
         .commentAvatarDiv{
             width: 50px;
             height: 50px;
-            padding:2px;
+            padding:0px;
             background: #ececec;
             border-radius:50px;
             box-shadow: 0px 0px 1px rgba(0,0,0,0.4);
@@ -48,7 +48,7 @@
                             <li class="item-content">
                                 <div class="item-media">
                                     <div class="commentAvatarDiv" style="width: 44px;height: 44px">
-                                        <img class="commentAvatarImage" src="../images/head.jpg" style="width: 44px;height: 44px"   >
+                                        <img class="commentAvatarImage" src="${request.contextPath}/images/default_head.jpg" style="width: 44px;height: 44px"   >
                                     </div>
                                 </div>
                                 <div class="item-inner">
@@ -118,27 +118,29 @@
                             </div>
                         </li>
                         <li class="card">
-                            <div class="card-header">顺便评价一下，再打个分吧</div>
+                            <div class="card-header"><#if feedback??>您的评价<#else>顺便评价一下，再打个分吧</#if></div>
                             <div class="card-content">
                                 <fieldset class="starability-checkmark" style="margin: 0 auto">
-                                    <input type="radio" id="rate5-6" name="rating" value="5" />
-                                    <label for="rate5-6" title="Amazing">5 stars</label>
+                                    <input type="radio" id="rate5" name="rating" value="5" />
+                                    <label for="rate5" title="Amazing">5 stars</label>
 
-                                    <input type="radio" id="rate4-6" name="rating" value="4" />
-                                    <label for="rate4-6" title="Very good">4 stars</label>
+                                    <input type="radio" id="rate4" name="rating" value="4" />
+                                    <label for="rate4" title="Very good">4 stars</label>
 
-                                    <input type="radio" id="rate3-6" name="rating" value="3" />
-                                    <label for="rate3-6" title="Average">3 stars</label>
+                                    <input type="radio" id="rate3" name="rating" value="3" />
+                                    <label for="rate3" title="Average">3 stars</label>
 
-                                    <input type="radio" id="rate2-6" name="rating" value="2" />
-                                    <label for="rate2-6" title="Not good">2 stars</label>
+                                    <input type="radio" id="rate2" name="rating" value="2" />
+                                    <label for="rate2" title="Not good">2 stars</label>
 
-                                    <input type="radio" id="rate1-6" name="rating" value="1" />
-                                    <label for="rate1-6" title="Terrible">1 star</label>
+                                    <input type="radio" id="rate1" name="rating" value="1" />
+                                    <label for="rate1" title="Terrible">1 star</label>
                                 </fieldset>
-                                <div class="item-input">
-                                    <textarea name="orderFeedBack" id="orderFeedBack" placeholder="请输入评价内容"></textarea>
-                                </div>
+
+                                    <#if feedback??><div class="card-content-inner">${feedback.content}</div><#else>
+                                        <div class="item-input"><textarea name="orderFeedBack" id="orderFeedBack" placeholder="请输入评价内容"></textarea></div>
+                                    </#if>
+
                             </div>
                         </li>
                     </ul>
@@ -147,7 +149,8 @@
 
             <div class="content-block">
                 <div class="row">
-                    <div class="col-50"><a href="#" id="saveOrderBtn" class="button button-big button-fill button-danger">见过面了</a></div>
+                    <div class="col-50">
+                        <a href="#" id="saveOrderBtn" class="button button-big button-fill button-danger">见过面了</a></div>
                     <div class="col-50"><a href="#" class="button button-big button-fill button-success">取消</a></div>
                 </div>
             </div>
@@ -178,6 +181,11 @@
             );
 
         });
+    }
+    var feedbackRating = '${feedback.rating}';
+    if(feedbackRating != ''){
+        $("input[name='rating']").removeAttr("checked");
+        $("input[name='rating'][value='"+feedbackRating+"']").attr("checked","checked");
     }
 
     $.get('${request.contextPath}/item/get-item', {itemId: $('#itemId').val()}, function (response) {

@@ -28,7 +28,7 @@
             <div style="position: relative;">
                 <img id="headbackImg" style="width: 100%;height: 240px;display: block;margin: 0 auto;"/>
                 <div class="commentAvatarDiv" style="position: absolute;top: 30%;left: 35%">
-                    <img class="commentAvatarImage" src="${request.contextPath}/images/head.jpg">
+                    <img class="commentAvatarImage" src="${request.contextPath}/images/default_head.jpg">
                 </div>
             </div>
             <div class="list-block cards-list" style="margin-top: 0px;">
@@ -74,7 +74,7 @@
         if(response){
             //$('#userShowPic').attr('src',response.imageObj.imageUrl);
             var userDes = response.description;
-            if(userDes == ''){
+            if(userDes == '' || userDes == null){
                 userDes = '暂无简介';
             }
             $('#userDesP').text(userDes);
@@ -114,13 +114,18 @@
     $.get('${request.contextPath}/feedback/list-by-touser', {toUserId: $('#userId').val()}, function (response) {
         if(response){
             $.each(response, function(i, item){
+                var optTime = item.optTime;
+                if(optTime != null){
+                    optTime = optTime.substring(0,10);
+                }
                 var html = '<ul>'+
                         '<li class="item-content">'+
                         '<div class="item-inner">'+
                         '<div class="item-title-row">'+
-                        '<div class="item-title">'+item.content+'</div>'+
+                        '<div class="item-title">'+item.createUserName+'</div>'+
+                        '<div class="item-after">'+optTime+'</div>'+
                         '</div>'+
-                        '<div class="item-subtitle">'+item.createUserName+'</div>'+
+                        '<div class="item-subtitle">'+item.content+'</div>'+
                         '</div>'+
                         '</li>'+
                         '</ul>';

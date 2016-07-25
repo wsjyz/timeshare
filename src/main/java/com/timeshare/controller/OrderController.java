@@ -70,7 +70,8 @@ public class OrderController extends BaseController{
                 toStr = "appointment/buyerFinish";
                 break;
             case "BUYLLER_FINISH":
-
+                Feedback feedback = feedbackService.findFeedBackByOrderId(order.getUserId(),orderId);
+                model.addAttribute("feedback",feedback);
                 model.addAttribute("canFinish","false");
                 toStr = "appointment/buyerFinish";
                 break;
@@ -80,7 +81,15 @@ public class OrderController extends BaseController{
                         order.getFinalAppointmentTime()))){
                     canFinish1 = "true";
                 }
+                Feedback feedback1 = feedbackService.findFeedBackByOrderId(order.getUserId(),orderId);
+                model.addAttribute("feedback",feedback1);
                 model.addAttribute("canFinish",canFinish1);
+                toStr = "appointment/buyerFinish";
+                break;
+            case "FINISH":
+                Feedback feedback2 = feedbackService.findFeedBackByOrderId(order.getUserId(),orderId);
+                model.addAttribute("feedback",feedback2);
+                model.addAttribute("canFinish","false");
                 toStr = "appointment/buyerFinish";
                 break;
 
@@ -91,12 +100,16 @@ public class OrderController extends BaseController{
     }
 
     @RequestMapping(value = "/fix-seller-order/{orderId}")
-    public String toFixSellerOrder(@PathVariable String orderId,Model model) {
+    public String toFixSellerOrder(@PathVariable String orderId,Model model,@CookieValue(value="time_sid", defaultValue="") String userId) {
 
         ItemOrder order = orderService.findOrderByOrderId(orderId);
         String toStr = "";
         switch (order.getOrderStatus()){
             case "BEGIN":
+                UserInfo seller = userService.findUserByUserId(userId);
+                if(seller != null){
+                    model.addAttribute("mobile",seller.getMobile());
+                }
                 toStr = "appointment/sellerApply";
                 break;
             case "SELLER_APPLY":
@@ -113,7 +126,8 @@ public class OrderController extends BaseController{
                 toStr = "appointment/sellerFinish";
                 break;
             case "SELLER_FINISH":
-
+                Feedback feedback = feedbackService.findFeedBackByOrderId(order.getOrderUserId(),orderId);
+                model.addAttribute("feedback",feedback);
                 model.addAttribute("canFinish","false");
                 toStr = "appointment/sellerFinish";
                 break;
@@ -124,7 +138,15 @@ public class OrderController extends BaseController{
                         order.getFinalAppointmentTime()))){
                     canFinish1 = "true";
                 }
+                Feedback feedback1 = feedbackService.findFeedBackByOrderId(order.getOrderUserId(),orderId);
+                model.addAttribute("feedback",feedback1);
                 model.addAttribute("canFinish",canFinish1);
+                toStr = "appointment/sellerFinish";
+                break;
+            case "FINISH":
+                Feedback feedback2 = feedbackService.findFeedBackByOrderId(order.getOrderUserId(),orderId);
+                model.addAttribute("feedback",feedback2);
+                model.addAttribute("canFinish","false");
                 toStr = "appointment/sellerFinish";
                 break;
 
@@ -314,6 +336,7 @@ public class OrderController extends BaseController{
                         feedback.setToUserId(order.getUserId());
                         feedback.setUserId(tempOrder.getOrderUserId());
                         feedback.setRating(order.getRating());
+                        feedback.setOrderId(order.getOrderId());
                         feedbackService.saveFeedback(feedback);
 
                     }else{//买家
@@ -333,8 +356,11 @@ public class OrderController extends BaseController{
                         feedback.setToUserId(order.getOrderUserId());
                         feedback.setUserId(tempOrder.getUserId());
                         feedback.setRating(order.getRating());
+                        feedback.setOrderId(order.getOrderId());
                         feedbackService.saveFeedback(feedback);
-
+                        //更新数量
+                        item.setUseCount(item.getUseCount() + 1);
+                        itemService.modifyItem(item);
                         order.setBuyerPayed(true);
 
                     }

@@ -57,4 +57,9 @@ public class FeedbackServiceImpl implements FeedbackService {
     public Feedback findFeedBackByCreateUserId(String createUserId,String itemId) {
         return feedbackDAO.findFeedBackByCreateUserId(createUserId,itemId);
     }
+
+    @Override
+    public Feedback findFeedBackByOrderId(String createUserId, String orderId) {
+        return feedbackDAO.findFeedBackByOrderId(createUserId,orderId);
+    }
 }

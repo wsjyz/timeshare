@@ -75,6 +75,7 @@ public class ItemServiceImpl implements ItemService {
                 ItemDTO itemDTO = new ItemDTO();
                 itemDTO.setItem(item);
                 String headImg = imgMap.get(item.getUserId()+Contants.IMAGE_TYPE.USER_HEAD.toString());
+                //TODO context path is required
                 if(headImg.indexOf("http") == -1){//修改过头像
                     headImg = "/time"+headImg+"_320x240.jpg";
                 }

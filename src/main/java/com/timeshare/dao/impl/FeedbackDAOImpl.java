@@ -24,8 +24,8 @@ import java.util.List;
 public class FeedbackDAOImpl extends BaseDAO implements FeedbackDAO {
     @Override
     public String saveFeedback(Feedback info) {
-        StringBuilder sql = new StringBuilder("insert into t_feed_back (feedback_id,title,content,item_id,item_title,to_user_id,create_user_name,create_user_id,opt_time,rating)" +
-                " values(?,?,?,?,?,?,?,?,?,?)");
+        StringBuilder sql = new StringBuilder("insert into t_feed_back (feedback_id,title,content,item_id,item_title,to_user_id,create_user_name,create_user_id,opt_time,rating,order_id)" +
+                " values(?,?,?,?,?,?,?,?,?,?,?)");
         int result = getJdbcTemplate().update(sql.toString(), new PreparedStatementSetter() {
             @Override
             public void setValues(PreparedStatement ps) throws SQLException {
@@ -39,6 +39,7 @@ public class FeedbackDAOImpl extends BaseDAO implements FeedbackDAO {
                 ps.setString(8,info.getUserId());
                 ps.setString(9,info.getOptTime());
                 ps.setInt(10,info.getRating());
+                ps.setString(11,info.getOrderId());
             }
         });
         if(result > 0){
@@ -101,6 +102,21 @@ public class FeedbackDAOImpl extends BaseDAO implements FeedbackDAO {
         if(StringUtils.isNotBlank(createUserId)){
 
             List<Feedback> feedbackList = getJdbcTemplate().query(reviewSql.toString(),new Object[]{itemId,createUserId},new FeedbackMapper());
+            if(feedbackList != null && feedbackList.size() > 0){
+                Feedback feedback = feedbackList.get(0);
+                return feedback;
+            }
+        }
+        return null;
+    }
+
+    @Override
+    public Feedback findFeedBackByOrderId(String createUserId, String orderId) {
+        StringBuilder reviewSql = new StringBuilder("");
+        reviewSql.append("select * from t_feed_back where order_id = ? and create_user_id = ?");
+        if(StringUtils.isNotBlank(createUserId) && StringUtils.isNotBlank(orderId)){
+
+            List<Feedback> feedbackList = getJdbcTemplate().query(reviewSql.toString(),new Object[]{orderId,createUserId},new FeedbackMapper());
             if(feedbackList != null && feedbackList.size() > 0){
                 Feedback feedback = feedbackList.get(0);
                 return feedback;

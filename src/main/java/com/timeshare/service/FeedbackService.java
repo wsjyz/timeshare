@@ -26,4 +26,6 @@ public interface FeedbackService {
 
     Feedback findFeedBackByCreateUserId(String createUserId,String itemId);
 
+    Feedback findFeedBackByOrderId(String createUserId,String order);
+
 }
