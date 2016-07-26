@@ -98,7 +98,7 @@
                         '<div class="card-content">'+
                         '<div class="content-padded">'+
                         '<div class="row">'+
-                        '<div class="col-80">'+item.price+'元/次（约1小时）</div>'+
+                        '<div class="col-80">'+item.price+'元/次（'+item.duration+'分钟）</div>'+
                         '<div class="col-20">'+item.score+'分</div>'+
                         '</div>'+
                         '<div class="row">'+
@@ -107,7 +107,7 @@
                         '</div>'+
                         '<div class="card-content-inner" id="descriptionDiv">'+item.description+'</div>'+
                         '</div>'+
-                        '<div class="card-footer" id="useCountSp">'+item.useCount+'</div>'+
+                        '<div class="card-footer" id="useCountSp">已约'+item.useCount+'次</div>'+
                     '</li>';
                 $('#items-card').append(html);
             });
