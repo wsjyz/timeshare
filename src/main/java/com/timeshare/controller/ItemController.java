@@ -138,7 +138,10 @@ public class ItemController extends BaseController{
             if(StringUtils.isNotBlank(item.getItemId())){
                 result = itemService.modifyItem(item);
             }else{
-                result = itemService.saveItem(item);
+                if(StringUtils.isNotBlank(item.getTitle()) && item.getPrice() != null){
+                    result = itemService.saveItem(item);
+                }
+
             }
             message.setMessageType(result);
             if(result.equals(Contants.SUCCESS)){
