@@ -82,9 +82,10 @@
     $.init();
     $.showIndicator();
     $('.infinite-scroll-preloader').hide();
-    $("#toAddBtn").on('click', function () {
+    $("body").on( "click", "#toAddBtn", function(){
         $('form').submit();
-    });
+    } );
+
     var loading = false;
     // 最多可加载的条目
     var maxItems = 100;

@@ -127,14 +127,14 @@
         $("input[name='itemType']").removeAttr("checked");
         $("input[name='itemType'][value='tel']").attr("checked","checked");
     }
-    $(".itemType_tel").on('click', function () {
+    $("body").on( "click", ".itemType_tel", function(){
         $("input[name='itemType']").removeAttr("checked");
         $("input[name='itemType'][value='tel']").attr("checked","checked");
-    });
-    $(".itemType_meet").on('click', function () {
+    } );
+    $("body").on( "click", ".itemType_meet", function(){
         $("input[name='itemType']").removeAttr("checked");
         $("input[name='itemType'][value='meet']").attr("checked","checked");
-    });
+    } );
     function checkForm(){
         var title = $('#titleId').val();
         if(title == ''){

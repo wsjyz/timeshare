@@ -116,9 +116,16 @@ public class UserController extends BaseController{
     }
     @RequestMapping(value = "/get-user-items")
     @ResponseBody
-    public UserInfo getUserItems(@RequestParam String userId) {
+    public UserInfo getUserItems(@RequestParam String userId,HttpServletRequest request) {
 
         UserInfo userInfo = getCurrentUser(userId);
+        ImageObj imageObj = userInfo.getImageObj();
+        String headImg = imageObj.getImageUrl();
+        //TODO context path is required
+        if(headImg.indexOf("http") == -1){//修改过头像
+            headImg = request.getContextPath()+headImg+"_320x240.jpg";
+            imageObj.setImageUrl(headImg);
+        }
         Item params = new Item();
         params.setUserId(userId);
         params.setItemStatus(Contants.ITEM_STATUS.for_sale.toString());
