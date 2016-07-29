@@ -239,6 +239,17 @@
                             <div class="col-md-8"><span id="corpSp"></span></div>
                         </div>
                         <div class="row">
+                            <div class="col-md-4"><label  class="control-label">自我介绍：</label></div>
+                            <div class="col-md-8"></div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-12"><div id="userDescriptionDiv"></div></div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-4"><label  class="control-label">提交人职位：</label></div>
+                            <div class="col-md-8"><span id="positionSp"></span></div>
+                        </div>
+                        <div class="row">
                             <div class="col-md-4"><label  class="control-label">提交时间：</label></div>
                             <div class="col-md-8">2016-06-22 14:22:10</div>
                         </div>
@@ -259,7 +270,7 @@
                             <div class="col-md-8"><span id="itemTypeSp"></span></div>
                         </div>
                         <div class="row">
-                            <div class="col-md-4"><label  class="control-label">自我介绍：</label></div>
+                            <div class="col-md-4"><label  class="control-label">项目介绍：</label></div>
                             <div class="col-md-8"></div>
                         </div>
                         <div class="row">
@@ -320,6 +331,8 @@
                     $('#descriptionDiv').text(response.item.description);
                     $('#durationSp').text(response.item.duration);
                     $('#corpSp').text(response.userInfo.corp);
+                    $('#positionSp').text(response.userInfo.position);
+                    $('#userDescriptionDiv').text(response.userInfo.description);
                     $('#mobileSp').text(response.userInfo.mobile);
                     $('#nicknameSp').text(response.userInfo.nickName);
                     $('#myModal').modal('show');

@@ -17,35 +17,61 @@
 <body>
 <div class="page-group">
     <div class="page page-current">
-        <div class="list-block cards-list">
+
 
         <!-- 你的html代码 -->
             <div class="content">
-                <div style="position: relative;text-align: center">
-                    <img id="headbackImg" style="width: 100%;height: 240px;"/>
-                    <div style="position:absolute;top:30%;left: 50%;margin-left: -50px;">
-                        <div class="commentAvatarDiv">
-                            <img class="commentAvatarImage" src="${request.contextPath}/images/default_head.jpg">
-                        </div>
-                        <div ><span id="nickNameSp" style="font-weight: bold;color: white;font-size: 22px;">蒋有志</span></div>
-                    </div>
-                </div>
-            </div>
-            <textarea id="post_body" style="width: 100%"></textarea>
 
-        </div>
+
+                <p><a href="#" id="openBtn" >Open About Popup </a></p>
+
+            </div>
+
+
+
     </div>
 </div>
+<div class="popup" style="background: #eee;">
+    <div class="content-block" >
+        <header class="bar bar-nav">
+            <a class="icon icon-left pull-left back"></a>
+            <h1 class="title">预览</h1>
+        </header>
+        <div style="background: #fff;padding-right: 1rem;padding-left: 1rem" >
+            <div class="row">
+                <div class="col-100"><h2 style="color: #666;"><span id="titleSp">你是大牛</span></h2></div>
+            </div>
+            <div class="row" >
+                <div class="col-50" ><span id="priceSp">2000</span>元/次</div>
+                <div class="col-50" >约<span id="durationSp" >12</span>分钟</div>
+            </div>
 
+        </div>
+        <div class="content-padded">
+            <p><div id="descriptionDiv">太厉害了 哈哈哈</div></p>
+        </div>
+
+
+    </div>
+</div>
 <script type='text/javascript' src='//g.alicdn.com/sj/lib/zepto/zepto.min.js' charset='utf-8'></script>
 <script type='text/javascript' src='//g.alicdn.com/msui/sm/0.6.2/js/sm.min.js' charset='utf-8'></script>
 <script type='text/javascript' src='//g.alicdn.com/msui/sm/0.6.2/js/sm-extend.min.js' charset='utf-8'></script>
-<script>
-    var headPicArr = [1,2,3,4,5,6];
-    var n = Math.floor(Math.random() * headPicArr.length + 1)-1;
-    $('#headbackImg').attr('src','${request.contextPath}/images/headback'+headPicArr[n]+'.jpg');
 
+<script>
+    $(document).on('click','#openBtn', function () {
+        history.pushState(null, "预览", window.location.href+"#");
+        $.popup('.popup');
+    });
+
+    $(document).on('click','#closeBtn', function () {
+        $.closeModal();
+    });
+
+    window.onpopstate = function(){
+        $.closeModal();
+    };
+    $.init()
 </script>
-<script>$.init()</script>
 </body>
 </html>

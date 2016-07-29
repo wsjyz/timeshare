@@ -66,11 +66,18 @@
             </#if>
         </div>
 
-        <#if selfItem == "yes"><#else>
+        <#if selfItem == "yes">
+            <#if itemStatus == "for_sale">
+                <div class="bar bar-standard bar-footer" style="padding-top:0rem;height: 12%">
+                    <p><a href="#" id="undercarriageBtn" class="button button-fill button-danger button-big" style="top: -0.1rem;">下架</a></p>
+                </div>
+            </#if>
+        <#else>
             <div class="bar bar-standard bar-footer" style="padding-top:0rem;height: 12%">
                 <p><a href="#" id="orderBtn" class="button button-fill button-danger button-big" style="top: -0.1rem;">立即预约</a></p>
             </div>
         </#if>
+
 
     </div>
 </div>
@@ -81,11 +88,20 @@
 <script>
     $.showIndicator();
 
-    $("#orderBtn").on('click', function () {
+    $("body").on( "click", "#orderBtn", function(){
         var itemId = $('#itemId').val();
         var backUrl = '/order/to-start/'+itemId;
         window.location.href = '${request.contextPath}/wx/to-get-open-id?backUrl='+encodeURIComponent(backUrl);
-    });
+    } );
+    $("body").on( "click", "#undercarriageBtn", function(){
+        $.confirm('您确定要下架吗？',
+                function () {
+                    var itemId = $('#itemId').val();
+                    window.location.href = '${request.contextPath}/item/modify-item-status?itemId='+itemId+'&itemStatus=undercarriage';
+                }
+        );
+
+    } );
 
     $.get('${request.contextPath}/item/get-item', {itemId: $('#itemId').val(),userId: $('#userId').val()}, function (response) {
         if(response){

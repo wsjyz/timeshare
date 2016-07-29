@@ -63,18 +63,22 @@ public class ItemController extends BaseController{
     public String toView(@PathVariable String itemId,Model model,@CookieValue(value="time_sid", defaultValue="") String userId) {
         String returnStr = "";
         Item item = itemService.findItemByItemId(itemId);
-        if(item != null &&( item.getItemStatus().equals(Contants.ITEM_STATUS.draft.toString()) || item.getItemStatus().equals(Contants.ITEM_STATUS.not_pass.toString()))){
+        if(item != null &&
+                ( item.getItemStatus().equals(Contants.ITEM_STATUS.draft.toString())
+                        || item.getItemStatus().equals(Contants.ITEM_STATUS.not_pass.toString())
+                        || item.getItemStatus().equals(Contants.ITEM_STATUS.undercarriage.toString())
+                )){
             model.addAttribute("item", item);
             returnStr = "additem";
         }else{
             String selfItem = "no";
-            System.out.println(userId + " "+item.getUserId());
             if(StringUtils.isNotBlank(userId) && userId.equals(item.getUserId())){
                 selfItem = "yes";
             }
             returnStr = "iteminfo";
             model.addAttribute("itemId",itemId);
             model.addAttribute("selfItem",selfItem);
+            model.addAttribute("itemStatus",item.getItemStatus());
         }
 
         return returnStr;
@@ -148,6 +152,21 @@ public class ItemController extends BaseController{
                 message.setContent("添加成功！");
                 message.setMessageType(result);
             }
+        }
+        model.addAttribute("message",message);
+        model.addAttribute("jumpUrl","/item/to-list");
+        return "info";
+    }
+    @RequestMapping(value = "/modify-item-status")
+    public String modifyItemStatus(@RequestParam String itemId,@RequestParam String itemStatus,Model model){
+
+        Item item = itemService.findItemByItemId(itemId);
+        item.setItemStatus(itemStatus);
+        String result = itemService.modifyItem(item);
+        SystemMessage message = new SystemMessage();
+        if(result.equals(Contants.SUCCESS)){
+            message.setContent("修改成功！");
+            message.setMessageType(result);
         }
         model.addAttribute("message",message);
         model.addAttribute("jumpUrl","/item/to-list");

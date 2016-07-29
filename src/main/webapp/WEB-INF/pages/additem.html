@@ -96,7 +96,7 @@
                             <div class="item-inner">
                                 <div class="item-title label">介绍：</div>
                                 <div class="item-input">
-                                    <textarea name="description" style="width: 100%" placeholder="请填写介绍"><#if item??>${item.description}<#else></#if></textarea>
+                                    <textarea name="description" id="description" style="width: 100%" placeholder="请填写介绍"><#if item??>${item.description}<#else></#if></textarea>
                                 </div>
                             </div>
                         </div>
@@ -114,7 +114,29 @@
         </div>
     </div>
 </div>
+<div class="popup" style="background: #eee;">
+    <div class="content-block" >
+        <header class="bar bar-nav">
+            <a class="icon icon-left pull-left back"></a>
+            <h1 class="title">预览</h1>
+        </header>
+        <div style="background: #fff;padding-right: 1rem;padding-left: 1rem" >
+            <div class="row">
+                <div class="col-100"><h2 style="color: #666;"><span id="titleSp"></span></h2></div>
+            </div>
+            <div class="row" >
+                <div class="col-50" ><span id="priceSp"></span>元/次</div>
+                <div class="col-50" >约<span id="durationSp" ></span>分钟</div>
+            </div>
 
+        </div>
+        <div class="content-padded">
+            <p><div id="descriptionDiv"></div></p>
+        </div>
+
+
+    </div>
+</div>
 <script type='text/javascript' src='//g.alicdn.com/sj/lib/zepto/zepto.min.js' charset='utf-8'></script>
 <script type='text/javascript' src='//g.alicdn.com/msui/sm/0.6.2/js/sm.min.js' charset='utf-8'></script>
 <script type='text/javascript' src='//g.alicdn.com/msui/sm/0.6.2/js/sm-extend.min.js' charset='utf-8'></script>
@@ -179,11 +201,17 @@
     $("body").on( "click", "#previewBtn", function(){
         var vali = checkForm();
         if(vali){
-            $.showIndicator();
-            $('form').attr('action','${request.contextPath}/item/preview');
-            $('form').submit();
+            $('#titleSp').text($('#titleId').val());
+            $('#priceSp').text($('#price').val());
+            $('#durationSp').text($('#durationId').val());
+            $('#descriptionDiv').text($('#description').val());
+            history.pushState(null, "预览", window.location.href+"#");
+            $.popup('.popup');
         }
     } );
+    window.onpopstate = function(){
+        $.closeModal();
+    };
 </script>
 </body>
 </html>
