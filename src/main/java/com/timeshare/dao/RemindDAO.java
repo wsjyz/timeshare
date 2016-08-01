@@ -11,6 +11,8 @@ public interface RemindDAO {
 
     int deleteRemind(String remindId);
 
+    int deleteRemindByObjIdAndUserId(String objId,String userId);
+
     int queryCountByObjIdAndType(String toUserId,String objId,String type);
 
 }

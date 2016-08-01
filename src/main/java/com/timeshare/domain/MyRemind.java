@@ -6,6 +6,15 @@ package com.timeshare.domain;
 public class MyRemind {
 
     private int sellRemindCount;
+    private int buyRemindCount;
+
+    public int getBuyRemindCount() {
+        return buyRemindCount;
+    }
+
+    public void setBuyRemindCount(int buyRemindCount) {
+        this.buyRemindCount = buyRemindCount;
+    }
 
     public int getSellRemindCount() {
         return sellRemindCount;

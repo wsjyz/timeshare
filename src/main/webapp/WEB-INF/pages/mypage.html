@@ -62,7 +62,7 @@
                             <div class="item-inner">
                                 <div class="item-title">我卖的</div>
                                 <div class="item-after"><span id="sellCountsSp"></span></div>
-                                <span class="badge" style="position: absolute;top: 0.5rem;left:2rem;background:red;color: white;display:none"></span>
+                                <span class="badge" style="position: absolute;top: 0.5rem;left:2rem;background:red;color: white;display:none" id="sellRemindCount"></span>
                             </div>
                         </li>
                     </a>
@@ -74,6 +74,7 @@
                             <div class="item-inner">
                                 <div class="item-title">我买的</div>
                                 <div class="item-after"><span id="buyCountsSp"></span></div>
+                                <span class="badge" style="position: absolute;top: 0.5rem;left:2rem;background:red;color: white;display:none" id="buyRemindCount"></span>
                             </div>
                         </li>
                     </a>
@@ -149,9 +150,17 @@
 </script>
 <script>
     $.showIndicator();
-    $.post('${request.contextPath}/user/get-remind', function (response) {
-        $('.badge').text(response.sellRemindCount);
-        $('.badge').show();
+    $.post('${request.contextPath}/user/get-remind-mypage', function (response) {
+        var sellRemindCount = response.sellRemindCount;
+        if(sellRemindCount > 0){
+            $('#sellRemindCount').text(sellRemindCount);
+            $('#sellRemindCount').show();
+        }
+        var buyRemindCount = response.buyRemindCount;
+        if(buyRemindCount > 0){
+            $('#buyRemindCount').text(buyRemindCount);
+            $('#buyRemindCount').show();
+        }
         $.hideIndicator();
     });
     //背景图片

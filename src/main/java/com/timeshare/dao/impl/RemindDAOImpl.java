@@ -46,6 +46,12 @@ public class RemindDAOImpl extends BaseDAO implements RemindDAO {
         reviewSql.append("delete from t_remind where remind_id = ? ");
         return getJdbcTemplate().update(reviewSql.toString(),new Object[]{remindId});
     }
+    @Override
+    public int deleteRemindByObjIdAndUserId(String objId,String userId) {
+        StringBuilder reviewSql = new StringBuilder("");
+        reviewSql.append("delete from t_remind where obj_id = ? and to_user_id = ?");
+        return getJdbcTemplate().update(reviewSql.toString(),new Object[]{objId,userId});
+    }
 
     @Override
     public int queryCountByObjIdAndType(String toUserId,String objId, String type) {

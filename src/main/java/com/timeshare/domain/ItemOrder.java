@@ -32,6 +32,15 @@ public class ItemOrder extends BaseDomain {
     private String orderFeedBack;
     private int rating;
     private boolean buyerPayed;
+    private int remindCount;
+
+    public int getRemindCount() {
+        return remindCount;
+    }
+
+    public void setRemindCount(int remindCount) {
+        this.remindCount = remindCount;
+    }
 
     public boolean isBuyerPayed() {
         return buyerPayed;

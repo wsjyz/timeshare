@@ -46,17 +46,18 @@ public class OrderServiceImpl implements OrderService {
     public String saveOrder(ItemOrder order) {
 
         String result = "";
-
+        Item item = itemService.findItemByItemId(order.getItemId());
         switch (order.getOrderStatus()){
             case "BEGIN":
-                Item item = itemService.findItemByItemId(order.getItemId());
+
                 order.setPrice(item.getPrice());
                 order.setItemTitle(item.getTitle());
                 order.setOrderUserId(item.getUserId());
-
+                String orderId = CommonStringUtils.gen18RandomNumber();
+                order.setOrderId(orderId);
                 Remind remind = new Remind();
-                remind.setObjId(item.getItemId());
-                remind.setRemindType(Contants.REMIND_TYPE.ORDER.toString());
+                remind.setObjId(order.getOrderId());
+                remind.setRemindType(Contants.REMIND_TYPE.ORDER_SELLER.toString());
                 remind.setToUserId(item.getUserId());
                 remind.setUserId(item.getUserId());
 
@@ -64,30 +65,41 @@ public class OrderServiceImpl implements OrderService {
                 result = orderDAO.saveOrder(order);
             break;
             case "SELLER_APPLY":
-                Item item1 = itemService.findItemByItemId(order.getItemId());
                 Remind sellerApplyRemind = new Remind();
                 sellerApplyRemind.setObjId(order.getOrderId());
-                sellerApplyRemind.setRemindType(Contants.REMIND_TYPE.ORDER.toString());
+                sellerApplyRemind.setRemindType(Contants.REMIND_TYPE.ORDER_BUYER.toString());
                 sellerApplyRemind.setToUserId(order.getUserId());
-                sellerApplyRemind.setUserId(item1.getUserId());
-
+                sellerApplyRemind.setUserId(item.getUserId());
+                remindService.saveRemind(sellerApplyRemind);
                 result = orderDAO.modifyOrder(order);
                 break;
             case "BUYER_CONFIRM":
-                Item item2 = itemService.findItemByItemId(order.getItemId());
+
                 Remind buyConfirmRemind = new Remind();
                 buyConfirmRemind.setObjId(order.getOrderId());
-                buyConfirmRemind.setRemindType(Contants.REMIND_TYPE.ORDER.toString());
-                buyConfirmRemind.setToUserId(item2.getUserId());
+                buyConfirmRemind.setRemindType(Contants.REMIND_TYPE.ORDER_SELLER.toString());
+                buyConfirmRemind.setToUserId(item.getUserId());
                 buyConfirmRemind.setUserId(order.getUserId());
-
+                remindService.saveRemind(buyConfirmRemind);
                 result = orderDAO.modifyOrder(order);
                 break;
             case "SELLER_FINISH":
                 result = orderDAO.modifyOrder(order);
+                Remind sellerApplyRemind1 = new Remind();
+                sellerApplyRemind1.setObjId(order.getOrderId());
+                sellerApplyRemind1.setRemindType(Contants.REMIND_TYPE.ORDER_BUYER.toString());
+                sellerApplyRemind1.setToUserId(order.getUserId());
+                sellerApplyRemind1.setUserId(item.getUserId());
+                remindService.saveRemind(sellerApplyRemind1);
                 break;
             case "BUYLLER_FINISH":
                 result = orderDAO.modifyOrder(order);
+                Remind buyConfirmRemind2 = new Remind();
+                buyConfirmRemind2.setObjId(order.getOrderId());
+                buyConfirmRemind2.setRemindType(Contants.REMIND_TYPE.ORDER_SELLER.toString());
+                buyConfirmRemind2.setToUserId(item.getUserId());
+                buyConfirmRemind2.setUserId(order.getUserId());
+                remindService.saveRemind(buyConfirmRemind2);
                 if(order.getOptUserType().equals("buyer") && order.isBuyerPayed()){
                     payToSeller(order.getOrderId());
                 }

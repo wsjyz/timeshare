@@ -48,9 +48,11 @@ public class OrderController extends BaseController{
         return "appointment/begin";
     }
     @RequestMapping(value = "/fix-buyer-order/{orderId}")
-    public String toFixBuyerOrder(@PathVariable String orderId,Model model) {
+    public String toFixBuyerOrder(@PathVariable String orderId,Model model,@CookieValue(value="time_sid", defaultValue="") String userId) {
 
         ItemOrder order = orderService.findOrderByOrderId(orderId);
+        remindService.deleteRemindByObjIdAndUserId(orderId,userId);
+        System.out.println(orderId + " "+userId);
         String toStr = "";
         switch (order.getOrderStatus()){
             case "BEGIN":
@@ -103,6 +105,7 @@ public class OrderController extends BaseController{
     public String toFixSellerOrder(@PathVariable String orderId,Model model,@CookieValue(value="time_sid", defaultValue="") String userId) {
 
         ItemOrder order = orderService.findOrderByOrderId(orderId);
+        remindService.deleteRemindByObjIdAndUserId(orderId,userId);
         String toStr = "";
         switch (order.getOrderStatus()){
             case "BEGIN":
@@ -164,6 +167,7 @@ public class OrderController extends BaseController{
         WeixinOauth weixinOauth = new WeixinOauth();
         String openId = weixinOauth.obtainOpenId(code);
         ItemOrder order = orderService.findOrderByOrderId(orderId);
+        remindService.deleteRemindByObjIdAndUserId(orderId,order.getUserId());
         request.setAttribute("order",order);
         request.setAttribute("openId",openId);
         WxPayConfigBean config = new WxPayConfigBean();

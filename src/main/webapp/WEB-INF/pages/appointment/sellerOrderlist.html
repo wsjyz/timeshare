@@ -102,6 +102,11 @@
                 }else if(order.orderStatus == 'FINISH'){
                     orderStatus = "已完成";
                 }
+                var remindCount = order.remindCount;
+                var remindHtml = '';
+                if(remindCount > 0){
+                    remindHtml = '<span class="badge" style="position: absolute;top: 1rem;right: 1rem;background:red;color: white;">'+remindCount+'</span>';
+                }
                 html += '<div class="card" >'+
                             '<div class="card-content">'+
                                 '<div class="list-block">'+
@@ -113,7 +118,7 @@
                                                 '</div>'+
                                                 '<div class="item-subtitle">'+orderStatus+'</div>'+
                                                 '<div class="item-subtitle">订单ID：'+order.orderId+'</div>'+
-                                                '<span class="badge" style="position: absolute;top: 1rem;right: 1rem;background:red;color: white;">1</span>'+
+                                                remindHtml+
                                             '</div>'+
                                         '</li>'+
                                     '</ul>'+

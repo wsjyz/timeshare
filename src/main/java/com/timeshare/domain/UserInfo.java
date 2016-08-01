@@ -10,7 +10,7 @@ import java.util.List;
  * Created by adam on 2016/6/7.
  */
 @Table(name = "t_user_info", comment = "会员")
-public class UserInfo {
+public class UserInfo extends BaseDomain{
 
     @Column(name = "user_id", pk = true, length = 32)
     private String userId;

@@ -153,7 +153,18 @@ public class UserController extends BaseController{
     public MyRemind getRemind(@CookieValue(value="time_sid", defaultValue="") String userId) {
 
         MyRemind remind = new MyRemind();
-        int sellCount = remindService.queryCountByObjIdAndType(userId,"",Contants.REMIND_TYPE.ORDER.toString());
+        int sellCount = remindService.queryCountByObjIdAndType(userId,"",null);
+        remind.setSellRemindCount(sellCount);
+        return remind;
+    }
+    @RequestMapping(value = "/get-remind-mypage")
+    @ResponseBody
+    public MyRemind getMyPageRemind(@CookieValue(value="time_sid", defaultValue="") String userId) {
+
+        MyRemind remind = new MyRemind();
+        int buyerCount = remindService.queryCountByObjIdAndType(userId,"",Contants.REMIND_TYPE.ORDER_BUYER.toString());
+        remind.setBuyRemindCount(buyerCount);
+        int sellCount = remindService.queryCountByObjIdAndType(userId,"",Contants.REMIND_TYPE.ORDER_SELLER.toString());
         remind.setSellRemindCount(sellCount);
         return remind;
     }

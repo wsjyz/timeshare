@@ -26,6 +26,11 @@ public class RemindServiceImpl implements RemindService {
     }
 
     @Override
+    public int deleteRemindByObjIdAndUserId(String objId, String userId) {
+        return remindDAO.deleteRemindByObjIdAndUserId(objId,userId);
+    }
+
+    @Override
     public int queryCountByObjIdAndType(String toUserId, String objId, String type) {
         return remindDAO.queryCountByObjIdAndType(toUserId,objId,type);
     }

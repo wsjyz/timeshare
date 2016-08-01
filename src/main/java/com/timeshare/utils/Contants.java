@@ -52,6 +52,6 @@ public interface Contants {
         FINISH,//已完成
     }
     enum REMIND_TYPE {
-        ORDER
+        ORDER_BUYER,ORDER_SELLER
     }
 }

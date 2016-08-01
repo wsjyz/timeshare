@@ -15,6 +15,7 @@ import java.math.BigDecimal;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -32,7 +33,7 @@ public class OrderDAOImpl extends BaseDAO implements OrderDAO {
         int result = getJdbcTemplate().update(sql.toString(), new PreparedStatementSetter() {
             @Override
             public void setValues(PreparedStatement ps) throws SQLException {
-                ps.setString(1, CommonStringUtils.gen18RandomNumber());
+                ps.setString(1,info.getOrderId());
                 ps.setString(2,info.getOrderUserId());
                 ps.setString(3,info.getOrderUserName());
                 ps.setString(4,info.getOrderProblem());
@@ -102,7 +103,9 @@ public class OrderDAOImpl extends BaseDAO implements OrderDAO {
     public ItemOrder findOrderByOrderId(String orderId) {
         StringBuilder sql = new StringBuilder("");
         sql.append("select * from t_order where order_id = ?");
-        List<ItemOrder> itemList = getJdbcTemplate().query(sql.toString(),new Object[]{orderId},new OrderMapper());
+        List<String> excludeFields = new ArrayList<>();
+        excludeFields.add("remindCount");
+        List<ItemOrder> itemList = getJdbcTemplate().query(sql.toString(),new Object[]{orderId},new OrderMapper(excludeFields));
         if(itemList != null && !itemList.isEmpty()){
             return itemList.get(0);
         }
@@ -145,32 +148,50 @@ public class OrderDAOImpl extends BaseDAO implements OrderDAO {
     @Override
     public List<ItemOrder> findItemPage(ItemOrder order, int startIndex, int loadSize) {
         StringBuilder sql = new StringBuilder("");
-        sql.append("select * from t_order where 1=1");
+        sql.append("select IF(r.remind_id IS NULL, null, 1) remindCount,o.* from t_order o" +
+                " LEFT JOIN t_remind r ON o.order_id = r.obj_id");
+
         if(order != null){
+            if(order.getOptUserType().equals(Contants.OPT_USER_TYPE.buyer.toString())){
+                sql.append(" and r.remind_type = '"+Contants.REMIND_TYPE.ORDER_BUYER.toString()+"' ");
+            }else if(order.getOptUserType().equals(Contants.OPT_USER_TYPE.seller.toString())){
+                sql.append(" and r.remind_type = '"+Contants.REMIND_TYPE.ORDER_SELLER.toString()+"' ");
+            }
+            sql.append(" where 1=1 ");
             if (StringUtils.isNotEmpty(order.getOrderStatus())) {
                 if(order.getOrderStatus().equals("ongoing")){
-                    sql.append(" and order_status !='"+Contants.ORDER_STATUS.FINISH+"' ");
+                    sql.append(" and o.order_status !='"+Contants.ORDER_STATUS.FINISH+"' ");
                 }else{
-                    sql.append(" and order_status ='"+order.getOrderStatus()+"' ");
+                    sql.append(" and o.order_status ='"+order.getOrderStatus()+"' ");
                 }
 
             }
 
             if(order.getOptUserType().equals(Contants.OPT_USER_TYPE.buyer.toString())){
-                sql.append(" and create_user_id = '"+order.getUserId()+"' ");
+                sql.append(" and o.create_user_id = '"+order.getUserId()+"' ");
             }else if(order.getOptUserType().equals(Contants.OPT_USER_TYPE.seller.toString())){
-                sql.append(" and order_user_id = '"+order.getOrderUserId()+"' ");
+                sql.append(" and o.order_user_id = '"+order.getOrderUserId()+"' ");
             }
 
         }
-        sql.append(" order by opt_time desc limit ?,?");
-        //System.out.println(sql.toString());
+        sql.append(" order by o.opt_time desc limit ?,?");
+        System.out.println(sql.toString());
         List<ItemOrder> itemList = getJdbcTemplate().query(sql.toString(),new Object[]{startIndex,loadSize},new OrderMapper());
 
         return itemList;
     }
 
     private class OrderMapper implements RowMapper<ItemOrder>{
+
+        private List<String> excludeField = new ArrayList<>();
+
+        public OrderMapper(){
+
+        }
+
+        public OrderMapper(List<String> excludeFields){
+            this.excludeField = excludeFields;
+        }
 
         @Override
         public ItemOrder mapRow(ResultSet rs, int i) throws SQLException {
@@ -195,6 +216,9 @@ public class OrderDAOImpl extends BaseDAO implements OrderDAO {
             order.setSellerFinish(rs.getString("seller_finish"));
             order.setWxTradeNo(rs.getString("wx_trade_no"));
             order.setCreateUserName(rs.getString("create_user_name"));
+            if(!excludeField.contains("remindCount")){
+                order.setRemindCount(rs.getInt("remindCount"));
+            }
             return order;
         }
     }
