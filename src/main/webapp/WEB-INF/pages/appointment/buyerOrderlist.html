@@ -196,6 +196,14 @@
         }
 
     }
+    $("body").on( "click", ".back", function(){
+        window.location.href = '${request.contextPath}/user/to-my-page';
+    } );
+    //以下是处理点击系统后退
+    history.pushState(null, "我的信息", window.location.href+"#");
+    window.onpopstate = function(){
+        window.location.href = '${request.contextPath}/user/to-my-page';
+    };
 </script>
 <script>$.init();</script>
 </body>

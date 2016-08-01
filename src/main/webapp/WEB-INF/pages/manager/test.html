@@ -59,6 +59,7 @@
 <script type='text/javascript' src='//g.alicdn.com/msui/sm/0.6.2/js/sm-extend.min.js' charset='utf-8'></script>
 
 <script>
+    history.pushState(null, "预览", window.location.href+"#");
     $(document).on('click','#openBtn', function () {
         history.pushState(null, "预览", window.location.href+"#");
         $.popup('.popup');
@@ -69,7 +70,7 @@
     });
 
     window.onpopstate = function(){
-        $.closeModal();
+        window.location.href = "http://www.baidu.com";
     };
     $.init()
 </script>
