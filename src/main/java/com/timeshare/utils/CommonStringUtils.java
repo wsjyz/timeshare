@@ -56,7 +56,7 @@ public class CommonStringUtils {
     }
 
     public static Date stringToDate(String dateStr){
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH");
         Date date = null;
         try {
             date = sdf.parse(dateStr);
