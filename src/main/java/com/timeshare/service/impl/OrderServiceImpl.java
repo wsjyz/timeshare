@@ -47,6 +47,9 @@ public class OrderServiceImpl implements OrderService {
 
         String result = "";
         Item item = itemService.findItemByItemId(order.getItemId());
+        UserInfo buyer = userService.findUserByUserId(order.getUserId());
+        UserInfo seller = userService.findUserByUserId(item.getUserId());
+        ItemOrder dbOrder = orderDAO.findOrderByOrderId(order.getOrderId());
         switch (order.getOrderStatus()){
             case "BEGIN":
 
@@ -63,6 +66,12 @@ public class OrderServiceImpl implements OrderService {
 
                 remindService.saveRemind(remind);
                 result = orderDAO.saveOrder(order);
+
+
+                buyer.setBuyCounts(buyer.getBuyCounts() + 1);
+                userService.modifyUser(buyer);
+                seller.setSellCounts(seller.getSellCounts() + 1);
+                userService.modifyUser(seller);
             break;
             case "SELLER_APPLY":
                 Remind sellerApplyRemind = new Remind();
@@ -91,6 +100,7 @@ public class OrderServiceImpl implements OrderService {
                 sellerApplyRemind1.setToUserId(order.getUserId());
                 sellerApplyRemind1.setUserId(item.getUserId());
                 remindService.saveRemind(sellerApplyRemind1);
+
                 break;
             case "BUYLLER_FINISH":
                 result = orderDAO.modifyOrder(order);
@@ -101,13 +111,23 @@ public class OrderServiceImpl implements OrderService {
                 buyConfirmRemind2.setUserId(order.getUserId());
                 remindService.saveRemind(buyConfirmRemind2);
                 if(order.getOptUserType().equals("buyer") && order.isBuyerPayed()){
-                    payToSeller(order.getOrderId());
+                    payToSeller(order.getOrderId());//付款
+                    //修改收入和支出
+                    seller.setIncome(seller.getIncome().add(dbOrder.getPrice()));
+                    buyer.setSumCost(buyer.getSumCost().add(dbOrder.getPrice()));
+                    userService.modifyUser(buyer);
+                    userService.modifyUser(seller);
                 }
                 break;
             case "FINISH":
                 result = orderDAO.modifyOrder(order);
                 if(order.getOptUserType().equals("buyer") && order.isBuyerPayed()){
-                    payToSeller(order.getOrderId());
+                    payToSeller(order.getOrderId());//付款
+                    //修改收入和支出
+                    seller.setIncome(seller.getIncome().add(dbOrder.getPrice()));
+                    buyer.setSumCost(buyer.getSumCost().add(dbOrder.getPrice()));
+                    userService.modifyUser(seller);
+                    userService.modifyUser(buyer);
                 }
                 break;
         }

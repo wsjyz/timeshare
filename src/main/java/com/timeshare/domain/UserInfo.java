@@ -167,6 +167,9 @@ public class UserInfo extends BaseDomain{
     }
 
     public BigDecimal getIncome() {
+        if(income == null){
+            return new BigDecimal(0);
+        }
         return income;
     }
 
@@ -175,6 +178,9 @@ public class UserInfo extends BaseDomain{
     }
 
     public BigDecimal getSumCost() {
+        if(sumCost == null){
+            return new BigDecimal(0);
+        }
         return sumCost;
     }
 

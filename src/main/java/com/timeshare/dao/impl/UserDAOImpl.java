@@ -88,10 +88,10 @@ public class UserDAOImpl extends BaseDAO implements UserDAO {
             if(StringUtils.isNotBlank(userInfo.getNickName())){
                 sql.append(" nick_name = '"+userInfo.getNickName()+"',");
             }
-            if(userInfo.getIncome() != null && userInfo.getIncome().intValue() != 0){
+            if(userInfo.getIncome() != null ){
                 sql.append(" income = "+userInfo.getIncome()+",");
             }
-            if(userInfo.getSumCost() != null && userInfo.getSumCost().intValue() != 0){
+            if(userInfo.getSumCost() != null ){
                 sql.append(" sum_cost = "+userInfo.getSumCost()+",");
             }
             if(userInfo.getSellCounts() != 0){
