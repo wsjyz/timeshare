@@ -44,7 +44,9 @@
                         <div class="preloader">
                         </div>
                     </div>
-
+                    <div class="no-record" style="display: none;text-align: center">
+                        没有更多记录了
+                    </div>
                 </div>
 
                 <div id="finishTab" class="tab infinite-scroll">
@@ -56,6 +58,9 @@
                     <div class="infinite-scroll-preloader">
                         <div class="preloader">
                         </div>
+                    </div>
+                    <div class="no-record" style="display: none;text-align: center">
+                        没有更多记录了
                     </div>
                 </div>
             </div>
@@ -80,7 +85,7 @@
         var  lastIndex = $('.list-block ul').length;
 
         function addItems(number, lastIndex,data,tabId) {
-            $('#'+tabId+'.infinite-scroll .list-block').empty();
+
             // 生成新条目的HTML
             var html = '';
             var dataLength = 0;
@@ -144,16 +149,20 @@
         }
         $.post('${request.contextPath}/order/my-order-list', {orderStatus:'ongoing',optUserType:'buyer',startIndex: 0,loadSize:itemsPerLoad}, function (response) {
             //预先加载20条
+            $('#ongoingTab.infinite-scroll .list-block').empty();
             addItems(itemsPerLoad, 0,response,'ongoingTab');
             $.hideIndicator();
         });
         $.post('${request.contextPath}/order/my-order-list', {orderStatus:'FINISH',optUserType:'buyer',startIndex: 0,loadSize:itemsPerLoad}, function (response) {
             //预先加载20条
+            $('#finishTab.infinite-scroll .list-block').empty();
             addItems(itemsPerLoad, 0,response,'finishTab');
             $.hideIndicator();
         });
         $(document).on('infinite', function() {
             // 如果正在加载，则退出
+            var noRecordDisplay = $('.no-record').css('display');
+
             if (loading) return;
             // 设置flag
             loading = true;
