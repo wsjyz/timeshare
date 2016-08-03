@@ -209,9 +209,19 @@
         window.location.href = '${request.contextPath}/user/to-my-page';
     } );
     //以下是处理点击系统后退
-    history.pushState(null, "我的信息", window.location.href+"#");
-    window.onpopstate = function(){
-        window.location.href = '${request.contextPath}/user/to-my-page';
+    var currentUrl = window.location.href;
+    if(currentUrl.indexOf('#') == -1 ){
+        //event.state refers to the second last state that was pushed.
+        // You need to have pushed state at least twice for e.state to not be null.
+        // This is because you should save the state when your site is loaded the first time and thereafter every time it changes state.
+        history.pushState({init:true}, "我的信息", window.location.href+"#");
+        history.pushState({init:true}, "我的信息", window.location.href+"1");
+    }
+    window.onpopstate = function(event){
+        var stateStr = event.state;
+        if(stateStr != null){//==null的时候是像safari这样的浏览器，第一次进入界面的时候就执行onpopstate方法，这时pushState并没有执行，不应该跳转
+            window.location.href = '${request.contextPath}/user/to-my-page';
+        }
     };
 </script>
 <script>$.init();</script>

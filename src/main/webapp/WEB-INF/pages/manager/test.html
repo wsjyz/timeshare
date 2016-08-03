@@ -19,59 +19,40 @@
     <div class="page page-current">
 
 
-        <!-- 你的html代码 -->
-            <div class="content">
 
 
-                <p><a href="#" id="openBtn" >Open About Popup </a></p>
-
-            </div>
-
-
+        <a href="#" id="saveOrderBtn" class="button button-big button-fill button-danger">确定</a>
 
     </div>
 </div>
-<div class="popup" style="background: #eee;">
-    <div class="content-block" >
-        <header class="bar bar-nav">
-            <a class="icon icon-left pull-left back"></a>
-            <h1 class="title">预览</h1>
-        </header>
-        <div style="background: #fff;padding-right: 1rem;padding-left: 1rem" >
-            <div class="row">
-                <div class="col-100"><h2 style="color: #666;"><span id="titleSp">你是大牛</span></h2></div>
-            </div>
-            <div class="row" >
-                <div class="col-50" ><span id="priceSp">2000</span>元/次</div>
-                <div class="col-50" >约<span id="durationSp" >12</span>分钟</div>
-            </div>
 
-        </div>
-        <div class="content-padded">
-            <p><div id="descriptionDiv">太厉害了 哈哈哈</div></p>
-        </div>
-
-
-    </div>
-</div>
 <script type='text/javascript' src='//g.alicdn.com/sj/lib/zepto/zepto.min.js' charset='utf-8'></script>
 <script type='text/javascript' src='//g.alicdn.com/msui/sm/0.6.2/js/sm.min.js' charset='utf-8'></script>
 <script type='text/javascript' src='//g.alicdn.com/msui/sm/0.6.2/js/sm-extend.min.js' charset='utf-8'></script>
 
 <script>
-    history.pushState(null, "预览", window.location.href+"#");
-    $(document).on('click','#openBtn', function () {
-        history.pushState(null, "预览", window.location.href+"#");
-        $.popup('.popup');
-    });
-
-    $(document).on('click','#closeBtn', function () {
-        $.closeModal();
-    });
-
-    window.onpopstate = function(){
-        window.location.href = "http://www.baidu.com";
+    window.onload=function(){
+        alert('load');
+    }
+    var currentUrl = window.location.href;
+    if(currentUrl.indexOf('#') == -1 ){
+        //event.state refers to the second last state that was pushed.
+        // You need to have pushed state at least twice for e.state to not be null.
+        // This is because you should save the state when your site is loaded the first time and thereafter every time it changes state.
+        history.pushState({init:true}, "我的信息", window.location.href+"#");
+        history.pushState({init:true}, "我的信息", window.location.href+"1");
+    }
+    window.onpopstate = function(event){
+        var stateStr = event.state;
+        if(stateStr != null){
+            alert('跳转');
+        }
     };
+
+    $("body").on( "click", "#saveOrderBtn", function(){
+
+        window.location.href = "${request.contextPath}/index/to-index";
+    } );
     $.init()
 </script>
 </body>
