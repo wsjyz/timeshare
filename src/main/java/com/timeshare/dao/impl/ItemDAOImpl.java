@@ -151,9 +151,9 @@ public class ItemDAOImpl extends BaseDAO implements ItemDAO {
         }else if(condition.equals("new")){//最新
             sql.append("select * from t_item where item_status = '"+ Contants.ITEM_STATUS.for_sale+"' order by opt_time desc");
         }else if(condition.equals("hot")){//最火
-            sql.append("SELECT i.*,count(o.order_id) c FROM `t_item` i ,t_order o where i.item_id = o.item_id and i.item_status = '"+ Contants.ITEM_STATUS.for_sale+"' order by c desc");
+            sql.append("SELECT * FROM `t_item`  where  item_status = '"+ Contants.ITEM_STATUS.for_sale+"' and use_count > 0 order by use_count desc");
         }else if(condition.equals("good")){//最优
-            sql.append("SELECT i.*,sum(f.rating) c FROM `t_item` i ,t_feed_back f where i.item_id = f.item_id and i.item_status = '"+ Contants.ITEM_STATUS.for_sale+"' order by c desc");
+            sql.append("SELECT * FROM `t_item`  where  item_status = '"+ Contants.ITEM_STATUS.for_sale+"' and score > 0 order by score desc");
         }
 
         List<String> excludeFields = new ArrayList<>();
