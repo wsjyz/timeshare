@@ -169,14 +169,15 @@ public class ItemDAOImpl extends BaseDAO implements ItemDAO {
 
         reviewSql.append("select i.* from t_item i where 1=1 ");
         if(item != null){
-            if (StringUtils.isNotEmpty(item.getTitle())) {
-                reviewSql.append(" and i.title like '%"+item.getTitle()+"%' ");
-            }
+
             if (StringUtils.isNotEmpty(item.getItemStatus())) {
                 reviewSql.append(" and i.item_status = '"+item.getItemStatus()+"' ");
             }
             if (StringUtils.isNotEmpty(item.getUserId())) {
                 reviewSql.append(" and i.create_user_id = '"+item.getUserId()+"' ");
+            }
+            if (StringUtils.isNotEmpty(item.getCreateUserName()) && StringUtils.isNotEmpty(item.getTitle())) {
+                reviewSql.append(" and (i.create_user_name like '%"+item.getCreateUserName()+"%' or i.title like '%"+item.getTitle()+"%')");
             }
         }
         reviewSql.append("  order by i.opt_time desc limit ?,?");

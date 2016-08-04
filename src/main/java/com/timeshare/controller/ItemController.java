@@ -59,6 +59,23 @@ public class ItemController extends BaseController{
         return "selltime";
     }
 
+    @RequestMapping(value = "/to-search")
+    public String toSearch(@RequestParam String keyword,Model model) {
+
+        model.addAttribute("keyword",keyword);
+        return "searchitem";
+    }
+
+    @RequestMapping(value = "/search")
+    @ResponseBody
+    public List<ItemDTO> search(@RequestParam String keyword ,@RequestParam int startIndex, @RequestParam int loadSize) {
+        Item item = new Item();
+        item.setTitle(keyword);
+        item.setCreateUserName(keyword);
+        List<ItemDTO> itemList = itemService.searchItemList(item,startIndex,loadSize);
+        return itemList;
+    }
+
     @RequestMapping(value = "/to-view/{itemId}")
     public String toView(@PathVariable String itemId,Model model,@CookieValue(value="time_sid", defaultValue="") String userId) {
         String returnStr = "";

@@ -17,7 +17,15 @@
 <body>
 <div class="page-group">
     <div class="page page-current">
-
+        <div class="bar bar-header-secondary" style="top:0;">
+            <div class="searchbar">
+                <a class="searchbar-cancel">取消</a>
+                <div class="search-input">
+                    <label class="icon icon-search" for="search"></label>
+                    <input type="search" id='search' placeholder='输入关键字...'/>
+                </div>
+            </div>
+        </div>
 
 
 
@@ -31,9 +39,7 @@
 <script type='text/javascript' src='//g.alicdn.com/msui/sm/0.6.2/js/sm-extend.min.js' charset='utf-8'></script>
 
 <script>
-    window.onload=function(){
-        alert('load');
-    }
+
     var currentUrl = window.location.href;
     if(currentUrl.indexOf('#') == -1 ){
         //event.state refers to the second last state that was pushed.

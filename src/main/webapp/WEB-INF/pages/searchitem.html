@@ -1,0 +1,195 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>时刻</title>
+    <meta name="viewport" content="initial-scale=1, maximum-scale=1">
+    <link rel="shortcut icon" href="/favicon.ico">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+
+    <!--<link rel="stylesheet" href="//g.alicdn.com/msui/sm/0.6.2/css/sm.min.css">-->
+    <!--<link rel="stylesheet" href="//g.alicdn.com/msui/sm/0.6.2/css/sm-extend.min.css">-->
+
+    <link rel="stylesheet" href="//g.alicdn.com/msui/sm/0.6.2/css/sm.min.css">
+    <link rel="stylesheet" href="//g.alicdn.com/msui/sm/0.6.2/css/sm-extend.min.css">
+
+    <link rel="apple-touch-icon-precomposed" href="/assets/img/apple-touch-icon-114x114.png">
+    <script src="//g.alicdn.com/sj/lib/zepto/zepto.min.js"></script>
+    <style type="text/css">
+        .infinite-scroll-preloader {
+            margin-top:-20px;
+        }
+        .commentAvatarDiv{
+            width: 50px;
+            height: 50px;
+            padding:0px;
+            background: #ececec;
+            border-radius:50px;
+            box-shadow: 0px 0px 0px rgba(0,0,0,0.4);
+            -moz-border-radius: 50px;
+            -webkit-border-radius: 50px;
+        }
+        .commentAvatarImage{
+            width:50px;
+            height:50px;
+            line-height: 0;	 /* remove line-height */
+            display: inline-block;	/* circle wraps image */
+            border-radius: 50%;	/* relative value */
+            -moz-border-radius: 50%;
+            -webkit-border-radius: 50%;
+            transition: linear 0.25s;
+        }
+    </style>
+</head>
+<body>
+<div class="page-group" >
+    <div id="page-swiper" class="page">
+        <div class="bar bar-header-secondary" style="top:0;">
+            <div class="searchbar">
+                <a class="searchbar-cancel">取消</a>
+                <div class="search-input">
+                    <label class="icon icon-search" for="search"></label>
+                    <form id="searchForm"><input type="search" id='search' placeholder='输入卖家姓名或项目...' value="${keyword}"/></form>
+                </div>
+            </div>
+        </div>
+
+        <div class="content" id=''>
+            <div class="infinite-scroll infinite-scroll-bottom" data-distance="100">
+                <div class="list-block media-list"  style="margin-top: 0px;">
+
+                </div>
+                <!-- 加载提示符 -->
+                <div class="infinite-scroll-preloader">
+                    <div class="preloader"></div>
+                </div>
+                <div class="no-record" style="display: none;text-align: center">
+                    没有更多记录了
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="//g.alicdn.com/msui/sm/0.6.2/js/sm.min.js"></script>
+<script src="//g.alicdn.com/msui/sm/0.6.2/js/sm-extend.min.js"></script>
+<script>
+
+    $.showIndicator();
+    var loading = false;
+    // 每次加载添加多少条目
+    var itemsPerLoad = 10;
+    // 最多可加载的条目
+    var maxItems = 30;
+
+    function addItems(number, lastIndex,data) {
+        // 生成新条目的HTML
+        var html = '';
+        var dataLength = 0;
+        $.each(data, function(i, item){
+            var headPic = item.headImgPath;
+            if(headPic == '' || headPic == null){
+                headPic = '${request.contextPath}/images/default_head.jpg';
+            }
+            html += '<ul>'+
+                    '<li>'+
+                    '<a href="#" class="item-link item-content" onclick="toViewUserItem(\''+item.item.userId+'\')">'+
+                    '<div class="item-media">' +
+                    '<div class="commentAvatarDiv">' +
+                    '<img class="commentAvatarImage" src="'+headPic+'" />' +
+                    '</div>' +
+                    '</div>'+
+                    '<div class="item-inner">'+
+                    '<div class="item-title-row">'+
+                    '<div class="item-title">'+item.item.title+'</div>'+
+                    '</div>'+
+                    '<div class="item-subtitle">'+item.item.createUserName+'</div>'+
+                    '<div class="item-text">'+item.item.useCount+'人咨询过</div>'+
+                    '</div>'+
+                    '</a>'+
+                    '</li>'+
+                    '</ul>';
+            dataLength += 1;
+        });
+        if(dataLength == 0){
+            $('.no-record').show();
+            $('.infinite-scroll-preloader').remove();
+        }else{
+            $('.no-record').hide();
+            $('.infinite-scroll-preloader').hide();
+            // 添加新条目
+            $('.infinite-scroll .list-block').append(html);
+        }
+        $.hideIndicator();
+    }
+
+    $(document).on("pageInit", function() {
+        var searchHeight = $('.bar-header-secondary').css('height');
+        $('.content').css('top',searchHeight);
+        $.showIndicator();
+
+        var  lastIndex = $('.list-block ul').length;
+
+        searchFunc();
+
+        $(document).on('infinite', function() {
+            // 如果正在加载，则退出
+            if (loading) return;
+            // 设置flag
+            loading = true;
+            var tabIndex = 0;
+            lastIndex = $('.list-block').eq(tabIndex).find('ul').length;
+            $.post('${request.contextPath}/item/search', {keyword:$('#search').val(),startIndex: lastIndex,loadSize:itemsPerLoad}, function (response) {
+                setTimeout(function() {
+                    // 重置加载flag
+                    loading = false;
+
+                    if (lastIndex >= maxItems) {
+                        // 加载完毕，则注销无限加载事件，以防不必要的加载
+                        $.detachInfiniteScroll($('.infinite-scroll'));
+                        // 删除加载提示符
+                        $('.infinite-scroll-preloader').remove();
+                        return;
+                    }
+                    // 添加新条目
+                    addItems(itemsPerLoad, lastIndex,response);
+                    // 更新最后加载的序号
+                    lastIndex = $('.list-block ul').length;
+                    //容器发生改变,如果是js滚动，需要刷新滚动
+                    $.refreshScroller();
+                }, 1000);
+            });
+        });
+    });
+
+    function toViewUserItem(id){
+        window.location.href = "${request.contextPath}/user/to-view-items/"+id;
+    }
+    $("body").on( "click", "#indexBtn", function(){
+        window.location.href = "${request.contextPath}/index/to-index";
+    } );
+    $("body").on( "click", "#myPageBtn", function(){
+        window.location.href = '${request.contextPath}/user/to-my-page';
+    } );
+    $("body").on( "submit", "#searchForm", function(){
+        var keyword = $('#search').val();
+        if(keyword == ''){
+            return false;
+        }
+        searchFunc();
+        return false;
+    } );
+    var searchFunc = function(){
+        $.post('${request.contextPath}/item/search', {keyword:$('#search').val(),startIndex: 0,loadSize:itemsPerLoad}, function (response) {
+            $('.infinite-scroll .list-block').empty();
+            //预先加载20条
+            addItems(itemsPerLoad, 0,response);
+            $.hideIndicator();
+        });
+    }
+    $.init();
+</script>
+</body>
+</html>

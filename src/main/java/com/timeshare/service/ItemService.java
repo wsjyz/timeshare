@@ -32,4 +32,6 @@ public interface ItemService {
 
     int findItemCount(Item item);
 
+    List<ItemDTO> searchItemList(Item item, int startIndex, int loadSize);
+
 }

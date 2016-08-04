@@ -42,8 +42,17 @@
 </head>
 <body>
 <div class="page-group" >
-    <div id="page-swiper" class="page">
 
+    <div id="page-swiper" class="page">
+        <div class="bar bar-header-secondary" style="top:0;">
+            <div class="searchbar">
+                <a class="searchbar-cancel">取消</a>
+                <div class="search-input">
+                    <label class="icon icon-search" for="search"></label>
+                    <form id="searchForm"><input type="search" id='search' name="keyword" placeholder='输入卖家姓名或项目...'/></form>
+                </div>
+            </div>
+        </div>
         <nav class="bar bar-tab">
             <a class="tab-item active" href="#">
                 <span class="icon icon-cart"></span>
@@ -59,14 +68,7 @@
                 <span class="badge" style="display: none"></span>
             </a>
         </nav>
-        <!--<div class="bar">-->
-            <!--<div class="searchbar">-->
-                <!--<div class="search-input">-->
-                    <!--<label class="icon icon-search" for="search"></label>-->
-                    <!--<input type="search" id='search' placeholder='输入关键字...'/>-->
-                <!--</div>-->
-            <!--</div>-->
-        <!--</div>-->
+
         <div class="content" id=''>
 
             <div class="swiper-container"  style="position: relative;padding-bottom: 0px;">
@@ -138,6 +140,8 @@
         window.location.href = "${request.contextPath}/user/to-view-items/"+id;
     }
     $(document).on("pageInit", function() {
+        var searchHeight = $('.bar-header-secondary').css('height');
+        $('.content').css('top',searchHeight);
         $.showIndicator();
 
         function addLunboItem(datas){
@@ -298,6 +302,14 @@
     $("body").on( "click", "#mySellBtn", function(){
         var backUrl = '/item/to-list';
         window.location.href = '${request.contextPath}/wx/to-get-open-id?backUrl='+encodeURIComponent(backUrl);
+    } );
+    $("body").on( "submit", "#searchForm", function(){
+        var keyword = $('#search').val();
+        if(keyword == ''){
+            return false;
+        }
+        $('form').attr('action','${request.contextPath}/item/to-search');
+        $('form').submit();
     } );
     $.init();
 </script>

@@ -55,6 +55,28 @@ public class ItemServiceImpl implements ItemService {
     public List<ItemDTO> findSellItemListByCondition(String condition, int startIndex, int loadSize) {
 
         List<Item> dtoDbList = itemDAO.findSellItemListByCondition(condition,startIndex,loadSize);
+
+
+        return fixImg(dtoDbList);
+    }
+
+    @Override
+    public List<Item> findItemList(Item item, int startIndex, int loadSize) {
+        return itemDAO.findItemList(item,startIndex,loadSize);
+    }
+
+    @Override
+    public List<ItemDTO> searchItemList(Item item, int startIndex, int loadSize) {
+        List<Item> dtoDbList = itemDAO.findItemList(item,startIndex,loadSize);
+        return fixImg(dtoDbList);
+    }
+
+    @Override
+    public int findItemCount(Item item) {
+        return itemDAO.findItemCount(item);
+    }
+
+    private List<ItemDTO> fixImg(List<Item> dtoDbList){
         List<ItemDTO> dtoList = new ArrayList<>();
         if(dtoDbList != null && !dtoDbList.isEmpty()){
 
@@ -84,17 +106,6 @@ public class ItemServiceImpl implements ItemService {
                 dtoList.add(itemDTO);
             }
         }
-
         return dtoList;
-    }
-
-    @Override
-    public List<Item> findItemList(Item item, int startIndex, int loadSize) {
-        return itemDAO.findItemList(item,startIndex,loadSize);
-    }
-
-    @Override
-    public int findItemCount(Item item) {
-        return itemDAO.findItemCount(item);
     }
 }
