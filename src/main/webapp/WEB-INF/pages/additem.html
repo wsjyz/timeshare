@@ -90,17 +90,27 @@
                             </div>
                         </div>
                     </li>
-                    <li>
-                        <div class="item-content">
-                            <div class="item-media"><i class="icon icon-form-gender"></i></div>
-                            <div class="item-inner">
-                                <div class="item-title label">介绍：</div>
-                                <div class="item-input">
-                                    <textarea name="description" id="description" style="width: 100%" placeholder="请填写介绍"><#if item??>${item.description}<#else></#if></textarea>
+
+                        <li>
+                            <div class="card-header" style="font-size: 0.7rem">请描述您在企业实践该项目的时间、情景和结果数据证明</div>
+                            <div class="card-content">
+                                <div class="card-content-inner">
+                                    <div class="item-input">
+                                        <textarea name="description" id="description" style="width: 100%" placeholder="请填写"><#if item??>${item.description}<#else></#if></textarea>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
-                    </li>
+                        </li>
+                        <li>
+                            <div class="card-header" style="font-size: 0.7rem">请描述此次直约，您将提供的分享内容</div>
+                            <div class="card-content">
+                                <div class="card-content-inner">
+                                    <div class="item-input">
+                                        <textarea name="practiceDescription" id="practiceDescription" style="width: 100%" placeholder="请填写"><#if item??>${item.practiceDescription}<#else></#if></textarea>
+                                    </div>
+                                </div>
+                            </div>
+                        </li>
                     </form>
                 </ul>
             </div>
@@ -131,7 +141,10 @@
 
         </div>
         <div class="content-padded">
+            <h5>我在企业实践该项目的时间、情景和结果数据证明</h5>
             <p><div id="descriptionDiv"></div></p>
+            <h5>此次直约，我将提供的分享内容</h5>
+            <p><div id="practiceDescriptionDiv"></div></p>
         </div>
 
 
@@ -205,6 +218,7 @@
             $('#priceSp').text($('#price').val());
             $('#durationSp').text($('#durationId').val());
             $('#descriptionDiv').text($('#description').val());
+            $('#practiceDescriptionDiv').text($('#practiceDescription').val());
             history.pushState(null, "预览", window.location.href+"#");
             $.popup('.popup');
         }

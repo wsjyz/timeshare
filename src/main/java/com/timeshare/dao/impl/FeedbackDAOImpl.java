@@ -26,21 +26,18 @@ public class FeedbackDAOImpl extends BaseDAO implements FeedbackDAO {
     public String saveFeedback(Feedback info) {
         StringBuilder sql = new StringBuilder("insert into t_feed_back (feedback_id,title,content,item_id,item_title,to_user_id,create_user_name,create_user_id,opt_time,rating,order_id)" +
                 " values(?,?,?,?,?,?,?,?,?,?,?)");
-        int result = getJdbcTemplate().update(sql.toString(), new PreparedStatementSetter() {
-            @Override
-            public void setValues(PreparedStatement ps) throws SQLException {
-                ps.setString(1, CommonStringUtils.genPK());
-                ps.setString(2,info.getTitle());
-                ps.setString(3,info.getContent());
-                ps.setString(4,info.getItemId());
-                ps.setString(5,info.getItemTitle());
-                ps.setString(6,info.getToUserId());
-                ps.setString(7,info.getCreateUserName());
-                ps.setString(8,info.getUserId());
-                ps.setString(9,info.getOptTime());
-                ps.setInt(10,info.getRating());
-                ps.setString(11,info.getOrderId());
-            }
+        int result = getJdbcTemplate().update(sql.toString(), ps -> {
+            ps.setString(1, CommonStringUtils.genPK());
+            ps.setString(2,info.getTitle());
+            ps.setString(3,info.getContent());
+            ps.setString(4,info.getItemId());
+            ps.setString(5,info.getItemTitle());
+            ps.setString(6,info.getToUserId());
+            ps.setString(7,info.getCreateUserName());
+            ps.setString(8,info.getUserId());
+            ps.setString(9,info.getOptTime());
+            ps.setInt(10,info.getRating());
+            ps.setString(11,info.getOrderId());
         });
         if(result > 0){
             return Contants.SUCCESS;
@@ -86,7 +83,7 @@ public class FeedbackDAOImpl extends BaseDAO implements FeedbackDAO {
     public List<Feedback> findFeedbackListByItemId(String itemId) {
         StringBuilder reviewSql = new StringBuilder("");
         List<Feedback> feedbackList = new ArrayList<>();
-        reviewSql.append("select * from t_feed_back where item_id = ?");
+        reviewSql.append("select * from t_feed_back where item_id = ? order by opt_time desc");
         if(StringUtils.isNotBlank(itemId)){
 
             feedbackList = getJdbcTemplate().query(reviewSql.toString(),new Object[]{itemId},new FeedbackMapper());

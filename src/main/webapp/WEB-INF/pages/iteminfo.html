@@ -50,7 +50,10 @@
 
             </div>
             <div class="content-padded">
+                <h5>我在企业实践该项目的时间、情景和结果数据证明</h5>
                 <p><div id="descriptionDiv"></div></p>
+                <h5>此次直约，我将提供的分享内容</h5>
+                <p><div id="practiceDescriptionDiv"></div></p>
             </div>
             <div class="card">
                 <div class="card-header"><h4>评价:</h4></div>
@@ -114,6 +117,7 @@
             //$('#scoreSp').text(response.item.score);
             $('#titleSp').text(response.item.title);
             $('#descriptionDiv').text(response.item.description);
+            $('#practiceDescriptionDiv').text(response.item.practiceDescription);
             $('#durationSp').text(response.item.duration);
             //$('#corpSp').text(response.userInfo.corp);
             //$('#nicknameSp').text(response.userInfo.nickName);

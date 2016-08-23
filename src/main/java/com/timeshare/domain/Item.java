@@ -18,9 +18,18 @@ public class Item extends BaseDomain{
     private int duration;
     private boolean recommend;
     private String notPassReason;
+    private String practiceDescription;
 
     //传值用
     private int remindCount;
+
+    public String getPracticeDescription() {
+        return practiceDescription;
+    }
+
+    public void setPracticeDescription(String practiceDescription) {
+        this.practiceDescription = practiceDescription;
+    }
 
     public String getNotPassReason() {
         return notPassReason;

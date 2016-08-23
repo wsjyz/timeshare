@@ -25,8 +25,9 @@ public class ItemDAOImpl extends BaseDAO implements ItemDAO {
 
     @Override
     public String saveItem(final Item info) {
-        StringBuilder sql = new StringBuilder("insert into t_item (item_id,title,price,score,description,item_type,use_count,create_user_id,opt_time,create_user_name,item_status,recommend,duration)" +
-                " values(?,?,?,?,?,?,?,?,?,?,?,?,?)");
+        StringBuilder sql = new StringBuilder("insert into t_item " +
+                "(item_id,title,price,score,description,item_type,use_count,create_user_id,opt_time,create_user_name,item_status,recommend,duration,practice_description)" +
+                " values(?,?,?,?,?,?,?,?,?,?,?,?,?,?)");
         int result = getJdbcTemplate().update(sql.toString(), new PreparedStatementSetter() {
             @Override
             public void setValues(PreparedStatement ps) throws SQLException {
@@ -43,6 +44,7 @@ public class ItemDAOImpl extends BaseDAO implements ItemDAO {
                 ps.setString(11,info.getItemStatus());
                 ps.setBoolean(12,info.isRecommend());
                 ps.setInt(13,info.getDuration());
+                ps.setString(14,info.getPracticeDescription());
             }
         });
         if(result > 0){
@@ -88,6 +90,9 @@ public class ItemDAOImpl extends BaseDAO implements ItemDAO {
         }
         if (sql.lastIndexOf(",") + 1 == sql.length()) {
             sql.delete(sql.lastIndexOf(","), sql.length());
+        }
+        if(StringUtils.isNotBlank(item.getPracticeDescription())){
+            sql.append(" practice_description = '"+item.getPracticeDescription()+"',");
         }
         sql.append(" where item_id='" + item.getItemId() + "'");
         int result = getJdbcTemplate().update(sql.toString());
@@ -225,6 +230,7 @@ public class ItemDAOImpl extends BaseDAO implements ItemDAO {
             item.setRecommend(rs.getBoolean("recommend"));
             item.setDuration(rs.getInt("duration"));
             item.setNotPassReason(rs.getString("notPassReason"));
+            item.setPracticeDescription(rs.getString("practice_description"));
             if(!excludeField.contains("remindCount")){
                 item.setRemindCount(rs.getInt("remindCount"));
             }
@@ -252,6 +258,7 @@ public class ItemDAOImpl extends BaseDAO implements ItemDAO {
             item.setRecommend(rs.getBoolean("recommend"));
             item.setDuration(rs.getInt("duration"));
             item.setNotPassReason(rs.getString("notPassReason"));
+            item.setPracticeDescription(rs.getString("practice_description"));
             itemDTO.setItem(item);
             itemDTO.setImgPath(rs.getString("image_url"));
             itemDTO.setImgType(rs.getString("image_type"));
