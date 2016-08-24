@@ -26,8 +26,8 @@ public class ItemDAOImpl extends BaseDAO implements ItemDAO {
     @Override
     public String saveItem(final Item info) {
         StringBuilder sql = new StringBuilder("insert into t_item " +
-                "(item_id,title,price,score,description,item_type,use_count,create_user_id,opt_time,create_user_name,item_status,recommend,duration,practice_description)" +
-                " values(?,?,?,?,?,?,?,?,?,?,?,?,?,?)");
+                "(item_id,title,price,score,description,item_type,use_count,create_user_id,opt_time,create_user_name,item_status,recommend,duration,practice_description,practice_time,item_to_object,item_value,item_catalog)" +
+                " values(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)");
         int result = getJdbcTemplate().update(sql.toString(), new PreparedStatementSetter() {
             @Override
             public void setValues(PreparedStatement ps) throws SQLException {
@@ -45,6 +45,10 @@ public class ItemDAOImpl extends BaseDAO implements ItemDAO {
                 ps.setBoolean(12,info.isRecommend());
                 ps.setInt(13,info.getDuration());
                 ps.setString(14,info.getPracticeDescription());
+                ps.setString(15,info.getPracticeTime());
+                ps.setString(16,info.getItemToObject());
+                ps.setString(17,info.getItemValue());
+                ps.setString(18,info.getItemCatalog());
             }
         });
         if(result > 0){
@@ -88,12 +92,25 @@ public class ItemDAOImpl extends BaseDAO implements ItemDAO {
         if(StringUtils.isNotBlank(item.getNotPassReason())){
             sql.append(" notPassReason = '"+item.getNotPassReason()+"',");
         }
-        if (sql.lastIndexOf(",") + 1 == sql.length()) {
-            sql.delete(sql.lastIndexOf(","), sql.length());
-        }
         if(StringUtils.isNotBlank(item.getPracticeDescription())){
             sql.append(" practice_description = '"+item.getPracticeDescription()+"',");
         }
+        if(StringUtils.isNotBlank(item.getPracticeTime())){
+            sql.append(" practice_time = '"+item.getPracticeTime()+"',");
+        }
+        if(StringUtils.isNotBlank(item.getItemToObject())){
+            sql.append(" item_to_object = '"+item.getItemToObject()+"',");
+        }
+        if(StringUtils.isNotBlank(item.getItemValue())){
+            sql.append(" item_value = '"+item.getItemValue()+"',");
+        }
+        if(StringUtils.isNotBlank(item.getItemCatalog())){
+            sql.append(" item_catalog = '"+item.getItemCatalog()+"',");
+        }
+        if (sql.lastIndexOf(",") + 1 == sql.length()) {
+            sql.delete(sql.lastIndexOf(","), sql.length());
+        }
+
         sql.append(" where item_id='" + item.getItemId() + "'");
         int result = getJdbcTemplate().update(sql.toString());
         if(result > 0){
@@ -125,11 +142,20 @@ public class ItemDAOImpl extends BaseDAO implements ItemDAO {
         return null;
     }
 
+    /**
+     * 我卖的
+     * @param item
+     * @param startIndex
+     * @param loadSize
+     * @return
+     */
     @Override
     public List<Item> findItemPage(Item item, int startIndex, int loadSize) {
         StringBuilder reviewSql = new StringBuilder("");
         //TODO sql need optimize ,two full table scan
-        reviewSql.append("select i.*,count(r.remind_id) remindCount from t_item i left join t_remind r on i.item_id = r.obj_id where 1=1 ");
+        reviewSql.append("select " +
+                "i.item_id,i.title,i.price,i.score,i.item_type,i.duration,i.item_status,i.use_count,i.recommend,i.create_user_id,i.opt_time,i.create_user_name,count(r.remind_id) remindCount " +
+                "from t_item i left join t_remind r on i.item_id = r.obj_id where 1=1 ");
         if(item != null){
             if (StringUtils.isNotEmpty(item.getTitle())) {
                 reviewSql.append(" and i.title ='"+item.getTitle()+"' ");
@@ -147,18 +173,25 @@ public class ItemDAOImpl extends BaseDAO implements ItemDAO {
         return itemList;
     }
 
+    /**
+     * 首页的tab页用到的
+     * @param condition
+     * @param startIndex
+     * @param loadSize
+     * @return
+     */
     public List<Item> findSellItemListByCondition(String condition, int startIndex, int loadSize){
         StringBuilder sql = new StringBuilder("");
 
         if(condition.equals("recommend")){//推荐
-            sql.append("select * from t_item  " +
+            sql.append("select item_id,title,price,score,item_type,duration,item_status,use_count,recommend,create_user_id,opt_time,create_user_name from t_item  " +
                     " where recommend = true and item_status = '"+ Contants.ITEM_STATUS.for_sale+"' order by opt_time desc");
         }else if(condition.equals("new")){//最新
-            sql.append("select * from t_item where item_status = '"+ Contants.ITEM_STATUS.for_sale+"' order by opt_time desc");
+            sql.append("select item_id,title,price,score,item_type,duration,item_status,use_count,recommend,create_user_id,opt_time,create_user_name from t_item where item_status = '"+ Contants.ITEM_STATUS.for_sale+"' order by opt_time desc");
         }else if(condition.equals("hot")){//最火
-            sql.append("SELECT * FROM `t_item`  where  item_status = '"+ Contants.ITEM_STATUS.for_sale+"' and use_count > 0 order by use_count desc");
+            sql.append("SELECT item_id,title,price,score,item_type,duration,item_status,use_count,recommend,create_user_id,opt_time,create_user_name FROM `t_item`  where  item_status = '"+ Contants.ITEM_STATUS.for_sale+"' and use_count > 0 order by use_count desc");
         }else if(condition.equals("good")){//最优
-            sql.append("SELECT * FROM `t_item`  where  item_status = '"+ Contants.ITEM_STATUS.for_sale+"' and score > 0 order by score desc");
+            sql.append("SELECT item_id,title,price,score,item_type,duration,item_status,use_count,recommend,create_user_id,opt_time,create_user_name FROM `t_item`  where  item_status = '"+ Contants.ITEM_STATUS.for_sale+"' and score > 0 order by score desc");
         }
 
         List<String> excludeFields = new ArrayList<>();
@@ -172,7 +205,7 @@ public class ItemDAOImpl extends BaseDAO implements ItemDAO {
     public List<Item> findItemList(Item item, int startIndex, int loadSize) {
         StringBuilder reviewSql = new StringBuilder("");
 
-        reviewSql.append("select i.* from t_item i where 1=1 ");
+        reviewSql.append("select i.item_id,i.title,i.price,i.score,i.item_type,i.duration,i.item_status,i.use_count,i.recommend,i.create_user_id,i.opt_time,i.create_user_name from t_item i where 1=1 ");
         if(item != null){
 
             if (StringUtils.isNotEmpty(item.getItemStatus())) {
@@ -220,7 +253,9 @@ public class ItemDAOImpl extends BaseDAO implements ItemDAO {
             item.setCreateUserName(rs.getString("create_user_name"));
             item.setUserId(rs.getString("create_user_id"));
             item.setOptTime(rs.getString("opt_time"));
-            item.setDescription(rs.getString("description"));
+            if(doesColumnExist("description",rs)){
+                item.setDescription(rs.getString("description"));
+            }
             item.setItemStatus(rs.getString("item_status"));
             item.setPrice(rs.getBigDecimal("price"));
             item.setScore(rs.getBigDecimal("score"));
@@ -229,8 +264,29 @@ public class ItemDAOImpl extends BaseDAO implements ItemDAO {
             item.setUseCount(rs.getInt("use_count"));
             item.setRecommend(rs.getBoolean("recommend"));
             item.setDuration(rs.getInt("duration"));
-            item.setNotPassReason(rs.getString("notPassReason"));
-            item.setPracticeDescription(rs.getString("practice_description"));
+            if(doesColumnExist("notPassReason",rs)){
+                item.setNotPassReason(rs.getString("notPassReason"));
+            }
+            if(doesColumnExist("practice_description",rs)){
+                item.setPracticeDescription(rs.getString("practice_description"));
+            }
+
+            if(doesColumnExist("practice_time",rs)){
+                item.setPracticeTime(rs.getString("practice_time"));
+            }
+
+            if(doesColumnExist("item_to_object",rs)){
+                item.setItemToObject(rs.getString("item_to_object"));
+            }
+
+            if(doesColumnExist("item_value",rs)){
+                item.setItemValue(rs.getString("item_value"));
+            }
+
+            if(doesColumnExist("item_catalog",rs)){
+                item.setItemCatalog(rs.getString("item_catalog"));
+            }
+
             if(!excludeField.contains("remindCount")){
                 item.setRemindCount(rs.getInt("remindCount"));
             }
@@ -248,7 +304,9 @@ public class ItemDAOImpl extends BaseDAO implements ItemDAO {
             item.setCreateUserName(rs.getString("create_user_name"));
             item.setUserId(rs.getString("create_user_id"));
             item.setOptTime(rs.getString("opt_time"));
-            item.setDescription(rs.getString("description"));
+            if(doesColumnExist("description",rs)){
+                item.setDescription(rs.getString("description"));
+            }
             item.setItemStatus(rs.getString("item_status"));
             item.setPrice(rs.getBigDecimal("price"));
             item.setScore(rs.getBigDecimal("score"));
@@ -257,8 +315,29 @@ public class ItemDAOImpl extends BaseDAO implements ItemDAO {
             item.setUseCount(rs.getInt("use_count"));
             item.setRecommend(rs.getBoolean("recommend"));
             item.setDuration(rs.getInt("duration"));
-            item.setNotPassReason(rs.getString("notPassReason"));
-            item.setPracticeDescription(rs.getString("practice_description"));
+            if(doesColumnExist("notPassReason",rs)){
+                item.setNotPassReason(rs.getString("notPassReason"));
+            }
+
+            if(doesColumnExist("practice_description",rs)){
+                item.setPracticeDescription(rs.getString("practice_description"));
+            }
+
+            if(doesColumnExist("practice_time",rs)){
+                item.setPracticeTime(rs.getString("practice_time"));
+            }
+
+            if(doesColumnExist("item_to_object",rs)){
+                item.setItemToObject(rs.getString("item_to_object"));
+            }
+
+            if(doesColumnExist("item_value",rs)){
+                item.setItemValue(rs.getString("item_value"));
+            }
+
+            if(doesColumnExist("item_catalog",rs)){
+                item.setItemCatalog(rs.getString("item_catalog"));
+            }
             itemDTO.setItem(item);
             itemDTO.setImgPath(rs.getString("image_url"));
             itemDTO.setImgType(rs.getString("image_type"));

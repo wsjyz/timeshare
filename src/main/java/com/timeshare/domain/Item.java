@@ -20,8 +20,54 @@ public class Item extends BaseDomain{
     private String notPassReason;
     private String practiceDescription;
 
+    private String practiceTime;
+    private String itemToObject;
+    private String itemValue;
+    private String itemCatalog;
+
     //传值用
     private int remindCount;
+    private String sellerDescription;
+
+    public String getPracticeTime() {
+        return practiceTime;
+    }
+
+    public void setPracticeTime(String practiceTime) {
+        this.practiceTime = practiceTime;
+    }
+
+    public String getItemToObject() {
+        return itemToObject;
+    }
+
+    public void setItemToObject(String itemToObject) {
+        this.itemToObject = itemToObject;
+    }
+
+    public String getItemValue() {
+        return itemValue;
+    }
+
+    public void setItemValue(String itemValue) {
+        this.itemValue = itemValue;
+    }
+
+    public String getItemCatalog() {
+        return itemCatalog;
+    }
+
+    public void setItemCatalog(String itemCatalog) {
+        this.itemCatalog = itemCatalog;
+    }
+
+    public String getSellerDescription() {
+        return sellerDescription;
+    }
+
+    public void setSellerDescription(String sellerDescription) {
+        this.sellerDescription = sellerDescription;
+    }
 
     public String getPracticeDescription() {
         return practiceDescription;

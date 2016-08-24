@@ -12,6 +12,109 @@
     <link rel="stylesheet" href="//g.alicdn.com/msui/sm/0.6.2/css/sm.min.css">
     <link rel="stylesheet" href="//g.alicdn.com/msui/sm/0.6.2/css/sm-extend.min.css">
     <link rel="stylesheet" href="${request.contextPath}/css/main.css">
+    <style rel="stylesheet">
+        body{font-family: Arial, Helvetica, sans-serif;}
+        .content{font-family: SimHei;}
+        /*--导航栏--*/
+        .bar{height: 1.9rem;}
+        .title{font-size: .8rem;line-height: 1.9rem;font-family: 'HiraginoSansGB W3';font-weight: 700;color: #000;}
+        .bar .icon{padding: .35rem .1rem;font-size: .9rem;}
+        .bar-nav~.content{top: 1.9rem;}
+        #headbackImg{object-fit: cover;vertical-align: top;}
+        .commentAvatarDiv{margin:0 auto;margin-top: 1.625rem;}
+        .nickNameSp-box span{display: inline-block;padding: 0 1.15rem;margin-top: .35rem;border-radius: .7rem;font-family: SimHei;font-size: .65rem;line-height: 1.4rem;color: #2d2d2d;background-color: #f8fcfe;box-shadow: 0 1px 5px rgba(0,0,0,.3);}
+        /*--预览界面--*/
+        .yl-panel h2{
+            font-family: SimHei;
+            font-size: .8rem;
+            font-weight: 400;
+            margin: .67em;
+            color: #000;
+        }
+        .yl-panel .direct-telephone-con{
+            position: absolute;
+            bottom: 0;
+            left: .75rem;
+            right: .75rem;
+            height: 2.7rem;
+            margin: 0;
+            border-top: 1px solid #dcdcdc;
+            background-repeat: no-repeat;
+            background-size: 1rem .9rem;
+            background-position: center;
+            background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACgAAAAjCAYAAADmOUiuAAAD0UlEQVRYhcWYXVLbSBSFz2mgKmBXWfIGwqwA7yC8pIqfBzwrwDuws4J4VhDNCiJWEOchlqr8EM8KolnBiA2AUiWZh5A+8yAkC/8Qm4A5T+7WtfrTVff9EfEbcsL0AELLgPsP2VmZMXdeRddv+X3dNbiOsTtSQ7dZm2KbRHvdxQTElAbWwE+O6v8+GaA7UkM/bzqUegT21wVbJAkDGfjJUe3zbwE6QXpOsD8LJikhObBkBMto6Q2MdYzQktAm0VoMqv4yjz4I2BymH0D25qBk/ORk959fPdwi5Q+MDsHD6rwl2ou8uRSwGWQfAXTKCcmz2vKS093Lx4DNgYbZGS36Va9aqJMc1y9+CegOs0/VQ2Cp1qqbel3Nr8VecrT3dzE2D/1BUvKccABwfVL7E4BfAkmeE066xfieB51w0jWSV8DJ4PA54apqBtl7AP1iXDimBHS+3Lw2xsazBpuAKyErh1JAfH1c+6N8xYY/exXbpcf+OXV1Un8naAwABPadMDsrAXV3YiUl2t7zNg1XcpDl2rToGABwhjdvSDoAQHLwmJz5VEqOap8FxDkL2rkHjaaxiBi8DNpUlEoGAwBGcsqr1iSr3MQJJ113mF43g0zFnDtSwx1m35pBJidIz2dt3SD7bzVClgxzcXBVUeoV28IZ3rwBAN1mZb6l2J61zTd+erDOOo8GFOlJSiQl3HkVAQC3awMJUX59+ppKWyBeNzoQyD1gaMd3c/2r49pfjwV/CrlB+rUoJgwAFB4AAGn9QvQp5Y7UKOAkRAYArt/yexkgiZbz5eb1SwHydlImDBKDaqD2pxfsi4Qad6SGpBLQWuOXgMlx/aLqxeYw/bBpOPyYjIvIAMlLTncv751i2a2OpDwGkb1q2bMBOL8IURKiq5P6O2AmzCSnu5cy7BRjI3nNIPvojtR4LjgnTA9yz01rUMlMY+jCPwXpuQH9YlyUPk8JVvFaCbOoBl0YqJPj+oUl2sXrrmaAdTPBIjAnnHRxO4nuwyGStuZq0JW7OitzCCE2xsZ5taFYgM/t2krVjxNmZ8bqUGS72sLmXmNnWX/8IKA7zL4VG9dSrbvPHP6snaQExJLemPvLmn0JA8n0HuoUlwJWW4BiD1ZT0GMlICYwtpS3Sl7eXnbBGNsvfhPwnXDSpVTA+ZYYGKEFYF9Su4xfC6E0phCt802msva8nDA9MGI1Pw+mYQARdvYON1V1zwFOI/ri7yjY2etssiW4B7gMLj9ppl/t+DelaV8cpOcUvOpeEhCL9Li1679UI0V3pAZ/ZH0RLYJjALBQDCJ6id54Vv8DL/AiZ79I4eoAAAAASUVORK5CYII=);
+        }
+        .direct-telephone-con:after{content: '';display: table;clear: both;}
+        .yl-panel .direct-telephone-con .col-50{
+            position: relative;
+            float: left;width: 50%;
+            min-height: 1px;
+            margin: 0;
+            box-sizing: border-box;
+            }
+        .yl-panel .direct-telephone-con span{
+        }
+        .yl-panel .row:first-child,
+        .yl-panel .row:first-child .col-100{
+            margin-left: 0;
+            width: 100%;
+            box-sizing: border-box;
+        }
+        .yl-panel .direct-telephone-con .col-50:first-child{
+            padding:.9rem 1rem .9rem 0;
+            font-size: .8rem;
+            line-height: .9rem;
+            text-align: right;
+        }
+        .yl-panel .direct-telephone-con .col-50:last-child{
+            padding: .9rem 0 .9rem 1rem;
+            font-size: .7rem;
+            line-height: .9rem;
+            text-align: left;
+        }
+        .yl-content{
+            position: relative;
+            padding-bottom: 2.7rem;
+            margin: .35rem;
+            margin-top: 3.2rem;
+            box-sizing: border-box;
+            border-radius: .1rem;
+            box-shadow: .05rem .1rem .15rem rgba(125,125,125,.2),-.05rem .1rem .15rem rgba(125,125,125,.2),0 .1rem .15rem rgba(125,125,125,.2);
+            background-color: #fff;
+        }
+            /*--导航栏处理--*/
+        .yl-content .bar{top: -3.2rem;left: -.75rem;right: -.75rem;}
+        .yl-content .content-padded{margin-top: 0;margin-left: 0;margin-right: 0;}
+        /*.yl-content .content-padded h5,*/
+        .yl-content .content-padded p,
+        .yl-content .content-padded div{
+            margin: 0;
+            font-family: SimHei;
+            font-size: .7rem;
+            font-weight: 400;
+            color: #3d4145;
+        }
+        /*.yl-content .content-padded h5:first-of-type{text-indent: 2em;}*/
+        .yl-content #titleSp{color: #000;}
+        /*--确认按钮--*/
+        .new-qr-btn{
+            display: block;
+            margin: 1rem 1.6rem;
+        }
+        .new-qr-btn .btn-link{
+            display: block;
+            height: 1.5rem;
+            line-height: 1.5rem;
+            font-size: .8rem;
+            font-family: SimHei;
+            font-weight: 700;
+            color: #fff;
+            letter-spacing: 2px;
+            background-color: #ffb359;
+            text-align: center;
+            border-radius: .25rem;
+        }
+    </style>
 </head>
 <body>
 <div class="page-group">
@@ -90,9 +193,29 @@
                             </div>
                         </div>
                     </li>
-
                         <li>
-                            <div class="card-header" style="font-size: 0.7rem">请描述您在企业实践该项目的时间、情景和结果数据证明</div>
+                            <div class="item-content">
+                                <div class="item-media"><i class="icon icon-form-name"></i></div>
+                                <div class="item-inner">
+                                    <div class="item-title label">项目实践时间：</div>
+                                    <div class="item-input">
+                                        <input type="text" placeholder="请填写项目实践时间" name="practiceTime" id="practiceTime" value="<#if item??>${item.practiceTime}<#else></#if>">
+                                    </div>
+                                </div>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="card-header" style="font-size: 0.7rem">项目对象所在行业、层级和特征</div>
+                            <div class="card-content">
+                                <div class="card-content-inner">
+                                    <div class="item-input">
+                                        <textarea name="itemToObject" id="itemToObject" style="width: 100%" placeholder="请填写"><#if item??>${item.itemToObject}<#else></#if></textarea>
+                                    </div>
+                                </div>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="card-header" style="font-size: 0.7rem">项目描述或特色</div>
                             <div class="card-content">
                                 <div class="card-content-inner">
                                     <div class="item-input">
@@ -102,11 +225,49 @@
                             </div>
                         </li>
                         <li>
-                            <div class="card-header" style="font-size: 0.7rem">请描述此次直约，您将提供的分享内容</div>
+                            <div class="card-header" style="font-size: 0.7rem">项目创造的价值（案例和数据为佳）</div>
+                            <div class="card-content">
+                                <div class="card-content-inner">
+                                    <div class="item-input">
+                                        <textarea name="itemValue" id="itemValue" style="width: 100%" placeholder="请填写"><#if item??>${item.itemValue}<#else></#if></textarea>
+                                    </div>
+                                </div>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="card-header" style="font-size: 0.7rem">直约分享内容描述（含其他补充说明）</div>
                             <div class="card-content">
                                 <div class="card-content-inner">
                                     <div class="item-input">
                                         <textarea name="practiceDescription" id="practiceDescription" style="width: 100%" placeholder="请填写"><#if item??>${item.practiceDescription}<#else></#if></textarea>
+                                    </div>
+                                </div>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="item-content">
+                                <div class="item-media"><i class="icon icon-form-gender"></i></div>
+                                <div class="item-inner">
+                                    <div class="item-title label">项目分类</div>
+                                    <div class="item-input">
+                                        <select name="itemCatalog" id="itemCatalog">
+                                            <option>培训管理</option>
+                                            <option>人才管理</option>
+                                            <option>企业教练</option>
+                                            <option>行动学习</option>
+                                            <option>绩效改进</option>
+                                            <option>微课制作与学习</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="card-header" style="font-size: 0.7rem">卖家介绍</div>
+                            <div class="card-content">
+                                <div class="card-content-inner">
+                                    <div class="item-input">
+                                        <textarea name="sellerDescription" id="sellerDescription" style="width: 100%" placeholder="请填写"><#if item??>${item.sellerDescription}<#else></#if></textarea>
                                     </div>
                                 </div>
                             </div>
@@ -125,28 +286,35 @@
     </div>
 </div>
 <div class="popup" style="background: #eee;">
-    <div class="content-block" >
+    <div class="content-block yl-content">
         <header class="bar bar-nav">
             <a class="icon icon-left pull-left back"></a>
             <h1 class="title">预览</h1>
         </header>
-        <div style="background: #fff;padding-right: 1rem;padding-left: 1rem" >
+        <div class="yl-panel">
             <div class="row">
                 <div class="col-100"><h2 style="color: #666;"><span id="titleSp"></span></h2></div>
             </div>
-            <div class="row" >
+            <div class="row direct-telephone-con" >
                 <div class="col-50" ><span id="priceSp"></span>元/次</div>
                 <div class="col-50" >约<span id="durationSp" ></span>分钟</div>
             </div>
 
         </div>
         <div class="content-padded">
-            <h5>我在企业实践该项目的时间、情景和结果数据证明</h5>
+            <h5>项目实践时间</h5>
+            <p><div id="practiceTimeDiv"></div></p>
+            <h5>项目对象所在行业、层级和特征</h5>
+            <p><div id="itemToObjectDiv"></div></p>
+            <h5>项目描述或特色</h5>
             <p><div id="descriptionDiv"></div></p>
-            <h5>此次直约，我将提供的分享内容</h5>
+            <h5>项目创造的价值</h5>
+            <p><div id="itemValueDiv"></div></p>
+            <h5>直约分享内容描述</h5>
             <p><div id="practiceDescriptionDiv"></div></p>
+            <h5>分类</h5>
+            <p><div id="itemCatalogDiv"></div></p>
         </div>
-
 
     </div>
 </div>
@@ -219,6 +387,11 @@
             $('#durationSp').text($('#durationId').val());
             $('#descriptionDiv').text($('#description').val());
             $('#practiceDescriptionDiv').text($('#practiceDescription').val());
+            $('#practiceTimeDiv').text($('#practiceTime').val());
+            $('#itemToObjectDiv').text($('#itemToObject').val());
+            $('#itemValueDiv').text($('#itemValue').val());
+            $('#itemCatalogDiv').text($('#itemCatalog').val());
+
             history.pushState(null, "预览", window.location.href+"#");
             $.popup('.popup');
         }
