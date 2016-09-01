@@ -8,14 +8,63 @@
     <link rel="shortcut icon" href="/favicon.ico">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <link rel="stylesheet" href="//g.alicdn.com/msui/sm/0.6.2/css/sm.min.css">
+    <link rel="stylesheet" href="//g.alicdn.com/msui/sm/0.6.2/css/sm-extend.min.css">
     <style type="text/css">
         .infinite-scroll-preloader {
             margin-top:-20px;
         }
-
+        body{font-family: Arial, Helvetica, sans-serif;}
+        /*==样式重写==*/
+            /*-导航-*/
+        .content{font-family: SimHei;}
+        .bar{height: 1.9rem;}
+        .title{font-size: .8rem;line-height: 1.9rem;font-family: 'HiraginoSansGB W3';font-weight: 700;color: #000;}
+        .bar .icon{padding: .35rem .1rem;font-size: .9rem;}
+        .bar-nav~.content{top: 1.9rem;}
+        #headbackImg{object-fit: cover;vertical-align: top;}
+        .commentAvatarDiv{margin:0 auto;margin-top: 1.625rem;}
+        .nickNameSp-box span{display: inline-block;padding: 0 1.15rem;margin-top: .35rem;border-radius: .7rem;font-family: SimHei;font-size: .65rem;line-height: 1.4rem;color: #2d2d2d;background-color: #f8fcfe;box-shadow: 0 1px 5px rgba(0,0,0,.3);}
+        
+        /*==新的样式==*/
+        /*-两按钮新样式-*/
+        .tab-link.button{padding: 1px;background-clip: content-box;}
+        .tab-link.jz-btn1{padding-right: 0;border-right-color: transparent;}
+        .tab-link.jz-btn2{padding-left: 0;border-left-color: transparent;}
+        /*-面板-*/
+        .card{margin-left: 0;margin-right: 0;font-family: SimHei;color: #1b1b1b;}
+        .list-block.media-list .item-title-row{border-bottom: 1px solid #e7e7e7;padding-left: 1.3rem;}
+        .list-block.media-list .item-title{font-size: .8rem;line-height: 1rem;padding-top: .3rem;padding-bottom: .5rem;}
+        .list-block .jz-title1{position: relative;font-size: .7rem;line-height: .9rem;padding: .65rem 0 .7rem 1.3rem;}
+        .list-block .jz-title1:after{content: '';position: absolute;left:1.3rem;right: 0;bottom: 0;height: 1px;background-color: #e7e7e7;}
+        .list-block .jz-title2{padding: .5rem 0 .05rem 1.3rem;}
+        .list-block .jz-title2 .jz-id-number{font-size: .7rem;color: #828282;}
+        .jz-orange1{color: #fc7f3b;}
+        .jz-orange2{color: #ffb359;}
+        /*--添加log--*/
+        .list-block.media-list .item-title-row,
+        .list-block .jz-title1,
+        .list-block .jz-title2{
+            background-clip: border-box;
+            background-repeat: no-repeat;
+        }
+        .list-block.media-list .item-title-row{
+            background-size: .95rem 1rem;
+            background-position: left top;
+            background-position: left top .3rem;
+            background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACYAAAAoCAYAAACSN4jeAAAABGdBTUEAALGPC/xhBQAAACBjSFJNAAB6JgAAgIQAAPoAAACA6AAAdTAAAOpgAAA6mAAAF3CculE8AAAABmJLR0QAAAAAAAD5Q7t/AAAACXBIWXMAAAsSAAALEgHS3X78AAAB60lEQVRYw+3YMU/VUBiH8d+twFKMKAsJE4txMESdXHDQxUHsqCOzMx+A3UWDOpjoSOJ4oguDkjg5CpNx8ROoEDmJ4WJwoJF677kY4r1tB56kaXp62v+Tt+2bth3HEeJFPMRtw2Udy4r886AJWUJmolyPYQV3MTHkZRErZcZRZoWxitA8bmAPz5FjdsiVqjJbZuxgqZR7r8i3jioW4lJZ3lXcB0W+g40Rim2UGcrMVayXLjpCXMBbjJeT3ijyxREK9RPia9wpt7q4lWG5IgUzQpyuUWoaM5WRcSxnWOiZehmPhXi1JrVHZWaVhY4Qu6oPwRFfsIszIxL6hUnMJfbtj+FgwIFzmuMg+/9zjIbWiqXurW1Ffr5WixC/Y6o6lKrYu1qlBmSmxKb+fZ6h05eZErvSgFhfZkeIe/7u/G2g29qnsrViqXaxo8inarUIcRvnqkOpin2oVWpAZmsvZUrsegMefZmn7eKktFYs1S6+KfL63vkhxK+4UB1KVexjrVIDMlNi2w2I9WWmxG42INaXedouTkprxVLtYleRn63VIsQfDj9+/9Dqt4teuZ8NiPVmZpnD3z5VrjUg1pvZ7QhxE/MNyBzHZoYnTVskeJphDS+aNqnwEmsdEOIk7uEBLkm3kVGyj094hleKfPc3DXZyPp1rq4QAAAAASUVORK5CYII=);}
+        .list-block .jz-title1{
+            background-size: .975rem;
+            background-position: left top;
+            background-position: left top .6rem;
+            background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACcAAAAnCAYAAACMo1E1AAAABGdBTUEAALGPC/xhBQAAACBjSFJNAAB6JgAAgIQAAPoAAACA6AAAdTAAAOpgAAA6mAAAF3CculE8AAAABmJLR0QAAAAAAAD5Q7t/AAAACXBIWXMAAAsSAAALEgHS3X78AAADEUlEQVRYw+2YT0gVQRzHP6svTaegyAwyJKQyiOqmJw/V0cPQyYroD50i6BIUJhgEFRRUh0C7RAadosN08VoQCAVBheRFpcwO0h/K5mn+ea/Dzr63b96+dZ9v3Tr4hWV+M9/fb/bLzsxvZtZB6Q7gBrAPWEMh5oEJQAH9SPGJBOGg9CSwNYLvGNCJFCNJiasCfkX0bQEeJiXME3cKeAGkcYfR/2Qt/3aUbkpKnAOA0o1AoxHrxz2gw2rbjxTvkhCXAkCKKWCqiFX6R0BM1nApoHYFNGWRIp0XVxrVIdwh4KqxawL4Od8HsEdkAciY9lRRnNIDQN9S4sKwGWgz9gyF89MB6oztzV8/6n122uJqTL+pSsRlfPYJQPvqAnhi7DvAcyv2FrAHeA1csbhO4BxwsxJxfjxFivyXU9rxcUNIMVjgrfQlY30J4LYYq7aKeLAupL42wN97b9CczvnH9eXqUHquoJ5HLUrbq7o6VxZzuS00LnF3ya9OKFy9Z4ADlv8OU+4F7ltca9zijoZwHRQncg/bgJOlAuMSd5bClFAP9Bm7Hxiy/HuAXcBb4LbFHfQExyNOiv6iNqU9cYNI8cziThtx40jxyOLwxMWzWpVeH1IXAREpq/Qjl6DjSiWZkHomwD8bpa+45txFlJ711f257TBKt1j+zabcidLdFtcehzh/fuoN8esyTxBagesluIFKxL0CLlcQH4YxYHD54qQYBoZXSBwQ34L4J+KcgLafSYlbalgXA9qOo/Tn/0HcZEDbtSSEwdLD+jgpIeWLk+Il7jF6NlJvMcOJ5KV0G24ibSX4prWKVURFtDnnwb22NZu4BWAUKcpLyko3ANtxF+Mi7oHz+/LFKV2Fu2rPU/iDcRroQYoHEfpwgAtAN4UnmhmgFyn67JCo4nYDH0qwaWADUswv0UcTUGpnWQQ22aMQdeNvDOHqCT6K22gI4aqBjXZjVHFxnF7Km99lvHSc4LsAwFfgd4Q+JoA/JbhpAv4PRhMnxUfc69oo7lbmPW+AI0ixEKGPb8AxYMTq4z3Q5f0w9OMvCoy5yqYWuGgAAAAASUVORK5CYII=);}
+        .list-block .jz-title2{
+            background-size: 1.025rem;
+            background-position: left top;
+            background-position: left top .55rem;
+            background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACkAAAApCAYAAACoYAD2AAAABGdBTUEAALGPC/xhBQAAACBjSFJNAAB6JgAAgIQAAPoAAACA6AAAdTAAAOpgAAA6mAAAF3CculE8AAAABmJLR0QAAAAAAAD5Q7t/AAAACXBIWXMAAAsSAAALEgHS3X78AAAD1klEQVRYw82ZT2gUVxzHP/uM0WRMikHRlOIfMCpG9GLVxDRC9dCT01Obi5BGBRUK0mLryYMeLIh6U/wboYsG6cHBk6ChirFSWwqSteou1KhEZattNs6uOuuMh7eTWVd33u66M/F72WXfvDefnd+8378XoVIZZjOwBugAFgItgAZ8BIwAJhAHbgFXgIvo2sNKbhUpE2wi0AX0AJ2AKGO2DVwGTgB96JpVXUjDjADdwE5gTiVPo0B3gd1AL7rmvD+kYbYAJ4H2KsAV6irQja7F/S7yN5dhfg38ERAguXX/xDC7KoM0zG3AaaAxIEBXDcApDPO78iDlhAOUu7EqVwTYh2F+X2ywEPAroC9EwHw5QBe6dqY4pGHOR76DDeMA6GoU+BRdu+3+4JlbupnecQYkd//eHA8ANXmD3fjs4sGOyQAkUjZf3nhZ9A5nl9Qyr9H774mUzajlMGo59P9r88v/dimgbcA3SMefM7eMJHfwcdTOunoAYk9tFl95XnT1wY7JtDYVdxrJjMP+2Et+Gn6lAh0CWtA1y12ti+pEkjcUjVtE4xaxpzbprAws0+si7Fk2iT2za1TTZ+e4xszdU21AgPV/u+FZfh6cV8OWRbUA7Fhay920w+Gk7xPtAX4WGObHyGQhcG1NZDl003ufv10wUTWlE8NsFsDnlJfNvDdoMiNN39okWK35umMBrBHAqrAAXZ1/kB37/sW0CarLOwWwKGzI2Ijnhj6pVwa2xQKYGzbkf3npbrMacpZApvuh6lbae5Iz65TboVEQfCr2li6ZymQ8Xw0CSIUNqdjRhRoVyMouVC2s90z8KKOM5SkB/BM25NQ8H/4wrTT9PQHcDBtyZZ5vzHdHRTQogIGwIdtnSMh01iklG7osgH5k2h6Kzi6pZXqd3Di/PVYCOkC/QNeGkfVvoFqtRbi2YhL6HJl4JTMOm28omxhX0bVhN1U7QgAx3M3m5zZGqK/x3E4y47D1+gsSltKAR8HLfk4jM+GqqrVJ0NokxgDTWYdo3KL91+ellBFDwClwk15dszDMXcDxYjOicWmaBwqXce5+lr+evOmsYyM2ibRTan3japfb1PJWk9XZALIIGm9dA9rdZlZh3b0AuM4HW3cDuYGNhOiSCuQAG/MB34aUoGeAH8YJ8sfCFgv49Xtk82gv4fSEHGA7urbvXYP+ALJveBSYEiDgM2ATutZX7IJSO71RYHkAgL8D69G1O34XqUtZ2SpuAzZQPYc/lFuvTQUIlZ8+bAA+K+lPerKRRyXHCOT04d3AzcBaZMx3z3GmIGumFPJdc89xBoALlZ7jvAZ7ni163vJVZQAAAABJRU5ErkJggg==);}
+        /*-end-*/
     </style>
-    <link rel="stylesheet" href="//g.alicdn.com/msui/sm/0.6.2/css/sm.min.css">
-    <link rel="stylesheet" href="//g.alicdn.com/msui/sm/0.6.2/css/sm-extend.min.css">
     <script src="//g.alicdn.com/sj/lib/zepto/zepto.min.js"></script>
 
 </head>
@@ -29,8 +78,8 @@
     <div class="content">
         <div class="content-block">
             <div class="buttons-row" style="margin-top: 1rem">
-                <a href="#ongoingTab" class="tab-link active button">进行中</a>
-                <a href="#finishTab" class="tab-link button">已完成</a>
+                <a href="#ongoingTab" class="tab-link active button jz-btn1">进行中</a>
+                <a href="#finishTab" class="tab-link button jz-btn2">已完成</a>
             </div>
             <div class="tabs">
                 <div id="ongoingTab" class="tab active infinite-scroll">
@@ -51,7 +100,6 @@
                 <div id="finishTab" class="tab infinite-scroll">
 
                     <div class="list-block media-list" style="margin-top:  0px;">
-
                     </div>
                     <!-- 加载提示符 -->
                     <div class="infinite-scroll-preloader">
@@ -121,8 +169,8 @@
                                                 '<div class="item-title-row">'+
                                                     '<div class="item-title">'+order.itemTitle+'</div>'+
                                                 '</div>'+
-                                                '<div class="item-subtitle">'+orderStatus+'</div>'+
-                                                '<div class="item-subtitle">订单ID：'+order.orderId+'</div>'+
+                                                '<div class="item-subtitle jz-title1">'+orderStatus+'</div>'+
+                                                '<div class="item-subtitle jz-title2">订单ID：<span class="jz-id-number">'+order.orderId+'</span></div>'+
                                                 remindHtml+
                                             '</div>'+
                                         '</li>'+

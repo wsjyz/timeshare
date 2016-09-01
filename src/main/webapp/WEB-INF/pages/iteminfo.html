@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <title>子项目详情</title>
+    <title>项目介绍</title>
     <meta name="viewport" content="initial-scale=1, maximum-scale=1">
     <link rel="shortcut icon" href="/favicon.ico">
     <meta name="apple-mobile-web-app-capable" content="yes">
@@ -13,6 +13,7 @@
     <link rel="stylesheet" href="//g.alicdn.com/msui/sm/0.6.2/css/sm-extend.min.css">
     <link rel="stylesheet" href="${request.contextPath}/css/main.css">
     <style type="text/css">
+        body{font-family: Arial, Helvetica, sans-serif;}
         .biaoqian{
             display: inline-block;
             width: 54px;
@@ -26,6 +27,100 @@
             background: #999999;
             font-size: 12px;
         }
+        /*==样式重写==*/
+            /*-导航-*/
+        .bar{height: 1.9rem;}
+        .title{font-size: .8rem;line-height: 1.9rem;font-family: 'HiraginoSansGB W3';font-weight: 700;color: #000;}
+        .bar .icon{padding: .35rem .1rem;font-size: .9rem;}
+        .bar-nav~.content{top: 1.9rem;}
+            /*-描述信息-*/
+        .content .row h2{margin: 0;padding-top: .4rem;padding-bottom: .4rem;padding-right: 3rem;font-size: .8rem;line-height: 1rem;}
+        .content .row h2 span,
+        .card .card-header h4 
+        {
+            font-family: SimHei;
+            font-size: .8rem;
+            font-weight: 400;
+            color: #000;
+        }
+        .content-padded{margin:0 .4rem 0 .4rem;padding: 0 1rem;background-color: #fff;border-radius: 0 0 .1rem .1rem/0 0 .1rem .1rem;}
+        .content-padded,.content-padded h5,.card-content .list-block{color: #3d4145;font-size: .7rem;font-family: SimHei;font-weight: 400;}
+        .content-padded p{margin: 0;}
+        .content .content-padded h5{margin: 0;}
+        .con-item-title{background: #fff;padding-left: 1rem;padding-right: 1rem;margin:.35rem .4rem 0 .4rem;border-radius:.1rem .1rem 0 0/.1rem .1rem 0 0;}
+        .content-padded,
+        .con-item-title{
+            box-shadow: .05rem .1rem .15rem rgba(125,125,125,.2),-.05rem .1rem .15rem rgba(125,125,125,.2),0 .1rem .15rem rgba(125,125,125,.2);
+        }
+        .direct-telephone-box{margin-top: .6rem;}
+        .direct-telephone-con{position: relative;
+            background-repeat: no-repeat;
+            background-size: 1.25rem;
+            background-clip: border-box;
+            background-position: bottom .7rem center; 
+            background-image: url(data:image/png;base64,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);}
+        .direct-telephone-con:before{
+            content: '';
+            position: absolute;
+            display: block;
+            width: 100%;
+            height: 1px;
+            background-color: #e1e1e1;
+        }
+        .direct-telephone-con:after{content: '';display: table;clear: both;}
+        .direct-telephone,
+        .communication-costs{
+            float: left;
+            display: block;
+            width: 50%;
+        }
+        .direct-telephone{padding: .9rem 1rem .9rem 0;}
+        .communication-costs{padding: .9rem 0 .9rem 1rem;}
+        .direct-telephone span{display: block;font-size: .8rem;line-height: .9rem;color: #000;vertical-align: middle;text-align: right;}
+        .communication-costs span{display: block;font-size: .6rem;line-height: .9rem;vertical-align: middle;text-align: left;}
+        .content .content-padded h5:first-of-type{text-indent: 2em;}
+        .content .content-padded p:first-of-type{text-indent: 2em;}
+        /*--评价--*/
+        .card .card-header h4{margin: 0;}
+        .card-header:after{
+            height: 2px;
+            padding: 0 .75rem;
+            box-sizing: border-box;
+            background-clip: content-box;
+        }
+        .card-content .list-block{padding: .75rem;box-sizing: border-box;text-indent: 2em;}
+        .card-content .list-block .item-content{text-indent: 0;}
+        .advisory-number{
+            position: absolute;
+            top: 0;
+            right: 0;
+            padding-left: 1.2rem;
+            font-family: SimHei;
+            font-size: .6rem;
+            min-height: 2.2rem;
+            padding: .5rem .75rem;
+            padding-right: 0;
+            color: #5f646e;
+            box-sizing: border-box;
+        }
+        .advisory-number span{margin-left: 2px;}
+            /*--按钮--*/
+        .bar.new-btn{
+            background-color: transparent;
+            position: static;
+        }
+        .bar.new-btn:before{content: '';height: 0;}
+        .bar.new-btn p{margin: 1rem 1.25rem;}
+        .new-btn .button.button-fill.button-big{height: 1.5rem;line-height: 1.5rem;font-size: .8rem;font-family: SimHei;font-weight: 700;color: #fff;letter-spacing: 2px;}
+        .box-shadow{box-shadow: .05rem .1rem .15rem rgba(125,125,125,.2),-.05rem .1rem .15rem rgba(125,125,125,.2),0 .1rem .15rem rgba(125,125,125,.2);}
+        .card.box-shadow{margin:.8rem .4rem;}
+        .icon-pen{
+            background-repeat: no-repeat;
+            background-clip: padding-box;
+            background-size: 1rem .9rem;
+            background-position: right .75rem bottom;
+            background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACgAAAAkCAYAAAD7PHgWAAAABGdBTUEAALGPC/xhBQAAACBjSFJNAAB6JgAAgIQAAPoAAACA6AAAdTAAAOpgAAA6mAAAF3CculE8AAAABmJLR0QAAAAAAAD5Q7t/AAAACXBIWXMAAAsSAAALEgHS3X78AAADi0lEQVRYw83XW4hXVRTH8Y+XMfWE2jEEMal5KMQI6U6BYFc7UBGVmVQUFpREl+deewqCoMtD2QUq6mHARMFTEFSmGGqhFJFlYE15qTyBdhw1x+lh7ZHxrzPzn+u/Defl7HX2/p7f2uuyJ/gfjbys23EzLsVnWDe51VAJbA6WYjEybMFuaClgXtbn4xLcgOWYgY+wpiqyvS0FzMv6XNyLJ7AQv+NlvI6uXrsJLQCbhTtwI67BfHyDN7GuKrJDfe3HTcG8rGcKdy7F3bg8TR3CL/gVWV7W01HjSFVk3WMOmJf1BMzCTXgSSxpMpiU152E7vkvPT6jHQ8HFeBDXo/0s8224ID0Xiig+hM4xBczLegGuw124DVPOYvYP9uFAenbjW+HuY4xykCR3TsPFeBgrMbPBrCdtvk+4chO2YmtVZEca1xxtBSfjfqzAorPAwb/YgfdEtdhTFVlXfwuOmoLJpctFCrlyEPO9SbVO4c4f8CM6G2FHrGBe1m0iAh/HU5g0gHkPjidlb8EJ7EpKHsF+fZL0qAAmuOdxJyYOYns4KbVDBMM27MHRBHa88YMRuTgv66vwrHDrjIbpCp/iSxGtkxLIXyJA9ldF9sdgewxLwRStl4nE+0A/ZidE6thUFdmO4YowLAXzsp6LF0S09veTPegWbnwLa6siOzjmgHlZz8NzImJnN/HJcZGAO9PPfI8ObB8ovfSOIbk4L+v5Ivk+gulNfjZFtFMLxRn8bSh7NgWYztwkkYSfEdWi2dHr6n14Be9WRXZgVAFF+liBZThvKAqIytGBD0R6GTRyhwSYl/U0UfQfwxVDWPtgAtqC9VWRbR3ijw0O2CedrMS1Tq8SXeI8/Ym54qwdS4odxVd4H5urIusZDlwzCk4VrdLtOKdh7gu8JqKyTRyD7jR3UpSuv0cCNyBgXtYT8ZA4e41dyTa8gw1VkZ0cCcCwAPOynoqrsQoL+kwdw068io/HGq5fQNFwPo2LGt7vwhtYKy42Yz7OAMzLejYK0Q71de12cTVcXxXZ4fGAOwMwRe2tIt/1wh0Vbl2NjsZ767gCit7uPqd3xDvxEsrxhjsNMLl2lbge9jYRa0S0bm4F3CnAdJtfgkcxRyTgz7G6KrKNrQA7BdinWixDLtryD/FiMx3vmAOKtuke0d99LYJhgyhhLR+ThXLtKPG2CIZxyXHNAi7Cz/gEG6si6x7ZkqM7/gPyrwp7ZuFCmQAAAABJRU5ErkJggg==);
+        }
     </style>
 </head>
 <body>
@@ -36,14 +131,14 @@
         <!-- 你的html代码 -->
         <header class="bar bar-nav">
             <a class="icon icon-left pull-left back"></a>
-            <h1 class="title">子项目详情</h1>
+            <h1 class="title">项目详情</h1>
         </header>
         <div class="content">
-            <div style="background: #fff;padding-left: 1rem;padding-right: 1rem" >
+            <div class="con-item-title">
                 <div class="row">
-                    <div class="col-100"><h2 style="color: #666;"><span id="titleSp"></span></h2></div>
+                    <div class="col-100" style="position:relative;"><h2 style="color: #666;"><span id="titleSp"></span></h2><div class="advisory-number">咨询人数<span class="number">0</span></div></div>
                 </div>
-                <div class="row" >
+                <div class="row" style="display:none;">
                     <div class="col-50" ><span id="priceSp"></span>元/次</div>
                     <div class="col-50" >约<span id="durationSp"></span>分钟</div>
                 </div>
@@ -54,9 +149,19 @@
                 <p><div id="descriptionDiv"></div></p>
                 <h5>此次直约，我将提供的分享内容</h5>
                 <p><div id="practiceDescriptionDiv"></div></p>
+                <div class="direct-telephone-box">
+                    <div class="direct-telephone-con">
+                        <div class="direct-telephone">
+                            <span>电话直连</span>
+                        </div>
+                        <div class="communication-costs">
+                            <span>50元/60分钟</span>
+                        </div>
+                    </div>
+                </div>
             </div>
-            <div class="card">
-                <div class="card-header"><h4>评价:</h4></div>
+            <div class="card box-shadow">
+                <div class="card-header icon-pen"><h4>课程评价</h4></div>
                 <div class="card-content">
                     <div class="list-block media-list" id="feedbackDiv">
 
@@ -64,11 +169,26 @@
                 </div>
 
             </div>
+            <!--===代替原来按钮===-->
+            <#if selfItem == "yes">
+                <#if itemStatus == "for_sale">
+                    <div class="bar new-btn bar-standard bar-footer" style="padding-top:0rem;height: 12%">
+                        <p><a href="#" id="undercarriageBtn" class="button button-fill button-danger button-big" style="top: -0.1rem;">下架</a></p>
+                    </div>
+                </#if>
+            <#else>
+                <div class="bar new-btn bar-standard bar-footer" style="padding-top:0rem;height: 12%">
+                    <p><a href="#" id="orderBtn" class="button button-fill button-danger button-big" style="top: -0.1rem;">立即预约</a></p>
+                </div>
+            </#if>
+        <!--
             <#if selfItem == "yes"><#else>
                 <div style="height: 12%">&nbsp;</div>
             </#if>
+            -->
         </div>
-
+        
+        <!--
         <#if selfItem == "yes">
             <#if itemStatus == "for_sale">
                 <div class="bar bar-standard bar-footer" style="padding-top:0rem;height: 12%">
@@ -80,7 +200,7 @@
                 <p><a href="#" id="orderBtn" class="button button-fill button-danger button-big" style="top: -0.1rem;">立即预约</a></p>
             </div>
         </#if>
-
+        -->
 
     </div>
 </div>

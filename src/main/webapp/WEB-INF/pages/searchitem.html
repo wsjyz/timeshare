@@ -19,6 +19,7 @@
     <link rel="apple-touch-icon-precomposed" href="/assets/img/apple-touch-icon-114x114.png">
     <script src="//g.alicdn.com/sj/lib/zepto/zepto.min.js"></script>
     <style type="text/css">
+        body{font-family: Arial, Helvetica, sans-serif;}
         .infinite-scroll-preloader {
             margin-top:-20px;
         }
@@ -41,6 +42,65 @@
             -moz-border-radius: 50%;
             -webkit-border-radius: 50%;
             transition: linear 0.25s;
+        }
+        .search-input input[type="search"]{padding-left: 1.4rem;}
+        /*-头像及字体-*/
+        .commentAvatarDiv,
+        .commentAvatarImage{
+            width: 65px;
+            height: 65px;
+            border-radius: 8px;
+        }
+        .list-block .item-title{
+            font-size: .75rem;
+            color: #000;
+        }
+        .list-block .item-subtitle{
+            font-size: .65rem;
+            line-height: 2em;
+        }
+        .list-block .item-text{
+            height: 20px;
+            padding-top: 3px;
+            padding-left: 25px;
+            margin-top: -3px;
+            font-size:.6rem;
+            color: #828282;
+            background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACgAAAAjCAYAAADmOUiuAAAD0UlEQVRYhcWYXVLbSBSFz2mgKmBXWfIGwqwA7yC8pIqfBzwrwDuws4J4VhDNCiJWEOchlqr8EM8KolnBiA2AUiWZh5A+8yAkC/8Qm4A5T+7WtfrTVff9EfEbcsL0AELLgPsP2VmZMXdeRddv+X3dNbiOsTtSQ7dZm2KbRHvdxQTElAbWwE+O6v8+GaA7UkM/bzqUegT21wVbJAkDGfjJUe3zbwE6QXpOsD8LJikhObBkBMto6Q2MdYzQktAm0VoMqv4yjz4I2BymH0D25qBk/ORk959fPdwi5Q+MDsHD6rwl2ou8uRSwGWQfAXTKCcmz2vKS093Lx4DNgYbZGS36Va9aqJMc1y9+CegOs0/VQ2Cp1qqbel3Nr8VecrT3dzE2D/1BUvKccABwfVL7E4BfAkmeE066xfieB51w0jWSV8DJ4PA54apqBtl7AP1iXDimBHS+3Lw2xsazBpuAKyErh1JAfH1c+6N8xYY/exXbpcf+OXV1Un8naAwABPadMDsrAXV3YiUl2t7zNg1XcpDl2rToGABwhjdvSDoAQHLwmJz5VEqOap8FxDkL2rkHjaaxiBi8DNpUlEoGAwBGcsqr1iSr3MQJJ113mF43g0zFnDtSwx1m35pBJidIz2dt3SD7bzVClgxzcXBVUeoV28IZ3rwBAN1mZb6l2J61zTd+erDOOo8GFOlJSiQl3HkVAQC3awMJUX59+ppKWyBeNzoQyD1gaMd3c/2r49pfjwV/CrlB+rUoJgwAFB4AAGn9QvQp5Y7UKOAkRAYArt/yexkgiZbz5eb1SwHydlImDBKDaqD2pxfsi4Qad6SGpBLQWuOXgMlx/aLqxeYw/bBpOPyYjIvIAMlLTncv751i2a2OpDwGkb1q2bMBOL8IURKiq5P6O2AmzCSnu5cy7BRjI3nNIPvojtR4LjgnTA9yz01rUMlMY+jCPwXpuQH9YlyUPk8JVvFaCbOoBl0YqJPj+oUl2sXrrmaAdTPBIjAnnHRxO4nuwyGStuZq0JW7OitzCCE2xsZ5taFYgM/t2krVjxNmZ8bqUGS72sLmXmNnWX/8IKA7zL4VG9dSrbvPHP6snaQExJLemPvLmn0JA8n0HuoUlwJWW4BiD1ZT0GMlICYwtpS3Sl7eXnbBGNsvfhPwnXDSpVTA+ZYYGKEFYF9Su4xfC6E0phCt802msva8nDA9MGI1Pw+mYQARdvYON1V1zwFOI/ri7yjY2etssiW4B7gMLj9ppl/t+DelaV8cpOcUvOpeEhCL9Li1679UI0V3pAZ/ZH0RLYJjALBQDCJ6id54Vv8DL/AiZ79I4eoAAAAASUVORK5CYII=);
+            background-clip: border-box;
+            background-repeat: no-repeat;
+            background-position: left bottom .1rem;
+            background-size: .8rem .7rem;
+            /*background-size: contain;*/
+        }
+        .list-block.media-list .item-inner{
+            padding-top: .6rem;
+            padding-bottom: .65rem;
+            font-family: SimHei;
+            box-sizing: border-box;
+        }
+        .list-block.media-list .item-media{
+            padding-top: .6rem;
+            padding-bottom: .65rem;
+        }
+        .list-block .item-link .item-inner{
+            background-size: .575rem .925rem;
+            background-image:url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABcAAAAlCAYAAACpmHIGAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAA3ZpVFh0WE1MOmNvbS5hZG9iZS54bXAAAAAAADw/eHBhY2tldCBiZWdpbj0i77u/IiBpZD0iVzVNME1wQ2VoaUh6cmVTek5UY3prYzlkIj8+IDx4OnhtcG1ldGEgeG1sbnM6eD0iYWRvYmU6bnM6bWV0YS8iIHg6eG1wdGs9IkFkb2JlIFhNUCBDb3JlIDUuNi1jMDY3IDc5LjE1Nzc0NywgMjAxNS8wMy8zMC0yMzo0MDo0MiAgICAgICAgIj4gPHJkZjpSREYgeG1sbnM6cmRmPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5LzAyLzIyLXJkZi1zeW50YXgtbnMjIj4gPHJkZjpEZXNjcmlwdGlvbiByZGY6YWJvdXQ9IiIgeG1sbnM6eG1wTU09Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC9tbS8iIHhtbG5zOnN0UmVmPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvc1R5cGUvUmVzb3VyY2VSZWYjIiB4bWxuczp4bXA9Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC8iIHhtcE1NOk9yaWdpbmFsRG9jdW1lbnRJRD0ieG1wLmRpZDo5ZTg3Yzg4Yi04ZmE1LWZkNGEtOWFjYy1jNzU2ZWMzYTQ3ZTAiIHhtcE1NOkRvY3VtZW50SUQ9InhtcC5kaWQ6NkUwMzAxMDk2NkVEMTFFNkFCMTZBNTRBNDIzQkE4RUYiIHhtcE1NOkluc3RhbmNlSUQ9InhtcC5paWQ6NkUwMzAxMDg2NkVEMTFFNkFCMTZBNTRBNDIzQkE4RUYiIHhtcDpDcmVhdG9yVG9vbD0iQWRvYmUgUGhvdG9zaG9wIENDIDIwMTUgKFdpbmRvd3MpIj4gPHhtcE1NOkRlcml2ZWRGcm9tIHN0UmVmOmluc3RhbmNlSUQ9InhtcC5paWQ6OWU4N2M4OGItOGZhNS1mZDRhLTlhY2MtYzc1NmVjM2E0N2UwIiBzdFJlZjpkb2N1bWVudElEPSJ4bXAuZGlkOjllODdjODhiLThmYTUtZmQ0YS05YWNjLWM3NTZlYzNhNDdlMCIvPiA8L3JkZjpEZXNjcmlwdGlvbj4gPC9yZGY6UkRGPiA8L3g6eG1wbWV0YT4gPD94cGFja2V0IGVuZD0iciI/Prk437gAAAK4SURBVHjarJZJaBRBFIZ7Oq2inlQwUSFoJILgQWS8CAqCIAhuCKII7kaMW9S44IIKuQjuO+pJ9KDEBQ/izYNLhAyuYDQHRS8mblGDF09+D/6GStsz02N3wceju6r+V/3q1av2vZhWKBRyXgbNL/K+Cgf9MxdHdAjmDCxM6yBu5XOhAfbA/DQO4sSfwnmog71pHPg2EaaGL/L5/EvMKbgI49I4sJXXw0Emr3McvFbcUzkw8W8wHc5GHHSkdeAj0qXN87J2kHNScCvmiB4bET7n9I3HrIc10AktcIsxfxJlCwOPYrZl+QV9UjFrB//keZYOYmtLVg6KFa5MHPilNiStA79crqZxkPhSYMImzAk9bkb4ZMw5WAlWm47BzYpuHESsoG3Q4zQcPHD6hmN2gh3Gd7DFr0C4VqfT2luYEhkyCMLqOhC6ggSiVZharbhBDiwk150x1QrZZLiv8vEmSLDokbAKltpq4LAJM/mnhGsw+2EOfLb6ZMLWF5RZdZ1WbAXruy6R2/BL/RO0eTPgscUc4Yfh/KCE8GiteBl8UcW8zOReZ1iThD9AM31trkZQQrjRWfEhSy0Tps+SYCLsUyhewQF4FtUJIqKBNs8OylroUSiuhTGmDYbdMA+ewxJdi15JcdoIhWIFdGvFrc7mjVUuL9D12FJMuI84E8dgNirdLBSnbfOY/EP99fqKmdo8S7cXpRIiUB2ocdKtW+l2Jdw8jWmW8CeLdznhsHANhV1gtaNXWdEKvyU8CXNHX9Qu+yjJqbawDIPZCsVxuOrEOFCtsBVbbFfrp8lLKm45vENZcMMRtgOyHRbDR6VbRyWFLiehAVZ4EO7R8yjMBZgFT6yUqnZ7FYtHcr0f5pI2175qOcJ3s/rLtdO3CNpk7/3vL3Tc8f+qG6WTFbdn+vOP4Hs77qoZqdpfAQYARmRPLak+tCYAAAAASUVORK5CYII=); 
+        }
+        /*--修复安卓下划线无法显示--*/
+        @media only screen and (-webkit-min-device-pixel-ratio: 2){
+               .buttons-tab:after {
+                    -webkit-transform: scaleY(1);
+                    transform: scaleY(1);
+                }
+                .list-block ul:before {
+                -webkit-transform: scaleY(0);
+                transform: scaleY(0);
+            }
+            .list-block ul:after {
+                -webkit-transform: scaleY(1);
+                transform: scaleY(1);
+            }
         }
     </style>
 </head>

@@ -12,6 +12,7 @@
     <link rel="stylesheet" href="//g.alicdn.com/msui/sm/0.6.2/css/sm.min.css">
     <link rel="stylesheet" href="//g.alicdn.com/msui/sm/0.6.2/css/sm-extend.min.css">
     <style>
+        body{font-family: Arial, Helvetica, sans-serif;}
         .commentAvatarDiv{
             width: 50px;
             height: 50px;
@@ -32,6 +33,49 @@
             -webkit-border-radius: 50%;
             transition: linear 0.25s;
         }
+         /*==style-reset==*/
+        .content{margin-top: .55rem;}
+        .card{margin:.4rem;}
+        .jz-header-photo{background-color: transparent;padding-left: 2rem;box-shadow: 0 0 0 0 rgba(0,0,0,0);padding-top: .1rem;}
+        .list-block .item-content{padding-left: 0;background:#fff;box-shadow: 0 .05rem .1rem rgba(0,0,0,.3);border-radius: 0 .1rem .1rem 0/0 .1rem .1rem 0;}
+        .list-block.media-list .item-media{padding: .15rem;border-radius: 50%;background:#fff;}
+        .jz-header-photo .item-title{font-size: .75rem;line-height: 1rem;font-family: SimHei;color: #000;}
+        .jz-header-photo .user-name{display: block;float: none;font-size: .6rem;line-height: .8rem;color: #828282;}
+        .jz-header-photo .user-expense{display: none;}
+        .jz-header-photo .user-datatime{display: block;float: none;font-size: .65rem;line-height: .8rem;font-family: SimHei;color: #828282;text-align: left;padding-top: .2rem;padding-left: .6rem;}
+        @media only screen and (max-width: 320px){.jz-header-photo .user-datatime{padding-left: .4rem;}}
+        .list-block .item-subtitle{margin: .3rem;margin-top: 0;margin-bottom: 0;}
+        .list-block.media-list .item-inner{padding-bottom: .1rem;padding-top: .4rem;}
+        .list-block.media-list .item-media{margin-top:-.4rem;margin-bottom: -.4rem;margin-left: -2rem;}
+        .list-block.media-list .item-media{box-shadow: 0 0 .2rem rgba(0,0,0,.3);}
+        /*--content-title--*/
+        .card-header{padding-top: .95rem;padding-left: 2rem;padding-bottom: .25rem;font-size: .75rem;min-height: 2rem;line-height: .8rem;color: #000;}
+        /*-分割线-*/
+        .card-header:after{padding: 0 .75rem;box-sizing: border-box;background-clip: content-box;transform: scaleY(1);}
+        .color{font-size: .7rem;color: #3d4145;}
+        /*-按钮reset-*/
+        .button-success.button-fill{background-color:#8ac832;}
+        .button-danger.button-fill{background-color: #ffb359;}
+        .button-success.button-fill:active{background-color: #9ce13a;}
+        .button-danger.button-fill:active{background-color: #f9a848;}
+        /*-输入框-*/
+        .list-block textarea{font-size: .7rem;color:#3d4145;text-indent: 1em;}
+        /*-背景小log-*/
+        .jz-bg-icon1{
+            background: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACgAAAAoCAYAAACM/rhtAAAABGdBTUEAALGPC/xhBQAAACBjSFJNAAB6JgAAgIQAAPoAAACA6AAAdTAAAOpgAAA6mAAAF3CculE8AAAABmJLR0QAAAAAAAD5Q7t/AAAACXBIWXMAAAsSAAALEgHS3X78AAAEUElEQVRYw82ZX2hbVRzHP/fm3rXJXRymae1oZ3FsrXN9ELc6BMFtT7sgkzHYv/ZRZLqsPqigKBWmT4pPtuDK8GnTDRTpdNy9aEXEYbsKgkybDaSxpWjbW2aWdE1uEh/uTfNnaXJPcjf8viX5nd/53N+555zf7xeJOhQyEjLQB+wDdgPdQAegOSYJYA6IAteBcWDS1LWs6FySIFgncAroB7YIzvUXcAEYMXVt1lPAkJFoAc4ALwIbRKNQphRwDhgydW2pYcCQkTgCjADhBsHKtQhETF27VBdgyEgowMfASY/ByvUJcNrUNcs1YMhIBIBLwPP3GS6vb4Cjpq4lawI6kfsSOPiA4PK6DBwuj6RSwXBYBK4/7KM3KBFUC88aT+f4wcxi3BY6VQ46c5e8UiURDBmJo8DFWp66VImPnlDZ0+ojoEhMLmS4FS/AtPsl9rT6ABiLWXz4p8VMOucW9ISpa5/fA+gcJX9QY7eeavfxZu+GNbCh31NMJO+dvEuVeOMxheNbVZJWjpcmV91G1AQeN3VtAUAu+uF9N3BnnmwioEiMz1scmFqtCAcwk84RiaYZnU4RUCRG+5rQN8m4UAh4rySCISPxKHALUNcb1aVK/PhcMwHFDvpT3664XrbpvX7CzRKLd3P0fL/iZkga2GbqWiz/SC9XgwM40e5bg5uJZ0XeKa79kwEg3CzRH/a5GaI6TMjOxT9Qa0SHv7CfElYt61LdsQoP0xt0ff0PhIyEnM9KOmtZX/k7Q9KZ6NfljBDgRqUANbviOvKdQJ8C7HdjbdzOcvinu2wPyFxYFAN8pq2wrJP/Cp2N+xRgl1vriWSOiaQY3HC3SrjZjuDXMWvdXb+OdstAj9CMgnDHt9p778ZylndvpkVd9CjAZq/B+sM+XutR6QrKJK0cYzGLSFQYDmCzAgS9hHtri8LrO+2cdnze4oObadFlLVZQqXdkNbiZeJa3f0uJJgsVpQBxoKVRR08HJF7pUbmxnGXgl1Whg7yK4jIw74WnQ4/YR4mHcADzMjDthadn2xR+Xsh4CQcwLQNTXnhq80tMmY2/c2W6LmMX1Q0r3CwRc3+NudW4DEwArgvpB6hZYFJ22hHnG/XWcjUpfEfX0HlT17L5fHAEu+L/vyjlMNkpv9MrOVePJ32TzPReP0sHAlzd1USXKtTuWU+f5vs3xUXCEFCzV1KuV7cVspW+Vh8nO11lzNW0BLyT/7AG6DRyIqLedj5cWghtf8hVYVRNg8VNpRJvpq5dBM6KeBuLleb/X801tFFGTV37rPiLSsnCIHYK5qq7EImmmVvJ0eGXuGZmG9nJl4HT5V9Wax59AeiNhENAV4AjlZpHFV8Yx/AFBJe7Tp0FDlWCA3cNzGPYfcL70cAcLO7DVFLNLedsnB3YjUYvDvOU42tHLTior4kewS70OwTB5rCv1GHPm+gVQPMF/37ssrUbu9De6Jjcwb7so9jp3HfU+TfEf2yNbDYkyiSnAAAAAElFTkSuQmCC) left .75rem top .8rem,
+            url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACgAAAAkCAYAAAD7PHgWAAAABGdBTUEAALGPC/xhBQAAACBjSFJNAAB6JgAAgIQAAPoAAACA6AAAdTAAAOpgAAA6mAAAF3CculE8AAAABmJLR0QAAAAAAAD5Q7t/AAAACXBIWXMAAAsSAAALEgHS3X78AAADi0lEQVRYw83XW4hXVRTH8Y+XMfWE2jEEMal5KMQI6U6BYFc7UBGVmVQUFpREl+deewqCoMtD2QUq6mHARMFTEFSmGGqhFJFlYE15qTyBdhw1x+lh7ZHxrzPzn+u/Defl7HX2/p7f2uuyJ/gfjbys23EzLsVnWDe51VAJbA6WYjEybMFuaClgXtbn4xLcgOWYgY+wpiqyvS0FzMv6XNyLJ7AQv+NlvI6uXrsJLQCbhTtwI67BfHyDN7GuKrJDfe3HTcG8rGcKdy7F3bg8TR3CL/gVWV7W01HjSFVk3WMOmJf1BMzCTXgSSxpMpiU152E7vkvPT6jHQ8HFeBDXo/0s8224ID0Xiig+hM4xBczLegGuw124DVPOYvYP9uFAenbjW+HuY4xykCR3TsPFeBgrMbPBrCdtvk+4chO2YmtVZEca1xxtBSfjfqzAorPAwb/YgfdEtdhTFVlXfwuOmoLJpctFCrlyEPO9SbVO4c4f8CM6G2FHrGBe1m0iAh/HU5g0gHkPjidlb8EJ7EpKHsF+fZL0qAAmuOdxJyYOYns4KbVDBMM27MHRBHa88YMRuTgv66vwrHDrjIbpCp/iSxGtkxLIXyJA9ldF9sdgewxLwRStl4nE+0A/ZidE6thUFdmO4YowLAXzsp6LF0S09veTPegWbnwLa6siOzjmgHlZz8NzImJnN/HJcZGAO9PPfI8ObB8ovfSOIbk4L+v5Ivk+gulNfjZFtFMLxRn8bSh7NgWYztwkkYSfEdWi2dHr6n14Be9WRXZgVAFF+liBZThvKAqIytGBD0R6GTRyhwSYl/U0UfQfwxVDWPtgAtqC9VWRbR3ijw0O2CedrMS1Tq8SXeI8/Ym54qwdS4odxVd4H5urIusZDlwzCk4VrdLtOKdh7gu8JqKyTRyD7jR3UpSuv0cCNyBgXtYT8ZA4e41dyTa8gw1VkZ0cCcCwAPOynoqrsQoL+kwdw068io/HGq5fQNFwPo2LGt7vwhtYKy42Yz7OAMzLejYK0Q71de12cTVcXxXZ4fGAOwMwRe2tIt/1wh0Vbl2NjsZ767gCit7uPqd3xDvxEsrxhjsNMLl2lbge9jYRa0S0bm4F3CnAdJtfgkcxRyTgz7G6KrKNrQA7BdinWixDLtryD/FiMx3vmAOKtuke0d99LYJhgyhhLR+ThXLtKPG2CIZxyXHNAi7Cz/gEG6si6x7ZkqM7/gPyrwp7ZuFCmQAAAABJRU5ErkJggg==) right .8rem top 1rem;
+            background-size:1rem,1rem .9rem; 
+        }
+        .jz-bg-icon2{
+            background: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACoAAAAxCAYAAACs0jsDAAAABGdBTUEAALGPC/xhBQAAACBjSFJNAAB6JgAAgIQAAPoAAACA6AAAdTAAAOpgAAA6mAAAF3CculE8AAAABmJLR0QAAAAAAAD5Q7t/AAAACXBIWXMAAAsSAAALEgHS3X78AAAFAElEQVRo3s2ZXYxcZR3Gf887s92yc8LObIIoMcEQjAUUDCSS9IKIApnZaop6YaB60WDUi8YUoYSUKMEPSBFKaL2pXnhBMAqVirTTYSVoQEgIiEFMiQQavgwJ4O7B3elut3Pex4u1Tbud3Z05O7Prc3n+H+/v/Tjv+b/vETlUPtAsqli8yHiDstZViCHAABhb4Z9Y+0X828Ro6XCeNuZL3QaMNKYvt32j8FeBgcV8bd5C/oVhT1pLPlgx0JGDMxsh7gGf3U2c7T9bA9emtcEP+w5aaRy5RI77QR/vvhljig9SGNg8cU3hWB7Q0IlTuTE1DOzJBzk3HiLb5Gzm5spY1lGbuUBl3Sz78nyQJ+fxrcCn+wJark+fK/jWciEBJJ2p7OiWvoCG4C8BH+0FKIDx18oHpod7DoqKFx/fInshwQjB63oO6qx1bo7tdolGfVmODrZXZaxVIGabFY/9GKlnUw9gcwjpd7buT0fP+HcnMcUFk8XpzwaHX6LejiaAxIXgCyCOAX/pJGbhqY+FoZ4TzuNFGujUeZE1qmcifB/zKr18m2ASeCHiey2e67xXS6hcnxoRvCTl/SqdKuO7JmrJ9m7jlnzr09FkXNJDvYAEmhaP5Ans9Lv7U8Mby6W0tTutJi/0DXS8Vho33mTzr9yQ+CHDjrzxXe095cbUekUelnROl5B7DTekteQ/KwIKUHn82AVks09IdAI7G637kG9Pa6WjeSFzgQKUG81qiN6HtHYRNxt+MlEr/XA5gMeVq4jFvAFkS3hF2S/1AjIXaOXg5CDSN5BKS7gWLF1ZqTcHewHa0dRXGs0LYc064uznkK8AXSQ4s4PQGZuXCforxKcUedmEVyZGh5aajc5BKweOFKX4FUtV4S8DZ/Wg3BsHPWHcMDyQ1kqtZYGO1Kc+b/QDiStYpMJajgxP27o3HR16NBdopTG7VXF2B9KafgDOUxbxLWkt2dkVaLk+dY/QVonCCkCekKW7Zf9ovFZqLuRzYlorjZntcuumlQQ8Ltm3MLcDbVvQB6BSn75GivuAfhfLiyrK16bVpO2aDZX6kbUQt6w2JICsneVGM2kLCnxS4srVhgQQfEJmY1tQo/VA0mXOfimAr25nKAbFS1eb7lTp/HJjqqgYNjh4LK2Wpv/XA+Jqo52kFvhJWT+T/HvsE5VXvuqpD7I9afl7QucLts7BaVv54OQ26NPnsXtK3rN0WzDrgetOshSE7q48fuzt/wfQw9G6M4iNzBU/p0joKHE2WVVQm9dtbZf8beCLp9nhXfB3JmrJY6sJ+ixwj+QtEl9oY3/feFNaS/4Eq7dGn41il/AdQp+ZbzQcNt6c1pKnjj9bcVDjXwN7FblT0ro29hctfTOtJodOfh5g5Uq6DD+YoUcxd7WFdHzeofDdtFo6NN8WInpzJQYys3ckhbAvCey29KnTIdlv6TeKcVO5MXXagTCQ6Q9AR7e++TE9hrhd5oaPrdVHhsKp95i29mI9Eqw7LN5Oq8lplxVBawb/4VC8DTzTL84Y+LnEeZOZr3p3xpw9KAqag7Wp2zyt4J3g34J2tctx4igyUp/cYAq3IhJ6d3ErzAcofh24Xmh3ZhgegEoR3ppml9GTwtssP5zWkvsXTjRP5fp0pYegAXMkhABuvYZ8DvB8i8KLw0X93bH1q8moQVnNdHRo0aNz7/8ktFHljx4ma1Y1d83+zngteb/bHP8F1bbub3XcNogAAAAASUVORK5CYII=) left .75rem top .6rem,
+            url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACgAAAAkCAYAAAD7PHgWAAAABGdBTUEAALGPC/xhBQAAACBjSFJNAAB6JgAAgIQAAPoAAACA6AAAdTAAAOpgAAA6mAAAF3CculE8AAAABmJLR0QAAAAAAAD5Q7t/AAAACXBIWXMAAAsSAAALEgHS3X78AAADi0lEQVRYw83XW4hXVRTH8Y+XMfWE2jEEMal5KMQI6U6BYFc7UBGVmVQUFpREl+deewqCoMtD2QUq6mHARMFTEFSmGGqhFJFlYE15qTyBdhw1x+lh7ZHxrzPzn+u/Defl7HX2/p7f2uuyJ/gfjbys23EzLsVnWDe51VAJbA6WYjEybMFuaClgXtbn4xLcgOWYgY+wpiqyvS0FzMv6XNyLJ7AQv+NlvI6uXrsJLQCbhTtwI67BfHyDN7GuKrJDfe3HTcG8rGcKdy7F3bg8TR3CL/gVWV7W01HjSFVk3WMOmJf1BMzCTXgSSxpMpiU152E7vkvPT6jHQ8HFeBDXo/0s8224ID0Xiig+hM4xBczLegGuw124DVPOYvYP9uFAenbjW+HuY4xykCR3TsPFeBgrMbPBrCdtvk+4chO2YmtVZEca1xxtBSfjfqzAorPAwb/YgfdEtdhTFVlXfwuOmoLJpctFCrlyEPO9SbVO4c4f8CM6G2FHrGBe1m0iAh/HU5g0gHkPjidlb8EJ7EpKHsF+fZL0qAAmuOdxJyYOYns4KbVDBMM27MHRBHa88YMRuTgv66vwrHDrjIbpCp/iSxGtkxLIXyJA9ldF9sdgewxLwRStl4nE+0A/ZidE6thUFdmO4YowLAXzsp6LF0S09veTPegWbnwLa6siOzjmgHlZz8NzImJnN/HJcZGAO9PPfI8ObB8ovfSOIbk4L+v5Ivk+gulNfjZFtFMLxRn8bSh7NgWYztwkkYSfEdWi2dHr6n14Be9WRXZgVAFF+liBZThvKAqIytGBD0R6GTRyhwSYl/U0UfQfwxVDWPtgAtqC9VWRbR3ijw0O2CedrMS1Tq8SXeI8/Ym54qwdS4odxVd4H5urIusZDlwzCk4VrdLtOKdh7gu8JqKyTRyD7jR3UpSuv0cCNyBgXtYT8ZA4e41dyTa8gw1VkZ0cCcCwAPOynoqrsQoL+kwdw068io/HGq5fQNFwPo2LGt7vwhtYKy42Yz7OAMzLejYK0Q71de12cTVcXxXZ4fGAOwMwRe2tIt/1wh0Vbl2NjsZ767gCit7uPqd3xDvxEsrxhjsNMLl2lbge9jYRa0S0bm4F3CnAdJtfgkcxRyTgz7G6KrKNrQA7BdinWixDLtryD/FiMx3vmAOKtuke0d99LYJhgyhhLR+ThXLtKPG2CIZxyXHNAi7Cz/gEG6si6x7ZkqM7/gPyrwp7ZuFCmQAAAABJRU5ErkJggg==) right .8rem top 1rem;
+            background-size: 1.05rem 1.25rem,1rem .9rem;
+        }
+        .jz-bg-icon1,
+        .jz-bg-icon2{
+            background-repeat: no-repeat;
+            background-clip: border-box;
+        }
     </style>
 </head>
 <body>
@@ -40,14 +84,14 @@
 <div class="page-group">
     <div class="page page-current">
         <div class="content">
-            <div class="card">
+            <div class="card jz-header-photo">
                 <div class="card-content">
                     <div class="list-block media-list">
                         <ul>
                             <li class="item-content">
                                 <div class="item-media">
-                                    <div class="commentAvatarDiv" style="width: 44px;height: 44px">
-                                        <img class="commentAvatarImage" src="${request.contextPath}/images/default_head.jpg" style="width: 44px;height: 44px"   >
+                                    <div class="commentAvatarDiv" style="width: 80px;height: 80px">
+                                        <img class="commentAvatarImage" src="${request.contextPath}/images/default_head.jpg" style="width: 80px;height: 80px"   >
                                     </div>
                                 </div>
                                 <div class="item-inner">
@@ -56,9 +100,9 @@
                                     </div>
                                     <div class="item-subtitle content-padded">
                                         <div class="row">
-                                            <div class="col-33"><span id="createUserNameSp" ></span></div>
-                                            <div class="col-33">&nbsp;</div>
-                                            <div class="col-34"><span id="priceSp" ></span>元/次</div>
+                                            <div class="col-33 user-name"><span id="createUserNameSp" ></span></div>
+                                            <div class="col-33 user-expense">&nbsp;</div>
+                                            <div class="col-34 user-datatime"><span id="priceSp" ></span>元/次</div>
                                         </div>
                                     </div>
                                 </div>
@@ -74,7 +118,7 @@
                 <div class="list-block cards-list">
                     <ul>
                         <li class="card">
-                            <div class="card-header">描述一下您的问题</div>
+                            <div class="card-header jz-bg-icon1">描述一下您的问题</div>
                             <div class="card-content">
                                 <div class="card-content-inner">
                                     <div class="item-input">
@@ -84,7 +128,7 @@
                             </div>
                         </li>
                         <li class="card">
-                            <div class="card-header">简单介绍一下自己</div>
+                            <div class="card-header jz-bg-icon2">简单介绍一下自己</div>
                             <div class="card-content">
                                 <div class="card-content-inner">
                                     <div class="item-input">

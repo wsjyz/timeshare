@@ -16,6 +16,7 @@
         body{font-family: Arial, Helvetica, sans-serif;}
         .content{font-family: SimHei;}
         /*--导航栏--*/
+        header.bar{z-index: 99;}
         .bar{height: 1.9rem;}
         .title{font-size: .8rem;line-height: 1.9rem;font-family: 'HiraginoSansGB W3';font-weight: 700;color: #000;}
         .bar .icon{padding: .35rem .1rem;font-size: .9rem;}
@@ -23,6 +24,80 @@
         #headbackImg{object-fit: cover;vertical-align: top;}
         .commentAvatarDiv{margin:0 auto;margin-top: 1.625rem;}
         .nickNameSp-box span{display: inline-block;padding: 0 1.15rem;margin-top: .35rem;border-radius: .7rem;font-family: SimHei;font-size: .65rem;line-height: 1.4rem;color: #2d2d2d;background-color: #f8fcfe;box-shadow: 0 1px 5px rgba(0,0,0,.3);}
+        /*--主页面--*/
+        .main-editor-page > .list-block > ul{background-color: transparent;}
+        .main-editor-page .item-list-title,.main-editor-page .item-child-title{background-color: #fff;}
+        .main-editor-page.content{top: .65rem;}
+        .main-editor-page .item-list-title .item-inner,
+        .main-editor-page .item-list-title .card-header{
+            padding: .35rem 1.25rem;
+            margin-left: 0;
+            font-size: .8rem;
+            font-family: SimHei;
+            font-weight: 400;
+            line-height: 1.5;
+            min-height: 1.2rem;
+            height: 1.9rem;
+            white-space: nowrap;
+            overflow: hidden;
+            color: #1b1b1b;
+        }
+        .item-list-title + .item-list-title,
+        .item-child-title + .item-list-title{
+            margin-top: .6rem;
+        }
+        .main-editor-page .item-content .main-title{height: 2.25rem;}
+        .main-editor-page .main-title .item-title{padding: .2rem 0;width: 30%;}
+        .main-editor-page .main-title input{font-family: SimHei;font-size: .7rem;font-weight: 400;height: 2.25rem;line-height: 2.25rem;vertical-align: bottom;}
+        .main-editor-page .item-content .item-title{margin:0;}
+        .main-editor-page .item-content{padding-left: 0;}
+        .main-editor-page .item-list-title .card-heade:after{height: 2px;}
+
+        .item-child-title .item-content .item-inner{
+            margin-left: 1.25rem;
+            padding-left: 2rem;
+        }
+        .item-child-title .item-title,
+        .item-child-title .item-input{
+            font-size: .75rem;
+            font-family: SimHei;
+            color: #1b1b1b;
+        }
+        .item-child-title .item-input input[type="text"]{font-size: .7rem;}
+        .item-child-title .item-input input[type="radio"]{position: absolute;clip: rect(0,0,0,0);width: 1px;height: 1px;overflow: hidden;margin: -1px;}
+        .item-child-title .item-input .col-45 span,.item-child-title .item-input .col-55 span{display: block;padding: .15rem .6rem;background-color: transparent;line-height: 1;border-radius: 3px;color: #828282;font-size: .65rem;box-sizing: border-box;border: 1px solid #828282;}
+        .item-child-title .item-input .col-45 input:checked+span,.item-child-title .item-input .col-55 input[checked]+span{background-color: #14B8F5;border-color:#14B8F5; color: #fff;}
+        .item-child-title .item-input .col-55{float: right;margin-right: 2rem;}
+        @media only screen and (max-width: 320px){
+            .item-child-title .item-input .col-55{margin-right: .5rem;}
+        }
+        #price{float: right;}
+        .item-list-title textarea{font-size: .7rem;font-weight: 400;padding-left: .5rem;padding-right: .5rem;}
+        .item-child-title .item-inner:after{margin-left: 2rem;}
+        .item-list-title .item-select{position: absolute;left: 0;right: 0;bottom: 0;height: 4.75rem;font-size: .65rem;}
+        .item-list-title .item-select input{position: absolute;clip: rect(0,0,0,0);width: 1px;height: 1px;overflow: hidden;margin: -1px;}
+        .item-list-title .item-select label{display: inline-block;padding: .15rem .6rem;background-color: transparent;line-height: 1;border-radius: 3px;color: #828282;font-size: .65rem;box-sizing: border-box;border: 1px solid #828282;}
+        @media only screen and (max-width:380px){
+            .item-list-title .item-select label{padding: .15rem .4rem;}
+        }
+        @media only screen and (max-width:340px){
+            .item-list-title .item-select label{padding: .15rem .2rem;}
+        }
+        .item-list-title .item-select input:checked+label{background-color: #14B8F5;border-color:#14B8F5; color: #fff;}
+        .item-list-title .item-select td{padding: .15rem;}
+        .item-list-title .item-select{padding-top: .6rem;padding-left: 1.25rem;}
+        .list-block .title-w-40-percent.item-title{width: 40%;}
+        @media only screen and (max-width: 320px){.list-block .title-w-40-percent.item-title{width: 45%;}}
+        .main-editor-page .box-shadow-bottom{box-shadow: 0 2px 2px rgba(0,0,0,.2);}
+        .bg-icon1 .item-inner,.bg-icon2 .item-inner,.bg-icon3 .item-inner{
+            background-clip: padding-box;
+            background-position: left .4rem center;
+            background-repeat: no-repeat;
+            background-size: 1.25rem;
+        }
+        .bg-icon1 .item-inner{background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADEAAAAyCAYAAAD1CDOyAAAABGdBTUEAALGPC/xhBQAAACBjSFJNAAB6JgAAgIQAAPoAAACA6AAAdTAAAOpgAAA6mAAAF3CculE8AAAABmJLR0QAAAAAAAD5Q7t/AAAACXBIWXMAAAsSAAALEgHS3X78AAAI/0lEQVRo3s2abXBU5RXHf89z792XXPKyYRNI0iUvDSAgMFQsghatFbtCp9UpM6hjFW0dqVR0am2HorUzTG0rptPxDaczFmrVtnQqjPbDQm2naKnDSJ0KGAICQSAQ5PISkhuyu/elH+6G7Cab5C5JnP4/Jbv3Off8zznPOWfP8whGAdGEqQJzgeuBK4ErgGpAB0qBDsAETgD7gT3AdmCXEdetkb5fjEBxAXwJuBe4LaNsoegANgMbgHeNuO5+JiSiCVMCdwKrgemXa4Q8aAZ+DrxuxHVnzEhEE+ZcYD1e6IwVdgHfNeL6rlElkYn5tcAPATmGBHrhAOuAx/3smWFJRBPmRGATXvyPCgQwKSx4uEFjWbVKII9Z3jhp8+vD6ff3dTlfN+J6+2WTiCbMemAb0DhaBMgQeGlWkKvLhnbqe+ccVu1NHjnR49504mb90GDPDSolmjAbgR1+CRQpENEE5ZqgTBOElPzPBSSsnqwNSwBgfkTy2Oe1unGq2JHRJy/yeiKaMCuAf/shEJAwbZzkjhqVayKSsCLoSLu8c9Zm80mbj02HVFau+doEhV9OC1AZ9J9T7vogybbT9kEXFhhx/fSwnogmTAX4k18Cd9aobLk6yLcnqcwoljQUCeaUSh6u19hydXBAzM+LKAURAFhUoRBSaAQ2ZfQbmgSwBvjycIIVAfFKhaenBxin5leqTBM8OVVjyQTvvSEFGooKr6+zSiRVQYEU3AA8PiSJaMK8EnjCj+DqkGB5TB02vZWqgntjGtUhwTerVOZFCs/Qc0olTTMCVAYEwOMZPQeSyLQRLwCqH8G1Ycm8MsXPo1xVKllapTK3VFKkFO4J24XZJZIKLwxV4IWMvrkkgFuAhX4FTwiKvPk9HwISygPwXGuaN9st7AI7pLcNm+98mKKl81KGWAgszkfix4UIDvlzwiXoiuBwt8uzrRYfm/5bo/NplydaUvzDsEnnkl+dQyKaML8AXFuIUnZBLRpIAZqA5k6HP5+w6baHX9Ntw9OH0rT15HXdtRm9L3ni7kIUEuA7lHoxRZfUFXmL1h9Js/5ImrOpwePqVNLlxSNpNhy1cupMP9wNIDIbpA2okgLmlEiWx1RujCoEFThsuuztdNh4zGL3BU9aNCBYe4XG0ipfOeAS1rSk2HDUuhQWK2pVHmvUKOmXojstl0ebU2w+Oay72oFqFe83QRXALZUKTdMDjA/0CZ1TKphdIjlkupdIVIUE4zXBfy84BAQ0FMm8e8R24f3zDq3dDrGwQFcEioR0RrfmLpezKSjpZ4vjPS67zvuK14nAdBW4EaBRl/xiWi6BXpi2i+V65hPAYdNhxe4U3Y5LZcCrF8uq1ZxKbKRc/nrK5tnWNMcu9oVNVUhQUyyoC0u+9TmV2jzFb6ouWVWvseOszUHT5XiPy/n0oKF3owrMCkj4foPKxEHagbQD7UlPiAuYtkcM4OhFl2cOpYkGBHfU9Jn0vXMOP92fwsxYvTwgWFguua1KZUFEUqYNXi+kgOUxleUxlWMXXf522ubNUzYfXnDosgaQmakCUyeFJbcOEd9Jx1M2G+NUwWRdMEWXNOqCGcW5O312ieT+Wo3fHrUo07zOtdA9BBALC+6bpHJ7jcqGY2l+84nFidxsdYUK1H8lKhnCMHTZLgdNb6Em4KoyyZIJKksqFWLh/AsnBgWlqvfb4cmpGjeML7Cw9EORAivrNGpCktX7Uhh9mS2mAuNnlwydLw+aLp2WyzjVi/8H61QqAkO3D5tOWDQdtlg7CgSycetEhfakxtoDqd7UWyaBcHVocIXOplw2t1sEJTxYp/LkFG1YAkbK5Q9tFgsikmU1hYfQcFhRqzKzL3yLVSAnT7tAe4/LP8/Y2C60dDm81W4zP6LwSIPm6yW7zjsc73FZVqMOGaYjwc0VCv/pcACkmjF2ee+XjgsfdDis2pvKWbR4guJboZNJF1VAbXiMGEB2aj4nAeNUsm+3K8J7INhvm0zW/Stku54cdew4ZOO0BA73S1nUF0nmRXI3oyxAIYEXlgX2iAXB6VO5VQLNLV25rwtIrwUZZNH/G5olsGPXeYfsQqgJWDheoo9eZhxL/EsC2w91O05/b8RCkkUVfSwKCW8Xb08olz90HxaqEOBF7DvSiOtn0g47t/Rre4OZcYzIXeQLjgudFtiMXQwmvYZ0pxHXz8iM5V7b0m7RmRVTMtNefDWzN/p7aijEwgLTctlujM3W7rFh66c2wKuQmWw4Ln88etFd98ZJO3xPrK/CFquCVfUaO885/P64RXVIML1YDrnJpYCwArGw5LU2r/m7JqKgyZEnByEgacPmdottp+2LeEO+vqCt3Go+N1mX33vri0EiWVXNdr0pxc8+To+JVUeA5424/hBkTTscl3X7u5zkS5/kHgcoAu6dpPKNibmpShUwrVgyq0TmkP6MkMQ7v/B07P2j+9WnOoruWqMfMN3r5pcrZDeFISmYXaqw54LXEwEsKFd4alqAxZUK15Ur1BZJum3vB/5ngCYjrv+l958cE0YTpg7smReR9a/MCVLez8J7Ox3WtKTYc8Hl+ZkegV64wJ4LDjvPOWxut/io0/E1lrkMtAIzjbhu5iWRIXItsP2emKo8Mz0wQMIB0+FAl8uiCmVAf9WLli6H5k6XB3YnR5uADVxvxPUd2R8Odj7xqCp45pEGjR81+mu/86Fia/dok/iBEdeb+n+Y15ZGXG+yXNb3ZiWrwDBPObCvgLriE+vzERiURAYPJR1+9+KRNI9+lGJfp3+lWrsdXjk24osC2XgZWDnYl8MdPErgV8DDc0olt1erLK1WBkzssvFp0uUn+9P83bCHmhUVgibgsaFuG/g9x14OvFCsiqK5pZLro97ZRIMukHhVusf2Zk2vt1m8e2bABPty0A2sNOL6xuEe9F2loglzBrCRsb1N0Iv3gPuNuP6Rn4d9z7YzAufjxWbbGCnfBjwAXOeXAFzmLZtowgwC9wGr8K4FjRQtwHPAy0ZcL7i4jLjpyVxaWQbcBMzCn3cdYDfwNrDJiOvvj0SHUe3cogkzAkzD804M7w6UjndhqwM4hmf1fUZcPzda7/0f3mAXrldLybUAAAAASUVORK5CYII=);}
+        .bg-icon2 .item-inner{background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADEAAAAyCAYAAAD1CDOyAAAABGdBTUEAALGPC/xhBQAAACBjSFJNAAB6JgAAgIQAAPoAAACA6AAAdTAAAOpgAAA6mAAAF3CculE8AAAABmJLR0QAAAAAAAD5Q7t/AAAACXBIWXMAAAsSAAALEgHS3X78AAAEqUlEQVRo3s2aX2gcRRzHP7u9UHOVSg0HQa0SkajxTwRji03TSulLHvbBFpQFg/9aa/ug4B9QEERQog/mQRFbIQrmYakQBBfMS6GaUJGaFmObGkNNqKl6UII2mislbdaHmYt3u3N7M3eb235h4Zib3/y+35nfb2Z2diwSROC7G4C7gbuAjcANwDpgEbgIzAFTwM+W4/2VlF8rAeJdwOPATuB+wNYwWwZ+Ao4AX1iO90PDRQS+uxZ4BngB0ev1Ygr4APjUcrzLqyoi8F0L2AO8CdycAPkwfgfeAgYtx1tOXETgu/cAnwBbVoF8GN8Bz1mON6lTWSd+CXz3KeB4gwQg/RyXfqsidiQC37WBAeDFBpFX4X3gVcvxAmMRge+uAQaBJ1MUUMQgsLeSkLhw+vAaEQDwLPBRpT+VIgLffQnYnzbzEPZLXhFEwinw3W7gW2BN2qwVuApstxzvWEURge82A6eB29NmG4MZ4D7L8QrFgnA4vX6NC0Dye620YGUkAt+9FfgFuC5tlhq4DLRbjvcbQKbkj5erCti4DTqfj5ZPDsHsiDmVpiz09EM2V16eH4fxgTjLtcAriL2bCKfAd1uAvVWdzo3CwrloefvuKBEdqOyWCjA9rGO9R/JeyYnHgGYtxz8eFI7CPdrRZyZg/W3Q1hstnx5Wd1QUzYhXgBUR+gwWzql7qrULWjr0RTygCMv5M6Zh+QSALYdks4klsyPCYRid+/Ts23rFSJRiqQATh4xoAJsD322xge1o7mbLMHEoGlbZnIjzOFSqM3EQChdMWdjANhvoNhYAwqEqrNp645O8o0/kUCny4+KpDVttwCCQQ1CFVVySt3aJpxRLBTEKtaPDBtrqaYHxgWhYqZK8krgJxWxnhjYbqGGCL0GlnuzcVx42qjVhdqSeMCoilwFuNDJ5+A29etmcyI/p4cprQkuHur3JId21AmBDRrdmmWNdtO+G86PqNQGi02wRTetMGC1ngEvortYQvyVoykZ7vKdfPRvF9fQlo6n2nwwwD9ySiAiA5lz5DBQWULiQRDKX4m8bmE2qNaA6QdUiWR/mMoh3iB5tE53EXlqMjgAI8u27gF3x9maJPZVBHOzqwySxw2jK6tmbJfapDHDUiIjeXl+9P5ob1Utas8Q+mgEmgTzQuuoizo+qd7+1Iw9M2vJU7XCSLTcQhy3HC4pb8M/TZlMjhkC+R1iOdxI4Vldzjcf3luOdWBEh0Z82K0O8W/xRKuJrYCxtZpoYA76KiJAJfgC4kjbDKrgCHCg95i97t7Yc7zTwdiKu5s9En6XFJFp+R/L8n3e4hvy4cgR4JOkuTADfADstx7saK0IKySE+/t2RNusSnAW2WI4XWc6VRzWyYi/wZ9rMJfJAr0pARRFSyFlgK/BrygJmgG7JR4nYQzPL8WakkLSm3jEpYCauUtWTP8vx8sAO4D3EnYxGYFn62yH9x3M0aTnw3YeAj4EHV1HACWC/yaUVozNY2fAmxCl6ontq2V4fsMn01k3NV4XkZZUe4GngUcTdJlNcBL4EPgPG4m4NrIqIkKAM0IVYIO8F7gRuAq4H1gMLwL/AH8A0cAqxcI1bjlf3Nuc/JGhg4enojCQAAAAASUVORK5CYII=);}
+        .bg-icon3 .item-inner{background-image: url(data:image/png;base64,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);}
         /*--预览界面--*/
         .yl-panel h2{
             font-family: SimHei;
@@ -38,7 +113,7 @@
             right: .75rem;
             height: 2.7rem;
             margin: 0;
-            border-top: 1px solid #dcdcdc;
+            border-top: 2px solid #dcdcdc;
             background-repeat: no-repeat;
             background-size: 1rem .9rem;
             background-position: center;
@@ -59,6 +134,10 @@
             margin-left: 0;
             width: 100%;
             box-sizing: border-box;
+        }
+        .yl-panel .row:first-child .col-100{
+            text-align: center;
+            border-bottom: 2px solid #e1e1e1;
         }
         .yl-panel .direct-telephone-con .col-50:first-child{
             padding:.9rem 1rem .9rem 0;
@@ -83,8 +162,8 @@
             background-color: #fff;
         }
             /*--导航栏处理--*/
-        .yl-content .bar{top: -3.2rem;left: -.75rem;right: -.75rem;}
-        .yl-content .content-padded{margin-top: 0;margin-left: 0;margin-right: 0;}
+        .yl-content .bar{top: -3.2rem;left: -.35rem;right: -.35rem;}
+        .yl-content .content-padded{margin-top: 0;margin-left: 0;margin-right: 0;margin-bottom: 0;}
         /*.yl-content .content-padded h5,*/
         .yl-content .content-padded p,
         .yl-content .content-padded div{
@@ -96,6 +175,50 @@
         }
         /*.yl-content .content-padded h5:first-of-type{text-indent: 2em;}*/
         .yl-content #titleSp{color: #000;}
+        .yl-content .content-padded h5{
+            padding: .6rem 0 .6rem 1.6rem;
+            margin: 0;
+            margin-left: .5rem;
+            margin-right: 1.25rem;
+            font-size: .75rem;
+            line-height: 1em;
+            font-family: SimHei;
+            font-weight: 400;
+            color: #1b1b1b;
+            background-clip: padding-box;
+            background-repeat: no-repeat;
+            background-size: .5rem;
+            background-position: left .75rem center;
+            background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABQAAAAUCAYAAACNiR0NAAAABGdBTUEAALGPC/xhBQAAACBjSFJNAAB6JgAAgIQAAPoAAACA6AAAdTAAAOpgAAA6mAAAF3CculE8AAAABmJLR0QAAAAAAAD5Q7t/AAAACXBIWXMAAAsSAAALEgHS3X78AAABD0lEQVQ4y63Vv0rDUBQH4K9Xccle/DeJb6AOvkHGFq3voYOlPoBIu+pTpGjd+hCK4KxbSyF7BwuCQ4IECaLt/UGWm5yPS5JzbkNNmuP5BlrldYxtLDDBCx7wmKfJ4mdtowZro499v+cN3TxN7mvB5ni+hmtc+l/6uMrT5BPWKzeWwVRqut87bI7np8iWwKrp5GkybJQf4B27K4JT7AV0ImCwg7Og+DVipRVwFBE8DNiMCG4FRQdES8AsojcLeI0IPgWMIoKjoOiQSQRsiiyUI+giAniep8lHgDxNMgxWwAalIVQWe7hdArsra1E/YE9w428DtpenybC62Kh7spxAHbRxoGh8ihf/rDgCsroj4AvsIEUoolQwsAAAAABJRU5ErkJggg==);
+        }
+        .yl-content .content-padded .m-title-bg-icon{
+            background-size: 1rem;
+            background-position: left .25rem center;
+            background-image: url(data:image/png;base64,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);
+        }
+        .yl-content .content-padded div{
+            padding-left: 1.6rem;
+            padding-bottom: .75rem;
+            font-size: .65rem;
+            font-family: SimHei;
+            color: #595959;
+            border-bottom: 1px solid #e1e1e1;
+            margin-left: .5rem;
+            margin-right: 1.25rem;
+        }
+        .yl-content .content-padded .un-border{
+            border-width: 0;
+        }
+        .yl-content .content-padded .pos-r-b{
+            position: absolute;
+            top:2.9rem;
+            left: .75rem;
+            right: .75rem;
+            padding-bottom: .5rem;
+            padding-right: .75rem;
+            height: 1.4rem;
+            text-align: right;
+        }
         /*--确认按钮--*/
         .new-qr-btn{
             display: block;
@@ -121,9 +244,10 @@
     <div class="page page-current">
         <!-- 你的html代码 -->
         <header class="bar bar-nav">
-            <h1 class='title'>编辑项目</h1>
+            <a class="icon icon-left pull-left back"></a>
+            <h1 class='title'>项目编辑</h1>
         </header>
-        <div class="content">
+        <div class="content main-editor-page">
             <div class="list-block">
                 <ul>
                     <form method="post" action="/time/item/save">
@@ -156,56 +280,56 @@
                     <#else>
                     </#if>
 
-                    <li>
+                    <li class="item-list-title">
                         <div class="item-content">
                             <div class="item-media"><i class="icon icon-form-name"></i></div>
-                            <div class="item-inner">
-                                <div class="item-title label">话题名称：</div>
+                            <div class="item-inner main-title">
+                                <div class="item-title label">项目标题</div>
                                 <div class="item-input">
-                                    <input type="text" placeholder="请填写名称" name="title" id="titleId" value="<#if item??>${item.title}<#else></#if>">
+                                    <input type="text" placeholder="起个博人眼球的课程标题吧！" name="title" id="titleId" value="<#if item??>${item.title}<#else></#if>">
                                 </div>
                             </div>
                         </div>
                     </li>
-                    <li>
+                    <li class="item-child-title bg-icon1">
                         <div class="item-content">
                             <div class="item-media"><i class="icon icon-form-email"></i></div>
                             <div class="item-inner">
-                                <div class="item-title label">类型：</div>
+                                <div class="item-title label" style="width:25%;">类型：</div>
                                 <div class="item-input">
                                     <div class="row">
-                                        <div class="col-45"><input type="radio" name="itemType" value="tel"><span style="font-size: 14px;" class="itemType_tel">电话直连</span></div>
-                                        <div class="col-55"><input type="radio" name="itemType" value="meet"><span style="font-size: 14px;" class="itemType_meet">直约面对面</span></div>
+                                        <div class="col-45"><input type="radio" name="itemType" value="tel"><span style="font-size: 13px;" class="itemType_tel">电话直连</span></div>
+                                        <div class="col-55"><input type="radio" name="itemType" value="meet"><span style="font-size: 13px;" class="itemType_meet">沟通面对面</span></div>
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </li>
-                    <li>
+                    <li class="item-child-title bg-icon2">
                         <div class="item-content">
                             <div class="item-media"><i class="icon icon-form-password"></i></div>
                             <div class="item-inner">
-                                <div class="item-input">费用：<input type="text" id="price" name="price"
-                                                                  value="<#if item.price??>${item.price}<#else>50</#if>" style="width: 2rem;display: inline"/>元/次 </div>
-                                <div class="item-input">时间：<input type="text" name="duration" id="durationId"
-                                                                  value="<#if item.duration??>${item.duration}<#else>60</#if>" style="width: 2rem;display: inline">分钟</div>
+                                <div class="item-input" style="line-height:2.2rem;">计费方式：<input type="text" id="price" name="price"
+                                                                  value="<#if item.price??>${item.price}<#else>50</#if>" style="width: 1.5rem;display: inline"/></div>
+                                <div class="item-input" style="width:100%;font-size:.7rem;">元/<input type="text" name="duration" id="durationId"
+                                                                  value="<#if item.duration??>${item.duration}<#else>60</#if>" style="width: 1.5rem;display: inline;">分钟</div>
 
                             </div>
                         </div>
                     </li>
-                        <li>
+                        <li class="item-child-title box-shadow-bottom bg-icon3">
                             <div class="item-content">
                                 <div class="item-media"><i class="icon icon-form-name"></i></div>
                                 <div class="item-inner">
-                                    <div class="item-title label">项目实践时间：</div>
+                                    <div class="item-title label title-w-40-percent">项目实践时间：</div>
                                     <div class="item-input">
                                         <input type="text" placeholder="请填写项目实践时间" name="practiceTime" id="practiceTime" value="<#if item??>${item.practiceTime}<#else></#if>">
                                     </div>
                                 </div>
                             </div>
                         </li>
-                        <li>
-                            <div class="card-header" style="font-size: 0.7rem">项目对象所在行业、层级和特征</div>
+                        <li class="item-list-title box-shadow-bottom">
+                            <div class="card-header">项目对象所在行业、层级和特征</div>
                             <div class="card-content">
                                 <div class="card-content-inner">
                                     <div class="item-input">
@@ -214,8 +338,8 @@
                                 </div>
                             </div>
                         </li>
-                        <li>
-                            <div class="card-header" style="font-size: 0.7rem">项目描述或特色</div>
+                        <li class="item-list-title box-shadow-bottom">
+                            <div class="card-header">项目描述或特色</div>
                             <div class="card-content">
                                 <div class="card-content-inner">
                                     <div class="item-input">
@@ -224,8 +348,8 @@
                                 </div>
                             </div>
                         </li>
-                        <li>
-                            <div class="card-header" style="font-size: 0.7rem">项目创造的价值（案例和数据为佳）</div>
+                        <li class="item-list-title box-shadow-bottom">
+                            <div class="card-header">项目创造的价值（案例和数据为佳）</div>
                             <div class="card-content">
                                 <div class="card-content-inner">
                                     <div class="item-input">
@@ -234,22 +358,22 @@
                                 </div>
                             </div>
                         </li>
-                        <li>
-                            <div class="card-header" style="font-size: 0.7rem">直约分享内容描述（含其他补充说明）</div>
+                        <li class="item-list-title box-shadow-bottom">
+                            <div class="card-header">直约分享内容描述（含其他补充说明）</div>
                             <div class="card-content">
                                 <div class="card-content-inner">
                                     <div class="item-input">
-                                        <textarea name="practiceDescription" id="practiceDescription" style="width: 100%" placeholder="请填写"><#if item??>${item.practiceDescription}<#else></#if></textarea>
+                                        <textarea name="practiceDescription" id="practiceDescription" style="width: 100%" placeholder="请输入内容描述"><#if item??>${item.practiceDescription}<#else></#if></textarea>
                                     </div>
                                 </div>
                             </div>
                         </li>
-                        <li>
-                            <div class="item-content">
+                        <li class="item-list-title box-shadow-bottom">
+                            <div class="item-content" style="position:relative;padding-bottom:4.75rem;">
                                 <div class="item-media"><i class="icon icon-form-gender"></i></div>
                                 <div class="item-inner">
                                     <div class="item-title label">项目分类</div>
-                                    <div class="item-input">
+                                    <div class="item-input" style="display:none;">
                                         <select name="itemCatalog" id="itemCatalog">
                                             <option>培训管理</option>
                                             <option>人才管理</option>
@@ -260,14 +384,30 @@
                                         </select>
                                     </div>
                                 </div>
+                                <div class="item-select">
+                                    <table>
+                                        <tr>
+                                            <td><input type="radio" id="itemID1" name="manage"><label for="itemID1">领导力</label></td>
+                                            <td><input type="radio" id="itemID2" name="manage"><label for="itemID2">专业技能</label></td>
+                                            <td><input type="radio" id="itemID3" name="manage"><label for="itemID3">通用技能</label></td>
+                                            <td><input type="radio" id="itemID4" name="manage"><label for="itemID4">通用技能</label></td>
+                                        </tr>
+                                        <tr>
+                                            <td><input type="radio" id="itemID5" name="studied"><label for="itemID5">培训管理</label></td>
+                                            <td><input type="radio" id="itemID6" name="studied"><label for="itemID6">经验分享</label></td>
+                                            <td><input type="radio" id="itemID7" name="studied"><label for="itemID7">数据分析</label></td>
+                                            <td><input type="radio" id="itemID8" name="studied"><label for="itemID8">其他</label></td>
+                                        </tr>
+                                    </table>
+                                </div>
                             </div>
                         </li>
-                        <li>
-                            <div class="card-header" style="font-size: 0.7rem">卖家介绍</div>
+                        <li class="item-list-title box-shadow-bottom">
+                            <div class="card-header">卖家介绍</div>
                             <div class="card-content">
                                 <div class="card-content-inner">
                                     <div class="item-input">
-                                        <textarea name="sellerDescription" id="sellerDescription" style="width: 100%" placeholder="请填写"><#if item??>${item.sellerDescription}<#else></#if></textarea>
+                                        <textarea name="sellerDescription" id="sellerDescription" style="width: 100%" placeholder="卖家介绍"><#if item??>${item.sellerDescription}<#else></#if></textarea>
                                     </div>
                                 </div>
                             </div>
@@ -275,7 +415,7 @@
                     </form>
                 </ul>
             </div>
-            <div class="content-block">
+            <div class="content-block new-main-btn">
                 <div class="row">
                     <div class="col-33"><a href="#" class="button button-big button-fill button-danger" id="saveDraftBtn">保存草稿</a></div>
                     <div class="col-33"><a href="#" class="button button-big button-fill button-success" id="previewBtn">预览</a></div>
@@ -293,7 +433,7 @@
         </header>
         <div class="yl-panel">
             <div class="row">
-                <div class="col-100"><h2 style="color: #666;"><span id="titleSp"></span></h2></div>
+                <div class="col-100"><h2 style="color: #000;"><span id="titleSp"></span></h2></div>
             </div>
             <div class="row direct-telephone-con" >
                 <div class="col-50" ><span id="priceSp"></span>元/次</div>
@@ -302,8 +442,8 @@
 
         </div>
         <div class="content-padded">
-            <h5>项目实践时间</h5>
-            <p><div id="practiceTimeDiv"></div></p>
+            <h5 class="m-title-bg-icon">项目实践时间</h5>
+            <p><div id="practiceTimeDiv" class="pos-r-b"></div></p>
             <h5>项目对象所在行业、层级和特征</h5>
             <p><div id="itemToObjectDiv"></div></p>
             <h5>项目描述或特色</h5>
@@ -313,7 +453,7 @@
             <h5>直约分享内容描述</h5>
             <p><div id="practiceDescriptionDiv"></div></p>
             <h5>分类</h5>
-            <p><div id="itemCatalogDiv"></div></p>
+            <p><div id="itemCatalogDiv" class="un-border"></div></p>
         </div>
 
     </div>
