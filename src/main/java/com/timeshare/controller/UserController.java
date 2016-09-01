@@ -109,9 +109,10 @@ public class UserController extends BaseController{
         return Contants.SUCCESS;
     }
 
-    @RequestMapping(value = "/to-view-items/{userId}")
-    public String toViewUserItems(@PathVariable String userId, Model model) {
+    @RequestMapping(value = "/to-view-items/{userId}/{itemId}")
+    public String toViewUserItems(@PathVariable String userId,@PathVariable String itemId, Model model) {
         model.addAttribute("userId",userId);
+        model.addAttribute("itemId",itemId);
         return "useritems";
     }
     @RequestMapping(value = "/get-user-items")
@@ -129,8 +130,8 @@ public class UserController extends BaseController{
         Item params = new Item();
         params.setUserId(userId);
         params.setItemStatus(Contants.ITEM_STATUS.for_sale.toString());
-        //TODO 最大显示10个项目
-        List<Item> items = itemService.findItemPage(params,0,10);
+
+        List<Item> items = userService.getUserItems(params,request.getParameter("itemId"));
         userInfo.setUserItemList(items);
         return userInfo;
     }

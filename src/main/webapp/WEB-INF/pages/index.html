@@ -304,8 +304,8 @@
 <script src="//g.alicdn.com/msui/sm/0.6.2/js/sm-extend.min.js"></script>
 <script>
 	// setTimeout(startInit, 300);
-    function toViewUserItem(id){
-        window.location.href = "${request.contextPath}/user/to-view-items/"+id;
+    function toViewUserItem(userId,itemId){
+        window.location.href = "${request.contextPath}/user/to-view-items/"+userId+"/"+itemId;
     }
 	    $(document).on("pageInit", function() {
 	        var searchHeight = $('.bar-header-secondary').css('height');
@@ -337,7 +337,7 @@
 	                }
 	                html += '<ul>'+
 	                            '<li>'+
-	                                '<a href="#" class="item-link item-content" onclick="toViewUserItem(\''+item.item.userId+'\')">'+
+	                                '<a href="#" class="item-link item-content" onclick="toViewUserItem(\''+item.item.userId+'\',\''+item.item.itemId+'\')">'+
 	                                    '<div class="item-media">' +
 	                                        '<div class="commentAvatarDiv">' +
 	                                            '<img class="commentAvatarImage" src="'+headPic+'" />' +
@@ -489,15 +489,15 @@
         $(".swiper-pagination").empty();
         for(var i = 0; i< 3;i++){
             var n = Math.floor(Math.random() * headPicArr.length + 1)-1;
-            html += htmlDomObj.a+headPicArr[n]+htmlDomObj.b+datas[i].item.userId+htmlDomObj.c+datas[i].item.title+htmlDomObj.d;
+            html += htmlDomObj.a+headPicArr[n]+htmlDomObj.b+datas[i].item.userId+htmlDomObj.c+htmlDomObj.d;
         }
         return html;
     }
     XhskSwiper.prototype._htmlDom=function(){
         var htmlDomObj={
             a:'<div class="swiper-slide"><img  src="${request.contextPath}/images/headback',
-            b:'.jpg"  style="width: 100%;height: 240px;" onclick="toViewUserItem(\'',
-            c:'\')"><div  style="position: absolute;right: 10px;width: 70%;bottom: 20px;z-index: 999;font-weight: bold;color: #ffffff">',
+            b:'.jpg"  style="width: 100%;height: 240px;" ',
+            c:'"><div  style="position: absolute;right: 10px;width: 70%;bottom: 20px;z-index: 999;font-weight: bold;color: #ffffff">',
             d:'</div></div>'
         }
         return htmlDomObj;
