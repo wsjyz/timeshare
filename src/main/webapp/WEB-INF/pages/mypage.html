@@ -228,18 +228,18 @@
             </div>
             <div class="content-block-title" >帮助</div>
             <div class="list-block" style="margin: 0px;">
+                <!--<ul>-->
+                    <!--<a href="#">-->
+                        <!--<li class="item-content bg-icon-5 item-link">-->
+                            <!--<div class="item-media"><i class="icon icon-f7"></i></div>-->
+                            <!--<div class="item-inner">-->
+                                <!--<div class="item-title">使用帮助</div>-->
+                            <!--</div>-->
+                        <!--</li>-->
+                    <!--</a>-->
+                <!--</ul>-->
                 <ul>
-                    <a href="#">
-                        <li class="item-content bg-icon-5 item-link">
-                            <div class="item-media"><i class="icon icon-f7"></i></div>
-                            <div class="item-inner">
-                                <div class="item-title">使用帮助</div>
-                            </div>
-                        </li>
-                    </a>
-                </ul>
-                <ul>
-                    <a href="#">
+                    <a href="#" id="connectUsBtn">
                         <li class="item-content bg-icon-6 item-link">
                             <div class="item-media"><i class="icon icon-f7"></i></div>
                             <div class="item-inner">
@@ -249,7 +249,7 @@
                     </a>
                 </ul>
                 <ul>
-                    <a href="#">
+                    <a href="#" id="sysfeecbackBtn">
                         <li class="item-content bg-icon-7 item-link">
                             <div class="item-media"><i class="icon icon-f7"></i></div>
                             <div class="item-inner">
@@ -314,6 +314,12 @@
     } );
     $("body").on( "click", "#toUserInfoBtn", function(){
         window.location.href = "${request.contextPath}/user/to-userinfo";
+    } );
+    $("body").on( "click", "#sysfeecbackBtn", function(){
+        window.location.href = "${request.contextPath}/sys/to-feedback";
+    } );
+    $("body").on( "click", "#connectUsBtn", function(){
+        window.location.href = "${request.contextPath}/sys/to-connect-us";
     } );
     $.init();
 </script>
