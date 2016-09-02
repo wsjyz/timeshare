@@ -488,8 +488,8 @@
         $(".swiper-wrapper").empty();
         $(".swiper-pagination").empty();
         for(var i = 0; i< 3;i++){
-            var n = Math.floor(Math.random() * headPicArr.length + 1)-1;
-            html += htmlDomObj.a+headPicArr[n]+htmlDomObj.b+datas[i].item.userId+htmlDomObj.c+htmlDomObj.d;
+            //var n = Math.floor(Math.random() * headPicArr.length + 1)-1;
+            html += htmlDomObj.a+headPicArr[i]+htmlDomObj.b+datas[i].item.userId+htmlDomObj.c+htmlDomObj.d;
         }
         return html;
     }
