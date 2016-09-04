@@ -14,6 +14,10 @@
     <link rel="stylesheet" href="${request.contextPath}/css/img.css">
     <style rel="stylesheet">
         body{font-family: Arial, Helvetica, sans-serif;}
+        .commentAvatarDiv {
+		    margin: 0 auto;
+		    margin-top: 1.625rem;
+		}
         #headbackImg {
             object-fit: cover;
             vertical-align: top;
@@ -76,14 +80,14 @@
         .bar-tab .tab-item.active .tab-label,.bar-tab .tab-label:active{color: #12B7F5;}
         .bar-tab .tab-item.addactive .tab-label{color: #12B7F5;}
         .bar-tab .tab-label{
-            display: block;
+            display: inline-block;
             padding: .45rem 0 .45rem 1.2rem;
             /*height: 100%;*/
             font-size: .75rem;
             line-height: 1.1rem;
             text-align: left;
             margin-top: -1px;
-            margin-left: 1rem;
+            /*margin-left: 1rem;*/
             box-sizing: border-box;
         }
         .buy-time,.sell-time,.my-time{background-repeat: no-repeat;background-size: auto 1.1rem;background-position: left center;-webkit-user-select:none;user-select:none;}
@@ -136,6 +140,12 @@
             background-size: .575rem .925rem;
             background-position: right 1.2rem center;
             background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABcAAAAlCAYAAACpmHIGAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAA3ZpVFh0WE1MOmNvbS5hZG9iZS54bXAAAAAAADw/eHBhY2tldCBiZWdpbj0i77u/IiBpZD0iVzVNME1wQ2VoaUh6cmVTek5UY3prYzlkIj8+IDx4OnhtcG1ldGEgeG1sbnM6eD0iYWRvYmU6bnM6bWV0YS8iIHg6eG1wdGs9IkFkb2JlIFhNUCBDb3JlIDUuNi1jMDY3IDc5LjE1Nzc0NywgMjAxNS8wMy8zMC0yMzo0MDo0MiAgICAgICAgIj4gPHJkZjpSREYgeG1sbnM6cmRmPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5LzAyLzIyLXJkZi1zeW50YXgtbnMjIj4gPHJkZjpEZXNjcmlwdGlvbiByZGY6YWJvdXQ9IiIgeG1sbnM6eG1wTU09Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC9tbS8iIHhtbG5zOnN0UmVmPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvc1R5cGUvUmVzb3VyY2VSZWYjIiB4bWxuczp4bXA9Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC8iIHhtcE1NOk9yaWdpbmFsRG9jdW1lbnRJRD0ieG1wLmRpZDo5ZTg3Yzg4Yi04ZmE1LWZkNGEtOWFjYy1jNzU2ZWMzYTQ3ZTAiIHhtcE1NOkRvY3VtZW50SUQ9InhtcC5kaWQ6NkUwMzAxMDk2NkVEMTFFNkFCMTZBNTRBNDIzQkE4RUYiIHhtcE1NOkluc3RhbmNlSUQ9InhtcC5paWQ6NkUwMzAxMDg2NkVEMTFFNkFCMTZBNTRBNDIzQkE4RUYiIHhtcDpDcmVhdG9yVG9vbD0iQWRvYmUgUGhvdG9zaG9wIENDIDIwMTUgKFdpbmRvd3MpIj4gPHhtcE1NOkRlcml2ZWRGcm9tIHN0UmVmOmluc3RhbmNlSUQ9InhtcC5paWQ6OWU4N2M4OGItOGZhNS1mZDRhLTlhY2MtYzc1NmVjM2E0N2UwIiBzdFJlZjpkb2N1bWVudElEPSJ4bXAuZGlkOjllODdjODhiLThmYTUtZmQ0YS05YWNjLWM3NTZlYzNhNDdlMCIvPiA8L3JkZjpEZXNjcmlwdGlvbj4gPC9yZGY6UkRGPiA8L3g6eG1wbWV0YT4gPD94cGFja2V0IGVuZD0iciI/Prk437gAAAK4SURBVHjarJZJaBRBFIZ7Oq2inlQwUSFoJILgQWS8CAqCIAhuCKII7kaMW9S44IIKuQjuO+pJ9KDEBQ/izYNLhAyuYDQHRS8mblGDF09+D/6GStsz02N3wceju6r+V/3q1av2vZhWKBRyXgbNL/K+Cgf9MxdHdAjmDCxM6yBu5XOhAfbA/DQO4sSfwnmog71pHPg2EaaGL/L5/EvMKbgI49I4sJXXw0Emr3McvFbcUzkw8W8wHc5GHHSkdeAj0qXN87J2kHNScCvmiB4bET7n9I3HrIc10AktcIsxfxJlCwOPYrZl+QV9UjFrB//keZYOYmtLVg6KFa5MHPilNiStA79crqZxkPhSYMImzAk9bkb4ZMw5WAlWm47BzYpuHESsoG3Q4zQcPHD6hmN2gh3Gd7DFr0C4VqfT2luYEhkyCMLqOhC6ggSiVZharbhBDiwk150x1QrZZLiv8vEmSLDokbAKltpq4LAJM/mnhGsw+2EOfLb6ZMLWF5RZdZ1WbAXruy6R2/BL/RO0eTPgscUc4Yfh/KCE8GiteBl8UcW8zOReZ1iThD9AM31trkZQQrjRWfEhSy0Tps+SYCLsUyhewQF4FtUJIqKBNs8OylroUSiuhTGmDYbdMA+ewxJdi15JcdoIhWIFdGvFrc7mjVUuL9D12FJMuI84E8dgNirdLBSnbfOY/EP99fqKmdo8S7cXpRIiUB2ocdKtW+l2Jdw8jWmW8CeLdznhsHANhV1gtaNXWdEKvyU8CXNHX9Qu+yjJqbawDIPZCsVxuOrEOFCtsBVbbFfrp8lLKm45vENZcMMRtgOyHRbDR6VbRyWFLiehAVZ4EO7R8yjMBZgFT6yUqnZ7FYtHcr0f5pI2175qOcJ3s/rLtdO3CNpk7/3vL3Tc8f+qG6WTFbdn+vOP4Hs77qoZqdpfAQYARmRPLak+tCYAAAAASUVORK5CYII=);}
+        /*--xhsk-log--*/
+        .xhsk-fixed-log{position: absolute;z-index: 9;top: 0;right: 0;}
+        .xhsk-fixed-log .fixed-log-con{overflow: hidden;}
+        .xhsk-fixed-log .fixed-log-con,
+        .xhsk-fixed-log img{width:1.7rem;height: 1.7rem;font-size: 12px;}
+        .xhsk-fixed-log img{vertical-align: top;}
     </style>
 
 </head>
@@ -167,8 +177,14 @@
         <div class="content">
             <div style="position: relative;text-align: center">
                 <img id="headbackImg" style="width: 100%;height: 200px;"/>
-                <div style="position:absolute;top:20%;left: 50%;margin-left: -50px;">
+                <div style="position:absolute;top:0;right:0;bottom:0;left:0;">
                     <div class="commentAvatarDiv">
+                        <!-- 邂逅时刻log -->
+                        <div class="xhsk-fixed-log">
+                            <div class="fixed-log-con">
+                                <img src="/time/images/icon/logo.png" alt="邂逅时刻">
+                            </div>
+                        </div>
                         <img class="commentAvatarImage" src="${request.contextPath}/images/default_head.jpg">
                     </div>
                     <div class="nickNameSp-box"><span id="nickNameSp"></span></div>
@@ -177,29 +193,30 @@
             <div class="content-block-title">订单明细</div>
             <div class="list-block">
                 <ul>
-                    <a href="#" id="toSellerListBtn">
-                        <li class="item-content bg-icon-1 item-link">
-                            <div class="item-media"><i class="icon icon-f7"></i></div>
-                            <div class="item-inner bg-icon-1">
-                                <div class="item-title">买入</div>
-                                <div class="item-after"><span id="sellCountsSp"></span></div>
-                                <span class="badge" style="position: absolute;top: 0.5rem;left:4rem;background:red;color: white;display:none" id="sellRemindCount"></span>
-                            </div>
-                        </li>
-                    </a>
-                </ul>
-                <ul>
                     <a href="#" id="toBuyerListBtn">
                         <li class="item-content bg-icon-2 item-link">
                             <div class="item-media"><i class="icon icon-f7"></i></div>
                             <div class="item-inner">
-                                <div class="item-title">卖出</div>
+                                <div class="item-title">买入</div>
                                 <div class="item-after"><span id="buyCountsSp"></span></div>
                                 <span class="badge" style="position: absolute;top: 0.5rem;left:4rem;background:red;color: white;display:none" id="buyRemindCount"></span>
                             </div>
                         </li>
                     </a>
                 </ul>
+                <ul>
+                    <a href="#" id="toSellerListBtn">
+                        <li class="item-content bg-icon-1 item-link">
+                            <div class="item-media"><i class="icon icon-f7"></i></div>
+                            <div class="item-inner bg-icon-1">
+                                <div class="item-title">卖出</div>
+                                <div class="item-after"><span id="sellCountsSp"></span></div>
+                                <span class="badge" style="position: absolute;top: 0.5rem;left:4rem;background:red;color: white;display:none" id="sellRemindCount"></span>
+                            </div>
+                        </li>
+                    </a>
+                </ul>
+
             </div>
             <div class="content-block-title" >资金明细</div>
             <div class="list-block r-mar-1em" style="margin: 0px;">

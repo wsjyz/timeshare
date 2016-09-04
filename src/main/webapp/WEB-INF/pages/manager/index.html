@@ -270,11 +270,46 @@
                             <div class="col-md-8"><span id="itemTypeSp"></span></div>
                         </div>
                         <div class="row">
-                            <div class="col-md-4"><label  class="control-label">项目介绍：</label></div>
+                            <div class="col-md-4"><label  class="control-label">项目描述或特色：</label></div>
                             <div class="col-md-8"></div>
                         </div>
                         <div class="row">
                             <div class="col-md-12"><div id="descriptionDiv"></div></div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-4"><label  class="control-label">项目实践时间：</label></div>
+                            <div class="col-md-8"></div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-12"><div id="practiceTimeSp"></div></div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6"><label  class="control-label">项目对象所在行业、层级和特征：</label></div>
+                            <div class="col-md-4"></div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-12"><div id="itemToObjectSp"></div></div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-4"><label  class="control-label">项目创造的价值：</label></div>
+                            <div class="col-md-8"></div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-12"><div id="itemValueSp"></div></div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-4"><label  class="control-label">直约分享内容描述：</label></div>
+                            <div class="col-md-8"></div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-12"><div id="practiceDescriptionSp"></div></div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-4"><label  class="control-label">项目分类：</label></div>
+                            <div class="col-md-8"></div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-12"><div id="itemCatalogSp"></div></div>
                         </div>
                         <div class="row">
                             <div class="col-md-4"><label  class="control-label">不通过原因：</label></div>
@@ -329,6 +364,13 @@
                     $('#priceSp').text(response.item.price);
                     $('#titleSp').text(response.item.title);
                     $('#descriptionDiv').text(response.item.description);
+
+                    $('#practiceTimeSp').text(response.item.practiceTime);
+                    $('#itemToObjectSp').text(response.item.itemToObject);
+                    $('#itemValueSp').text(response.item.itemValue);
+                    $('#practiceDescriptionSp').text(response.item.practiceDescription);
+                    $('#itemCatalogSp').text(response.item.itemCatalog);
+
                     $('#durationSp').text(response.item.duration);
                     $('#corpSp').text(response.userInfo.corp);
                     $('#positionSp').text(response.userInfo.position);

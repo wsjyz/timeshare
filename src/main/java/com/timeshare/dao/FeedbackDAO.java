@@ -27,4 +27,6 @@ public interface FeedbackDAO {
     Feedback findFeedBackByCreateUserId(String createUserId,String itemId);
 
     Feedback findFeedBackByOrderId(String createUserId,String order);
+
+    int findItemTotalScore(String itemId,String itemCreateUserId);
 }

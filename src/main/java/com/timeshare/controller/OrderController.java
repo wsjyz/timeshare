@@ -363,7 +363,14 @@ public class OrderController extends BaseController{
                         feedback.setOrderId(order.getOrderId());
                         feedbackService.saveFeedback(feedback);
                         //更新数量
-                        item.setUseCount(item.getUseCount() + 1);
+                        int useCount = item.getUseCount() + 1;
+                        int totalScore = feedbackService.findItemTotalScore(item.getItemId(),item.getUserId());
+
+                        float avgF = (float)totalScore/useCount;
+                        BigDecimal avg = new BigDecimal(avgF);
+                        avg.setScale(1,BigDecimal.ROUND_HALF_UP);
+                        item.setScore(avg);
+                        item.setUseCount(useCount);
                         itemService.modifyItem(item);
                         order.setBuyerPayed(true);
 

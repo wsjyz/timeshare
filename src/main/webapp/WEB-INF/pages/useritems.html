@@ -124,6 +124,12 @@
         .card-content .list-block .item-content{text-indent: 0;}
         /*==end==*/
         .ellipsis{text-overflow: ellipsis;overflow: hidden;box-sizing: border-box;white-space: nowrap;}
+        /*--xhsk-log--*/
+        .xhsk-fixed-log{position: absolute;z-index: 9;top: 0;right: 0;}
+        .xhsk-fixed-log .fixed-log-con{overflow: hidden;}
+        .xhsk-fixed-log .fixed-log-con,
+        .xhsk-fixed-log img{width:1.7rem;height: 1.7rem;font-size: 12px;}
+        .xhsk-fixed-log img{vertical-align: top;}
     </style>
 </head>
 <body>
@@ -133,6 +139,12 @@
         <header class="bar bar-nav">
             <a class="icon icon-left pull-left back"></a>
             <h1 class="title">项目列表</h1>
+            <!-- 邂逅时刻log -->
+            <div class="xhsk-fixed-log">
+                <div class="fixed-log-con">
+                    <img src="/time/images/icon/logo.png" alt="邂逅时刻">
+                </div>
+            </div>
         </header>
 
         <input type="hidden" id="userId" value="${userId}">
@@ -156,7 +168,7 @@
                 <div class="card-header">关于我</div>
                 <div class="card-content">
                     <div class="card-content-inner">
-                        <p id="userDesP"></p>
+                        <p id="userDesP" style="white-space: pre-line;"></p>
                     </div>
                 </div>
             </div>
@@ -222,7 +234,7 @@
 
                         '</div>'+
                         '<div class="card-footer" id="useCountSp">咨询人数'+item.useCount+'</div>'+
-                        '<div class="card-jz-avg" id="">平均分'+item.useCount+'</div>'+
+                        '<div class="card-jz-avg" id="">平均分'+item.score+'</div>'+
                     '</li>';
                 /*var html = '<li class="card" onclick="toView(\''+item.itemId+'\',\''+item.userId+'\')">'+
                         '<div class="card-header"><span id="itemTypeSp">'+itemType+'</span></div>'+

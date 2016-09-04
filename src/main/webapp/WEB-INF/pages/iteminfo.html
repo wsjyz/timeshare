@@ -5,6 +5,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <title>项目介绍</title>
     <meta name="viewport" content="initial-scale=1, maximum-scale=1">
+    <meta name="format-detection" content="telephone=no">
     <link rel="shortcut icon" href="/favicon.ico">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black">
@@ -33,6 +34,72 @@
         .title{font-size: .8rem;line-height: 1.9rem;font-family: 'HiraginoSansGB W3';font-weight: 700;color: #000;}
         .bar .icon{padding: .35rem .1rem;font-size: .9rem;}
         .bar-nav~.content{top: 1.9rem;}
+        /*.yl-content .content-padded h5:first-of-type{text-indent: 2em;}*/
+        .yl-content #titleSp{color: #000;}
+        .yl-content .content-padded h5{
+            padding: .6rem 0 .6rem 1.1rem;
+            margin: 0;
+            margin-left: .5rem;
+            margin-right: .5rem;
+            font-size: .75rem;
+            line-height: 1em;
+            font-family: SimHei;
+            font-weight: 400;
+            color: #1b1b1b;
+            border-top: 1px solid #e1e1e1;
+            background-clip: padding-box;
+            background-repeat: no-repeat;
+            background-size: .5rem;
+            background-position: left top .725rem;
+            background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABQAAAAUCAYAAACNiR0NAAAABGdBTUEAALGPC/xhBQAAACBjSFJNAAB6JgAAgIQAAPoAAACA6AAAdTAAAOpgAAA6mAAAF3CculE8AAAABmJLR0QAAAAAAAD5Q7t/AAAACXBIWXMAAAsSAAALEgHS3X78AAABD0lEQVQ4y63Vv0rDUBQH4K9Xccle/DeJb6AOvkHGFq3voYOlPoBIu+pTpGjd+hCK4KxbSyF7BwuCQ4IECaLt/UGWm5yPS5JzbkNNmuP5BlrldYxtLDDBCx7wmKfJ4mdtowZro499v+cN3TxN7mvB5ni+hmtc+l/6uMrT5BPWKzeWwVRqut87bI7np8iWwKrp5GkybJQf4B27K4JT7AV0ImCwg7Og+DVipRVwFBE8DNiMCG4FRQdES8AsojcLeI0IPgWMIoKjoOiQSQRsiiyUI+giAniep8lHgDxNMgxWwAalIVQWe7hdArsra1E/YE9w428DtpenybC62Kh7spxAHbRxoGh8ihf/rDgCsroj4AvsIEUoolQwsAAAAABJRU5ErkJggg==);
+        }
+        .yl-content .content-padded p{padding-bottom: .5rem;padding-left: 1.6rem;padding-right: .5rem;margin-left:.5rem;font-size: .65rem;color: #595959;}
+        .yl-content .content-padded .m-title-bg-icon{
+            background-size: 1rem;
+            background-position: left .25rem center;
+            background-image: url(data:image/png;base64,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);
+        }
+        .yl-content .content-padded div{
+            padding: .6rem 0 .6rem 1.1rem;
+            padding-top: 0;
+            padding-bottom: .75rem;
+            margin-left: .5rem;
+            margin-right: .5rem;
+            white-space: pre-line;
+            font-size: .65rem;
+            font-family: SimHei;
+            color: #595959;
+        }
+        }
+        .yl-content .content-padded .un-border{
+            border-width: 0;
+        }
+        /*.yl-content .content-padded .pos-r-b{
+            position: absolute;
+            top:2.9rem;
+            left: .75rem;
+            right: .75rem;
+            padding-bottom: .5rem;
+            padding-right: .75rem;
+            height: 1.4rem;
+            text-align: right;
+        }*/
+        /*-main-title-*/
+        .yl-content .con-item-title{margin-bottom: -1px;}
+        .row .col-100{
+            padding-left: 1.6rem;
+            border-bottom: 1px solid #e1e1e1;
+            background-size: 1rem;
+            background-clip: padding-box;
+            background-repeat: no-repeat;
+            background-position: left .25rem center;
+            background-image: url(data:image/png;base64,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);
+        }
+        /*.yl-content .content-padded > div{display: none;}*/
+        .yl-content .content-padded .direct-telephone-box{display: block;padding: 0;margin: 0;/*margin-top: .6rem;*/border-width: 0;background-image: none;white-space: normal;}
+        .yl-content .content-padded .direct-telephone-box div{margin: 0;border-width: 0;white-space: normal;}
+        .yl-content .content-padded .direct-telephone-con div{background-image: none;white-space: normal;}
+        .yl-content .content-padded .direct-telephone-con{margin: 0;padding: 0;}
             /*-描述信息-*/
         .content .row h2{margin: 0;padding-top: .4rem;padding-bottom: .4rem;padding-right: 3rem;font-size: .8rem;line-height: 1rem;}
         .content .row h2 span,
@@ -46,13 +113,14 @@
         .content-padded{margin:0 .4rem 0 .4rem;padding: 0 1rem;background-color: #fff;border-radius: 0 0 .1rem .1rem/0 0 .1rem .1rem;}
         .content-padded,.content-padded h5,.card-content .list-block{color: #3d4145;font-size: .7rem;font-family: SimHei;font-weight: 400;}
         .content-padded p{margin: 0;}
-        .content .content-padded h5{margin: 0;}
+        /*.content .content-padded h5{margin: 0;}*/
         .con-item-title{background: #fff;padding-left: 1rem;padding-right: 1rem;margin:.35rem .4rem 0 .4rem;border-radius:.1rem .1rem 0 0/.1rem .1rem 0 0;}
         .content-padded,
         .con-item-title{
             box-shadow: .05rem .1rem .15rem rgba(125,125,125,.2),-.05rem .1rem .15rem rgba(125,125,125,.2),0 .1rem .15rem rgba(125,125,125,.2);
         }
         .direct-telephone-box{margin-top: .6rem;}
+        .yl-content .content-padded .direct-telephone-con,
         .direct-telephone-con{position: relative;
             background-repeat: no-repeat;
             background-size: 1.25rem;
@@ -74,12 +142,14 @@
             display: block;
             width: 50%;
         }
+        .yl-content .content-padded .direct-telephone{padding: .9rem 1rem .9rem 0;}
         .direct-telephone{padding: .9rem 1rem .9rem 0;}
+        .yl-content .content-padded .communication-costs{padding: .9rem 0 .9rem 1rem;}
         .communication-costs{padding: .9rem 0 .9rem 1rem;}
         .direct-telephone span{display: block;font-size: .8rem;line-height: .9rem;color: #000;vertical-align: middle;text-align: right;}
         .communication-costs span{display: block;font-size: .6rem;line-height: .9rem;vertical-align: middle;text-align: left;}
-        .content .content-padded h5:first-of-type{text-indent: 2em;}
-        .content .content-padded p:first-of-type{text-indent: 2em;}
+        /*.content .content-padded h5:first-of-type{text-indent: 2em;}*/
+        /*.content .content-padded p:first-of-type{text-indent: 2em;}*/
         /*--评价--*/
         .card .card-header h4{margin: 0;}
         .card-header:after{
@@ -121,6 +191,8 @@
             background-position: right .75rem bottom;
             background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACgAAAAkCAYAAAD7PHgWAAAABGdBTUEAALGPC/xhBQAAACBjSFJNAAB6JgAAgIQAAPoAAACA6AAAdTAAAOpgAAA6mAAAF3CculE8AAAABmJLR0QAAAAAAAD5Q7t/AAAACXBIWXMAAAsSAAALEgHS3X78AAADi0lEQVRYw83XW4hXVRTH8Y+XMfWE2jEEMal5KMQI6U6BYFc7UBGVmVQUFpREl+deewqCoMtD2QUq6mHARMFTEFSmGGqhFJFlYE15qTyBdhw1x+lh7ZHxrzPzn+u/Defl7HX2/p7f2uuyJ/gfjbys23EzLsVnWDe51VAJbA6WYjEybMFuaClgXtbn4xLcgOWYgY+wpiqyvS0FzMv6XNyLJ7AQv+NlvI6uXrsJLQCbhTtwI67BfHyDN7GuKrJDfe3HTcG8rGcKdy7F3bg8TR3CL/gVWV7W01HjSFVk3WMOmJf1BMzCTXgSSxpMpiU152E7vkvPT6jHQ8HFeBDXo/0s8224ID0Xiig+hM4xBczLegGuw124DVPOYvYP9uFAenbjW+HuY4xykCR3TsPFeBgrMbPBrCdtvk+4chO2YmtVZEca1xxtBSfjfqzAorPAwb/YgfdEtdhTFVlXfwuOmoLJpctFCrlyEPO9SbVO4c4f8CM6G2FHrGBe1m0iAh/HU5g0gHkPjidlb8EJ7EpKHsF+fZL0qAAmuOdxJyYOYns4KbVDBMM27MHRBHa88YMRuTgv66vwrHDrjIbpCp/iSxGtkxLIXyJA9ldF9sdgewxLwRStl4nE+0A/ZidE6thUFdmO4YowLAXzsp6LF0S09veTPegWbnwLa6siOzjmgHlZz8NzImJnN/HJcZGAO9PPfI8ObB8ovfSOIbk4L+v5Ivk+gulNfjZFtFMLxRn8bSh7NgWYztwkkYSfEdWi2dHr6n14Be9WRXZgVAFF+liBZThvKAqIytGBD0R6GTRyhwSYl/U0UfQfwxVDWPtgAtqC9VWRbR3ijw0O2CedrMS1Tq8SXeI8/Ym54qwdS4odxVd4H5urIusZDlwzCk4VrdLtOKdh7gu8JqKyTRyD7jR3UpSuv0cCNyBgXtYT8ZA4e41dyTa8gw1VkZ0cCcCwAPOynoqrsQoL+kwdw068io/HGq5fQNFwPo2LGt7vwhtYKy42Yz7OAMzLejYK0Q71de12cTVcXxXZ4fGAOwMwRe2tIt/1wh0Vbl2NjsZ767gCit7uPqd3xDvxEsrxhjsNMLl2lbge9jYRa0S0bm4F3CnAdJtfgkcxRyTgz7G6KrKNrQA7BdinWixDLtryD/FiMx3vmAOKtuke0d99LYJhgyhhLR+ThXLtKPG2CIZxyXHNAi7Cz/gEG6si6x7ZkqM7/gPyrwp7ZuFCmQAAAABJRU5ErkJggg==);
         }
+        /*-清除关于我标题裁剪-*/
+        .list-block .item-title{white-space: normal;}
     </style>
 </head>
 <body>
@@ -133,35 +205,40 @@
             <a class="icon icon-left pull-left back"></a>
             <h1 class="title">项目详情</h1>
         </header>
-        <div class="content">
+        <div class="content yl-content">
             <div class="con-item-title">
                 <div class="row">
-                    <div class="col-100" style="position:relative;"><h2 style="color: #666;"><span id="titleSp"></span></h2><div class="advisory-number">咨询人数<span class="number">0</span></div></div>
-                </div>
-                <div class="row" style="display:none;">
-                    <div class="col-50" ><span id="priceSp"></span>元/次</div>
-                    <div class="col-50" >约<span id="durationSp"></span>分钟</div>
+                    <div class="col-100" style="position:relative;"><h2 style="color: #666;"><span id="titleSp"></span></h2><div class="advisory-number">咨询人数<span id="useCountSp" class="number">0</span></div></div>
                 </div>
 
             </div>
             <div class="content-padded">
-                <h5>我在企业实践该项目的时间、情景和结果数据证明</h5>
-                <p><div id="descriptionDiv"></div></p>
-                <h5>此次直约，我将提供的分享内容</h5>
-                <p><div id="practiceDescriptionDiv"></div></p>
+                <h5>项目实践时间</h5>
+                <div id="practiceTimeDiv" class="pos-r-b"></div>
+                <h5>项目对象所在行业、层级和特征</h5>
+                <div id="itemToObjectDiv"></div>
+                <h5>项目描述或特色</h5>
+                <div id="descriptionDiv"></div>
+                <h5>项目创造的价值</h5>
+                <div id="itemValueDiv"></div>
+                <h5>直约分享内容描述</h5>
+                <div id="practiceDescriptionDiv"></div>
+                <h5>分类</h5>
+                <div id="itemCatalogDiv" ></div>
+
                 <div class="direct-telephone-box">
                     <div class="direct-telephone-con">
                         <div class="direct-telephone">
-                            <span>电话直连</span>
+                            <span id="itemTypeSp"></span>
                         </div>
                         <div class="communication-costs">
-                            <span>50元/60分钟</span>
+                            <span id="priceDura">元/分钟</span>
                         </div>
                     </div>
                 </div>
             </div>
             <div class="card box-shadow">
-                <div class="card-header icon-pen"><h4>课程评价</h4></div>
+                <div class="card-header icon-pen"><h4>项目评价</h4></div>
                 <div class="card-content">
                     <div class="list-block media-list" id="feedbackDiv">
 
@@ -230,19 +307,26 @@
         if(response){
             if(response.item.itemType == 'tel'){
                 $('#itemTypeSp').text('电话直连');
-            }else if(response.itemType == 'meet'){
+            }else if(response.item.itemType == 'meet'){
                 $('#itemTypeSp').text('直约面对面');
             }
-            $('#priceSp').text(response.item.price);
+
+            //$('#priceSp').text(response.item.price);
             //$('#scoreSp').text(response.item.score);
             $('#titleSp').text(response.item.title);
+            $('#priceDura').text(response.item.price+'元/'+response.item.duration+'分钟');
+            //$('#durationSp').text(response.item.duration);
             $('#descriptionDiv').text(response.item.description);
             $('#practiceDescriptionDiv').text(response.item.practiceDescription);
-            $('#durationSp').text(response.item.duration);
+            $('#practiceTimeDiv').text(response.item.practiceTime);
+            $('#itemToObjectDiv').text(response.item.itemToObject);
+            $('#itemValueDiv').text(response.item.itemValue);
+            $('#itemCatalogDiv').text(response.item.itemCatalog);
+
             //$('#corpSp').text(response.userInfo.corp);
             //$('#nicknameSp').text(response.userInfo.nickName);
 
-            //$('#useCountSp').text('已约'+response.item.useCount+'次');
+            $('#useCountSp').text(response.item.useCount);
             //$('#userDesP').text(response.userInfo.description);
             $.hideIndicator();
         }

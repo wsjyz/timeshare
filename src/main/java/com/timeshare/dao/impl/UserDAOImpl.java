@@ -31,7 +31,7 @@ public class UserDAOImpl extends BaseDAO implements UserDAO {
     ImageObjDAO imageObjDAO;
 
     @Override
-    public String saveUser(UserInfo info) {
+    public String saveUser(final UserInfo info) {
         StringBuilder sql = new StringBuilder("insert into t_user_info " +
                 "(user_id,mobile,open_id,user_name,nick_name,income,sum_cost," +
                 "sell_counts,buy_counts,description,position,corp,industry,city,ageGroup,sex,opt_time)" +

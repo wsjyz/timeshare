@@ -28,4 +28,11 @@ public interface FeedbackService {
 
     Feedback findFeedBackByOrderId(String createUserId,String order);
 
+    /**
+     * 获取项目的总分，不包括自己打的分
+     * @param itemCreateUserId
+     * @return
+     */
+    int findItemTotalScore(String itemId,String itemCreateUserId);
+
 }

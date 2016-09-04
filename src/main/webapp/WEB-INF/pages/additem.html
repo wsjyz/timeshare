@@ -76,7 +76,7 @@
         .item-child-title .item-inner:after{margin-left: 2rem;}
         .item-list-title .item-select{position: absolute;left: 0;right: 0;bottom: 0;height: 4.75rem;font-size: .65rem;}
         .item-list-title .item-select input{position: absolute;clip: rect(0,0,0,0);width: 1px;height: 1px;overflow: hidden;margin: -1px;}
-        .item-list-title .item-select label{display: inline-block;padding: .15rem .6rem;background-color: transparent;line-height: 1;border-radius: 3px;color: #828282;font-size: .65rem;box-sizing: border-box;border: 1px solid #828282;}
+        .item-list-title .item-select label{display: inline-block;width: 100%;text-align: center;padding: .15rem .6rem;background-color: transparent;line-height: 1;border-radius: 3px;color: #828282;font-size: .65rem;box-sizing: border-box;border: 1px solid #828282;}
         @media only screen and (max-width:380px){
             .item-list-title .item-select label{padding: .15rem .4rem;}
         }
@@ -113,11 +113,12 @@
             right: .75rem;
             height: 2.7rem;
             margin: 0;
+            font-family: SimHei;
             border-top: 2px solid #dcdcdc;
             background-repeat: no-repeat;
-            background-size: 1rem .9rem;
+            background-size: 1.275rem 1.275rem;
             background-position: center;
-            background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACgAAAAjCAYAAADmOUiuAAAD0UlEQVRYhcWYXVLbSBSFz2mgKmBXWfIGwqwA7yC8pIqfBzwrwDuws4J4VhDNCiJWEOchlqr8EM8KolnBiA2AUiWZh5A+8yAkC/8Qm4A5T+7WtfrTVff9EfEbcsL0AELLgPsP2VmZMXdeRddv+X3dNbiOsTtSQ7dZm2KbRHvdxQTElAbWwE+O6v8+GaA7UkM/bzqUegT21wVbJAkDGfjJUe3zbwE6QXpOsD8LJikhObBkBMto6Q2MdYzQktAm0VoMqv4yjz4I2BymH0D25qBk/ORk959fPdwi5Q+MDsHD6rwl2ou8uRSwGWQfAXTKCcmz2vKS093Lx4DNgYbZGS36Va9aqJMc1y9+CegOs0/VQ2Cp1qqbel3Nr8VecrT3dzE2D/1BUvKccABwfVL7E4BfAkmeE066xfieB51w0jWSV8DJ4PA54apqBtl7AP1iXDimBHS+3Lw2xsazBpuAKyErh1JAfH1c+6N8xYY/exXbpcf+OXV1Un8naAwABPadMDsrAXV3YiUl2t7zNg1XcpDl2rToGABwhjdvSDoAQHLwmJz5VEqOap8FxDkL2rkHjaaxiBi8DNpUlEoGAwBGcsqr1iSr3MQJJ113mF43g0zFnDtSwx1m35pBJidIz2dt3SD7bzVClgxzcXBVUeoV28IZ3rwBAN1mZb6l2J61zTd+erDOOo8GFOlJSiQl3HkVAQC3awMJUX59+ppKWyBeNzoQyD1gaMd3c/2r49pfjwV/CrlB+rUoJgwAFB4AAGn9QvQp5Y7UKOAkRAYArt/yexkgiZbz5eb1SwHydlImDBKDaqD2pxfsi4Qad6SGpBLQWuOXgMlx/aLqxeYw/bBpOPyYjIvIAMlLTncv751i2a2OpDwGkb1q2bMBOL8IURKiq5P6O2AmzCSnu5cy7BRjI3nNIPvojtR4LjgnTA9yz01rUMlMY+jCPwXpuQH9YlyUPk8JVvFaCbOoBl0YqJPj+oUl2sXrrmaAdTPBIjAnnHRxO4nuwyGStuZq0JW7OitzCCE2xsZ5taFYgM/t2krVjxNmZ8bqUGS72sLmXmNnWX/8IKA7zL4VG9dSrbvPHP6snaQExJLemPvLmn0JA8n0HuoUlwJWW4BiD1ZT0GMlICYwtpS3Sl7eXnbBGNsvfhPwnXDSpVTA+ZYYGKEFYF9Su4xfC6E0phCt802msva8nDA9MGI1Pw+mYQARdvYON1V1zwFOI/ri7yjY2etssiW4B7gMLj9ppl/t+DelaV8cpOcUvOpeEhCL9Li1679UI0V3pAZ/ZH0RLYJjALBQDCJ6id54Vv8DL/AiZ79I4eoAAAAASUVORK5CYII=);
+            background-image: url(data:image/png;base64,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);
         }
         .direct-telephone-con:after{content: '';display: table;clear: both;}
         .yl-panel .direct-telephone-con .col-50{
@@ -139,14 +140,24 @@
             text-align: center;
             border-bottom: 2px solid #e1e1e1;
         }
-        .yl-panel .direct-telephone-con .col-50:first-child{
-            padding:.9rem 1rem .9rem 0;
-            font-size: .8rem;
-            line-height: .9rem;
-            text-align: right;
-        }
-        .yl-panel .direct-telephone-con .col-50:last-child{
+        .jz-yl-contac{
+        	float: left;
+        	width: 50%;
+        	min-height: 1px;
+        	padding: .9rem 1rem .9rem 0;
+        	text-align: right;
+        	font-size: .75rem;
+    		line-height: .9rem;
+    		color: #1b1b1b;
+    	}
+        .yl-panel .direct-telephone-con .col-50.jz-yl-list2{
             padding: .9rem 0 .9rem 1rem;
+            font-size: .7rem;
+            line-height: .9rem;
+            text-align: left;
+        }
+        .yl-panel .direct-telephone-con .col-50.jz-yl-list3{
+            padding: .9rem 0 .9rem 0;
             font-size: .7rem;
             line-height: .9rem;
             text-align: left;
@@ -237,6 +248,28 @@
             text-align: center;
             border-radius: .25rem;
         }
+        /*btn颜色*/
+        .button.button-fill{background-color: #14B8F5;}
+        .button.button-fill:active{background-color: #0090C9;}
+        .button-danger.button-fill{background-color: #FEB358;}
+        .button-danger.button-fill:active{background-color: #FF8900;}
+        .button-success.button-fill{background-color: #89C831;}
+        .button-success.button-fill:active{background-color: #76CE00;}
+        /*--xhsk-log--*/
+        .xhsk-fixed-log{position: absolute;z-index: 9;top: 0;right: 0;}
+        .xhsk-fixed-log .fixed-log-con{overflow: hidden;}
+        .xhsk-fixed-log .fixed-log-con,
+        .xhsk-fixed-log img{width:1.7rem;height: 1.7rem;font-size: 12px;}
+        .xhsk-fixed-log img{vertical-align: top;}
+        /*-预览添加data-*/
+        .jz-add-data-list{padding: .05rem .6rem;box-sizing: border-box;}
+        .jz-add-data-list+.jz-add-data-list{border-left: 1px solid #828282;}
+         @media only screen and (max-width:380px){
+            .jz-add-data-list{padding: .15rem .4rem;}
+        }
+        @media only screen and (max-width: 340px){
+            .jz-add-data-list{padding: .05rem .2rem;box-sizing: border-box;}
+            }
     </style>
 </head>
 <body>
@@ -246,6 +279,12 @@
         <header class="bar bar-nav">
             <a class="icon icon-left pull-left back"></a>
             <h1 class='title'>项目编辑</h1>
+            <!-- 邂逅时刻log -->
+            <div class="xhsk-fixed-log">
+                <div class="fixed-log-con">
+                    <img src="/time/images/icon/logo.png" alt="邂逅时刻">
+                </div>
+            </div>
         </header>
         <div class="content main-editor-page">
             <div class="list-block">
@@ -296,7 +335,7 @@
                             <div class="item-media"><i class="icon icon-form-email"></i></div>
                             <div class="item-inner">
                                 <div class="item-title label" style="width:25%;">类型：</div>
-                                <div class="item-input">
+                                <div class="item-input jz-radio-list">
                                     <div class="row">
                                         <div class="col-45"><input type="radio" name="itemType" value="tel"><span style="font-size: 13px;" class="itemType_tel">电话直连</span></div>
                                         <div class="col-55"><input type="radio" name="itemType" value="meet"><span style="font-size: 13px;" class="itemType_meet">沟通面对面</span></div>
@@ -374,7 +413,7 @@
                                 <div class="item-inner">
                                     <div class="item-title label">项目分类</div>
                                     <div class="item-input" style="display:none;">
-                                        <select name="itemCatalog" id="itemCatalog">
+                                        <select name="itemCatalogTmp" id="itemCatalog">
                                             <option>培训管理</option>
                                             <option>人才管理</option>
                                             <option>企业教练</option>
@@ -387,31 +426,31 @@
                                 <div class="item-select">
                                     <table>
                                         <tr>
-                                            <td><input type="radio" id="itemID1" name="manage"><label for="itemID1">领导力</label></td>
-                                            <td><input type="radio" id="itemID2" name="manage"><label for="itemID2">专业技能</label></td>
-                                            <td><input type="radio" id="itemID3" name="manage"><label for="itemID3">通用技能</label></td>
-                                            <td><input type="radio" id="itemID4" name="manage"><label for="itemID4">通用技能</label></td>
+                                            <td><input type="checkbox" id="itemID1" name="itemCatalog" value="领导力"><label for="itemID1">领导力</label></td>
+                                            <td><input type="checkbox" id="itemID2" name="itemCatalog" value="专业技能"><label for="itemID2">专业技能</label></td>
+                                            <td><input type="checkbox" id="itemID3" name="itemCatalog" value="通用素质"><label for="itemID3">通用素质</label></td>
+                                            <td><input type="checkbox" id="itemID4" name="itemCatalog" value="职场发展"><label for="itemID4">职场发展</label></td>
                                         </tr>
                                         <tr>
-                                            <td><input type="radio" id="itemID5" name="studied"><label for="itemID5">培训管理</label></td>
-                                            <td><input type="radio" id="itemID6" name="studied"><label for="itemID6">经验分享</label></td>
-                                            <td><input type="radio" id="itemID7" name="studied"><label for="itemID7">数据分析</label></td>
-                                            <td><input type="radio" id="itemID8" name="studied"><label for="itemID8">其他</label></td>
+                                            <td><input type="checkbox" id="itemID5" name="itemCatalog" value="培训管理"><label for="itemID5">培训管理</label></td>
+                                            <td><input type="checkbox" id="itemID6" name="itemCatalog" value="经验分享"><label for="itemID6">经验分享</label></td>
+                                            <td><input type="checkbox" id="itemID7" name="itemCatalog" value="数据分析"><label for="itemID7">数据分析</label></td>
+                                            <td><input type="checkbox" id="itemID8" name="itemCatalog" value="其他"><label for="itemID8">其他</label></td>
                                         </tr>
                                     </table>
                                 </div>
                             </div>
                         </li>
-                        <li class="item-list-title box-shadow-bottom">
-                            <div class="card-header">卖家介绍</div>
-                            <div class="card-content">
-                                <div class="card-content-inner">
-                                    <div class="item-input">
-                                        <textarea name="sellerDescription" id="sellerDescription" style="width: 100%" placeholder="卖家介绍"><#if item??>${item.sellerDescription}<#else></#if></textarea>
-                                    </div>
-                                </div>
-                            </div>
-                        </li>
+                        <!--<li class="item-list-title box-shadow-bottom">-->
+                            <!--<div class="card-header">卖家介绍</div>-->
+                            <!--<div class="card-content">-->
+                                <!--<div class="card-content-inner">-->
+                                    <!--<div class="item-input">-->
+                                        <!--<textarea name="sellerDescription" id="sellerDescription" style="width: 100%" placeholder="卖家介绍"><#if item??>${item.sellerDescription}<#else></#if></textarea>-->
+                                    <!--</div>-->
+                                <!--</div>-->
+                            <!--</div>-->
+                        <!--</li>-->
                     </form>
                 </ul>
             </div>
@@ -436,24 +475,26 @@
                 <div class="col-100"><h2 style="color: #000;"><span id="titleSp"></span></h2></div>
             </div>
             <div class="row direct-telephone-con" >
-                <div class="col-50" ><span id="priceSp"></span>元/次</div>
-                <div class="col-50" >约<span id="durationSp" ></span>分钟</div>
+                <div class="jz-yl-contac jz-yl-list2"></div>
+                <div class="col-50 jz-yl-list2"><span id="priceSp"></span>元/<span id="durationSp" ></span>分钟</div>
             </div>
 
         </div>
         <div class="content-padded">
             <h5 class="m-title-bg-icon">项目实践时间</h5>
-            <p><div id="practiceTimeDiv" class="pos-r-b"></div></p>
+            <div id="practiceTimeDiv" class="pos-r-b"></div>
             <h5>项目对象所在行业、层级和特征</h5>
-            <p><div id="itemToObjectDiv"></div></p>
+            <div id="itemToObjectDiv"></div>
             <h5>项目描述或特色</h5>
-            <p><div id="descriptionDiv"></div></p>
+            <div id="descriptionDiv"></div>
             <h5>项目创造的价值</h5>
-            <p><div id="itemValueDiv"></div></p>
+            <div id="itemValueDiv"></div>
             <h5>直约分享内容描述</h5>
-            <p><div id="practiceDescriptionDiv"></div></p>
+            <div id="practiceDescriptionDiv"></div>
             <h5>分类</h5>
-            <p><div id="itemCatalogDiv" class="un-border"></div></p>
+            <div id="itemCatalogDiv" class="un-border" style="display:none;"></div>
+            <div class="un-border jz-add-data">
+            </div>
         </div>
 
     </div>
@@ -539,6 +580,29 @@
     window.onpopstate = function(){
         $.closeModal();
     };
+</script>
+<script>
+    $('#previewBtn').on('click',function(){
+        //清除内容
+        $('.jz-add-data').empty();
+        $('.jz-yl-contac').empty();
+        //需要添加的dom
+        var $htmlDom='';
+        var $len=$('input[type="checkbox"]').length;
+        var $radioArr=$('.jz-radio-list').eq(0).find('input[type="radio"]');
+        for(var j=0;j<$radioArr.length;j++){
+            if($($radioArr).get(j).checked){
+                $('.jz-yl-contac').append($($radioArr).eq(j).next().text());
+            }
+        }
+        for(var i=1;i<=$len;i++){
+            if($('#itemID'+i).get(0).checked){
+                var $nextDom = $('#itemID'+i).next().text();
+                $htmlDom+='<span class="jz-add-data-list">'+$nextDom+'</span>';
+            }
+        }
+        $('.jz-add-data').append($htmlDom);
+    });
 </script>
 </body>
 </html>

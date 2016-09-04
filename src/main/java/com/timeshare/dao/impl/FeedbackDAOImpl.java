@@ -11,6 +11,7 @@ import org.springframework.jdbc.core.PreparedStatementSetter;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Repository;
 
+import java.math.BigDecimal;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -23,21 +24,26 @@ import java.util.List;
 @Repository("FeedbackDAO")
 public class FeedbackDAOImpl extends BaseDAO implements FeedbackDAO {
     @Override
-    public String saveFeedback(Feedback info) {
+    public String saveFeedback(final Feedback info) {
         StringBuilder sql = new StringBuilder("insert into t_feed_back (feedback_id,title,content,item_id,item_title,to_user_id,create_user_name,create_user_id,opt_time,rating,order_id)" +
                 " values(?,?,?,?,?,?,?,?,?,?,?)");
-        int result = getJdbcTemplate().update(sql.toString(), ps -> {
-            ps.setString(1, CommonStringUtils.genPK());
-            ps.setString(2,info.getTitle());
-            ps.setString(3,info.getContent());
-            ps.setString(4,info.getItemId());
-            ps.setString(5,info.getItemTitle());
-            ps.setString(6,info.getToUserId());
-            ps.setString(7,info.getCreateUserName());
-            ps.setString(8,info.getUserId());
-            ps.setString(9,info.getOptTime());
-            ps.setInt(10,info.getRating());
-            ps.setString(11,info.getOrderId());
+        int result = getJdbcTemplate().update(sql.toString(), new PreparedStatementSetter(){
+
+            @Override
+            public void setValues(PreparedStatement ps) throws SQLException {
+                ps.setString(1, CommonStringUtils.genPK());
+                ps.setString(2,info.getTitle());
+                ps.setString(3,info.getContent());
+                ps.setString(4,info.getItemId());
+                ps.setString(5,info.getItemTitle());
+                ps.setString(6,info.getToUserId());
+                ps.setString(7,info.getCreateUserName());
+                ps.setString(8,info.getUserId());
+                ps.setString(9,info.getOptTime());
+                ps.setInt(10,info.getRating());
+                ps.setString(11,info.getOrderId());
+            }
+
         });
         if(result > 0){
             return Contants.SUCCESS;
@@ -120,6 +126,17 @@ public class FeedbackDAOImpl extends BaseDAO implements FeedbackDAO {
             }
         }
         return null;
+    }
+
+    @Override
+    public int findItemTotalScore(String itemId,String itemCreateUserId) {
+        StringBuilder reviewSql = new StringBuilder("");
+        reviewSql.append("select sum(rating) from t_feed_back where item_id = ? and create_user_id != ?");
+        BigDecimal totalScore = getJdbcTemplate().queryForObject(reviewSql.toString(),new Object[]{itemId,itemCreateUserId},BigDecimal.class);
+        if(totalScore != null){
+            return totalScore.intValue();
+        }
+        return 0;
     }
 
     private class FeedbackMapper implements RowMapper<Feedback>{
