@@ -162,6 +162,7 @@
             line-height: .9rem;
             text-align: left;
         }
+        .yl-panel .direct-telephone-con .col-50.jz-yl-list2 span{font-size: .65rem;}
         .yl-content{
             position: relative;
             padding-bottom: 2.7rem;
@@ -182,6 +183,7 @@
             font-family: SimHei;
             font-size: .7rem;
             font-weight: 400;
+            white-space: pre-line;
             color: #3d4145;
         }
         /*.yl-content .content-padded h5:first-of-type{text-indent: 2em;}*/
@@ -270,6 +272,30 @@
         @media only screen and (max-width: 340px){
             .jz-add-data-list{padding: .05rem .2rem;box-sizing: border-box;}
             }
+        /*-时间选择模拟placeholder-*/
+        .jz-add-before{
+            position: absolute;
+            line-height: 2.2rem;
+            z-index: 0;
+            color: #3d4145;}
+        .list-block input[type=date]{position: relative;z-index: 1;}
+        /*-添加小提示-*/
+        .bg-icon2 .item-inner.jz-addtip-text{
+        	padding-bottom: 1rem;
+        	background-position: left .4rem top .4rem;
+        }
+        .jz-addtip-text:before{
+			content: '（腾讯将收取0.6%手续费，请您知晓）';
+			position: absolute;
+			left: 0;
+			right: 0;
+			bottom: .2rem;
+			color: #828282;
+			text-align: center;
+			font-size: 12px;
+			font-family: SimHei;
+			margin: 0 auto;
+        }
     </style>
 </head>
 <body>
@@ -347,7 +373,7 @@
                     <li class="item-child-title bg-icon2">
                         <div class="item-content">
                             <div class="item-media"><i class="icon icon-form-password"></i></div>
-                            <div class="item-inner">
+                            <div class="item-inner jz-addtip-text">
                                 <div class="item-input" style="line-height:2.2rem;">计费方式：<input type="text" id="price" name="price"
                                                                   value="<#if item.price??>${item.price}<#else>50</#if>" style="width: 1.5rem;display: inline"/></div>
                                 <div class="item-input" style="width:100%;font-size:.7rem;">元/<input type="text" name="duration" id="durationId"
@@ -362,7 +388,8 @@
                                 <div class="item-inner">
                                     <div class="item-title label title-w-40-percent">项目实践时间：</div>
                                     <div class="item-input">
-                                        <input type="text" placeholder="请填写项目实践时间" name="practiceTime" id="practiceTime" value="<#if item??>${item.practiceTime}<#else></#if>">
+                                        <!-- <div class="jz-add-before">请填写项目实践时间</div> -->
+                                        <input type="text" class="jz-date-list1" placeholder="请填写项目实践时间" name="practiceTime" id="practiceTime" value="<#if item??>${item.practiceTime}<#else></#if>">
                                     </div>
                                 </div>
                             </div>
@@ -476,7 +503,7 @@
             </div>
             <div class="row direct-telephone-con" >
                 <div class="jz-yl-contac jz-yl-list2"></div>
-                <div class="col-50 jz-yl-list2"><span id="priceSp"></span>元/<span id="durationSp" ></span>分钟</div>
+                <div class="col-50 jz-yl-list2 jz-list-toggle1"><span id="priceSp"></span>元/<span id="durationSp" ></span>分钟</div>
             </div>
 
         </div>
@@ -582,10 +609,12 @@
     };
 </script>
 <script>
+$(function(){
     $('#previewBtn').on('click',function(){
         //清除内容
         $('.jz-add-data').empty();
         $('.jz-yl-contac').empty();
+        // $('.jz-list-toggle1').empty();
         //需要添加的dom
         var $htmlDom='';
         var $len=$('input[type="checkbox"]').length;
@@ -593,6 +622,15 @@
         for(var j=0;j<$radioArr.length;j++){
             if($($radioArr).get(j).checked){
                 $('.jz-yl-contac').append($($radioArr).eq(j).next().text());
+                // if(j===0){
+                //     $('.jz-list-toggle1').append('<span id="priceSp"></span>元/<span id="durationSp" ></span>分钟');
+                // }else if(j===1){
+                //     if($('.jz-date-list1').eq(0).val()==''){
+                //         $('.jz-list-toggle1').append('<span>请填写时间</span>');
+                //     }
+                //     $('.jz-list-toggle1').append('<span>'+$('.jz-date-list1').eq(0).val()+'</span>');
+                // }
+                break;
             }
         }
         for(var i=1;i<=$len;i++){
@@ -603,6 +641,27 @@
         }
         $('.jz-add-data').append($htmlDom);
     });
+    // var $userAgent=navigator.userAgent;
+    // var regExp=/mobile/i;
+    // if(regExp.test($userAgent)){
+    //     action_list1();
+    // }else{
+    //     $('.jz-add-before').hide();
+    // }
+    // function action_list1(){
+    //     $('.jz-date-list1').on('focus',function(){
+    //         $('.jz-add-before').text('');
+
+    //     })
+    //     $('.jz-date-list1').on('blur',function(){
+    //         if($('.jz-date-list1').eq(0).val()==''){
+    //                 $('.jz-add-before').text('请填写项目实践时间');
+    //             }else{
+    //                 $('.jz-add-before').text('');
+    //             }
+    //     })
+    // }
+})
 </script>
 </body>
 </html>

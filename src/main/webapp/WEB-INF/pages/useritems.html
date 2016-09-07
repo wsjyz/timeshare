@@ -130,6 +130,8 @@
         .xhsk-fixed-log .fixed-log-con,
         .xhsk-fixed-log img{width:1.7rem;height: 1.7rem;font-size: 12px;}
         .xhsk-fixed-log img{vertical-align: top;}
+        /*-关于我-*/
+        #userDesP span{display: block;text-indent: 2em;}
     </style>
 </head>
 <body>
@@ -168,7 +170,7 @@
                 <div class="card-header">关于我</div>
                 <div class="card-content">
                     <div class="card-content-inner">
-                        <p id="userDesP" style="white-space: pre-line;"></p>
+                        <p id="userDesP"></p>
                     </div>
                 </div>
             </div>
@@ -205,7 +207,15 @@
             if(userDes == '' || userDes == null){
                 userDes = '暂无简介';
             }
-            $('#userDesP').text(userDes);
+            var $jz_arr=userDes.split(/[\n\r]/);
+            var $jz_html='';
+            for(var $jz_i=0,$jz_len=$jz_arr.length;$jz_i<$jz_len;$jz_i++){
+                if($jz_arr[$jz_i]!=''){
+                    $jz_html+='<span>'+$jz_arr[$jz_i]+'</span>';
+                }
+            }
+            $('#userDesP').empty();
+            $('#userDesP').append($jz_html);
 
             $('.commentAvatarImage').attr("src",response.imageObj.imageUrl);
             $('#nickNameSp').text(response.nickName);

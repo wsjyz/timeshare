@@ -32,6 +32,7 @@ import java.util.TreeMap;
 public class OrderServiceImpl implements OrderService {
 
     protected Logger logger = LoggerFactory.getLogger(OrderServiceImpl.class);
+    protected Logger payLogger = LoggerFactory.getLogger("payLogger");
 
     @Autowired
     OrderDAO orderDAO;
@@ -143,7 +144,7 @@ public class OrderServiceImpl implements OrderService {
     private void payToSeller(String orderId){
 
         OrderDTO orderDTO = orderDAO.findPayOrderByOrderId(orderId);
-        logger.info("处理订单:"+orderDTO.getOrder().getOrderId()+" 向"+orderDTO.getOpenId()+"付款");
+        payLogger.info("处理订单:,"+orderDTO.getOrder().getOrderId()+",付款价格为,"+orderDTO.getOrder().getPrice());
         WxPayParamsBean xmlParams = new WxPayParamsBean();
         SortedMap parameters = new TreeMap<>();
         xmlParams.setMch_appid(Contants.APPID);
@@ -165,8 +166,9 @@ public class OrderServiceImpl implements OrderService {
         xmlParams.setCheck_name("NO_CHECK");
         parameters.put("check_name","NO_CHECK");
 
-        xmlParams.setAmount(orderDTO.getOrder().getPrice().multiply(new BigDecimal(100)).intValue());
-        parameters.put("amount",orderDTO.getOrder().getPrice().multiply(new BigDecimal(100)).intValue());
+        int amount = payAmount(orderDTO.getOrder().getPrice(),new BigDecimal(0.006));
+        xmlParams.setAmount(amount);
+        parameters.put("amount",amount);
 
         xmlParams.setDesc("佣金");
         parameters.put("desc","佣金");
@@ -292,6 +294,22 @@ public class OrderServiceImpl implements OrderService {
         if(response.indexOf("error_response") != -1){
             logger.error(response);
         }
+    }
+    /**
+     * 返回最终付款的金额（单位：分）：原始价格减去手续费四舍五入保留2位小数
+     * @param originalAmount 原始价格
+     * @param commission 手续费率
+     * @return
+     */
+    public int payAmount(BigDecimal originalAmount,BigDecimal commission){
+        //计算手续费
+        BigDecimal commissionBig = originalAmount.multiply(commission);
+        commissionBig = commissionBig.setScale(2,BigDecimal.ROUND_HALF_UP);
+        //计算最终付款
+        BigDecimal finalAmountYuan = originalAmount.subtract(commissionBig);
+        finalAmountYuan = finalAmountYuan.setScale(2,BigDecimal.ROUND_HALF_UP);
+        payLogger.info("扣除手续费,"+commissionBig.toString()+",元最终付款,"+finalAmountYuan.toString());
+        return finalAmountYuan.multiply(new BigDecimal(100)).intValue();
     }
 }
 

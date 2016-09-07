@@ -62,6 +62,13 @@
         .list-block textarea::-moz-placeholder{direction: rtl}
         .list-block textarea:-ms-input-placeholder{direction: rtl}
         .list-block textarea::placeholder{direction: rtl}
+        /*btn颜色*/
+        .button.button-fill{background-color: #14B8F5;}
+        .button.button-fill:active{background-color: #0090C9;}
+        .button-danger.button-fill{background-color: #FEB358;}
+        .button-danger.button-fill:active{background-color: #FF8900;}
+        .button-success.button-fill{background-color: #89C831;}
+        .button-success.button-fill:active{background-color: #76CE00;}
     </style>
 </head>
 <body>
@@ -187,7 +194,7 @@
                             <div class="item-media"><i class="icon icon-form-gender"></i></div>
                             <div class="item-inner jz-unline-botton-after">
                                 <div class="item-title label" style="align-self:flex-start;margin:0;">自我介绍：</div>
-                                <div class="item-input">
+                                <div class="item-input" style="padding-top:5px;padding-bottom:5px;">
                                     <textarea name="description" id="description" style="width: 100%" placeholder="请填写介绍">${user.description!''}</textarea>
                                 </div>
                             </div>
