@@ -629,13 +629,12 @@
         $.post('${request.contextPath}/item/save-async', serializeObj, function (response) {
 
             if(response.messageType == 'success' ){
-                console.log('xxx');
                 $('#itemId').val(response.objId);
                 $('#itemStatusId').val('draft');
             }
         });
     }
-    setInterval("saveItemInterval()", 50000);
+    setInterval("saveItemInterval()", 60000);
 </script>
 <script>
 $(function(){

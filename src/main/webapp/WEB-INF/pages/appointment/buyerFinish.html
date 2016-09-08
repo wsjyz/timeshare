@@ -70,7 +70,7 @@
             position: absolute;
             bottom: 0;
             width: 200px;
-            padding: .5rem 1.25rem 0 1.25rem;
+            padding: 10px 25px 0 25px;
             margin-left: -100px;
             border-top: 1px dashed #16b8f5;
         }
@@ -188,14 +188,16 @@
                                 </div>
                             </div>
                         </li>
-                        <li class="card jz-d-none">
-                            <div class="card-header">卖家手机号码</div>
-                            <div class="card-content">
-                                <div class="card-content-inner">
-                                    ${order.sellerPhone!''}
+                        <#if order.buyerFinish != "1">
+                            <li class="card">
+                                <div class="card-header jz-bg-icon4">卖家手机号码</div>
+                                <div class="card-content">
+                                    <div class="card-content-inner">
+                                        ${order.sellerPhone!''}
+                                    </div>
                                 </div>
-                            </div>
-                        </li>
+                            </li>
+                        </#if>
                         <li class="card jz-star-bottom">
                             <div class="card-header jz-bg-icon5"><#if feedback??>您的评价<#else>顺便评价一下，再打个分吧</#if></div>
                             <div class="card-content">
