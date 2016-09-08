@@ -20,6 +20,8 @@ public interface Contants {
 
     String SUCCESS = "success";
 
+    String FAILED = "failed";
+
     String DOMAIN = "jk.zhangqidong.cn";
 
     enum ITEM_STATUS {

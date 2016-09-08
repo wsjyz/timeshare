@@ -148,6 +148,18 @@ public class ItemController extends BaseController{
 
     @RequestMapping(value = "/save")
     public String save(Item item,@CookieValue(value="time_sid", defaultValue="") String userId,Model model) {
+        SystemMessage message = saveItem(item,userId);
+        model.addAttribute("message",message);
+        model.addAttribute("jumpUrl","/item/to-list");
+        return "info";
+    }
+    @ResponseBody
+    @RequestMapping(value = "/save-async")
+    public SystemMessage save(Item item,@CookieValue(value="time_sid", defaultValue="") String userId) {
+        SystemMessage message = saveItem(item,userId);
+        return message;
+    }
+    private SystemMessage saveItem(Item item,String userId){
         SystemMessage message = new SystemMessage();
         if(item != null){
             UserInfo user = getCurrentUser(userId);
@@ -164,15 +176,17 @@ public class ItemController extends BaseController{
                 }
 
             }
-            message.setMessageType(result);
-            if(result.equals(Contants.SUCCESS)){
+
+            message.setObjId(result);
+            if(!result.equals(Contants.FAILED)){
                 message.setContent("添加成功！");
-                message.setMessageType(result);
+                message.setMessageType(Contants.SUCCESS);
+            }else{
+                message.setContent("添加失败！");
+                message.setMessageType(Contants.FAILED);
             }
         }
-        model.addAttribute("message",message);
-        model.addAttribute("jumpUrl","/item/to-list");
-        return "info";
+        return message;
     }
     @RequestMapping(value = "/modify-item-status")
     public String modifyItemStatus(@RequestParam String itemId,@RequestParam String itemStatus,Model model){

@@ -440,14 +440,7 @@
                                 <div class="item-inner">
                                     <div class="item-title label">项目分类</div>
                                     <div class="item-input" style="display:none;">
-                                        <select name="itemCatalogTmp" id="itemCatalog">
-                                            <option>培训管理</option>
-                                            <option>人才管理</option>
-                                            <option>企业教练</option>
-                                            <option>行动学习</option>
-                                            <option>绩效改进</option>
-                                            <option>微课制作与学习</option>
-                                        </select>
+
                                     </div>
                                 </div>
                                 <div class="item-select">
@@ -546,6 +539,13 @@
         $("input[name='itemType']").removeAttr("checked");
         $("input[name='itemType'][value='meet']").attr("checked","checked");
     } );
+    var itemCatalog = '${item.itemCatalog}';
+    if(itemCatalog != null && itemCatalog != ''){
+        var itemCataArr = itemCatalog.split(",");
+        $.each(itemCataArr, function(i, item){
+            $("input[name='itemCatalog'][value='"+item+"']").attr("checked","checked");
+        });
+    }
     function checkForm(){
         var title = $('#titleId').val();
         if(title == ''){
@@ -598,7 +598,7 @@
             $('#practiceTimeDiv').text($('#practiceTime').val());
             $('#itemToObjectDiv').text($('#itemToObject').val());
             $('#itemValueDiv').text($('#itemValue').val());
-            $('#itemCatalogDiv').text($('#itemCatalog').val());
+
 
             history.pushState(null, "预览", window.location.href+"#");
             $.popup('.popup');
@@ -607,6 +607,35 @@
     window.onpopstate = function(){
         $.closeModal();
     };
+    function saveItemInterval(){
+
+        var serializeObj={}; // 目标对象
+
+        var array = $('form').serializeArray(); // 转换数组格式
+
+        $(array).each(function(){ // 遍历数组的每个元素 {name : xx , value : xxx}
+
+            if(serializeObj[this.name]){ // 判断对象中是否已经存在 name，如果存在name
+                // 将元素变为 数组
+                serializeObj[this.name]=serializeObj[this.name]+','+this.value;
+
+            }else{
+
+                serializeObj[this.name]=this.value; // 如果元素name不存在，添加一个属性 name:value
+
+            }
+
+        });
+        $.post('${request.contextPath}/item/save-async', serializeObj, function (response) {
+
+            if(response.messageType == 'success' ){
+                console.log('xxx');
+                $('#itemId').val(response.objId);
+                $('#itemStatusId').val('draft');
+            }
+        });
+    }
+    setInterval("saveItemInterval()", 50000);
 </script>
 <script>
 $(function(){

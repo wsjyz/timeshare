@@ -7,6 +7,15 @@ public class SystemMessage {
 
     private String messageType;
     private String content;
+    private String objId;//传值用，例如保存的时候可以用来传递id
+
+    public String getObjId() {
+        return objId;
+    }
+
+    public void setObjId(String objId) {
+        this.objId = objId;
+    }
 
     public String getMessageType() {
         return messageType;
