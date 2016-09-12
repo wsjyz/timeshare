@@ -12,9 +12,9 @@ import com.taobao.api.response.AlibabaAliqinFcSmsNumSendResponse;
 public class SmsUtils {
 
     public static final String SMS_SEND_URL = "http://gw.api.taobao.com/router/rest";
-    public static final String APPKEY = "23407928";
-    public static final String SECRET = "eaf706854d416c5e95964dcd6744d5f0";
-    public static final String SIGN = "丽逅测试";
+    public static final String APPKEY = "23451679";
+    public static final String SECRET = "877ebd4accbe5d3436d4fe7223c7dc81";
+    public static final String SIGN = "邂逅时刻";
 
     public static String senMessage(SmsContentBean bean){
         TaobaoClient client = new DefaultTaobaoClient(SMS_SEND_URL, APPKEY, SECRET);

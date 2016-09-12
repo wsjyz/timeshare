@@ -249,19 +249,19 @@ public class OrderServiceImpl implements OrderService {
         SmsContentBean bean = new SmsContentBean();
         switch (order.getOrderStatus()){
             case "BEGIN":
-                bean.setTemplateCode("SMS_12405376");
+                bean.setTemplateCode("SMS_14730465");
                 bean.setToMobile(seller.getMobile());
                 bean.setContent("{\"name\":\""+buyer.getNickName()+"\"}");
                 System.out.println("向卖家"+seller.getMobile()+"发短信："+"买家["+buyer.getNickName()+"]预约了您的项目，请进入服务号[邂逅时刻]查看");
                 break;
             case "SELLER_APPLY":
-                bean.setTemplateCode("SMS_12350337");
+                bean.setTemplateCode("SMS_14740368");
                 bean.setToMobile(buyer.getMobile());
                 bean.setContent("{\"name\":\""+seller.getNickName()+"\"}");
                 System.out.println("向买家"+buyer.getMobile()+"发短信："+"卖家["+seller.getNickName()+"]答复了您的邀请，请进入服务号[邂逅时刻]查看");
                 break;
             case "BUYER_CONFIRM":
-                bean.setTemplateCode("SMS_12410324");
+                bean.setTemplateCode("SMS_14725333");
                 bean.setToMobile(seller.getMobile());
                 SimpleDateFormat sdf = new SimpleDateFormat("yy年MM月dd日 HH点mm");
                 SimpleDateFormat sdf1 = new SimpleDateFormat("yyyy-MM-dd HH:mm");
@@ -276,13 +276,13 @@ public class OrderServiceImpl implements OrderService {
                 System.out.println("向卖家"+seller.getMobile()+"发短信："+"买家["+buyer.getNickName()+"]确认了邂逅时间，具体沟通时间为["+finalAppointmentTime+"]，请进入服务号[邂逅时刻]查看");
                 break;
             case "SELLER_FINISH":
-                bean.setTemplateCode("SMS_12335356");
+                bean.setTemplateCode("SMS_14760340");
                 bean.setToMobile(buyer.getMobile());
                 bean.setContent("{\"name\":\""+seller.getNickName()+"\"}");
                 System.out.println("向买家"+buyer.getMobile()+"发短信："+"卖家["+seller.getNickName()+"]已经确认完成双方邀约，请进入服务号[邂逅时刻]查看");
                 break;
             case "BUYLLER_FINISH":
-                bean.setTemplateCode("SMS_12360451");
+                bean.setTemplateCode("SMS_14735327");
                 bean.setToMobile(seller.getMobile());
                 bean.setContent("{\"name\":\""+buyer.getNickName()+"\"}");
                 System.out.println("向卖家"+seller.getMobile()+"发短信："+"买家["+buyer.getNickName()+"]已经确认完成双方邀约，项目款项已入账，请进入服务号[邂逅时刻]查收");

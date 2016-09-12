@@ -52,7 +52,7 @@ public class OrderController extends BaseController{
 
         ItemOrder order = orderService.findOrderByOrderId(orderId);
         remindService.deleteRemindByObjIdAndUserId(orderId,userId);
-        System.out.println(orderId + " "+userId);
+        Feedback sellerFeedback = null;//对方的评价
         String toStr = "";
         switch (order.getOrderStatus()){
             case "BEGIN":
@@ -73,8 +73,10 @@ public class OrderController extends BaseController{
                 break;
             case "BUYLLER_FINISH":
                 Feedback feedback = feedbackService.findFeedBackByOrderId(order.getUserId(),orderId);
+                sellerFeedback = feedbackService.findFeedBackByOrderId(order.getOrderUserId(),orderId);
                 model.addAttribute("feedback",feedback);
                 model.addAttribute("canFinish","false");
+                model.addAttribute("sellerFeedback",sellerFeedback);
                 toStr = "appointment/buyerFinish";
                 break;
             case "SELLER_FINISH":
@@ -84,12 +86,16 @@ public class OrderController extends BaseController{
                     canFinish1 = "true";
                 }
                 Feedback feedback1 = feedbackService.findFeedBackByOrderId(order.getUserId(),orderId);
+                sellerFeedback = feedbackService.findFeedBackByOrderId(order.getOrderUserId(),orderId);
+                model.addAttribute("sellerFeedback",sellerFeedback);
                 model.addAttribute("feedback",feedback1);
                 model.addAttribute("canFinish",canFinish1);
                 toStr = "appointment/buyerFinish";
                 break;
             case "FINISH":
                 Feedback feedback2 = feedbackService.findFeedBackByOrderId(order.getUserId(),orderId);
+                sellerFeedback = feedbackService.findFeedBackByOrderId(order.getOrderUserId(),orderId);
+                model.addAttribute("sellerFeedback",sellerFeedback);
                 model.addAttribute("feedback",feedback2);
                 model.addAttribute("canFinish","false");
                 toStr = "appointment/buyerFinish";
@@ -107,6 +113,7 @@ public class OrderController extends BaseController{
         ItemOrder order = orderService.findOrderByOrderId(orderId);
         remindService.deleteRemindByObjIdAndUserId(orderId,userId);
         String toStr = "";
+        Feedback buyerFeedback = null;
         switch (order.getOrderStatus()){
             case "BEGIN":
                 UserInfo seller = userService.findUserByUserId(userId);
@@ -130,6 +137,8 @@ public class OrderController extends BaseController{
                 break;
             case "SELLER_FINISH":
                 Feedback feedback = feedbackService.findFeedBackByOrderId(order.getOrderUserId(),orderId);
+                buyerFeedback = feedbackService.findFeedBackByOrderId(order.getUserId(),orderId);
+                model.addAttribute("buyerFeedback",buyerFeedback);
                 model.addAttribute("feedback",feedback);
                 model.addAttribute("canFinish","false");
                 toStr = "appointment/sellerFinish";
@@ -142,12 +151,16 @@ public class OrderController extends BaseController{
                     canFinish1 = "true";
                 }
                 Feedback feedback1 = feedbackService.findFeedBackByOrderId(order.getOrderUserId(),orderId);
+                buyerFeedback = feedbackService.findFeedBackByOrderId(order.getUserId(),orderId);
+                model.addAttribute("buyerFeedback",buyerFeedback);
                 model.addAttribute("feedback",feedback1);
                 model.addAttribute("canFinish",canFinish1);
                 toStr = "appointment/sellerFinish";
                 break;
             case "FINISH":
                 Feedback feedback2 = feedbackService.findFeedBackByOrderId(order.getOrderUserId(),orderId);
+                buyerFeedback = feedbackService.findFeedBackByOrderId(order.getUserId(),orderId);
+                model.addAttribute("buyerFeedback",buyerFeedback);
                 model.addAttribute("feedback",feedback2);
                 model.addAttribute("canFinish","false");
                 toStr = "appointment/sellerFinish";
