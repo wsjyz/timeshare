@@ -179,6 +179,30 @@ public class UserDAOImpl extends BaseDAO implements UserDAO {
     }
 
     @Override
+    public int findUserCount(UserInfo userInfo) {
+        StringBuilder countSql = new StringBuilder(
+                "select count(*) from t_user_info where 1=1 ");
+        if (userInfo != null) {
+            countSql.append(" and ");
+            if(StringUtils.isNotBlank(userInfo.getMobile())){
+                countSql.append(" mobile = '"+userInfo.getMobile()+"',");
+            }
+
+            if (countSql.lastIndexOf(",") + 1 == countSql.length()) {
+                countSql.delete(countSql.lastIndexOf(","), countSql.length());
+            }
+        }
+        return getJdbcTemplate().queryForObject(countSql.toString(), Integer.class);
+    }
+    @Override
+    public int findUserHasMobileCount() {
+        StringBuilder countSql = new StringBuilder(
+                "select count(*) from t_user_info where mobile is not null ");
+
+        return getJdbcTemplate().queryForObject(countSql.toString(), Integer.class);
+    }
+
+    @Override
     public String deleteById(String userId) {
         return null;
     }

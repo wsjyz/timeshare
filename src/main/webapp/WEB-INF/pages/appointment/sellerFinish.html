@@ -186,9 +186,17 @@
                                 </div>
                             </div>
                         </li>
-
+                        <#if buyerFeedback??>
+                            <li class="card">
+                                <div class="card-header jz-bg-icon5">对方的评价</div>
+                                <div class="card-content">
+                                    <span style="margin-left: 2rem;">${buyerFeedback.rating}分</span>
+                                    <div class="card-content-inner">${buyerFeedback.content}</div>
+                                </div>
+                            </li>
+                        </#if>
                             <li class="card jz-star-bottom">
-                                <div class="card-header jz-bg-icon5"><#if buyerFeedback??>对方的评价<#else><#if feedback??>您的评价<#else>顺便评价一下，再打个分吧</#if></#if></div>
+                                <div class="card-header jz-bg-icon5"><#if feedback??>您的评价<#else>顺便评价一下，再打个分吧</#if></div>
                                 <div class="card-content">
                                     <fieldset class="starability-checkmark">
                                         <input type="radio" id="rate5" name="rating" value="5" />
@@ -206,10 +214,9 @@
                                         <input type="radio" id="rate1" name="rating" value="1" />
                                         <label for="rate1" title="Terrible">1 star</label>
                                     </fieldset>
-                                    <#if buyerFeedback??><div class="card-content-inner">${buyerFeedback.content}</div><#else>
-                                        <#if feedback??><div class="card-content-inner">${feedback.content}</div><#else>
-                                            <div class="item-input"><textarea name="orderFeedBack" id="orderFeedBack" placeholder="请输入评价内容"></textarea></div>
-                                        </#if>
+
+                                    <#if feedback??><div class="card-content-inner">${feedback.content}</div><#else>
+                                        <div class="item-input"><textarea name="orderFeedBack" id="orderFeedBack" placeholder="请输入评价内容"></textarea></div>
                                     </#if>
                                 </div>
                             </li>
@@ -247,15 +254,8 @@
             $('form').submit();
         });
     }
-    <#if sellerFeedback??>
-        var feedbackRating = '${buyerFeedback.rating}';
-    <#else>
-        <#if feedback??>
-            var feedbackRating = '${feedback.rating}';
-        <#else>
-            var feedbackRating = '';
-        </#if>
-    </#if>
+
+    var feedbackRating = '${feedback.rating}';
 
     if(feedbackRating != ''){
         $("input[name='rating']").removeAttr("checked");

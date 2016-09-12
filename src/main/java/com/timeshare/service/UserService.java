@@ -33,4 +33,8 @@ public interface UserService {
 
     List<Item> getUserItems(Item params,String firstItemId);
 
+    int findUserCount(UserInfo userInfo);
+
+    int findUserHasMobileCount();
+
 }

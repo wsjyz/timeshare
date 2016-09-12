@@ -23,4 +23,8 @@ public interface UserDAO {
 
     UserInfo findUserByOpenId(String openId);
 
+    int findUserCount(UserInfo userInfo);
+
+    int findUserHasMobileCount();
+
 }

@@ -113,4 +113,14 @@ public class UserServiceImpl implements UserService{
 
         return items;
     }
+
+    @Override
+    public int findUserCount(UserInfo userInfo) {
+        return userDAO.findUserCount(userInfo);
+    }
+
+    @Override
+    public int findUserHasMobileCount() {
+        return userDAO.findUserHasMobileCount();
+    }
 }

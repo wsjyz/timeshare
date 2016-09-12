@@ -58,6 +58,11 @@
                             <i class="fa fa-power-off"></i>
                         </a>
                     </div>
+                    <div class="btn-group">
+                        <a data-placement="bottom" data-original-title="Show / Hide Left" data-toggle="tooltip" class="btn btn-primary btn-sm toggle-left" id="menu-toggle">
+                            <i class="fa fa-bars"></i>
+                        </a>
+                    </div>
                 </div>
 
             </div><!-- /.container-fluid -->
@@ -99,7 +104,7 @@
             <li class="nav-header">Menu</li>
             <li class="nav-divider"></li>
             <li class="">
-                <a href="dashboard.html">
+                <a href="#" id="indexBtn">
                     <i class="fa fa-dashboard"></i><span class="link-title">&nbsp;Dashboard</span>
                 </a>
             </li>
@@ -125,7 +130,7 @@
           </span>  </a>
             </li>
             <li>
-                <a href="maps.html">
+                <a href="#" id="userManageBtn">
                     <i class="fa fa-map-marker"></i><span class="link-title">
             Users
           </span> </a>
@@ -462,6 +467,16 @@
 
     });
 
+    $("#userManageBtn").on('click', function () {
+        $("#content").load("${request.contextPath}/manager/user/to-user-manage");
+    });
+    $("#indexBtn").on('click', function () {
+        window.location.href = '${request.contextPath}/manager/main/to-index';
+    });
+
+    $("#menu-toggle").on('click', function () {
+        $("body").toggleClass('sidebar-left-opened');
+    });
     $(document).ready(function() {
         var oTable = $('#example').dataTable( {
             "bJQueryUI": true,
