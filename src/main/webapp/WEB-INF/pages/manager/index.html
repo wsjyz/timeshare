@@ -390,7 +390,7 @@
             $.get('${request.contextPath}/manager/item/modify', {itemId: itemId,itemStatus: 'undercarriage'}, function (response) {
 
                 if(response){
-                    if(response == 'success'){
+                    if(response != null && response != ''&& response != 'failed'){
                         alert('下架成功');
                         window.location.reload();
                     }else{
@@ -439,7 +439,7 @@
         $.get('${request.contextPath}/manager/item/modify', {itemId: itemId,itemStatus: 'for_sale'}, function (response) {
 
             if(response){
-                if(response == 'success'){
+                if(response != null && response != ''&& response != 'failed'){
                     alert('审批成功');
                     window.location.reload();
                 }else{
@@ -455,7 +455,7 @@
         $.get('${request.contextPath}/manager/item/modify', {itemId: itemId,itemStatus: 'not_pass',notPassReason:$('#notPassReason').val()}, function (response) {
 
             if(response){
-                if(response == 'success'){
+                if(response != null && response != ''&& response != 'failed'){
                     alert('审批成功');
                     window.location.reload();
                 }else{
