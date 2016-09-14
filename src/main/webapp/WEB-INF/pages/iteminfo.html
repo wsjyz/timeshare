@@ -212,6 +212,7 @@
 <body>
 <input type="hidden" id="itemId" value="${itemId}">
 <input type="hidden" id="userId" value="${userId}">
+<input type="hidden" id="headImgPath" >
 <div class="page-group">
     <div class="page page-current">
         <!-- 你的html代码 -->
@@ -299,8 +300,43 @@
 <script type='text/javascript' src='//g.alicdn.com/sj/lib/zepto/zepto.min.js' charset='utf-8'></script>
 <script type='text/javascript' src='//g.alicdn.com/msui/sm/0.6.2/js/sm.min.js' charset='utf-8'></script>
 <script type='text/javascript' src='//g.alicdn.com/msui/sm/0.6.2/js/sm-extend.min.js' charset='utf-8'></script>
+<script type='text/javascript' src='https://res.wx.qq.com/open/js/jweixin-1.0.0.js'></script>
 <script>
     $.showIndicator();
+    wx.config({
+        appId: "${parmsMap['appId']}", // 必填，公众号的唯一标识
+        timestamp:${parmsMap['timestamp']} , // 必填，生成签名的时间戳
+        nonceStr: "${parmsMap['nonceStr']}", // 必填，生成签名的随机串
+        signature: "${parmsMap['signature']}",// 必填，签名，见附录1
+        jsApiList: [
+                'checkJsApi',
+                'onMenuShareTimeline',
+                'onMenuShareAppMessage',
+                'onMenuShareQQ'
+        ] // 必填，需要使用的JS接口列表，所有JS接口列表见附录2
+    });
+    wx.ready(function(){
+            wx.onMenuShareAppMessage({
+                title: '邂逅时刻',
+                desc: $('#titleSp').text(),
+                link: window.location.href,
+                imgUrl: $('#headImgPath').text(),
+                trigger: function (res) {
+                    //alert('用户点击发送给朋友');
+                },
+                success: function (res) {
+                    //$.toast('已分享');
+                },
+                cancel: function (res) {
+                    //$.toast('已取消分享');
+                },
+                fail: function (res) {
+                    console.log('失败');
+                }
+            });
+    });
+
+
 
     $("body").on( "click", "#orderBtn", function(){
         var itemId = $('#itemId').val();
@@ -341,10 +377,12 @@
             //$('#nicknameSp').text(response.userInfo.nickName);
 
             $('#useCountSp').text(response.item.useCount);
+            $('#headImgPath').text(response.userInfo.headImgPath);
             //$('#userDesP').text(response.userInfo.description);
             $.hideIndicator();
         }
     });
+
     $.get('${request.contextPath}/feedback/list-by-item', {itemId: $('#itemId').val()}, function (response) {
         if(response){
             $.each(response, function(i, item){

@@ -9,6 +9,7 @@ import com.timeshare.domain.UserInfo;
 import com.timeshare.service.ItemService;
 import com.timeshare.service.UserService;
 import com.timeshare.utils.Contants;
+import com.timeshare.utils.WxUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -24,6 +25,7 @@ import java.net.URLDecoder;
 import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by user on 2016/6/21.
@@ -77,7 +79,7 @@ public class ItemController extends BaseController{
     }
 
     @RequestMapping(value = "/to-view/{itemId}")
-    public String toView(@PathVariable String itemId,Model model,@CookieValue(value="time_sid", defaultValue="") String userId) {
+    public String toView(@PathVariable String itemId,Model model,@CookieValue(value="time_sid", defaultValue="") String userId,HttpServletRequest request) {
         String returnStr = "";
         Item item = itemService.findItemByItemId(itemId);
         if(item != null &&
@@ -96,6 +98,10 @@ public class ItemController extends BaseController{
             model.addAttribute("itemId",itemId);
             model.addAttribute("selfItem",selfItem);
             model.addAttribute("itemStatus",item.getItemStatus());
+            //微信jssdk相关代码
+            String url = WxUtils.getUrl(request);
+            Map<String,String> parmsMap = WxUtils.sign(url);
+            model.addAttribute("parmsMap",parmsMap);
         }
 
         return returnStr;
