@@ -163,6 +163,9 @@ public class ItemOrder extends BaseDomain {
     }
 
     public String getSuggestAppointmentTime() {
+        if(suggestAppointmentTime != null && suggestAppointmentTime.length() > 16){
+            return suggestAppointmentTime.substring(0,16);
+        }
         return suggestAppointmentTime;
     }
 
@@ -171,6 +174,9 @@ public class ItemOrder extends BaseDomain {
     }
 
     public String getFinalAppointmentTime() {
+        if(finalAppointmentTime != null && finalAppointmentTime.length() > 16){
+            return finalAppointmentTime.substring(0,16);
+        }
         return finalAppointmentTime;
     }
 
