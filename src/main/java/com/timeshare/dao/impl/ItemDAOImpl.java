@@ -28,7 +28,7 @@ public class ItemDAOImpl extends BaseDAO implements ItemDAO {
         StringBuilder sql = new StringBuilder("insert into t_item " +
                 "(item_id,title,price,score,description,item_type,use_count,create_user_id,opt_time,create_user_name,item_status,recommend,duration,practice_description,practice_time,item_to_object,item_value,item_catalog)" +
                 " values(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)");
-        String id = CommonStringUtils.genPK();
+        final String id = CommonStringUtils.genPK();
         int result = getJdbcTemplate().update(sql.toString(), new PreparedStatementSetter() {
             @Override
             public void setValues(PreparedStatement ps) throws SQLException {

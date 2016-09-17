@@ -54,7 +54,7 @@ public class ItemManageController {
             Item dbItem = itemService.findItemByItemId(item.getItemId());
             UserInfo userInfo = userService.findUserByUserId(dbItem.getUserId());
             userInfo.setSellCounts(userInfo.getSellCounts() + 1);
-            userService.modifyUser(userInfo);
+            //userService.modifyUser(userInfo);
         }
         String result = itemService.modifyItem(item);
         return result;

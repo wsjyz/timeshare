@@ -155,7 +155,7 @@
             }
             html += '<ul>'+
                     '<li>'+
-                    '<a href="#" class="item-link item-content" onclick="toViewUserItem(\''+item.item.userId+'\')">'+
+                    '<a href="#" class="item-link item-content" onclick="toViewUserItem(\''+item.item.userId+'\',\''+item.item.itemId+'\')">'+
                     '<div class="item-media">' +
                     '<div class="commentAvatarDiv">' +
                     '<img class="commentAvatarImage" src="'+headPic+'" />' +
@@ -224,8 +224,8 @@
         });
     });
 
-    function toViewUserItem(id){
-        window.location.href = "${request.contextPath}/user/to-view-items/"+id;
+    function toViewUserItem(userId,itemId){
+        window.location.href = "${request.contextPath}/user/to-view-items/"+userId+"/"+itemId;
     }
     $("body").on( "click", "#indexBtn", function(){
         window.location.href = "${request.contextPath}/index/to-index";

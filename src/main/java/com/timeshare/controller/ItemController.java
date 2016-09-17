@@ -74,6 +74,7 @@ public class ItemController extends BaseController{
         Item item = new Item();
         item.setTitle(keyword);
         item.setCreateUserName(keyword);
+        item.setItemStatus(Contants.ITEM_STATUS.for_sale.toString());
         List<ItemDTO> itemList = itemService.searchItemList(item,startIndex,loadSize);
         return itemList;
     }
