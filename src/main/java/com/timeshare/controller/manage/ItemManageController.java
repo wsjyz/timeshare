@@ -5,6 +5,7 @@ import com.timeshare.domain.*;
 import com.timeshare.service.ItemService;
 import com.timeshare.service.UserService;
 import com.timeshare.utils.Contants;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -31,11 +32,13 @@ public class ItemManageController {
 
     @RequestMapping(value = "/list")
     @ResponseBody
-    public PageModel findItemList(PageModel pageModel) {
+    public PageModel findItemList(PageModel pageModel,String itemStatus) {
 
         List<Item> itemList = new ArrayList<>();
         Item parms = new Item();
-
+        if(StringUtils.isNotBlank(itemStatus) && !itemStatus.equals("all")){
+            parms.setItemStatus(itemStatus);
+        }
         //parms.setItemStatus(Contants.ITEM_STATUS.apply_for_online.toString());
         itemList = itemService.findItemList(parms,pageModel.getiDisplayStart(),pageModel.getiDisplayStart()+pageModel.getiDisplayLength());
         int count = itemService.findItemCount(parms);
@@ -82,5 +85,16 @@ public class ItemManageController {
         model.addAttribute("imageType",imgType);
         model.addAttribute("imageId",imageId);
         return "uploadimg";
+    }
+    @RequestMapping(value = "/to-item-manage")
+    public String toUserManage(Model model){
+        return "manager/item";
+    }
+
+    @ResponseBody
+    @RequestMapping(value = "/find-item-count")
+    public int findItemCount(Item item){
+        int count = itemService.findItemCount(item);
+        return count;
     }
 }

@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>项目管理</title>
+</head>
+<body>
+<div class="inner bg-light lter">
+    <h1 id="bootstrap-admin-template">待审批的项目</h1>
+    <table id="example" class="table table-striped table-bordered" cellspacing="0" width="100%">
+        <thead>
+        <tr>
+            <th>标题</th>
+            <th>价格</th>
+            <th>时长</th>
+            <th>状态</th>
+            <th>操作</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr>
+            <td>Tiger Nixon</td>
+            <td>System Architect</td>
+            <td>Edinburgh</td>
+            <td>61</td>
+            <td>2011/04/25</td>
+        </tr>
+        <tr>
+            <td>Garrett Winters</td>
+            <td>Accountant</td>
+            <td>Tokyo</td>
+            <td>63</td>
+            <td>2011/07/25</td>
+        </tr>
+        <tr>
+            <td>Ashton Cox</td>
+            <td>Junior Technical Author</td>
+            <td>San Francisco</td>
+            <td>66</td>
+            <td>2009/01/12</td>
+        </tr>
+        </tbody>
+    </table>
+
+</div><!-- /.inner -->
+</body>
+<script>
+    $(document).ready(function() {
+        var oTable = $('#example').dataTable( {
+            "bJQueryUI": true,
+            "sPaginationType": "full_numbers",
+            "bProcessing": true,
+            "sAjaxSource": "${request.contextPath}/manager/item/list?itemStatus=apply_for_online",
+            "fnServerParams": function ( aoData ) {
+                aoData.push( { "name": "start", "value": 0 } );
+                aoData.push( { "name": "end", "value": -1 } );
+            },
+            "bServerSide": true,
+            "aoColumns": [
+                { "mData": "title" },
+                { "mData": "price" },
+                { "mData": "duration" },
+                { "mData": "itemStatus" },
+                { "mData": "itemId" }
+            ],
+            "aoColumnDefs": [
+                {
+                    "mRender": function ( data, type, row ) {
+                        var htmlStr = '';
+                        var itemStatus = row.itemStatus;
+                        if(itemStatus == 'apply_for_online'){
+                            htmlStr += '<a href ="#" onclick="toEdit(\''+data+'\',\'apply\')">审批</a>'+'&nbsp;';
+                        }else if(itemStatus == 'for_sale'){
+                            htmlStr+='<a href ="#" onclick="toEdit(\''+data+'\',\'undercarriage\')">下架</a>'+'&nbsp;';
+                            htmlStr+='<a href ="#" onclick="toEdit(\''+data+'\',\'recommend\')">推荐</a>'+'&nbsp;';
+                        }
+                        htmlStr+='<a href ="#" onclick="toEdit(\''+data+'\',\'delete\')">删除</a>'+'&nbsp;';
+
+                        return htmlStr;
+                    },
+                    "aTargets": [ 4 ]
+                }
+            ]
+        } );
+
+    } );
+</script>
+</html>

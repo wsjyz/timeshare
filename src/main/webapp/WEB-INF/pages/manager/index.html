@@ -103,78 +103,27 @@
         <ul id="menu" class="bg-blue dker">
             <li class="nav-header">Menu</li>
             <li class="nav-divider"></li>
-            <li class="">
-                <a href="#" id="indexBtn">
-                    <i class="fa fa-dashboard"></i><span class="link-title">&nbsp;Dashboard</span>
-                </a>
-            </li>
-
-            <li>
-                <a href="table.html">
-                    <i class="fa fa-table"></i>
-                    <span class="link-title">Item</span>
-                </a>
-            </li>
             <li class="active">
-                <a href="file.html">
-                    <i class="fa fa-file"></i>
-              <span class="link-title">
-      Order
-          </span> </a>
+                <a href="#" id="indexBtn">
+                    <i class="fa fa-dashboard"></i><span class="link-title">&nbsp;项目管理</span>
+                </a>
             </li>
             <li>
-                <a href="typography.html">
-                    <i class="fa fa-font"></i>
-              <span class="link-title">
-            Feedback
-          </span>  </a>
+                <a href="#" id="needApplyBtn">
+                    <i class="fa fa-table"></i>
+                    <span class="link-title">待审批的项目</span>
+                    <span id="applyNotification" class="label label-danger user-label" style="display: none">16</span>
+                </a>
             </li>
             <li>
                 <a href="#" id="userManageBtn">
-                    <i class="fa fa-map-marker"></i><span class="link-title">
-            Users
-          </span> </a>
-            </li>
-            <li>
-                <a href="chart.html">
-                    <i class="fa fa fa-bar-chart-o"></i>
-              <span class="link-title">
-            Charts
-          </span> </a>
-            </li>
-            <li>
-                <a href="calendar.html">
-                    <i class="fa fa-calendar"></i>
-              <span class="link-title">
-            Calendar
-          </span> </a>
+                    <i class="fa fa-map-marker"></i><span class="link-title">&nbsp;用户管理</span>
+                </a>
             </li>
 
-            <li>
-                <a href="grid.html">
-                    <i class="fa fa-columns"></i>
-              <span class="link-title">
-    Grid
-    </span>
-                </a>
-            </li>
-            <li>
-                <a href="blank.html">
-                    <i class="fa fa-square-o"></i>
-              <span class="link-title">
-    Blank Page
-    </span>
-                </a>
-            </li>
+
             <li class="nav-divider"></li>
-            <li>
-                <a href="login.html">
-                    <i class="fa fa-sign-in"></i>
-              <span class="link-title">
-    Login Page
-    </span>
-                </a>
-            </li>
+
 
         </ul><!-- /#menu -->
     </div><!-- /#left -->
@@ -354,6 +303,22 @@
 <!-- MetisMenu -->
 <script src="${request.contextPath}/js/metisMenu.min.js"></script>
 <script type="text/javascript" language="javascript" class="init">
+
+    function findApplyCount(){
+        $('#applyNotification').hide();
+        $.get('${request.contextPath}/manager/item/find-item-count', {itemStatus: 'apply_for_online'}, function (response) {
+            if(response){
+                if(response != '0'){
+                    $('#applyNotification').text(response);
+                    $('#applyNotification').show();
+                }
+
+            }
+        });
+    }
+    findApplyCount();
+    setInterval("findApplyCount()", 60000);
+
     var toEdit = function (itemId,opt){
         $('#itemId').val(itemId);
         if(opt == 'apply'){
@@ -473,6 +438,9 @@
     $("#indexBtn").on('click', function () {
         window.location.href = '${request.contextPath}/manager/main/to-index';
     });
+    $("#needApplyBtn").on('click', function () {
+        $("#content").load("${request.contextPath}/manager/item/to-item-manage");
+    });
 
     $("#menu-toggle").on('click', function () {
         $("body").toggleClass('sidebar-left-opened');
@@ -482,7 +450,7 @@
             "bJQueryUI": true,
             "sPaginationType": "full_numbers",
             "bProcessing": true,
-            "sAjaxSource": "${request.contextPath}/manager/item/list",
+            "sAjaxSource": "${request.contextPath}/manager/item/list?itemStatus=all",
             "fnServerParams": function ( aoData ) {
                 aoData.push( { "name": "start", "value": 0 } );
                 aoData.push( { "name": "end", "value": -1 } );

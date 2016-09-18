@@ -231,7 +231,7 @@ public class ItemDAOImpl extends BaseDAO implements ItemDAO {
         StringBuilder countSql = new StringBuilder(
                 "select count(*) from t_item where 1=1 ");
         if (StringUtils.isNotEmpty(item.getItemStatus())) {
-            countSql.append(" and i.item_status = '"+item.getItemStatus()+"' ");
+            countSql.append(" and item_status = '"+item.getItemStatus()+"' ");
         }
         return getJdbcTemplate().queryForObject(countSql.toString(), Integer.class);
     }
