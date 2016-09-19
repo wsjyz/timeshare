@@ -53,12 +53,22 @@ public class ItemManageController {
     @RequestMapping(value = "/modify")
     @ResponseBody
     public String modify(Item item) {
-        if(item.getItemStatus().equals(Contants.ITEM_STATUS.for_sale.toString())){
+        if(StringUtils.isNotBlank(item.getItemStatus())){
             Item dbItem = itemService.findItemByItemId(item.getItemId());
             UserInfo userInfo = userService.findUserByUserId(dbItem.getUserId());
-            userInfo.setSellCounts(userInfo.getSellCounts() + 1);
-            //userService.modifyUser(userInfo);
+            int sellCount = userInfo.getSellCounts();
+            if(item.getItemStatus().equals(Contants.ITEM_STATUS.for_sale.toString())){
+
+                userInfo.setSellCounts(sellCount + 1);
+                //userService.modifyUser(userInfo);
+            }else if(item.getItemStatus().equals(Contants.ITEM_STATUS.undercarriage.toString())){
+                if(sellCount > 0){
+                    userInfo.setSellCounts(sellCount - 1);
+                }
+
+            }
         }
+
         String result = itemService.modifyItem(item);
         return result;
     }

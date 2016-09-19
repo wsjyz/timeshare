@@ -43,7 +43,7 @@ public class ItemDAOImpl extends BaseDAO implements ItemDAO {
                 ps.setString(9,info.getOptTime());
                 ps.setString(10,info.getCreateUserName());
                 ps.setString(11,info.getItemStatus());
-                ps.setBoolean(12,info.isRecommend());
+                ps.setString(12,info.getRecommend());
                 ps.setInt(13,info.getDuration());
                 ps.setString(14,info.getPracticeDescription());
                 ps.setString(15,info.getPracticeTime());
@@ -87,8 +87,8 @@ public class ItemDAOImpl extends BaseDAO implements ItemDAO {
         if(item.getUseCount() != 0){
             sql.append(" use_count = "+item.getUseCount()+",");
         }
-        if(item.isRecommend()){
-            sql.append(" recommend = "+item.isRecommend()+",");
+        if(StringUtils.isNotBlank(item.getRecommend())){
+            sql.append(" recommend = '"+item.getRecommend()+"',");
         }
         if(StringUtils.isNotBlank(item.getNotPassReason())){
             sql.append(" notPassReason = '"+item.getNotPassReason()+"',");
@@ -186,7 +186,7 @@ public class ItemDAOImpl extends BaseDAO implements ItemDAO {
 
         if(condition.equals("recommend")){//推荐
             sql.append("select item_id,title,price,score,item_type,duration,item_status,use_count,recommend,create_user_id,opt_time,create_user_name from t_item  " +
-                    " where recommend = true and item_status = '"+ Contants.ITEM_STATUS.for_sale+"' order by opt_time desc");
+                    " where recommend = 'true' and item_status = '"+ Contants.ITEM_STATUS.for_sale+"' order by opt_time desc");
         }else if(condition.equals("new")){//最新
             sql.append("select item_id,title,price,score,item_type,duration,item_status,use_count,recommend,create_user_id,opt_time,create_user_name from t_item where item_status = '"+ Contants.ITEM_STATUS.for_sale+"' order by opt_time desc");
         }else if(condition.equals("hot")){//最火
@@ -263,7 +263,7 @@ public class ItemDAOImpl extends BaseDAO implements ItemDAO {
             item.setItemType(rs.getString("item_type"));
             item.setTitle(rs.getString("title"));
             item.setUseCount(rs.getInt("use_count"));
-            item.setRecommend(rs.getBoolean("recommend"));
+            item.setRecommend(rs.getString("recommend"));
             item.setDuration(rs.getInt("duration"));
             if(doesColumnExist("notPassReason",rs)){
                 item.setNotPassReason(rs.getString("notPassReason"));
@@ -314,7 +314,7 @@ public class ItemDAOImpl extends BaseDAO implements ItemDAO {
             item.setItemType(rs.getString("item_type"));
             item.setTitle(rs.getString("title"));
             item.setUseCount(rs.getInt("use_count"));
-            item.setRecommend(rs.getBoolean("recommend"));
+            item.setRecommend(rs.getString("recommend"));
             item.setDuration(rs.getInt("duration"));
             if(doesColumnExist("notPassReason",rs)){
                 item.setNotPassReason(rs.getString("notPassReason"));

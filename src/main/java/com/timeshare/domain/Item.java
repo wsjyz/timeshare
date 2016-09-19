@@ -16,7 +16,7 @@ public class Item extends BaseDomain{
     private String itemStatus;
     private int useCount;
     private int duration;
-    private boolean recommend;
+    private String recommend;
     private String notPassReason;
     private String practiceDescription;
 
@@ -93,11 +93,11 @@ public class Item extends BaseDomain{
         this.remindCount = remindCount;
     }
 
-    public boolean isRecommend() {
+    public String getRecommend() {
         return recommend;
     }
 
-    public void setRecommend(boolean recommend) {
+    public void setRecommend(String recommend) {
         this.recommend = recommend;
     }
 

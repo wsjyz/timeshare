@@ -376,10 +376,10 @@
                 area: ['60%', '50%'],
                 btn: ['推荐到首页','取消']
                 ,yes:function(index, layero){
-                    $.get('${request.contextPath}/manager/item/modify', {itemId: itemId,itemStatus: 'for_sale',recommend:1}, function (response) {
+                    $.get('${request.contextPath}/manager/item/modify', {itemId: itemId,itemStatus: 'for_sale',recommend:'true'}, function (response) {
 
                         if(response){
-                            if(response == 'success'){
+                            if(response != 'failed'){
                                 alert('推荐成功');
                                 window.location.reload();
                             }else{
@@ -395,6 +395,36 @@
                     },
                 content: '${request.contextPath}/manager/item/to-upload-img?itemId='+itemId //iframe的url
 
+            });
+        }else if(opt == 'unrecommend'){
+            layer.confirm('你真的要取消推荐?', {icon: 3, title:'提示',btn: ['我就是要取消','算了吧'],
+                yes:function(index, layero){
+                    $.get('${request.contextPath}/manager/item/modify', {itemId: itemId,recommend:'false'}, function (response) {
+
+                        if(response){
+                            if(response != 'failed'){
+                                alert('操作成功');
+                                window.location.reload();
+                            }else{
+                                alert('操作失败');
+                            }
+                        }
+
+                    });
+
+                }
+            });
+        }else if(opt == 'onshelf'){
+            $.get('${request.contextPath}/manager/item/modify', {itemId: itemId,itemStatus: 'for_sale'}, function (response) {
+
+                if(response){
+                    if(response != null && response != ''&& response != 'failed'){
+                        alert('上架成功');
+                        window.location.reload();
+                    }else{
+                        alert('上架失败');
+                    }
+                }
             });
         }
 
@@ -461,24 +491,36 @@
                 { "mData": "price" },
                 { "mData": "duration" },
                 { "mData": "itemStatus" },
-                { "mData": "itemId" }
+                { "mData": "itemId" },
+                { "mData": "recommend" }
             ],
             "aoColumnDefs": [
                 {
                     "mRender": function ( data, type, row ) {
                         var htmlStr = '';
                         var itemStatus = row.itemStatus;
+                        var recommend = row.recommend;
                         if(itemStatus == 'apply_for_online'){
                             htmlStr += '<a href ="#" onclick="toEdit(\''+data+'\',\'apply\')">审批</a>'+'&nbsp;';
                         }else if(itemStatus == 'for_sale'){
                             htmlStr+='<a href ="#" onclick="toEdit(\''+data+'\',\'undercarriage\')">下架</a>'+'&nbsp;';
-                            htmlStr+='<a href ="#" onclick="toEdit(\''+data+'\',\'recommend\')">推荐</a>'+'&nbsp;';
+                            if(recommend != 'true'){
+                                htmlStr+='<a href ="#" onclick="toEdit(\''+data+'\',\'recommend\')">推荐</a>'+'&nbsp;';
+                            }else{
+                                htmlStr+='<a href ="#" onclick="toEdit(\''+data+'\',\'unrecommend\')">取消推荐</a>'+'&nbsp;';
+                            }
+
+                        }else if(itemStatus == 'undercarriage'){
+                            htmlStr+='<a href ="#" onclick="toEdit(\''+data+'\',\'onshelf\')">上架</a>'+'&nbsp;';
                         }
-                        htmlStr+='<a href ="#" onclick="toEdit(\''+data+'\',\'delete\')">删除</a>'+'&nbsp;';
+                        //htmlStr+='<a href ="#" onclick="toEdit(\''+data+'\',\'delete\')">删除</a>'+'&nbsp;';
 
                         return htmlStr;
                     },
                     "aTargets": [ 4 ]
+                },
+                {
+                    "bVisible": false, "aTargets": [5]
                 }
             ]
         } );
