@@ -17,7 +17,7 @@ public class WxUtils {
 
     public static AccessTokenBean weixinAccessTokenBean;
     public static JsapiTicketBean jsapiTicketBean;
-    public static final String ACCESSTOKENURL = "https://api.weixin.qq.com/cgi-bin/";
+    public static final String ACCESSTOKENURL = "https://api.weixin.qq.com/cgi-bin/token";
     public static final String TICKETURL = "https://api.weixin.qq.com/cgi-bin/ticket/";
 
     public static String createSign(SortedMap parameters,String key) {
@@ -44,15 +44,14 @@ public class WxUtils {
     }
     private static AccessTokenBean obtainAccessToken(){
         weixinAccessTokenBean = new AccessTokenBean();
-        HTTPSClient client = new HTTPSClient();
-        client.setSERVER_HOST_URL(ACCESSTOKENURL);
-        client.setServiceUri("token");
+        OkhttpClient client = new OkhttpClient();
+
         Map<String,Object> paramsMap = new HashMap<String,Object>();
         paramsMap.put("appid", Contants.APPID);
         paramsMap.put("secret",Contants.SECRET);
         paramsMap.put("grant_type","client_credential");
-        client.setParams(paramsMap);
-        String response = client.request();
+        String response = client.post(ACCESSTOKENURL,paramsMap);
+        System.out.println(response);
         AccessTokenBean accessTokenBean = JSON.parseObject(response,new TypeReference<AccessTokenBean>(){});
         return accessTokenBean;
     }

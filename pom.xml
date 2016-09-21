@@ -183,7 +183,11 @@
             <!--本地jar的路径,相对或者绝对都可以-->
             <systemPath>D:/workspace/other/timeshare/lib/taobao-sdk-java-auto_1455552377940-20160607.jar</systemPath>
         </dependency>
-
+        <dependency>
+            <groupId>com.squareup.okhttp3</groupId>
+            <artifactId>okhttp</artifactId>
+            <version>3.4.1</version>
+        </dependency>
     </dependencies>
     <build>
     <plugins>
