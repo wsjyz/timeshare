@@ -6,6 +6,7 @@ import com.timeshare.service.OrderService;
 import com.timeshare.service.RemindService;
 import com.timeshare.service.UserService;
 import com.timeshare.utils.Contants;
+import com.timeshare.utils.WxUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -14,6 +15,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by adam on 2016/6/11.
@@ -110,9 +112,13 @@ public class UserController extends BaseController{
     }
 
     @RequestMapping(value = "/to-view-items/{userId}/{itemId}")
-    public String toViewUserItems(@PathVariable String userId,@PathVariable String itemId, Model model) {
+    public String toViewUserItems(@PathVariable String userId,@PathVariable String itemId, Model model,HttpServletRequest request) {
         model.addAttribute("userId",userId);
         model.addAttribute("itemId",itemId);
+        //微信jssdk相关代码
+        String url = WxUtils.getUrl(request);
+        Map<String,String> parmsMap = WxUtils.sign(url);
+        model.addAttribute("parmsMap",parmsMap);
         return "useritems";
     }
     @RequestMapping(value = "/get-user-items")
