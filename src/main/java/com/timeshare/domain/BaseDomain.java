@@ -17,6 +17,16 @@ public class BaseDomain implements java.io.Serializable {
     @Column(name="opt_time",length = 20,comment = "操作时间yyyy-MM-dd HH:mm:ss")
     String optTime;//操作时间
 
+    String lastModifyTime;
+
+    public String getLastModifyTime() {
+        return lastModifyTime;
+    }
+
+    public void setLastModifyTime(String lastModifyTime) {
+        this.lastModifyTime = lastModifyTime;
+    }
+
     public String getUserId() {
         return userId;
     }

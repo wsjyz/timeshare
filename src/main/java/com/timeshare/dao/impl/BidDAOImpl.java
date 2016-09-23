@@ -1,0 +1,165 @@
+package com.timeshare.dao.impl;
+
+import com.timeshare.dao.BaseDAO;
+import com.timeshare.dao.BidDAO;
+import com.timeshare.domain.Bid;
+import com.timeshare.utils.CommonStringUtils;
+import com.timeshare.utils.Contants;
+import org.apache.commons.lang3.StringUtils;
+import org.springframework.jdbc.core.PreparedStatementSetter;
+import org.springframework.jdbc.core.RowMapper;
+import org.springframework.stereotype.Repository;
+
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.List;
+
+/**
+ * Created by user on 2016/9/23.
+ */
+@Repository("BidDAO")
+public class BidDAOImpl extends BaseDAO implements BidDAO {
+
+    @Override
+    public String saveBid(Bid bid) {
+        StringBuilder sql = new StringBuilder("insert into t_bid " +
+                "(bid_id,title,content,price,end_time,bid_status,can_audit,click_rate,submit_count,create_user_id,opt_time,create_user_name,last_modify_time)" +
+                " values(?,?,?,?,?,?,?,?,?,?,?,?)");
+        final String id = CommonStringUtils.genPK();
+        int result = getJdbcTemplate().update(sql.toString(), new PreparedStatementSetter() {
+            @Override
+            public void setValues(PreparedStatement ps) throws SQLException {
+                ps.setString(1,id);
+                ps.setString(2,bid.getTitle());
+                ps.setString(3,bid.getContent());
+                ps.setBigDecimal(4,bid.getPrice());
+                ps.setString(5,bid.getEndTime());
+                ps.setString(6,bid.getBidStatus());
+                ps.setString(7,bid.getCanAudit());
+                ps.setInt(8,bid.getClickRate());
+                ps.setInt(9,bid.getSubmitCount());
+                ps.setString(10,bid.getUserId());
+                ps.setString(11,bid.getOptTime());
+                ps.setString(12,bid.getCreateUserName());
+                ps.setString(13,bid.getLastModifyTime());
+            }
+        });
+        if(result > 0){
+            return id;
+        }else{
+            return Contants.FAILED;
+        }
+    }
+
+    @Override
+    public String modifyBid(Bid bid) {
+
+        StringBuilder sql = new StringBuilder("update t_bid set ");
+
+        if(StringUtils.isNotBlank(bid.getTitle())){
+            sql.append(" title = '"+bid.getTitle()+"',");
+        }
+        if(bid.getPrice() != null && bid.getPrice().intValue() != 0){
+            sql.append(" price = "+bid.getPrice()+",");
+        }
+        if(bid.getScore() != null ){
+            sql.append(" score = "+bid.getScore()+",");
+        }
+        if(StringUtils.isNotBlank(bid.getContent())){
+            sql.append(" content = "+bid.getContent()+",");
+        }
+        if(StringUtils.isNotBlank(bid.getBidStatus())){
+            sql.append(" bid_status = '"+bid.getBidStatus()+"',");
+        }
+        if(StringUtils.isNotBlank(bid.getCanAudit())){
+            sql.append(" can_audit = '"+bid.getCanAudit()+"',");
+        }
+        if(bid.getClickRate() != 0){
+            sql.append(" click_rate = "+bid.getClickRate()+",");
+        }
+        if(bid.getSubmitCount() != 0){
+            sql.append(" submit_count = "+bid.getSubmitCount()+",");
+        }
+        if (sql.lastIndexOf(",") + 1 == sql.length()) {
+            sql.delete(sql.lastIndexOf(","), sql.length());
+        }
+        sql.append(" where bid_id='" + bid.getBidId() + "'");
+        int result = getJdbcTemplate().update(sql.toString());
+        if(result > 0){
+            return bid.getBidId();
+        }else{
+            return Contants.FAILED;
+        }
+    }
+
+    @Override
+    public Bid findBidById(String bidId) {
+        StringBuilder sql = new StringBuilder("");
+        sql.append("select * from t_bid where bid_id = ?");
+        if(StringUtils.isNotBlank(bidId)){
+
+            List<Bid> bidList = getJdbcTemplate().query(sql.toString(),new Object[]{bidId},new BidRowMapper());
+            if(bidList != null && bidList.size() > 0){
+                Bid bid = bidList.get(0);
+                return bid;
+            }
+        }
+        return null;
+    }
+
+    @Override
+    public List<Bid> findBidList(Bid bid, int startIndex, int loadSize) {
+        StringBuilder sql = new StringBuilder("select * from t_bid i where 1=1 ");
+        if (StringUtils.isNotEmpty(bid.getBidStatus())) {
+            sql.append(" and i.bid_status = '"+bid.getBidStatus()+"' ");
+        }
+        if (StringUtils.isNotEmpty(bid.getCanAudit())) {
+            sql.append(" and i.can_audit = '"+bid.getCanAudit()+"' ");
+        }
+        if(StringUtils.isNotBlank(bid.getUserId())){
+            sql.append(" and i.create_user_id = '"+bid.getUserId()+"' ");
+        }
+        sql.append("  order by i.opt_time desc limit ?,?");
+        return getJdbcTemplate().query(sql.toString(),new Object[]{startIndex,loadSize},new BidRowMapper());
+    }
+
+    @Override
+    public int findBidCount(Bid bid) {
+        StringBuilder countSql = new StringBuilder(
+                "select count(*) from t_bid where 1=1 ");
+        if (StringUtils.isNotEmpty(bid.getBidStatus())) {
+            countSql.append(" and bid_status = '"+bid.getBidStatus()+"' ");
+        }
+        if (StringUtils.isNotEmpty(bid.getCanAudit())) {
+            countSql.append(" and i.can_audit = '"+bid.getCanAudit()+"' ");
+        }
+        if(StringUtils.isNotBlank(bid.getUserId())){
+            countSql.append(" and i.create_user_id = '"+bid.getUserId()+"' ");
+        }
+        return getJdbcTemplate().queryForObject(countSql.toString(), Integer.class);
+    }
+
+    class BidRowMapper implements RowMapper<Bid>{
+
+        @Override
+        public Bid mapRow(ResultSet rs, int i) throws SQLException {
+            Bid bid = new Bid();
+            bid.setBidId(rs.getString("bid_id"));
+            bid.setTitle(rs.getString("title"));
+            bid.setContent(rs.getString("content"));
+            bid.setPrice(rs.getBigDecimal("price"));
+            bid.setEndTime(rs.getString("end_time"));
+            bid.setBidStatus(rs.getString("bid_status"));
+            bid.setCanAudit(rs.getString("can_audit"));
+            bid.setClickRate(rs.getInt("click_rate"));
+            bid.setSubmitCount(rs.getInt("submit_count"));
+            bid.setCreateUserName(rs.getString("create_user_name"));
+            bid.setUserId(rs.getString("create_user_id"));
+            bid.setOptTime(rs.getString("opt_time"));
+            bid.setLastModifyTime(rs.getString("last_modify_time"));
+            bid.setScore(rs.getBigDecimal("score"));
+            return bid;
+        }
+    }
+}
