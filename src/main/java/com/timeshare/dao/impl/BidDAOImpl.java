@@ -24,8 +24,8 @@ public class BidDAOImpl extends BaseDAO implements BidDAO {
     @Override
     public String saveBid(Bid bid) {
         StringBuilder sql = new StringBuilder("insert into t_bid " +
-                "(bid_id,title,content,price,end_time,bid_status,can_audit,click_rate,submit_count,create_user_id,opt_time,create_user_name,last_modify_time)" +
-                " values(?,?,?,?,?,?,?,?,?,?,?,?)");
+                "(bid_id,title,content,price,end_time,bid_status,can_audit,click_rate,submit_count,create_user_id,opt_time,create_user_name,last_modify_time,bid_catalog,stop_reason)" +
+                " values(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)");
         final String id = CommonStringUtils.genPK();
         int result = getJdbcTemplate().update(sql.toString(), new PreparedStatementSetter() {
             @Override
@@ -43,6 +43,8 @@ public class BidDAOImpl extends BaseDAO implements BidDAO {
                 ps.setString(11,bid.getOptTime());
                 ps.setString(12,bid.getCreateUserName());
                 ps.setString(13,bid.getLastModifyTime());
+                ps.setString(14,bid.getBidCatalog());
+                ps.setString(15,bid.getStopReason());
             }
         });
         if(result > 0){
@@ -74,6 +76,12 @@ public class BidDAOImpl extends BaseDAO implements BidDAO {
         }
         if(StringUtils.isNotBlank(bid.getCanAudit())){
             sql.append(" can_audit = '"+bid.getCanAudit()+"',");
+        }
+        if(StringUtils.isNotBlank(bid.getBidCatalog())){
+            sql.append(" bid_catalog = '"+bid.getBidCatalog()+"',");
+        }
+        if(StringUtils.isNotBlank(bid.getStopReason())){
+            sql.append(" stop_reason = '"+bid.getStopReason()+"',");
         }
         if(bid.getClickRate() != 0){
             sql.append(" click_rate = "+bid.getClickRate()+",");
@@ -159,6 +167,8 @@ public class BidDAOImpl extends BaseDAO implements BidDAO {
             bid.setOptTime(rs.getString("opt_time"));
             bid.setLastModifyTime(rs.getString("last_modify_time"));
             bid.setScore(rs.getBigDecimal("score"));
+            bid.setBidCatalog(rs.getString("bid_catalog"));
+            bid.setStopReason(rs.getString("stop_reason"));
             return bid;
         }
     }

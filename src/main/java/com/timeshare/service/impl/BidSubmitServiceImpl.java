@@ -1,5 +1,6 @@
 package com.timeshare.service.impl;
 
+import com.timeshare.dao.BidSubmitDAO;
 import com.timeshare.domain.BidSubmit;
 import com.timeshare.service.BidSubmitService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,20 +15,20 @@ import java.util.List;
 public class BidSubmitServiceImpl implements BidSubmitService {
 
     @Autowired
-    BidSubmitService bidSubmitService;
+    BidSubmitDAO bidSubmitDAO;
 
     @Override
     public String saveBidSubmit(BidSubmit submit) {
-        return bidSubmitService.saveBidSubmit(submit);
+        return bidSubmitDAO.saveBidSubmit(submit);
     }
 
     @Override
     public String deleteBidSubmit(String submitId) {
-        return bidSubmitService.deleteBidSubmit(submitId);
+        return bidSubmitDAO.deleteBidSubmit(submitId);
     }
 
     @Override
     public List<BidSubmit> findSubmitList(BidSubmit submit, int startIndex, int loadSize) {
-        return bidSubmitService.findSubmitList(submit,startIndex,loadSize);
+        return bidSubmitDAO.findSubmitList(submit,startIndex,loadSize);
     }
 }

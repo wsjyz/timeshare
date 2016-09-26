@@ -30,6 +30,11 @@ public interface Contants {
         apply_for_online,//待审核
         not_pass//审核未通过
     }
+    enum BID_STATUS {
+        draft,ongoing,
+        stopped,//后台终止
+        finish,//已完成
+    }
     enum ITEM_TYPE {
         tel,meet
     }

@@ -17,6 +17,24 @@ public class Bid extends BaseDomain{
     private int clickRate;
     private int submitCount;
     private BigDecimal score;
+    private String bidCatalog;
+    private String stopReason;
+
+    public String getStopReason() {
+        return stopReason;
+    }
+
+    public void setStopReason(String stopReason) {
+        this.stopReason = stopReason;
+    }
+
+    public String getBidCatalog() {
+        return bidCatalog;
+    }
+
+    public void setBidCatalog(String bidCatalog) {
+        this.bidCatalog = bidCatalog;
+    }
 
     public BigDecimal getScore() {
         return score;

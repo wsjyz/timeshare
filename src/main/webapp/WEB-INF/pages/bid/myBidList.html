@@ -1,0 +1,357 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>我出售的</title>
+    <meta name="viewport" content="initial-scale=1, maximum-scale=1">
+    <link rel="shortcut icon" href="/favicon.ico">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+
+    <link rel="stylesheet" href="//g.alicdn.com/msui/sm/0.6.2/css/sm.min.css">
+    <link rel="stylesheet" href="//g.alicdn.com/msui/sm/0.6.2/css/sm-extend.min.css">
+
+    <link rel="apple-touch-icon-precomposed" href="/assets/img/apple-touch-icon-114x114.png">
+    <script src="//g.alicdn.com/sj/lib/zepto/zepto.min.js"></script>
+    <style type="text/css">
+        body{font-family: Arial, Helvetica, sans-serif;}
+        .infinite-scroll-preloader {
+            margin-top:-20px;
+        }
+        /*=公共样式=*/
+        .jz-or-hide{visibility: hidden;}
+        /*==样式修改==*/
+            /*-导航栏-*/
+        .bar{height: 1.9rem;}
+        .title{font-size: .8rem;line-height: 1.9rem;font-family: 'HiraginoSansGB W3';font-weight: 700;color: #000;}
+        .bar .icon{padding: .35rem .1rem;font-size: .9rem;}
+        .bar-nav~.content{top: 1.9rem;}
+        .bar .button{top: .45rem;font-size: .65rem;color: #14b8f5;border-color: #14b8f5;line-height:.9rem;height: 1rem;}
+            /*内容*/
+        .content{font-family: SimHei;}
+        .content .list-block{font-size: .7rem;font-weight: 400;box-shadow: 0 2px 2px rgba(0,0,0,.2);}
+        /*.bar-tab~.content{padding-top: .6rem;}*/
+        /*.content .item-inner .col-60{display: none;}*/
+        .content .item-inner .col-60{width: 60%;float:left;margin-left: 0;text-align: right;}
+        .content .item-inner .col-40{width: 40%;float:left;margin-left: 0;height: 100%;box-sizing: border-box;text-align: left;}
+        .content .item-inner .item-title-row{padding: .35rem 0;}
+        .list-block ul{margin-bottom: -1px;}
+        .content .item-inner .item-text{position: absolute;top: 0;left: 0;right: 0;bottom: 0;padding-top: .8rem;}
+        .content .item-inner .item-title{
+            color: #1b1b1b;
+            width: 35%;
+            white-space: normal;
+            overflow : hidden;
+            text-overflow: ellipsis;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+        }
+        .list-block .item-after{color:#828282;}
+        .list-block.media-list .item-inner{
+            background-size: .575rem .925rem;
+            background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABcAAAAlCAYAAACpmHIGAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAA3ZpVFh0WE1MOmNvbS5hZG9iZS54bXAAAAAAADw/eHBhY2tldCBiZWdpbj0i77u/IiBpZD0iVzVNME1wQ2VoaUh6cmVTek5UY3prYzlkIj8+IDx4OnhtcG1ldGEgeG1sbnM6eD0iYWRvYmU6bnM6bWV0YS8iIHg6eG1wdGs9IkFkb2JlIFhNUCBDb3JlIDUuNi1jMDY3IDc5LjE1Nzc0NywgMjAxNS8wMy8zMC0yMzo0MDo0MiAgICAgICAgIj4gPHJkZjpSREYgeG1sbnM6cmRmPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5LzAyLzIyLXJkZi1zeW50YXgtbnMjIj4gPHJkZjpEZXNjcmlwdGlvbiByZGY6YWJvdXQ9IiIgeG1sbnM6eG1wTU09Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC9tbS8iIHhtbG5zOnN0UmVmPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvc1R5cGUvUmVzb3VyY2VSZWYjIiB4bWxuczp4bXA9Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC8iIHhtcE1NOk9yaWdpbmFsRG9jdW1lbnRJRD0ieG1wLmRpZDo5ZTg3Yzg4Yi04ZmE1LWZkNGEtOWFjYy1jNzU2ZWMzYTQ3ZTAiIHhtcE1NOkRvY3VtZW50SUQ9InhtcC5kaWQ6NkUwMzAxMDk2NkVEMTFFNkFCMTZBNTRBNDIzQkE4RUYiIHhtcE1NOkluc3RhbmNlSUQ9InhtcC5paWQ6NkUwMzAxMDg2NkVEMTFFNkFCMTZBNTRBNDIzQkE4RUYiIHhtcDpDcmVhdG9yVG9vbD0iQWRvYmUgUGhvdG9zaG9wIENDIDIwMTUgKFdpbmRvd3MpIj4gPHhtcE1NOkRlcml2ZWRGcm9tIHN0UmVmOmluc3RhbmNlSUQ9InhtcC5paWQ6OWU4N2M4OGItOGZhNS1mZDRhLTlhY2MtYzc1NmVjM2E0N2UwIiBzdFJlZjpkb2N1bWVudElEPSJ4bXAuZGlkOjllODdjODhiLThmYTUtZmQ0YS05YWNjLWM3NTZlYzNhNDdlMCIvPiA8L3JkZjpEZXNjcmlwdGlvbj4gPC9yZGY6UkRGPiA8L3g6eG1wbWV0YT4gPD94cGFja2V0IGVuZD0iciI/Prk437gAAAK4SURBVHjarJZJaBRBFIZ7Oq2inlQwUSFoJILgQWS8CAqCIAhuCKII7kaMW9S44IIKuQjuO+pJ9KDEBQ/izYNLhAyuYDQHRS8mblGDF09+D/6GStsz02N3wceju6r+V/3q1av2vZhWKBRyXgbNL/K+Cgf9MxdHdAjmDCxM6yBu5XOhAfbA/DQO4sSfwnmog71pHPg2EaaGL/L5/EvMKbgI49I4sJXXw0Emr3McvFbcUzkw8W8wHc5GHHSkdeAj0qXN87J2kHNScCvmiB4bET7n9I3HrIc10AktcIsxfxJlCwOPYrZl+QV9UjFrB//keZYOYmtLVg6KFa5MHPilNiStA79crqZxkPhSYMImzAk9bkb4ZMw5WAlWm47BzYpuHESsoG3Q4zQcPHD6hmN2gh3Gd7DFr0C4VqfT2luYEhkyCMLqOhC6ggSiVZharbhBDiwk150x1QrZZLiv8vEmSLDokbAKltpq4LAJM/mnhGsw+2EOfLb6ZMLWF5RZdZ1WbAXruy6R2/BL/RO0eTPgscUc4Yfh/KCE8GiteBl8UcW8zOReZ1iThD9AM31trkZQQrjRWfEhSy0Tps+SYCLsUyhewQF4FtUJIqKBNs8OylroUSiuhTGmDYbdMA+ewxJdi15JcdoIhWIFdGvFrc7mjVUuL9D12FJMuI84E8dgNirdLBSnbfOY/EP99fqKmdo8S7cXpRIiUB2ocdKtW+l2Jdw8jWmW8CeLdznhsHANhV1gtaNXWdEKvyU8CXNHX9Qu+yjJqbawDIPZCsVxuOrEOFCtsBVbbFfrp8lLKm45vENZcMMRtgOyHRbDR6VbRyWFLiehAVZ4EO7R8yjMBZgFT6yUqnZ7FYtHcr0f5pI2175qOcJ3s/rLtdO3CNpk7/3vL3Tc8f+qG6WTFbdn+vOP4Hs77qoZqdpfAQYARmRPLak+tCYAAAAASUVORK5CYII=);
+        }
+        /*-底部按钮-*/
+        .bar-tab~.content {bottom: 2rem;}
+        .bar-tab{height: 2rem;border-top: 1px solid #e7e7e7;box-sizing: border-box;}
+        .bar-tab .tab-item{height: 2rem;color: #666;}
+        .bar-tab .tab-item:before{
+            content: '';
+            display: block;
+            position: absolute;
+            top: .4rem;
+            width: 1px;
+            height: 1.2rem;
+            background-color: #dcdcdc;
+        }
+        .bar-tab .tab-item.active .tab-label,.bar-tab .tab-label:active{color: #12B7F5;}
+        .bar-tab .tab-item.addactive .tab-label{color: #12B7F5;}
+        .bar-tab .tab-label{
+            display: inline-block;
+            padding: .45rem 0 .45rem 1.2rem;
+            /*height: 100%;*/
+            font-size: .75rem;
+            line-height: 1.1rem;
+            text-align: left;
+            margin-top: -1px;
+            /*margin-left: 1rem;*/
+            box-sizing: border-box;
+        }
+        .buy-time,.sell-time,.my-time{background-repeat: no-repeat;background-size: auto 1.1rem;background-position: left center;-webkit-user-select:none;user-select:none;}
+        .buy-time{background-image: url(${request.contextPath}/images/icon/buy-time.png);}
+        .sell-time{background-image: url(${request.contextPath}/images/icon/sell-time.png);}
+        .my-time{background-image: url(${request.contextPath}/images/icon/my-time.png);}
+        .tab-item.addactive .buy-time,
+        .tab-item.active .buy-time{background-image: url(${request.contextPath}/images/icon/buy-timing.png);}
+        .tab-item.addactive .sell-time,
+        .tab-item.active .sell-time{background-image: url(${request.contextPath}/images/icon/sell-timing.png);}
+        .tab-item.addactive .my-time,
+        .tab-item.active .my-time{background-image: url(${request.contextPath}/images/icon/my-timing.png);}
+        /*--新加title--*/
+        .jz-nav-header{font-size: .7rem;font-family: SimHei;color: #828282;font-weight: 400;}
+        .jz-nav-header .jz-nav-box{border: 1px solid #e7e7e7;background-color: #fff;}
+        .jz-nav-header .jz-nav-box:after,
+        .jz-nav-header .jz-nav-box:before{
+            content: '';
+            display: table;
+        }
+        .jz-nav-header .jz-nav-box:after{clear: both;}
+        .jz-title,.jz-date,.jz-status{
+            float: left;
+            line-height: 1rem;
+            padding: 2rem 0 .25rem 0;
+            font-size: inherit;
+            text-align: center;
+            font-family: inherit;
+            color: inherit;
+            background-clip: border-box;
+            background-repeat: no-repeat;
+        }
+        .jz-title{
+            width: 33%;
+            background-position: top .75rem center;
+            background-size: .95rem 1rem;
+            background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACYAAAAoCAYAAACSN4jeAAAABGdBTUEAALGPC/xhBQAAACBjSFJNAAB6JgAAgIQAAPoAAACA6AAAdTAAAOpgAAA6mAAAF3CculE8AAAABmJLR0QAAAAAAAD5Q7t/AAAACXBIWXMAAAsSAAALEgHS3X78AAAB60lEQVRYw+3YMU/VUBiH8d+twFKMKAsJE4txMESdXHDQxUHsqCOzMx+A3UWDOpjoSOJ4oguDkjg5CpNx8ROoEDmJ4WJwoJF677kY4r1tB56kaXp62v+Tt+2bth3HEeJFPMRtw2Udy4r886AJWUJmolyPYQV3MTHkZRErZcZRZoWxitA8bmAPz5FjdsiVqjJbZuxgqZR7r8i3jioW4lJZ3lXcB0W+g40Rim2UGcrMVayXLjpCXMBbjJeT3ijyxREK9RPia9wpt7q4lWG5IgUzQpyuUWoaM5WRcSxnWOiZehmPhXi1JrVHZWaVhY4Qu6oPwRFfsIszIxL6hUnMJfbtj+FgwIFzmuMg+/9zjIbWiqXurW1Ffr5WixC/Y6o6lKrYu1qlBmSmxKb+fZ6h05eZErvSgFhfZkeIe/7u/G2g29qnsrViqXaxo8inarUIcRvnqkOpin2oVWpAZmsvZUrsegMefZmn7eKktFYs1S6+KfL63vkhxK+4UB1KVexjrVIDMlNi2w2I9WWmxG42INaXedouTkprxVLtYleRn63VIsQfDj9+/9Dqt4teuZ8NiPVmZpnD3z5VrjUg1pvZ7QhxE/MNyBzHZoYnTVskeJphDS+aNqnwEmsdEOIk7uEBLkm3kVGyj094hleKfPc3DXZyPp1rq4QAAAAASUVORK5CYII=);
+        }
+        .jz-date{
+            width: 40%;
+            background-position: top .75rem center;
+            background-size: 1.725rem 1.125rem;
+            background-image: url(data:image/png;base64,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);
+        }
+        .jz-status{
+            width: 27%;
+            background-position: top .85rem center;
+            background-size: .975rem;
+            background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACcAAAAnCAYAAACMo1E1AAAABGdBTUEAALGPC/xhBQAAACBjSFJNAAB6JgAAgIQAAPoAAACA6AAAdTAAAOpgAAA6mAAAF3CculE8AAAABmJLR0QAAAAAAAD5Q7t/AAAACXBIWXMAAAsSAAALEgHS3X78AAADEUlEQVRYw+2YT0gVQRzHP6svTaegyAwyJKQyiOqmJw/V0cPQyYroD50i6BIUJhgEFRRUh0C7RAadosN08VoQCAVBheRFpcwO0h/K5mn+ea/Dzr63b96+dZ9v3Tr4hWV+M9/fb/bLzsxvZtZB6Q7gBrAPWEMh5oEJQAH9SPGJBOGg9CSwNYLvGNCJFCNJiasCfkX0bQEeJiXME3cKeAGkcYfR/2Qt/3aUbkpKnAOA0o1AoxHrxz2gw2rbjxTvkhCXAkCKKWCqiFX6R0BM1nApoHYFNGWRIp0XVxrVIdwh4KqxawL4Od8HsEdkAciY9lRRnNIDQN9S4sKwGWgz9gyF89MB6oztzV8/6n122uJqTL+pSsRlfPYJQPvqAnhi7DvAcyv2FrAHeA1csbhO4BxwsxJxfjxFivyXU9rxcUNIMVjgrfQlY30J4LYYq7aKeLAupL42wN97b9CczvnH9eXqUHquoJ5HLUrbq7o6VxZzuS00LnF3ya9OKFy9Z4ADlv8OU+4F7ltca9zijoZwHRQncg/bgJOlAuMSd5bClFAP9Bm7Hxiy/HuAXcBb4LbFHfQExyNOiv6iNqU9cYNI8cziThtx40jxyOLwxMWzWpVeH1IXAREpq/Qjl6DjSiWZkHomwD8bpa+45txFlJ711f257TBKt1j+zabcidLdFtcehzh/fuoN8esyTxBagesluIFKxL0CLlcQH4YxYHD54qQYBoZXSBwQ34L4J+KcgLafSYlbalgXA9qOo/Tn/0HcZEDbtSSEwdLD+jgpIeWLk+Il7jF6NlJvMcOJ5KV0G24ibSX4prWKVURFtDnnwb22NZu4BWAUKcpLyko3ANtxF+Mi7oHz+/LFKV2Fu2rPU/iDcRroQYoHEfpwgAtAN4UnmhmgFyn67JCo4nYDH0qwaWADUswv0UcTUGpnWQQ22aMQdeNvDOHqCT6K22gI4aqBjXZjVHFxnF7Km99lvHSc4LsAwFfgd4Q+JoA/JbhpAv4PRhMnxUfc69oo7lbmPW+AI0ixEKGPb8AxYMTq4z3Q5f0w9OMvCoy5yqYWuGgAAAAASUVORK5CYII=);
+        }
+        /*--解决安卓下滑线--*/
+        @media only screen and (-webkit-min-device-pixel-ratio: 2){
+            .list-block ul:before {
+                -webkit-transform: scaleY(0);
+                transform: scaleY(0);
+            }
+            .list-block ul:after {
+                -webkit-transform: scaleY(1);
+                transform: scaleY(1);
+            }
+        }
+    </style>
+</head>
+<body>
+<div class="page-group" >
+    <div id="page-swiper" class="page">
+        <nav class="bar bar-tab">
+            <a class="tab-item active" href="#">
+                <span class="tab-label buy-time">约</span>
+            </a>
+            <a class="tab-item" id="mySellBtn">
+                <span class="tab-label sell-time">飚</span>
+            </a>
+            <a class="tab-item" href="#" id="myPageBtn">
+                <span class="tab-label my-time">我</span>
+            </a>
+        </nav>
+        <!--<div class="content" id=''>-->
+            <header class="bar bar-nav">
+                <a class="icon icon-left pull-left back"></a>
+                <h1 class="title">我飚的</h1>
+            </header>
+
+            <div class="content infinite-scroll infinite-scroll-bottom" data-distance="100">
+                <div class="jz-nav-header">
+                    <div class="jz-nav-box">
+                        <div class="jz-title">标题</div>
+                        <div class="jz-date">应标次数</div>
+                        <div class="jz-status">状态</div>
+                    </div>
+                </div>
+                <div class="list-block media-list"  style="margin-top: 0px;">
+
+                </div>
+                <!-- 加载提示符 -->
+                <div class="infinite-scroll-preloader">
+                    <div class="preloader"></div>
+                </div>
+                <div class="no-record" style="display: none;text-align: center">
+                    没有更多记录了
+                </div>
+            </div>
+        <!--</div>-->
+    </div>
+</div>
+<script src="//g.alicdn.com/msui/sm/0.6.2/js/sm.min.js"></script>
+<script src="//g.alicdn.com/msui/sm/0.6.2/js/sm-extend.min.js"></script>
+<script>
+    $.init();
+    $.showIndicator();
+    $('.infinite-scroll-preloader').hide();
+
+
+    var loading = false;
+    // 最多可加载的条目
+    var maxItems = 100;
+
+    // 每次加载添加多少条目
+    var itemsPerLoad = 10;
+
+    function addItems(number, lastIndex,data) {
+        // 生成新条目的HTML
+        var html = '';
+        var dataLength = 0;
+        $.each(data, function(i, item){
+            var bidStatus = "";
+            if(item.bidStatus == 'ongoing'){
+                bidStatus = "进行中";
+            }else if(item.bidStatus == 'stopped'){
+                bidStatus = "已终止";
+            }else if(item.bidStatus == 'draft'){
+                bidStatus = "草稿";
+            }else if(item.bidStatus == 'finish'){
+                bidStatus = "已完成";
+            }
+
+            var submitCount = item.submitCount;
+            var remindHtml = '';
+            if(submitCount > 0){
+                var remindHtml = '<span class="badge" style="position: absolute;top: 0.5rem;left:2rem;background:red;color: white;">'+submitCount+'</span>'
+            }
+            html += '<ul>'+
+                    '<li>'+
+                    '<a href="#" class="item-link item-content" onclick="toView(\''+item.bidId+'\')">'+
+                    '<div class="item-inner">'+
+                    '<div class="item-title-row">'+
+                    '<div class="item-title">'+item.title+'</div>'+
+                    '<div class="item-after">'+bidStatus+'</div>'+
+                    remindHtml+
+                    '</div>'+
+                    '<div class="item-text">'+
+                    '<div class="row">'+
+                    '<div class="col-60">'+item.submitCount+'人飚过</div>'+
+                    '</div>'+
+                    '</div>'+
+                    '</div>'+
+                    '</a>'+
+                    '</li>'+
+                    '</ul>';
+            dataLength += 1;
+        });
+        if(dataLength == 0){
+            $('.no-record').show();
+            $('.infinite-scroll-preloader').remove();
+        }else{
+            $('.no-record').hide();
+            // 添加新条目
+            $('.infinite-scroll-bottom .list-block').append(html);
+            $('.item-title-row').each(function(index,ele,arr){
+                var $item_title = $(ele).children('.item-title'),
+                    $item_after = $(ele).children('.item-after'),
+                    $siblings = $(ele).siblings('.item-text'),
+                    $height=$item_title.height();
+                    if($height>30){
+                        console.log($height);
+                        $siblings.css('padding-top','1.25rem');
+                        $item_after.css('margin-top','.475rem');
+                    }
+            });
+        }
+        $.hideIndicator();
+
+    }
+    $.post('${request.contextPath}/bid/list', {startIndex: 0,loadSize:itemsPerLoad}, function (response) {
+        //预先加载20条
+        addItems(itemsPerLoad, 0,response);
+    });
+
+
+    // 上次加载的序号
+
+    var lastIndex = 10;
+
+    // 注册'infinite'事件处理函数
+    $(document).on('infinite', '.infinite-scroll-bottom',function() {
+        // 如果正在加载，则退出
+        if (loading) return;
+
+        // 设置flag
+        loading = true;
+        $.post('${request.contextPath}/bid/list', {startIndex: lastIndex,loadSize:itemsPerLoad}, function (response) {
+
+            // 模拟1s的加载过程
+            setTimeout(function() {
+                // 重置加载flag
+                loading = false;
+
+                if (lastIndex >= maxItems) {
+                    // 加载完毕，则注销无限加载事件，以防不必要的加载
+                    $.detachInfiniteScroll($('.infinite-scroll'));
+                    // 删除加载提示符
+                    $('.infinite-scroll-preloader').remove();
+                    return;
+                }
+
+                // 添加新条目
+                addItems(itemsPerLoad, lastIndex,response);
+                // 更新最后加载的序号
+                lastIndex = $('.list-block ul').length;
+                //容器发生改变,如果是js滚动，需要刷新滚动
+                $.refreshScroller();
+            }, 1000);
+        });
+
+
+    });
+    function toView(id){
+        window.location.href = "${request.contextPath}/bid/to-view/"+id;
+    }
+    $("body").on( "click", "#indexBtn", function(){
+        window.location.href = "${request.contextPath}/index/to-index";
+    } );
+    $("body").on( "click", "#myPageBtn", function(){
+        window.location.href = '${request.contextPath}/user/to-my-page';
+    } );
+</script>
+<script>
+    // 重写底部botton事件
+    $(function(){
+        var $arr=$('.tab-item');
+        var $len=$arr.length;
+        $('.tab-item').each(function(index,ele){
+            var $childDOM=$(ele).children('.tab-label');
+            $($childDOM).on('touchstart',function(e){
+                if($(ele).hasClass('addactive')){
+                    return;
+                }
+                for(var i=0;i<$len;i++){
+                    if($($arr[i]).hasClass('active')){
+                        $($arr[i]).removeClass('active');
+                    }
+                    if($($arr[i]).hasClass('addactive')){
+                        $($arr[i]).removeClass('addactive');
+                    }
+                }
+                $(ele).addClass('addactive');
+            })
+        });
+        $('.tab-item').each(function(index,ele){
+            $(ele).on('touchstart',function(e){
+                if($(ele).hasClass('addactive')){
+                    return;
+                }
+                for(var i=0;i<$len;i++){
+                    if($($arr[i]).hasClass('active')){
+                        $($arr[i]).removeClass('active');
+                    }
+                    if($($arr[i]).hasClass('addactive')){
+                        $($arr[i]).removeClass('addactive');
+                    }
+                }
+                $(ele).addClass('addactive');
+            })
+        });
+    })
+</script>
+</body>
+</html>

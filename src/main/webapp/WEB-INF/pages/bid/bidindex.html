@@ -1,0 +1,362 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>时刻</title>
+    <meta name="viewport" content="initial-scale=1, maximum-scale=1">
+    <link rel="shortcut icon" href="/favicon.ico">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <link rel="stylesheet" href="//g.alicdn.com/msui/sm/0.6.2/css/sm.min.css">
+    <link rel="stylesheet" href="//g.alicdn.com/msui/sm/0.6.2/css/sm-extend.min.css">
+    <link rel="apple-touch-icon-precomposed" href="/assets/img/apple-touch-icon-114x114.png">
+    <link rel="stylesheet" href="${request.contextPath}/css/time.css">
+    <script src="//g.alicdn.com/sj/lib/zepto/zepto.min.js"></script>
+
+</head>
+<body>
+<div class="page-group" >
+
+    <div id="page-swiper" class="page">
+       
+        <nav class="bar bar-tab">
+            <a class="tab-item active" href="#">
+                <span class="tab-label buy-time">约</span>
+            </a>
+            <a class="tab-item" id="mySellBtn">
+                <span class="tab-label sell-time">飚</span>
+            </a>
+            <a class="tab-item" href="#" id="myPageBtn">
+                <span class="tab-label my-time">我</span>
+            </a>
+        </nav>
+
+        <div class="content" id=''>
+            <!-- 邂逅时刻log -->
+            <div class="xhsk-fixed-log">
+                <div class="fixed-log-con">
+                    <img src="/time/images/icon/logo.png" alt="邂逅时刻">
+                </div>
+            </div>
+            <div class="swiper-container"  style="position: relative;padding-bottom: 0px;">
+                <div class="swiper-wrapper">
+
+                </div>
+                <div class="swiper-pagination" style="position: absolute;right: 0;left: 0;width: 20%;bottom: 20px;margin:0 auto;"></div>
+            </div>
+            <div class="bar bar-header-secondary" style="top:0;">
+                <div class="searchbar">
+                    <!--<a class="searchbar-cancel">取消</a>-->
+                    <div class="search-input">
+                        <label class="icon icon-search" for="search"></label>
+                        <form id="searchForm"><input type="search" id='search' name="keyword" placeholder='输入标题or发飙人'/></form>
+                    </div>
+                </div>
+            </div>
+            <div class="buttons-tab">
+                <a href="#recommendTab" class="tab-link active button">推荐</a>
+                <a href="#newTab" class="tab-link button">最新</a>
+                <a href="#hotTab" class="tab-link button">最火</a>
+                <a href="#goodTab" class="tab-link button">最优</a>
+            </div>
+             
+                <div class="tabs">
+                    <div id="recommendTab" class="tab active infinite-scroll">
+
+                        <div class="list-block media-list" style="margin-top:  0px;">
+
+                        </div>
+                        <!-- 加载提示符 -->
+                        <div class="infinite-scroll-preloader">
+                            <div class="preloader">
+                            </div>
+                        </div>
+                    </div>
+                    <div id="newTab" class="tab infinite-scroll">
+                        <div class="list-block media-list" style="margin-top:  0px;">
+
+                        </div>
+                        <!-- 加载提示符 -->
+                        <div class="infinite-scroll-preloader">
+                            <div class="preloader">
+                            </div>
+                        </div>
+                    </div>
+                    <div id="hotTab" class="tab infinite-scroll">
+                        <div class="list-block media-list" style="margin-top:  0px;">
+
+                        </div>
+                        <!-- 加载提示符 -->
+                        <div class="infinite-scroll-preloader">
+                            <div class="preloader">
+                            </div>
+                        </div>
+                    </div>
+                    <div id="goodTab" class="tab infinite-scroll">
+                        <div class="list-block media-list" style="margin-top:  0px;">
+
+                        </div>
+                        <!-- 加载提示符 -->
+                        <div class="infinite-scroll-preloader">
+                            <div class="preloader">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+
+        </div>
+    </div>
+
+</div>
+<script src="//g.alicdn.com/msui/sm/0.6.2/js/sm.min.js"></script>
+<script src="//g.alicdn.com/msui/sm/0.6.2/js/sm-extend.min.js"></script>
+<script>
+	// setTimeout(startInit, 300);
+    function toViewUserItem(userId,itemId){
+        window.location.href = "${request.contextPath}/user/to-view-items/"+userId+"/"+itemId;
+    }
+	    $(document).on("pageInit", function() {
+	        var searchHeight = $('.bar-header-secondary').css('height');
+	        $('.content').css('top',0);
+	        $.showIndicator();
+	        //多个标签页下的无限滚动
+	        var loading = false;
+	        // 每次加载添加多少条目
+	        var itemsPerLoad = 10;
+	        // 最多可加载的条目
+	        var maxItems = 30;
+	        var  lastIndex = $('.list-block ul').length;
+	        function addItems(number, lastIndex,data,tabId) {
+	            // 生成新条目的HTML
+	            var html = '';
+	            var dataLength = 0;
+	            $.each(data, function(i, item){
+	                var itemStatus = "";
+	                if(item.item.itemStatus == 'for_sale'){
+	                    itemStatus = "销售中";
+	                }else if(item.item.itemStatus == 'undercarriage'){
+	                    itemStatus = "已下架";
+	                }else if(item.item.itemStatus == 'draft'){
+	                    itemStatus = "草稿";
+	                }
+	                var headPic = item.headImgPath;
+	                if(headPic == '' || headPic == null){
+	                    headPic = '${request.contextPath}/images/default_head.jpg';
+	                }
+	                html += '<ul>'+
+	                            '<li>'+
+	                                '<a href="#" class="item-link item-content" onclick="toViewUserItem(\''+item.item.userId+'\',\''+item.item.itemId+'\')">'+
+	                                    '<div class="item-media">' +
+	                                        '<div class="commentAvatarDiv">' +
+	                                            '<img class="commentAvatarImage" src="'+headPic+'" />' +
+	                                        '</div>' +
+	                                    '</div>'+
+	                                    '<div class="item-inner">'+
+	                                        '<div class="item-title-row">'+
+	                                            '<div class="item-title">'+item.item.title+'</div>'+
+	                                        '</div>'+
+	                                        '<div class="item-subtitle">'+item.item.createUserName+'</div>'+
+	                                        '<div class="item-text">'+item.item.useCount+'人咨询过</div>'+
+	                                    '</div>'+
+	                                '</a>'+
+	                            '</li>'+
+	                        '</ul>';
+	                dataLength += 1;
+	            });
+	            if(dataLength == 0){
+	                $('.no-record').show();
+	                $('.infinite-scroll-preloader').remove();
+	            }else{
+	                $('.no-record').hide();
+	                $('.infinite-scroll-preloader').hide();
+	                // 添加新条目
+	                //$('.active.infinite-scroll .list-block').append(html);
+	                $('#'+tabId+'.infinite-scroll .list-block').append(html);
+	            }
+
+
+	        }
+	        $.post('${request.contextPath}/item/list-by-condition', {condition:'recommend',startIndex: 0,loadSize:itemsPerLoad}, function (response) {
+	            $('#recommendTab.infinite-scroll .list-block').empty();
+	            //预先加载20条
+	            // new XhskSwiper(response);
+	            addItems(itemsPerLoad, 0,response,'recommendTab');
+	            $.hideIndicator();
+	        });
+	        $.post('${request.contextPath}/item/list-by-condition', {condition:'new',startIndex: 0,loadSize:itemsPerLoad}, function (response) {
+	            $('#newTab.infinite-scroll .list-block').empty();
+	            //预先加载20条
+	            addItems(itemsPerLoad, 0,response,'newTab');
+	        });
+	        $.post('${request.contextPath}/item/list-by-condition', {condition:'hot',startIndex: 0,loadSize:itemsPerLoad}, function (response) {
+	            $('#hotTab.infinite-scroll .list-block').empty();
+	            //预先加载20条
+	            addItems(itemsPerLoad, 0,response,'hotTab');
+	        });
+	        $.post('${request.contextPath}/item/list-by-condition', {condition:'good',startIndex: 0,loadSize:itemsPerLoad}, function (response) {
+	            $('#goodTab.infinite-scroll .list-block').empty();
+	            //预先加载20条
+	            addItems(itemsPerLoad, 0,response,'goodTab');
+	        });
+	        $(document).on('infinite', function() {
+	            // 如果正在加载，则退出
+	            if (loading) return;
+	            // 设置flag
+	            loading = true;
+	            var tabIndex = 0;
+	            var dataType = 'recommend';
+	            var tabId = $(this).find('.infinite-scroll.active').attr('id');
+	            if(tabId == "newTab"){
+	                tabIndex = 1;
+	                dataType = 'new';
+	            }
+	            if(tabId == "hotTab"){
+	                tabIndex = 2;
+	                dataType = 'hot';
+	            }
+	            if(tabId == "goodTab"){
+	                tabIndex = 3;
+	                dataType = 'good';
+	            }
+	            lastIndex = $('.list-block').eq(tabIndex).find('ul').length;
+	            $.post('${request.contextPath}/item/list-by-condition', {condition:dataType,startIndex: lastIndex,loadSize:itemsPerLoad}, function (response) {
+	                setTimeout(function() {
+	                    // 重置加载flag
+	                    loading = false;
+
+	                    if (lastIndex >= maxItems) {
+	                        // 加载完毕，则注销无限加载事件，以防不必要的加载
+	                        $.detachInfiniteScroll($('.infinite-scroll'));
+	                        // 删除加载提示符
+	                        $('.infinite-scroll-preloader').remove();
+	                        return;
+	                    }
+	                    // 添加新条目
+	                    addItems(itemsPerLoad, lastIndex,response,tabId);
+	                    // 更新最后加载的序号
+	                    lastIndex = $('.list-block ul').length;
+	                    //容器发生改变,如果是js滚动，需要刷新滚动
+	                    $.refreshScroller();
+	                }, 1000);
+	            });
+	        });
+	    });
+	    $.post('${request.contextPath}/user/get-remind', function (response) {
+	        var remindCount = response.sellRemindCount;
+	        if(remindCount > 0){
+	            $('.badge').text(remindCount);
+	            $('.badge').show();
+	        }
+
+	    });
+	    $("body").on( "click", "#myPageBtn", function(){
+	        window.location.href = '${request.contextPath}/wx/to-get-open-id';
+	    } );
+	    $("body").on( "click", "#mySellBtn", function(){
+	        var backUrl = '/item/to-list';
+	        window.location.href = '${request.contextPath}/wx/to-get-open-id?backUrl='+encodeURIComponent(backUrl);
+	    } );
+	    $("body").on( "submit", "#searchForm", function(){
+	        var keyword = $('#search').val();
+	        if(keyword == ''){
+	            return false;
+	        }
+	        $('form').attr('action','${request.contextPath}/item/to-search');
+	        $('form').submit();
+	    } );
+</script>
+<script>
+     function XhskSwiper(datas){
+        this.datas=datas || '';
+        this.init();
+    }
+    XhskSwiper.prototype.init=function(){
+        this._swiper();
+    }
+    XhskSwiper.prototype._swiper=function(){
+        this.setHtmlDom();
+        var $mySwiper = $(".swiper-container").swiper({
+            autoplay: 5000,
+            loop:true,
+            observer:true,
+            observeParents:true
+        });
+        $mySwiper.update(true);
+    }
+    XhskSwiper.prototype.setHtmlDom=function(){
+        var datas=this.datas;
+        var html =this.getHtmlDom(datas);
+        $('.swiper-wrapper').append(html);
+    }
+    XhskSwiper.prototype.getHtmlDom=function(datas){
+        var htmlDomObj=this._htmlDom(),
+            dataLength = datas.length >= 3 ? 3:datas.length,
+            headPicArr = [1,2,3],
+            html='';
+        $(".swiper-wrapper").empty();
+        $(".swiper-pagination").empty();
+        for(var i = 0; i< 3;i++){
+            //var n = Math.floor(Math.random() * headPicArr.length + 1)-1;
+            //html += htmlDomObj.a+headPicArr[i]+htmlDomObj.b+datas[i].item.userId+htmlDomObj.c+htmlDomObj.d;
+            html += htmlDomObj.a+headPicArr[i]+htmlDomObj.b+htmlDomObj.c+htmlDomObj.d;
+        }
+        return html;
+    }
+    XhskSwiper.prototype._htmlDom=function(){
+        var htmlDomObj={
+            a:'<div class="swiper-slide"><img  src="${request.contextPath}/images/headback',
+            b:'.jpg?v=20160902"  style="width: 100%;" ',
+            c:'"><div  style="position: absolute;right: 10px;width: 70%;bottom: 20px;z-index: 999;font-weight: bold;color: #ffffff">',
+            d:'</div></div>'
+        }
+        return htmlDomObj;
+    }
+    $.post('${request.contextPath}/item/list-by-condition', {condition:'recommend',startIndex: 0,loadSize:10}, function (response) {
+        new XhskSwiper(response);
+            $.init();
+        });
+</script>
+<script>
+    // 重写底部botton事件
+    $(function(){
+        var $arr=$('.tab-item');
+        var $len=$arr.length;
+        $('.tab-item').each(function(index,ele){
+            var $childDOM=$(ele).children('.tab-label');
+            $($childDOM).on('touchstart',function(e){
+                if($(ele).hasClass('addactive')){
+                    return;
+                }
+                for(var i=0;i<$len;i++){
+                    if($($arr[i]).hasClass('active')){
+                        $($arr[i]).removeClass('active');
+                    }
+                    if($($arr[i]).hasClass('addactive')){
+                        $($arr[i]).removeClass('addactive');
+                    }
+                }
+                $(ele).addClass('addactive');
+            })
+        });
+        $('.tab-item').each(function(index,ele){
+            $(ele).on('touchstart',function(e){
+                if($(ele).hasClass('addactive')){
+                    return;
+                }
+                for(var i=0;i<$len;i++){
+                    if($($arr[i]).hasClass('active')){
+                        $($arr[i]).removeClass('active');
+                    }
+                    if($($arr[i]).hasClass('addactive')){
+                        $($arr[i]).removeClass('addactive');
+                    }
+                }
+                $(ele).addClass('addactive');
+            })
+        });
+    })
+</script>
+</body>
+</html>
