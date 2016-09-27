@@ -77,6 +77,9 @@ public class Bid extends BaseDomain{
     }
 
     public String getEndTime() {
+        if(endTime != null && endTime.length() > 16){
+            return endTime.substring(0,16);
+        }
         return endTime;
     }
 

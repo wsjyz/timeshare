@@ -69,7 +69,7 @@ public class BidDAOImpl extends BaseDAO implements BidDAO {
             sql.append(" score = "+bid.getScore()+",");
         }
         if(StringUtils.isNotBlank(bid.getContent())){
-            sql.append(" content = "+bid.getContent()+",");
+            sql.append(" content = '"+bid.getContent()+"',");
         }
         if(StringUtils.isNotBlank(bid.getBidStatus())){
             sql.append(" bid_status = '"+bid.getBidStatus()+"',");

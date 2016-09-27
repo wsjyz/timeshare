@@ -4,17 +4,18 @@ import com.timeshare.domain.Bid;
 import com.timeshare.domain.SystemMessage;
 import com.timeshare.domain.UserInfo;
 import com.timeshare.service.BidService;
+import com.timeshare.utils.Contants;
+import com.timeshare.utils.WxUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.CookieValue;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by user on 2016/9/26.
@@ -80,5 +81,21 @@ public class BidController extends BaseController{
         parms.setUserId(userId);
         bidList = bidService.findBidList(parms,startIndex,loadSize);
         return bidList;
+    }
+
+    @RequestMapping(value = "/to-view/{bidId}")
+    public String toView(@PathVariable String bidId, Model model, @CookieValue(value="time_sid", defaultValue="c9f7da60747f4cf49505123d15d29ac4") String userId) {
+        String returnStr = "";
+        Bid bid = bidService.findBidById(bidId);
+        if(bid != null){
+            model.addAttribute("bid", bid);
+
+            if(StringUtils.isNotBlank(userId) && userId.equals(bid.getUserId())){
+                returnStr = "bid/addbid";
+            }
+
+        }
+
+        return returnStr;
     }
 }

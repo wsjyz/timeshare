@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>来接飚</title>
+    <meta name="viewport" content="initial-scale=1, maximum-scale=1">
+    <link rel="shortcut icon" href="/favicon.ico">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+
+    <link rel="stylesheet" href="//g.alicdn.com/msui/sm/0.6.2/css/sm.min.css">
+    <link rel="stylesheet" href="//g.alicdn.com/msui/sm/0.6.2/css/sm-extend.min.css">
+    <link rel="stylesheet" href="${request.contextPath}/css/main.css">
+    <link rel="stylesheet" href="${request.contextPath}/css/chat.css">
+    <style rel="stylesheet">
+        body{font-family: Arial, Helvetica, sans-serif;}
+        .content{font-family: SimHei;}
+        /*--导航栏--*/
+        header.bar{z-index: 99;}
+        .bar{height: 1.9rem;}
+        .title{font-size: .8rem;line-height: 1.9rem;font-family: 'HiraginoSansGB W3';font-weight: 700;color: #000;}
+        .bar .icon{padding: .35rem .1rem;font-size: .9rem;}
+        .bar-nav~.content{top: 1.9rem;}
+        .popup-messages-footer > textarea {
+            border-bottom: 1px solid #b2b2b2 !important;
+            height: 2rem !important;
+            margin: 7px;
+            padding: 5px !important;
+            border: medium none;
+            width: 95% !important;
+        }
+        .popup-messages-footer {
+            background: #fff none repeat scroll 0 0;
+            bottom: 0;
+            position: absolute;
+            width: 100%;
+        }
+        .popup-messages-footer .btn-footer {
+            overflow: hidden;
+            padding: 2px 5px 10px 6px;
+            width: 100%;
+        }
+        .bg_none i {
+            border: 1px solid #ff6701;
+            border-radius: 25px;
+            color: #ff6701;
+            font-size: 17px;
+            height: 33px;
+            line-height: 30px;
+            width: 33px;
+        }
+        .bg_none:active i {
+            border: 1px solid #000;
+            border-radius: 25px;
+            color: #000;
+            font-size: 17px;
+            height: 33px;
+            line-height: 30px;
+            width: 33px;
+        }
+        .bg_none {
+            background: rgba(0, 0, 0, 0) none repeat scroll 0 0;
+            border: medium none;
+        }
+        @font-face {
+            font-family: 'Material Icons';
+            font-style: normal;
+            font-weight: 400;
+            src: url(https://example.com/MaterialIcons-Regular.eot); /* For IE6-8 */
+            src: local('Material Icons'),
+            local('MaterialIcons-Regular'),
+            url(${request.contextPath}/css/MaterialIcons-Regular.woff2) format('woff2'),
+            url(${request.contextPath}/css/MaterialIcons-Regular.woff) format('woff'),
+            url(${request.contextPath}/css/MaterialIcons-Regular.ttf) format('truetype');
+        }
+        .material-icons {
+            font-family: 'Material Icons';
+            font-weight: normal;
+            font-style: normal;
+            font-size: 24px;  /* Preferred icon size */
+            display: inline-block;
+            line-height: 1;
+            text-transform: none;
+            letter-spacing: normal;
+            word-wrap: normal;
+            white-space: nowrap;
+            direction: ltr;
+
+            /* Support for all WebKit browsers. */
+            -webkit-font-smoothing: antialiased;
+            /* Support for Safari and Chrome. */
+            text-rendering: optimizeLegibility;
+
+            /* Support for Firefox. */
+            -moz-osx-font-smoothing: grayscale;
+
+            /* Support for IE. */
+            font-feature-settings: 'liga';
+        }
+    </style>
+</head>
+<body>
+<div class="page-group">
+    <div class="page page-current">
+        <!-- 你的html代码 -->
+        <header class="bar bar-nav">
+
+            <a class="icon icon-left pull-left back"></a>
+            <h1 class='title'>来接飚</h1>
+
+        </header>
+        <div class="content">
+            <ul class="chat-thread">
+                <li>请问您这飚打算花多少钱啊?</li>
+                <li>没多少，也就几个亿吧?</li>
+                <li>OK，我能搞定</li>
+                <!--<li>Are we meeting today?</li>-->
+                <!--<li>yes, what time suits you?</li>-->
+                <!--<li>I was thinking after lunch, I have a meeting in the morning</li>-->
+                <!--<li>Are we meeting today?</li>-->
+                <!--<li>yes, what time suits you?</li>-->
+                <!--<li>I was thinking after lunch, I have a meeting in the morning</li>-->
+                <!--<li>Are we meeting today?</li>-->
+                <!--<li>yes, what time suits you?</li>-->
+                <!--<li>I was thinking after lunch, I have a meeting in the morning</li>-->
+            </ul>
+            <div class="popup-messages-footer">
+                <textarea id="status_message" placeholder="请输入您要说的话..." rows="10" cols="40" name="message"></textarea>
+                <div class="btn-footer">
+                    <button class="bg_none" id="voiceBtn"><i class="material-icons">surround_sound</i></button>
+                    <button class="bg_none" id="imageBtn"><i class="material-icons">wallpaper</i></button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<script type='text/javascript' src='//g.alicdn.com/sj/lib/zepto/zepto.min.js' charset='utf-8'></script>
+<script type='text/javascript' src='//g.alicdn.com/msui/sm/0.6.2/js/sm.min.js' charset='utf-8'></script>
+<script type='text/javascript' src='//g.alicdn.com/msui/sm/0.6.2/js/sm-extend.min.js' charset='utf-8'></script>
+<script type='text/javascript' src='https://res.wx.qq.com/open/js/jweixin-1.0.0.js'></script>
+<script>
+$(function(){
+//    wx.config({
+//        appId: "${parmsMap['appId']}", // 必填，公众号的唯一标识
+//        timestamp:${parmsMap['timestamp']} , // 必填，生成签名的时间戳
+//        nonceStr: "${parmsMap['nonceStr']}", // 必填，生成签名的随机串
+//        signature: "${parmsMap['signature']}",// 必填，签名，见附录1
+//        jsApiList: [
+//            'checkJsApi',
+//            'chooseImage',
+//            'previewImage',
+//            'uploadImage'
+//        ] // 必填，需要使用的JS接口列表，所有JS接口列表见附录2
+//    });
+
+    $("body").on( "click", "#imageBtn", function(){
+        //                    wx.chooseImage({
+//                        count: 1, // 默认9
+//                        sizeType: ['original', 'compressed'], // 可以指定是原图还是压缩图，默认二者都有
+//                        sourceType: ['album', 'camera'], // 可以指定来源是相册还是相机，默认二者都有
+//                        success: function (res) {
+//                            var localIds = res.localIds; // 返回选定照片的本地ID列表，localId可以作为img标签的src属性显示图片
+//                            $("#testImg").attr('src',localIds);
+//                            console.log(localIds);
+//                        }
+//                    });
+    } );
+    $("body").on( "click", "#voiceBtn", function(){
+
+    } );
+})
+</script>
+</body>
+</html>
