@@ -12,8 +12,16 @@
     <link rel="stylesheet" href="//g.alicdn.com/msui/sm/0.6.2/css/sm-extend.min.css">
     <link rel="apple-touch-icon-precomposed" href="/assets/img/apple-touch-icon-114x114.png">
     <link rel="stylesheet" href="${request.contextPath}/css/time.css">
+    <link rel="stylesheet" href="${request.contextPath}/css/material-icon.css">
     <script src="//g.alicdn.com/sj/lib/zepto/zepto.min.js"></script>
-
+    <style>
+        .row .col-10{
+            margin-left: 10%
+        }
+        .row .col-30{
+            margin-left: 4%
+        }
+    </style>
 </head>
 <body>
 <div class="page-group" >
@@ -55,14 +63,13 @@
                 </div>
             </div>
             <div class="buttons-tab">
-                <a href="#recommendTab" class="tab-link active button">推荐</a>
-                <a href="#newTab" class="tab-link button">最新</a>
-                <a href="#hotTab" class="tab-link button">最火</a>
-                <a href="#goodTab" class="tab-link button">最优</a>
+                <a href="#bidHallTab" class="tab-link active button">招标大厅</a>
+                <a href="#auditTab" class="tab-link button">旁听飚</a>
+                <a href="#heroTab" class="tab-link button">英雄飚</a>
             </div>
              
                 <div class="tabs">
-                    <div id="recommendTab" class="tab active infinite-scroll">
+                    <div id="bidHallTab" class="tab active infinite-scroll">
 
                         <div class="list-block media-list" style="margin-top:  0px;">
 
@@ -73,7 +80,7 @@
                             </div>
                         </div>
                     </div>
-                    <div id="newTab" class="tab infinite-scroll">
+                    <div id="auditTab" class="tab infinite-scroll">
                         <div class="list-block media-list" style="margin-top:  0px;">
 
                         </div>
@@ -83,7 +90,7 @@
                             </div>
                         </div>
                     </div>
-                    <div id="hotTab" class="tab infinite-scroll">
+                    <div id="heroTab" class="tab infinite-scroll">
                         <div class="list-block media-list" style="margin-top:  0px;">
 
                         </div>
@@ -93,16 +100,7 @@
                             </div>
                         </div>
                     </div>
-                    <div id="goodTab" class="tab infinite-scroll">
-                        <div class="list-block media-list" style="margin-top:  0px;">
 
-                        </div>
-                        <!-- 加载提示符 -->
-                        <div class="infinite-scroll-preloader">
-                            <div class="preloader">
-                            </div>
-                        </div>
-                    </div>
                 </div>
 
 
@@ -133,36 +131,51 @@
 	            var html = '';
 	            var dataLength = 0;
 	            $.each(data, function(i, item){
-	                var itemStatus = "";
-	                if(item.item.itemStatus == 'for_sale'){
-	                    itemStatus = "销售中";
-	                }else if(item.item.itemStatus == 'undercarriage'){
-	                    itemStatus = "已下架";
-	                }else if(item.item.itemStatus == 'draft'){
-	                    itemStatus = "草稿";
-	                }
-	                var headPic = item.headImgPath;
-	                if(headPic == '' || headPic == null){
-	                    headPic = '${request.contextPath}/images/default_head.jpg';
-	                }
-	                html += '<ul>'+
-	                            '<li>'+
-	                                '<a href="#" class="item-link item-content" onclick="toViewUserItem(\''+item.item.userId+'\',\''+item.item.itemId+'\')">'+
-	                                    '<div class="item-media">' +
-	                                        '<div class="commentAvatarDiv">' +
-	                                            '<img class="commentAvatarImage" src="'+headPic+'" />' +
-	                                        '</div>' +
-	                                    '</div>'+
-	                                    '<div class="item-inner">'+
-	                                        '<div class="item-title-row">'+
-	                                            '<div class="item-title">'+item.item.title+'</div>'+
-	                                        '</div>'+
-	                                        '<div class="item-subtitle">'+item.item.createUserName+'</div>'+
-	                                        '<div class="item-text">'+item.item.useCount+'人咨询过</div>'+
-	                                    '</div>'+
-	                                '</a>'+
-	                            '</li>'+
-	                        '</ul>';
+
+	                html += '<div class="card">'+
+                                '<div class="card-header"><i class="material-icons">blur_circular</i>'+item.title+'</div>'+
+                                    '<div class="card-content">'+
+                                        '<div class="card-content-inner">' +
+                                            '<div class="row">'+
+                                                '<div class="col-10"><i class="material-icons" >face</i></div>'+
+                                                '<div class="col-40">'+item.createUserName+'</div>'+
+                                                '<div class="col-12"><i class="material-icons">stars</i></div>'+
+                                                '<div class="col-30">'+item.score+'颗星</div>'+
+                                            '</div>'+
+                                            '<div class="row">'+
+                                                '<div class="col-10"><i class="material-icons">attach_money</i></div>'+
+                                                '<div class="col-40">招标金额：'+item.price+'</div>'+
+                                                '<div class="col-12"><i class="material-icons">hearing</i></div>'+
+                                                '<div class="col-30">允许旁听：是</div>'+
+                                            '</div>'+
+                                            '<div class="row">'+
+                                                '<div class="col-10"><i class="material-icons">pie_chart</i></div>'+
+                                                '<div class="col-40">点击率：'+item.clickRate+'</div>'+
+                                                '<div class="col-12"><i class="material-icons">gps_fixed</i></div>'+
+                                                '<div class="col-30">飚数：'+item.submitCount+'</div>'+
+                                            '</div>'+
+                                            '<div class="row" >'+
+                                                '<div class="col-100"><hr style="height:1px;border:none;border-top:1px solid #E1E1E1;"/></div>'+
+                                            '</div>'+
+                                            '<div class="row" style="margin-top: 0.5rem;">'+
+                                                    '<div class="col-100">'+item.content+'</div>'+
+                                            '</div>'+
+                                            '<div class="row" >'+
+                                            '<div class="col-100"><hr style="height:1px;border:none;border-top:1px solid #E1E1E1;"/></div>'+
+                                            '</div>'+
+                                            '<div class="row">'+
+                                                '<div class="col-5" ><i class="material-icons" style="font-size:  0.5rem">brightness_1</i></div>'+
+                                                '<div class="col-50" style="font-size: smaller">发起时间：2016-10-11 13:00</div>'+
+                                                '<div class="col-5" style=""><i class="material-icons" style="font-size:  0.5rem">brightness_1</i></div>'+
+                                                '<div class="col-30" style="font-size: smaller">距离结束：1小时20分</div>'+
+                                            '</div>'+
+                                            '<div class="row">'+
+                                            '<div class="col-100" style="padding-top: 0.2rem"><a href="#" class="button button-success" style="border: 1px solid #0894ec;color: #0894ec">去抢飚</a></div>'+
+                                            '</div>'+
+                                        '</div>'+
+                                    '</div>'+
+
+                            '</div>';
 	                dataLength += 1;
 	            });
 	            if(dataLength == 0){
@@ -178,50 +191,46 @@
 
 
 	        }
-	        $.post('${request.contextPath}/item/list-by-condition', {condition:'recommend',startIndex: 0,loadSize:itemsPerLoad}, function (response) {
+	        $.post('${request.contextPath}/bid/list-by-condition', {condition:'all',startIndex: 0,loadSize:itemsPerLoad}, function (response) {
 	            $('#recommendTab.infinite-scroll .list-block').empty();
 	            //预先加载20条
 	            // new XhskSwiper(response);
-	            addItems(itemsPerLoad, 0,response,'recommendTab');
+	            addItems(itemsPerLoad, 0,response,'bidHallTab');
 	            $.hideIndicator();
 	        });
-	        $.post('${request.contextPath}/item/list-by-condition', {condition:'new',startIndex: 0,loadSize:itemsPerLoad}, function (response) {
+	        $.post('${request.contextPath}/bid/list-by-condition', {condition:'audit',startIndex: 0,loadSize:itemsPerLoad}, function (response) {
 	            $('#newTab.infinite-scroll .list-block').empty();
 	            //预先加载20条
-	            addItems(itemsPerLoad, 0,response,'newTab');
+	            addItems(itemsPerLoad, 0,response,'auditTab');
 	        });
-	        $.post('${request.contextPath}/item/list-by-condition', {condition:'hot',startIndex: 0,loadSize:itemsPerLoad}, function (response) {
+	        $.post('${request.contextPath}/bid/list-by-condition', {condition:'complete',startIndex: 0,loadSize:itemsPerLoad}, function (response) {
 	            $('#hotTab.infinite-scroll .list-block').empty();
 	            //预先加载20条
-	            addItems(itemsPerLoad, 0,response,'hotTab');
+	            addItems(itemsPerLoad, 0,response,'heroTab');
 	        });
-	        $.post('${request.contextPath}/item/list-by-condition', {condition:'good',startIndex: 0,loadSize:itemsPerLoad}, function (response) {
-	            $('#goodTab.infinite-scroll .list-block').empty();
-	            //预先加载20条
-	            addItems(itemsPerLoad, 0,response,'goodTab');
-	        });
+
 	        $(document).on('infinite', function() {
 	            // 如果正在加载，则退出
 	            if (loading) return;
 	            // 设置flag
 	            loading = true;
 	            var tabIndex = 0;
-	            var dataType = 'recommend';
+	            var dataType = 'all';
 	            var tabId = $(this).find('.infinite-scroll.active').attr('id');
-	            if(tabId == "newTab"){
+	            if(tabId == "bidHallTab"){
 	                tabIndex = 1;
-	                dataType = 'new';
+	                dataType = 'all';
 	            }
-	            if(tabId == "hotTab"){
+	            if(tabId == "auditTab"){
 	                tabIndex = 2;
-	                dataType = 'hot';
+	                dataType = 'audit';
 	            }
-	            if(tabId == "goodTab"){
+	            if(tabId == "heroTab"){
 	                tabIndex = 3;
-	                dataType = 'good';
+	                dataType = 'complete';
 	            }
 	            lastIndex = $('.list-block').eq(tabIndex).find('ul').length;
-	            $.post('${request.contextPath}/item/list-by-condition', {condition:dataType,startIndex: lastIndex,loadSize:itemsPerLoad}, function (response) {
+	            $.post('${request.contextPath}/bid/list-by-condition', {condition:dataType,startIndex: lastIndex,loadSize:itemsPerLoad}, function (response) {
 	                setTimeout(function() {
 	                    // 重置加载flag
 	                    loading = false;
@@ -243,14 +252,7 @@
 	            });
 	        });
 	    });
-	    $.post('${request.contextPath}/user/get-remind', function (response) {
-	        var remindCount = response.sellRemindCount;
-	        if(remindCount > 0){
-	            $('.badge').text(remindCount);
-	            $('.badge').show();
-	        }
 
-	    });
 	    $("body").on( "click", "#myPageBtn", function(){
 	        window.location.href = '${request.contextPath}/wx/to-get-open-id';
 	    } );

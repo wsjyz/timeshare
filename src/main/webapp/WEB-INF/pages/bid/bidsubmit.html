@@ -12,8 +12,12 @@
     <link rel="stylesheet" href="//g.alicdn.com/msui/sm/0.6.2/css/sm.min.css">
     <link rel="stylesheet" href="//g.alicdn.com/msui/sm/0.6.2/css/sm-extend.min.css">
     <link rel="stylesheet" href="${request.contextPath}/css/main.css">
-    <link rel="stylesheet" href="${request.contextPath}/css/chat.css?t=20160928">
-
+    <link rel="stylesheet" href="${request.contextPath}/css/chat.css?t=20160930">
+    <style>
+        .chat-thread li.self:before {
+            background-image: url(http://jk.zhangqidong.cn/time/images/head.jpg);
+        }
+    </style>
 </head>
 <body>
 <div class="page-group">
@@ -46,7 +50,7 @@
                     <a href="#" class="button button-light" id="sendBidSubmitBtn">飙他</a>
                 </div>
                 <div class="btn-footer">
-                    <button class="bg_none" id="voiceBtn"><i class="material-icons">surround_sound</i></button>
+                    <button class="bg_none" id="voiceBtn"><i class="material-icons">settings_voice</i></button>
                     <button class="bg_none" id="imageBtn"><i class="material-icons">wallpaper</i></button>
                 </div>
             </div>
@@ -88,7 +92,7 @@ $(function(){
         $('.chat-thread').append('<li class="self"><img style="height: 60px;width: 80px;" src="http://photo.l99.com/bigger/03/1416893672563_m7b2sy.jpg"/></li>');
     } );
     $("body").on( "click", "#voiceBtn", function(){
-        $('.chat-thread').append('<li class="self"><i class="material-icons">play_circle_filled</i></li>');
+        $('.chat-thread').append('<li class="self"><i class="material-icons">hearing</i></li>');
     });
     $("body").on( "click", "#sendBidSubmitBtn", function(){
         var messageText = $('#status_message').val();

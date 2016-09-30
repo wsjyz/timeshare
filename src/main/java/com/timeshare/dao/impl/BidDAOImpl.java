@@ -128,6 +128,10 @@ public class BidDAOImpl extends BaseDAO implements BidDAO {
         if(StringUtils.isNotBlank(bid.getUserId())){
             sql.append(" and i.create_user_id = '"+bid.getUserId()+"' ");
         }
+
+        if(StringUtils.isBlank(bid.getBidStatus())){
+            sql.append(" i.bid_status = '"+Contants.BID_STATUS.ongoing.toString()+"' ");
+        }
         sql.append("  order by i.opt_time desc limit ?,?");
         return getJdbcTemplate().query(sql.toString(),new Object[]{startIndex,loadSize},new BidRowMapper());
     }

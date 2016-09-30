@@ -98,4 +98,25 @@ public class BidController extends BaseController{
 
         return returnStr;
     }
+
+    @RequestMapping(value = "/to-index")
+    public String toBidIndex() {
+        return "bid/bidindex";
+    }
+
+    @RequestMapping(value = "/list-by-condition")
+    @ResponseBody
+    public List<Bid> listByCondition(@RequestParam String condition ,@RequestParam int startIndex, @RequestParam int loadSize) {
+        Bid params = new Bid();
+        if(condition.equals("all")){
+            params.setBidStatus(Contants.BID_STATUS.ongoing.toString());
+        }else if(condition.equals("audit")){
+            params.setCanAudit("1");
+            params.setBidStatus(Contants.BID_STATUS.ongoing.toString());
+        }else if(condition.equals("complete")){
+            params.setBidStatus(Contants.BID_STATUS.ongoing.toString());
+        }
+        List<Bid> bidList = bidService.findBidList(params,startIndex,loadSize);
+        return bidList;
+    }
 }
