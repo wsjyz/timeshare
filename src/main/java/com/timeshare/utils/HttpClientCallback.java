@@ -5,6 +5,6 @@ package com.timeshare.utils;
  */
 public interface HttpClientCallback {
 
-    String call();
+    String call(OkhttpClient.FileBean fileBean);
 
 }

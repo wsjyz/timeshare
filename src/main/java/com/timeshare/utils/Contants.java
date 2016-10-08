@@ -24,6 +24,8 @@ public interface Contants {
 
     String DOMAIN = "jk.zhangqidong.cn";
 
+    String FILE_SAVE_PATH = "/work/appfile";
+
     enum ITEM_STATUS {
         draft,for_sale,
         undercarriage,//下架
@@ -34,6 +36,9 @@ public interface Contants {
         draft,ongoing,
         stopped,//后台终止
         finish,//已完成
+    }
+    enum BID_SUBMIT_TYPE {
+        IMAGE,VOICE,TEXT
     }
     enum ITEM_TYPE {
         tel,meet

@@ -12,14 +12,16 @@
     <link rel="stylesheet" href="//g.alicdn.com/msui/sm/0.6.2/css/sm.min.css">
     <link rel="stylesheet" href="//g.alicdn.com/msui/sm/0.6.2/css/sm-extend.min.css">
     <link rel="stylesheet" href="${request.contextPath}/css/main.css">
-    <link rel="stylesheet" href="${request.contextPath}/css/chat.css?t=20160930">
+    <link rel="stylesheet" href="${request.contextPath}/css/chat.css?t=20161008">
     <style>
         .chat-thread li.self:before {
             background-image: url(http://jk.zhangqidong.cn/time/images/head.jpg);
         }
+
     </style>
 </head>
 <body>
+<input type="hidden" name="bidId" id="bidId" value="0f7c23273d4a46f3b197b28104335e93">
 <div class="page-group">
     <div class="page page-current">
         <!-- 你的html代码 -->
@@ -44,6 +46,12 @@
                 <!--<li>yes, what time suits you?</li>-->
                 <!--<li>I was thinking after lunch, I have a meeting in the morning</li>-->
             </ul>
+            <div class="speaker" style="display: none">
+                <a id="speakBtn">
+                    <i id="speaker_phone" class="material-icons" style="font-size: 2rem;margin-top: 0.4rem">speaker_phone</i>
+                    <div id="speaker_phone_text">按下说话</div>
+                </a>
+            </div>
             <div class="popup-messages-footer">
                 <div class="message-input">
                     <textarea id="status_message" placeholder="请输入您要说的话..." rows="10" cols="40" name="message"></textarea>
@@ -64,6 +72,12 @@
 <script type='text/javascript' src='//g.alicdn.com/msui/sm/0.6.2/js/sm-extend.min.js' charset='utf-8'></script>
 <script type='text/javascript' src='https://res.wx.qq.com/open/js/jweixin-1.0.0.js'></script>
 <script>
+    var timeOutEvent=0;
+    function longPress(){
+        timeOutEvent = 0;
+        $('#speakBtn').css('color', '#ff6701');
+        wx.startRecord();
+    }
 $(function(){
 //    wx.config({
 //        appId: "${parmsMap['appId']}", // 必填，公众号的唯一标识
@@ -74,33 +88,113 @@ $(function(){
 //            'checkJsApi',
 //            'chooseImage',
 //            'previewImage',
-//            'uploadImage'
+//            'uploadImage',
+//            'startRecord',
+//            'stopRecord',
+//            'onVoiceRecordEnd',
+//            'playVoice',
+//            'pauseVoice',
+//            'stopVoice',
+//            'onVoicePlayEnd',
+//            'uploadVoice'
 //        ] // 必填，需要使用的JS接口列表，所有JS接口列表见附录2
 //    });
 
     $("body").on( "click", "#imageBtn", function(){
-        //                    wx.chooseImage({
-//                        count: 1, // 默认9
-//                        sizeType: ['original', 'compressed'], // 可以指定是原图还是压缩图，默认二者都有
-//                        sourceType: ['album', 'camera'], // 可以指定来源是相册还是相机，默认二者都有
-//                        success: function (res) {
-//                            var localIds = res.localIds; // 返回选定照片的本地ID列表，localId可以作为img标签的src属性显示图片
-//                            $("#testImg").attr('src',localIds);
-//                            console.log(localIds);
-//                        }
-//                    });
-        $('.chat-thread').append('<li class="self"><img style="height: 60px;width: 80px;" src="http://photo.l99.com/bigger/03/1416893672563_m7b2sy.jpg"/></li>');
+        wx.chooseImage({
+            count: 1, // 默认9
+            sizeType: ['original', 'compressed'], // 可以指定是原图还是压缩图，默认二者都有
+            sourceType: ['album', 'camera'], // 可以指定来源是相册还是相机，默认二者都有
+            success: function (res) {
+                var localIds = res.localIds; // 返回选定照片的本地ID列表，localId可以作为img标签的src属性显示图片
+                $('.chat-thread').append('<li class="self"><img style="height: 60px;width: 80px;" src="'+localIds+'"/></li>');
+//                $('.chat-thread').append('<li class="self" style="height: 90px;width: 120px;">' +
+//                        '<img style="height: 60px;width: 80px;position:absolute;" src="'+localIds+'"/>' +
+//                        '<div style="height: 60px;width: 80px;background-color: #00a1dc;position:absolute;z-index: 2;filter: alpha(opacity=70); opacity: 0.7;text-align: center;line-height: 60px;">0%</div>' +
+//                        '</li>');
+
+                wx.uploadImage({
+                    localId: localIds[0], // 需要上传的图片的本地ID，由chooseImage接口获得
+                    isShowProgressTips: 1, // 默认为1，显示进度提示
+                    success: function (res) {
+                        var serverId = res.serverId; // 返回图片的服务器端ID
+                        $.post('${request.contextPath}/bidsubmit/download-file', {bidId:$('#bidId').val(),serverId:serverId}, function (response) {
+                            $('.chat-thread').scrollTop($('.chat-thread').height() + 60);
+                        });
+                    }
+                });
+
+            }
+        });
+
     } );
     $("body").on( "click", "#voiceBtn", function(){
-        $('.chat-thread').append('<li class="self"><i class="material-icons">hearing</i></li>');
+        $('.speaker').show();
+    });
+
+    $("body").on( "touchstart", "#speakBtn", function(e){
+        timeOutEvent = setTimeout("longPress()",500);
+        e.preventDefault();
+    });
+    $("body").on( "touchmove", "#speakBtn", function(){
+        clearTimeout(timeOutEvent);
+        timeOutEvent = 0;
+    });
+    function uploadVoice(localId){
+        wx.uploadVoice({
+            localId: localId, // 需要上传的音频的本地ID，由stopRecord接口获得
+            isShowProgressTips: 1, // 默认为1，显示进度提示
+            success: function (res) {
+                var serverId = res.serverId; // 返回音频的服务器端ID
+            }
+        });
+    }
+    function playAndStopVoice(localId){
+        wx.playVoice({
+            localId: localId // 需要播放的音频的本地ID，由stopRecord接口获得
+        });
+    }
+    $("body").on( "touchend", "#speakBtn", function(){
+        clearTimeout(timeOutEvent);
+        $('#speakBtn').css('color', '#212121');
+        wx.stopRecord({
+            success: function (res) {
+                var localId = res.localId;
+                $('.chat-thread').append('<li class="self"><i class="material-icons">hearing</i></li>');
+                uploadVoice(localId);
+            }
+        });
+        return false;
+    });
+    $("body").on( "click", function(e){
+        if($(e.target).closest('.speaker').length <= 0 && $(e.target).closest('#voiceBtn').length <= 0){
+            $('.speaker').hide();
+        }
+
+    });
+    wx.onVoiceRecordEnd({
+        // 录音时间超过一分钟没有停止的时候会执行 complete 回调
+        complete: function (res) {
+            var localId = res.localId;
+            $('.chat-thread').append('<li class="self"><i class="material-icons">hearing</i></li>');
+            uploadVoice(localId);
+        }
     });
     $("body").on( "click", "#sendBidSubmitBtn", function(){
         var messageText = $('#status_message').val();
         if(messageText != ''){
             $('.chat-thread').append('<li class="self">'+messageText+'</li>');
             $('#status_message').val('');
+            $.post('${request.contextPath}/bidsubmit/addtext', {bidId:$('#bidId').val(),text:messageText}, function (response) {
+
+                if(response.messageType == 'success' ){
+
+                    $('.chat-thread').scrollTop($('.chat-thread').height() + 40);
+                }
+            });
         }
     } );
+
 })
 </script>
 </body>

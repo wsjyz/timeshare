@@ -1,6 +1,7 @@
 package com.timeshare.utils;
 
 import okhttp3.*;
+import org.apache.commons.lang3.StringUtils;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -96,14 +97,26 @@ public class OkhttpClient {
                 InputStream inputStream = response.body().byteStream();
                 FileOutputStream fileOutputStream = null;
                 try {
-                    fileOutputStream = new FileOutputStream(new File(savePath));
+                    String contentDisposition = response.header("Content-disposition");
+                    FileBean fileBean = new FileBean();
+                    String fileName = "";
+                    if(StringUtils.isNotBlank(contentDisposition) && contentDisposition.indexOf(".") != -1){
+                        fileName = contentDisposition.substring(contentDisposition.lastIndexOf("filename=\"") + 10,contentDisposition.lastIndexOf("\""));
+                        fileBean.setFileName(fileName);
+                    }
+                    File parentPath = new File(savePath);
+                    if(!parentPath.exists()){
+                        parentPath.mkdirs();
+                    }
+                    fileOutputStream = new FileOutputStream(new File(savePath+fileName));
                     byte[] buffer = new byte[2048];
                     int len;
                     while ((len = inputStream.read(buffer)) != -1) {
                         fileOutputStream.write(buffer, 0, len);
                     }
                     fileOutputStream.flush();
-                    callback.call();
+
+                    callback.call(fileBean);
 
                 } catch (IOException e) {
 
@@ -112,7 +125,10 @@ public class OkhttpClient {
                     try {
                         inputStream.close();
                         response.body().close();
-                        fileOutputStream.close();
+                        if(fileOutputStream != null){
+                            fileOutputStream.close();
+                        }
+
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
@@ -125,7 +141,35 @@ public class OkhttpClient {
 
     }
 
+    public class FileBean{
+        private String fileName;
+        private long fileSize;
+        private String contentType;
 
+        public String getFileName() {
+            return fileName;
+        }
+
+        public void setFileName(String fileName) {
+            this.fileName = fileName;
+        }
+
+        public long getFileSize() {
+            return fileSize;
+        }
+
+        public void setFileSize(long fileSize) {
+            this.fileSize = fileSize;
+        }
+
+        public String getContentType() {
+            return contentType;
+        }
+
+        public void setContentType(String contentType) {
+            this.contentType = contentType;
+        }
+    }
 
 
 
