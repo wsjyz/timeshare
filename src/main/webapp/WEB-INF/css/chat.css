@@ -119,7 +119,7 @@ header.bar{z-index: 99;}
 }
 
 .chat-thread {
-    margin: 24px auto 0 auto;
+    margin: 10px auto 0 auto;
     padding: 0 20px 0 0;
     list-style: none;
     overflow-y: auto;

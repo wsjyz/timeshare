@@ -71,8 +71,14 @@ public class BidSubmitDAOImpl extends BaseDAO implements BidSubmitDAO {
         if(StringUtils.isNotBlank(submit.getUserId())){
             sql.append(" and i.create_user_id = '"+submit.getUserId()+"' ");
         }
-        sql.append("  order by i.opt_time desc limit ?,?");
-        return getJdbcTemplate().query(sql.toString(),new Object[]{startIndex,loadSize},new BidSubmitRowMapper());
+        sql.append("  order by i.opt_time ");
+        if(startIndex != 0 && loadSize != 0){
+            sql.append(" limit ?,?");
+            return getJdbcTemplate().query(sql.toString(),new Object[]{startIndex,loadSize},new BidSubmitRowMapper());
+        }else{
+            return getJdbcTemplate().query(sql.toString(),new BidSubmitRowMapper());
+        }
+
     }
 
     class BidSubmitRowMapper implements RowMapper<BidSubmit>{

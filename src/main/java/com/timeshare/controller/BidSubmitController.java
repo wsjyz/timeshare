@@ -4,10 +4,7 @@ import com.timeshare.domain.BidSubmit;
 import com.timeshare.domain.SystemMessage;
 import com.timeshare.domain.UserInfo;
 import com.timeshare.service.BidSubmitService;
-import com.timeshare.utils.Contants;
-import com.timeshare.utils.HttpClientCallback;
-import com.timeshare.utils.OkhttpClient;
-import com.timeshare.utils.WxUtils;
+import com.timeshare.utils.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -16,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -32,9 +30,9 @@ public class BidSubmitController extends BaseController{
     public String toAdd(Model model, HttpServletRequest request) {
 
         //微信jssdk相关代码
-//        String url = WxUtils.getUrl(request);
-//        Map<String,String> parmsMap = WxUtils.sign(url);
-//        model.addAttribute("parmsMap",parmsMap);
+        String url = WxUtils.getUrl(request);
+        Map<String,String> parmsMap = WxUtils.sign(url);
+        model.addAttribute("parmsMap",parmsMap);
         return "bid/bidsubmit";
     }
 
@@ -60,7 +58,7 @@ public class BidSubmitController extends BaseController{
     }
     @ResponseBody
     @RequestMapping(value = "/download-file")
-    public String downloadFile(String bidId,String serverId,@CookieValue(value="time_sid", defaultValue="c9f7da60747f4cf49505123d15d29ac4") String userId){
+    public String downloadFile(String bidId,String serverId,String fileType,@CookieValue(value="time_sid", defaultValue="c9f7da60747f4cf49505123d15d29ac4") String userId){
         OkhttpClient client = new OkhttpClient();
         String accessToken = WxUtils.getAccessToken().getAccess_token();
         String fileUrl = "http://file.api.weixin.qq.com/cgi-bin/media/get?access_token="+accessToken+"&media_id="+serverId;
@@ -69,13 +67,27 @@ public class BidSubmitController extends BaseController{
             @Override
             public String call(OkhttpClient.FileBean fileBean) {
                 BidSubmit bidSubmit = saveSubmitBase(userId,bidId);
-                bidSubmit.setBidSubmitType(Contants.BID_SUBMIT_TYPE.IMAGE.toString());
+                bidSubmit.setBidSubmitType(fileType);
                 bidSubmit.setWxServerId(serverId);
                 //bidSubmit.setServerPath(bidId +"/"+ fileBean.getFileName());
+                if(fileType.equals(Contants.BID_SUBMIT_TYPE.VOICE.toString())){
+                    VoiceFileUtils.amrToMp3(savePath+serverId+".amr");
+                }
+
                 bidSubmitService.saveBidSubmit(bidSubmit);
                 return null;
             }
         });
         return "success";
+    }
+
+    @ResponseBody
+    @RequestMapping(value = "/findsubmitlist")
+    public List<BidSubmit> findSubmitList(String bidId) {
+
+        BidSubmit bidSubmit = new BidSubmit();
+        bidSubmit.setBidId(bidId);
+        List<BidSubmit> bidSubmitList = bidSubmitService.findSubmitList(bidSubmit,0,0);
+        return bidSubmitList;
     }
 }

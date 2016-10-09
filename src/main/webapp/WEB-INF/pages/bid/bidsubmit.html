@@ -22,6 +22,7 @@
 </head>
 <body>
 <input type="hidden" name="bidId" id="bidId" value="0f7c23273d4a46f3b197b28104335e93">
+<audio id="play_audio" volume="2"></audio>
 <div class="page-group">
     <div class="page page-current">
         <!-- 你的html代码 -->
@@ -46,12 +47,12 @@
                 <!--<li>yes, what time suits you?</li>-->
                 <!--<li>I was thinking after lunch, I have a meeting in the morning</li>-->
             </ul>
-            <div class="speaker" style="display: none">
-                <a id="speakBtn">
+            <a id="speakBtn">
+                <div class="speaker" style="display: none">
                     <i id="speaker_phone" class="material-icons" style="font-size: 2rem;margin-top: 0.4rem">speaker_phone</i>
-                    <div id="speaker_phone_text">按下说话</div>
-                </a>
-            </div>
+                    <div id="speaker_phone_text">长按说话</div>
+                </div>
+            </a>
             <div class="popup-messages-footer">
                 <div class="message-input">
                     <textarea id="status_message" placeholder="请输入您要说的话..." rows="10" cols="40" name="message"></textarea>
@@ -73,33 +74,62 @@
 <script type='text/javascript' src='https://res.wx.qq.com/open/js/jweixin-1.0.0.js'></script>
 <script>
     var timeOutEvent=0;
+    var webServerDomain = 'http://jk.zhangqidong.cn/bidsubmit';
     function longPress(){
         timeOutEvent = 0;
         $('#speakBtn').css('color', '#ff6701');
         wx.startRecord();
+        wx.onVoiceRecordEnd({
+            // 录音时间超过一分钟没有停止的时候会执行 complete 回调
+            //这个函数不能算作监听，他一定要放在startRecord函数之后，否则不能执行，糟糕、愚蠢、误导人的设计
+            complete: function (res) {
+                var localId = res.localId;
+                $('.chat-thread').append('<a class="play_voice" data="'+localId+'"><li class="self" ><i class="material-icons">hearing</i></li></a>');
+                $('.speaker').hide();
+                uploadVoice(localId);
+            }
+        });
     }
-$(function(){
-//    wx.config({
-//        appId: "${parmsMap['appId']}", // 必填，公众号的唯一标识
-//        timestamp:${parmsMap['timestamp']} , // 必填，生成签名的时间戳
-//        nonceStr: "${parmsMap['nonceStr']}", // 必填，生成签名的随机串
-//        signature: "${parmsMap['signature']}",// 必填，签名，见附录1
-//        jsApiList: [
-//            'checkJsApi',
-//            'chooseImage',
-//            'previewImage',
-//            'uploadImage',
-//            'startRecord',
-//            'stopRecord',
-//            'onVoiceRecordEnd',
-//            'playVoice',
-//            'pauseVoice',
-//            'stopVoice',
-//            'onVoicePlayEnd',
-//            'uploadVoice'
-//        ] // 必填，需要使用的JS接口列表，所有JS接口列表见附录2
-//    });
 
+$(function(){
+    wx.config({
+        appId: "${parmsMap['appId']}", // 必填，公众号的唯一标识
+        timestamp:${parmsMap['timestamp']} , // 必填，生成签名的时间戳
+        nonceStr: "${parmsMap['nonceStr']}", // 必填，生成签名的随机串
+        signature: "${parmsMap['signature']}",// 必填，签名，见附录1
+        jsApiList: [
+            'checkJsApi',
+            'chooseImage',
+            'previewImage',
+            'uploadImage',
+            'startRecord',
+            'stopRecord',
+            'onVoiceRecordEnd',
+            'playVoice',
+            'pauseVoice',
+            'stopVoice',
+            'onVoicePlayEnd',
+            'uploadVoice'
+        ] // 必填，需要使用的JS接口列表，所有JS接口列表见附录2
+    });
+    $.post('${request.contextPath}/bidsubmit/findsubmitlist', {bidId:$('#bidId').val()}, function (response) {
+        var size = 0;
+        $.each(response, function(i, item){
+            if(item.bidSubmitType == 'TEXT'){
+                $('.chat-thread').append('<li class="self">'+item.bidSubmitText+'</li>');
+            }else if(item.bidSubmitType == 'IMAGE'){
+                var imagePath = webServerDomain+"/"+item.bidId+"/"+item.wxServerId+".jpg";
+                $('.chat-thread').append('<a class="play_img"><li class="self"><img style="height: 60px;width: 80px;" src="'+imagePath+'"/></li></a>');
+            }else if(item.bidSubmitType == 'VOICE'){
+                $('.chat-thread').append('<a class="play_voice" voice="'+item.wxServerId+'"><li class="self" ><i class="material-icons">hearing</i></li></a>');
+
+            }
+            size = i ++;
+
+        });
+        $('.chat-thread').scrollTop($('.chat-thread').height() + size*60);
+
+    });
     $("body").on( "click", "#imageBtn", function(){
         wx.chooseImage({
             count: 1, // 默认9
@@ -118,7 +148,7 @@ $(function(){
                     isShowProgressTips: 1, // 默认为1，显示进度提示
                     success: function (res) {
                         var serverId = res.serverId; // 返回图片的服务器端ID
-                        $.post('${request.contextPath}/bidsubmit/download-file', {bidId:$('#bidId').val(),serverId:serverId}, function (response) {
+                        $.post('${request.contextPath}/bidsubmit/download-file', {bidId:$('#bidId').val(),serverId:serverId,fileType:'IMAGE'}, function (response) {
                             $('.chat-thread').scrollTop($('.chat-thread').height() + 60);
                         });
                     }
@@ -146,24 +176,72 @@ $(function(){
             isShowProgressTips: 1, // 默认为1，显示进度提示
             success: function (res) {
                 var serverId = res.serverId; // 返回音频的服务器端ID
+                $.post('${request.contextPath}/bidsubmit/download-file', {bidId:$('#bidId').val(),serverId:serverId,fileType:'VOICE'}, function (response) {
+                    $('.chat-thread').scrollTop($('.chat-thread').height() + 60);
+                });
             }
         });
     }
-    function playAndStopVoice(localId){
-        wx.playVoice({
-            localId: localId // 需要播放的音频的本地ID，由stopRecord接口获得
-        });
-    }
+    var playing = 0;
+
+    var audio = document.getElementById('play_audio');
+    audio.addEventListener('ended', function(){
+        var audioId = $('#play_audio').attr('data');
+        $("[voice='"+audioId+"']").find('i').css('color', '#212121');
+        playing = 0;
+    });
+    $("body").on("click",".play_voice",function(){
+        if($(this).attr("data")== null){
+            var voicePath = webServerDomain+"/"+$('#bidId').val()+"/"+$(this).attr('voice')+".mp3";
+            //var voicePath = $(this).attr('voice');
+            if(playing == 0){
+                $('#play_audio').attr("src",voicePath);
+                $('#play_audio').attr("data",$(this).attr('voice'));
+                $('#play_audio')[0].play();
+                $(this).find('i').css('color', '#ff6701');
+                playing = 1;
+            }else{
+                $('#play_audio')[0].pause();
+                $(this).find('i').css('color', '#212121');
+                playing = 0;
+            }
+        }else{
+            var localId = $(this).attr('data');
+            if(playing == 0){
+                wx.playVoice({
+                    localId: localId // 需要播放的音频的本地ID，由stopRecord接口获得
+                });
+                $(this).find('i').css('color', '#ff6701');
+                playing = 1;
+                wx.onVoicePlayEnd({//这个函数不能算作监听，他一定要放在playVoice函数之后，否则不能执行，糟糕、愚蠢、误导人的设计
+                    success: function (res) {
+                        var localId = res.localId; // 返回音频的本地ID
+                        $("[data='"+localId+"']").find('i').css('color', '#212121');
+                    }
+                });
+
+            }else{
+                wx.stopVoice({
+                    localId: localId // 需要停止的音频的本地ID，由stopRecord接口获得
+                });
+                $(this).find('i').css('color', '#212121');
+                playing = 0;
+            }
+        }
+
+    });
     $("body").on( "touchend", "#speakBtn", function(){
         clearTimeout(timeOutEvent);
         $('#speakBtn').css('color', '#212121');
         wx.stopRecord({
             success: function (res) {
                 var localId = res.localId;
-                $('.chat-thread').append('<li class="self"><i class="material-icons">hearing</i></li>');
+                $('.chat-thread').append('<a class="play_voice" data="'+localId+'"><li class="self" ><i class="material-icons" >hearing</i></li></a>');
+                $('.speaker').hide();
                 uploadVoice(localId);
             }
         });
+
         return false;
     });
     $("body").on( "click", function(e){
@@ -172,13 +250,17 @@ $(function(){
         }
 
     });
-    wx.onVoiceRecordEnd({
-        // 录音时间超过一分钟没有停止的时候会执行 complete 回调
-        complete: function (res) {
-            var localId = res.localId;
-            $('.chat-thread').append('<li class="self"><i class="material-icons">hearing</i></li>');
-            uploadVoice(localId);
-        }
+
+    $("body").on("click",".play_img",function(){
+        var imgPath = $(this).find('img').attr('src');
+        $('.photo-browser').remove();
+        var myPhotoBrowserStandalone = $.photoBrowser({
+            photos : [
+                imgPath
+            ],
+            type: 'popup'
+        });
+        myPhotoBrowserStandalone.open();
     });
     $("body").on( "click", "#sendBidSubmitBtn", function(){
         var messageText = $('#status_message').val();
