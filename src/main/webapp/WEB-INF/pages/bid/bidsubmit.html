@@ -17,11 +17,13 @@
         .chat-thread li.self:before {
             background-image: url(http://jk.zhangqidong.cn/time/images/head.jpg);
         }
-
+        .chat-thread{
+            height: <#if bidStatus == "finish">95%<#else>80%</#if>;
+        }
     </style>
 </head>
 <body>
-<input type="hidden" name="bidId" id="bidId" value="0f7c23273d4a46f3b197b28104335e93">
+<input type="hidden" name="bidId" id="bidId" value="${bidId}">
 <audio id="play_audio" volume="2"></audio>
 <div class="page-group">
     <div class="page page-current">
@@ -53,7 +55,7 @@
                     <div id="speaker_phone_text">长按说话</div>
                 </div>
             </a>
-            <div class="popup-messages-footer">
+            <div class="popup-messages-footer" style="display: <#if bidStatus == "finish">none<#else>block</#if>">
                 <div class="message-input">
                     <textarea id="status_message" placeholder="请输入您要说的话..." rows="10" cols="40" name="message"></textarea>
                     <a href="#" class="button button-light" id="sendBidSubmitBtn">飙他</a>

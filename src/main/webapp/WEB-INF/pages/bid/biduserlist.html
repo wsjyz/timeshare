@@ -1,0 +1,313 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>查看飚</title>
+    <meta name="viewport" content="initial-scale=1, maximum-scale=1">
+    <link rel="shortcut icon" href="/favicon.ico">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+
+    <link rel="stylesheet" href="//g.alicdn.com/msui/sm/0.6.2/css/sm.min.css">
+    <link rel="stylesheet" href="//g.alicdn.com/msui/sm/0.6.2/css/sm-extend.min.css">
+    <link rel="stylesheet" href="${request.contextPath}/css/starability.css">
+
+    <link rel="apple-touch-icon-precomposed" href="/assets/img/apple-touch-icon-114x114.png">
+    <script src="//g.alicdn.com/sj/lib/zepto/zepto.min.js"></script>
+    <style type="text/css">
+        body{font-family: Arial, Helvetica, sans-serif;}
+        .infinite-scroll-preloader {
+            margin-top:-20px;
+        }
+        /*=公共样式=*/
+        .jz-or-hide{visibility: hidden;}
+        /*==样式修改==*/
+            /*-导航栏-*/
+        .bar{height: 1.9rem;}
+        .title{font-size: .8rem;line-height: 1.9rem;font-family: 'HiraginoSansGB W3';font-weight: 700;color: #000;}
+        .bar .icon{padding: .35rem .1rem;font-size: .9rem;}
+        .bar-nav~.content{top: 1.9rem;}
+        .bar .button{top: .45rem;font-size: .65rem;color: #14b8f5;border-color: #14b8f5;line-height:.9rem;height: 1rem;}
+            /*内容*/
+        .content{font-family: SimHei;}
+        .content .list-block{font-size: .7rem;font-weight: 400;box-shadow: 0 2px 2px rgba(0,0,0,.2);}
+        /*.bar-tab~.content{padding-top: .6rem;}*/
+        /*.content .item-inner .col-60{display: none;}*/
+        .content .item-inner .col-60{width: 60%;float:left;margin-left: 0;text-align: right;}
+        .content .item-inner .col-40{width: 40%;float:left;margin-left: 0;height: 100%;box-sizing: border-box;text-align: left;}
+        .content .item-inner .item-title-row{padding: .35rem 0;}
+        .list-block ul{margin-bottom: -1px;}
+        .content .item-inner .item-text{position: absolute;top: 0;left: 0;right: 0;bottom: 0;padding-top: .8rem;}
+        .content .item-inner .item-title{
+            color: #1b1b1b;
+            width: 35%;
+            white-space: normal;
+            overflow : hidden;
+            text-overflow: ellipsis;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+        }
+        .list-block .item-after{color:#828282;}
+        .list-block.media-list .item-inner{
+            background-size: .575rem .925rem;
+            background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABcAAAAlCAYAAACpmHIGAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAA3ZpVFh0WE1MOmNvbS5hZG9iZS54bXAAAAAAADw/eHBhY2tldCBiZWdpbj0i77u/IiBpZD0iVzVNME1wQ2VoaUh6cmVTek5UY3prYzlkIj8+IDx4OnhtcG1ldGEgeG1sbnM6eD0iYWRvYmU6bnM6bWV0YS8iIHg6eG1wdGs9IkFkb2JlIFhNUCBDb3JlIDUuNi1jMDY3IDc5LjE1Nzc0NywgMjAxNS8wMy8zMC0yMzo0MDo0MiAgICAgICAgIj4gPHJkZjpSREYgeG1sbnM6cmRmPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5LzAyLzIyLXJkZi1zeW50YXgtbnMjIj4gPHJkZjpEZXNjcmlwdGlvbiByZGY6YWJvdXQ9IiIgeG1sbnM6eG1wTU09Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC9tbS8iIHhtbG5zOnN0UmVmPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvc1R5cGUvUmVzb3VyY2VSZWYjIiB4bWxuczp4bXA9Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC8iIHhtcE1NOk9yaWdpbmFsRG9jdW1lbnRJRD0ieG1wLmRpZDo5ZTg3Yzg4Yi04ZmE1LWZkNGEtOWFjYy1jNzU2ZWMzYTQ3ZTAiIHhtcE1NOkRvY3VtZW50SUQ9InhtcC5kaWQ6NkUwMzAxMDk2NkVEMTFFNkFCMTZBNTRBNDIzQkE4RUYiIHhtcE1NOkluc3RhbmNlSUQ9InhtcC5paWQ6NkUwMzAxMDg2NkVEMTFFNkFCMTZBNTRBNDIzQkE4RUYiIHhtcDpDcmVhdG9yVG9vbD0iQWRvYmUgUGhvdG9zaG9wIENDIDIwMTUgKFdpbmRvd3MpIj4gPHhtcE1NOkRlcml2ZWRGcm9tIHN0UmVmOmluc3RhbmNlSUQ9InhtcC5paWQ6OWU4N2M4OGItOGZhNS1mZDRhLTlhY2MtYzc1NmVjM2E0N2UwIiBzdFJlZjpkb2N1bWVudElEPSJ4bXAuZGlkOjllODdjODhiLThmYTUtZmQ0YS05YWNjLWM3NTZlYzNhNDdlMCIvPiA8L3JkZjpEZXNjcmlwdGlvbj4gPC9yZGY6UkRGPiA8L3g6eG1wbWV0YT4gPD94cGFja2V0IGVuZD0iciI/Prk437gAAAK4SURBVHjarJZJaBRBFIZ7Oq2inlQwUSFoJILgQWS8CAqCIAhuCKII7kaMW9S44IIKuQjuO+pJ9KDEBQ/izYNLhAyuYDQHRS8mblGDF09+D/6GStsz02N3wceju6r+V/3q1av2vZhWKBRyXgbNL/K+Cgf9MxdHdAjmDCxM6yBu5XOhAfbA/DQO4sSfwnmog71pHPg2EaaGL/L5/EvMKbgI49I4sJXXw0Emr3McvFbcUzkw8W8wHc5GHHSkdeAj0qXN87J2kHNScCvmiB4bET7n9I3HrIc10AktcIsxfxJlCwOPYrZl+QV9UjFrB//keZYOYmtLVg6KFa5MHPilNiStA79crqZxkPhSYMImzAk9bkb4ZMw5WAlWm47BzYpuHESsoG3Q4zQcPHD6hmN2gh3Gd7DFr0C4VqfT2luYEhkyCMLqOhC6ggSiVZharbhBDiwk150x1QrZZLiv8vEmSLDokbAKltpq4LAJM/mnhGsw+2EOfLb6ZMLWF5RZdZ1WbAXruy6R2/BL/RO0eTPgscUc4Yfh/KCE8GiteBl8UcW8zOReZ1iThD9AM31trkZQQrjRWfEhSy0Tps+SYCLsUyhewQF4FtUJIqKBNs8OylroUSiuhTGmDYbdMA+ewxJdi15JcdoIhWIFdGvFrc7mjVUuL9D12FJMuI84E8dgNirdLBSnbfOY/EP99fqKmdo8S7cXpRIiUB2ocdKtW+l2Jdw8jWmW8CeLdznhsHANhV1gtaNXWdEKvyU8CXNHX9Qu+yjJqbawDIPZCsVxuOrEOFCtsBVbbFfrp8lLKm45vENZcMMRtgOyHRbDR6VbRyWFLiehAVZ4EO7R8yjMBZgFT6yUqnZ7FYtHcr0f5pI2175qOcJ3s/rLtdO3CNpk7/3vL3Tc8f+qG6WTFbdn+vOP4Hs77qoZqdpfAQYARmRPLak+tCYAAAAASUVORK5CYII=);
+        }
+        /*-底部按钮-*/
+        .bar-tab~.content {bottom: 2rem;}
+        .bar-tab{height: 2rem;border-top: 1px solid #e7e7e7;box-sizing: border-box;}
+        .bar-tab .tab-item{height: 2rem;color: #666;}
+        .bar-tab .tab-item:before{
+            content: '';
+            display: block;
+            position: absolute;
+            top: .4rem;
+            width: 1px;
+            height: 1.2rem;
+            background-color: #dcdcdc;
+        }
+        .bar-tab .tab-item.active .tab-label,.bar-tab .tab-label:active{color: #12B7F5;}
+        .bar-tab .tab-item.addactive .tab-label{color: #12B7F5;}
+        .bar-tab .tab-label{
+            display: inline-block;
+            padding: .45rem 0 .45rem 1.2rem;
+            /*height: 100%;*/
+            font-size: .75rem;
+            line-height: 1.1rem;
+            text-align: left;
+            margin-top: -1px;
+            /*margin-left: 1rem;*/
+            box-sizing: border-box;
+        }
+        .buy-time,.sell-time,.my-time{background-repeat: no-repeat;background-size: auto 1.1rem;background-position: left center;-webkit-user-select:none;user-select:none;}
+        .buy-time{background-image: url(${request.contextPath}/images/icon/buy-time.png);}
+        .sell-time{background-image: url(${request.contextPath}/images/icon/sell-time.png);}
+        .my-time{background-image: url(${request.contextPath}/images/icon/my-time.png);}
+        .tab-item.addactive .buy-time,
+        .tab-item.active .buy-time{background-image: url(${request.contextPath}/images/icon/buy-timing.png);}
+        .tab-item.addactive .sell-time,
+        .tab-item.active .sell-time{background-image: url(${request.contextPath}/images/icon/sell-timing.png);}
+        .tab-item.addactive .my-time,
+        .tab-item.active .my-time{background-image: url(${request.contextPath}/images/icon/my-timing.png);}
+
+        /*--解决安卓下滑线--*/
+        @media only screen and (-webkit-min-device-pixel-ratio: 2){
+            .list-block ul:before {
+                -webkit-transform: scaleY(0);
+                transform: scaleY(0);
+            }
+            .list-block ul:after {
+                -webkit-transform: scaleY(1);
+                transform: scaleY(1);
+            }
+        }
+        .button-success{
+            border: 1px solid #0894ec;
+            color: #0894ec;
+        }
+        .starability-checkmark{
+            min-height: 0;
+        }
+    </style>
+</head>
+<body>
+<div class="page-group" >
+    <div id="page-swiper" class="page">
+        <nav class="bar bar-tab">
+            <a class="tab-item active" href="#">
+                <span class="tab-label buy-time">约</span>
+            </a>
+            <a class="tab-item" id="mySellBtn">
+                <span class="tab-label sell-time">飚</span>
+            </a>
+            <a class="tab-item" href="#" id="myPageBtn">
+                <span class="tab-label my-time">我</span>
+            </a>
+        </nav>
+        <!--<div class="content" id=''>-->
+            <header class="bar bar-nav">
+                <a class="icon icon-left pull-left back"></a>
+                <h1 class="title">查看飚</h1>
+            </header>
+
+        <div class="content">
+            <div class="list-block cards-list">
+                <ul id="content-list-ul">
+
+                </ul>
+            </div>
+        </div>
+        <!--</div>-->
+    </div>
+</div>
+<script src="//g.alicdn.com/msui/sm/0.6.2/js/sm.min.js"></script>
+<script src="//g.alicdn.com/msui/sm/0.6.2/js/sm-extend.min.js"></script>
+<script>
+    $.init();
+//    $.showIndicator();
+    $('.infinite-scroll-preloader').hide();
+
+    function addItems(data) {
+        // 生成新条目的HTML
+        var html = '';
+        var dataLength = 0;
+        var bidStatus = 'finish';
+        $.each(data, function(i, item){
+            var winTheBid = item.winTheBid;
+            var starDisplay = 'none';
+            var winBtnDisplay = 'none';
+            if(winTheBid == '1'){
+                starDisplay = 'block';
+            }
+            if(bidStatus == 'ongoing'){
+                winBtnDisplay = 'block';
+            }
+            html += '<li class="card">'+
+                        '<div class="card-header">'+
+                            '<span>'+item.createUserName+'</span>'+
+                            '<fieldset class="starability-checkmark" style="display: '+starDisplay+'">'+
+                            '<label  title="Amazing">5 stars</label>'+
+                            '<label  title="Very good">4 stars</label>'+
+                            '<label  title="Average">3 stars</label>'+
+                            '<label  title="Not good">2 stars</label>'+
+                            '<label  title="Terrible" style="background-position: 0 -30px;">1 star</label>'+
+                            '</fieldset>'+
+                        '</div>'+
+                        '<div class="card-content">'+
+                            '<div class="card-content-inner">'+
+                                '<div class="row">'+
+                                    '<div class="col-33">'+
+                                    '<a href="#" class="button button-success" id="winBtn" biduserid="'+item.bidUserId+'" bidid="'+item.bidId+'" style="display: '+winBtnDisplay+';">确定中标</a>'+
+                                    '</div>'+
+                                    '<div class="col-33">&nbsp;</div>'+
+                                    '<div class="col-33"><a href="#" class="button button-success" id="viewBtn" data="'+item.bidUserId+'" bidid="'+item.bidId+'">查看详情</a></div>'+
+                                '</div>'+
+                            '</div>'+
+                        '</div>'+
+                        '<div class="card-footer"><span>最后应标时间：'+item.lastModifyTime+'</span></div>'+
+                    '</li>'
+            dataLength += 1;
+        });
+        if(dataLength == 0){
+            $('.no-record').show();
+            $('.infinite-scroll-preloader').remove();
+        }else{
+            $('.no-record').hide();
+            // 添加新条目
+            $('#content-list-ul').append(html);
+
+        }
+        $.hideIndicator();
+
+    }
+    $.post('${request.contextPath}/biduser/find-list', {startIndex: 0,loadSize:50}, function (response) {
+        addItems(response);
+    });
+    $("body").on( "click", "#winBtn", function(){
+        var bidUserId = $(this).attr('biduserid');
+        var bidId = $(this).attr('bidid');
+        var starHtml = '请评价一下吧' +
+                        '<fieldset class="starability-checkmark"  style="margin: 0 auto;">'+
+                            '<input type="radio" id="rate5" name="rating" value="5" />'+
+                            '<label for="rate5" title="Amazing">5 stars</label>'+
+
+                            '<input type="radio" id="rate4" name="rating" value="4" />'+
+                            '<label for="rate4" title="Very good">4 stars</label>'+
+
+                            '<input type="radio" id="rate3" name="rating" value="3" />'+
+                            '<label for="rate3" title="Average">3 stars</label>'+
+
+                            '<input type="radio" id="rate2" name="rating" value="2" />'+
+                            '<label for="rate2" title="Not good">2 stars</label>'+
+
+                            '<input type="radio" id="rate1" name="rating" value="1" />'+
+                            '<label for="rate1" title="Terrible">1 star</label>'+
+                        '</fieldset>';
+        $.modal({
+            title:  '确定他中飚',
+            text: '你确定选择他做为本次招标的中标者，获得全部招标金额吗？\n'+starHtml,
+            buttons: [
+                {
+                    text: '取消',
+                    onClick: function() {
+
+                    }
+                },
+                {
+                    text: '确定',
+                    close:false,
+                    onClick: function() {
+                        var rating = $("input[name='rating']:checked").val();;
+                        if(rating == null){
+                            $.toast("请点击星星评价");
+                        }else{
+                            $.post('${request.contextPath}/biduser/modify', {bidUserId:bidUserId,winTheBid:'1',rating:rating,bidId:bidId}, function (response) {
+                                if(response.messageType != 'failed'){
+                                    $.closeModal();
+                                }
+                            });
+
+                        }
+
+                    }
+                },
+            ]
+        })
+    } );
+    $("body").on( "click", "#viewBtn", function(){
+        var bidId = $(this).attr('bidid');
+        window.location.href = '${request.contextPath}/bidsubmit/to-submit/'+bidId;
+    } );
+    function toView(id){
+        window.location.href = "${request.contextPath}/bid/to-view/"+id;
+    }
+    $("body").on( "click", "#indexBtn", function(){
+        window.location.href = "${request.contextPath}/index/to-index";
+    } );
+    $("body").on( "click", "#myPageBtn", function(){
+        window.location.href = '${request.contextPath}/user/to-my-page';
+    } );
+</script>
+<script>
+    // 重写底部botton事件
+    $(function(){
+        var $arr=$('.tab-item');
+        var $len=$arr.length;
+        $('.tab-item').each(function(index,ele){
+            var $childDOM=$(ele).children('.tab-label');
+            $($childDOM).on('touchstart',function(e){
+                if($(ele).hasClass('addactive')){
+                    return;
+                }
+                for(var i=0;i<$len;i++){
+                    if($($arr[i]).hasClass('active')){
+                        $($arr[i]).removeClass('active');
+                    }
+                    if($($arr[i]).hasClass('addactive')){
+                        $($arr[i]).removeClass('addactive');
+                    }
+                }
+                $(ele).addClass('addactive');
+            })
+        });
+        $('.tab-item').each(function(index,ele){
+            $(ele).on('touchstart',function(e){
+                if($(ele).hasClass('addactive')){
+                    return;
+                }
+                for(var i=0;i<$len;i++){
+                    if($($arr[i]).hasClass('active')){
+                        $($arr[i]).removeClass('active');
+                    }
+                    if($($arr[i]).hasClass('addactive')){
+                        $($arr[i]).removeClass('addactive');
+                    }
+                }
+                $(ele).addClass('addactive');
+            })
+        });
+    })
+</script>
+</body>
+</html>

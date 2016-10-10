@@ -12,6 +12,15 @@ public class BidUser extends BaseDomain {
     private String bidId;
     private String winTheBid;
     private BigDecimal incomeFee;
+    private int rating;
+
+    public int getRating() {
+        return rating;
+    }
+
+    public void setRating(int rating) {
+        this.rating = rating;
+    }
 
     public String getBidUserId() {
         return bidUserId;

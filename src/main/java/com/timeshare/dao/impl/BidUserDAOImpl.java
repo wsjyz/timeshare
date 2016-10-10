@@ -5,11 +5,16 @@ import com.timeshare.dao.BidUserDAO;
 import com.timeshare.domain.BidUser;
 import com.timeshare.utils.CommonStringUtils;
 import com.timeshare.utils.Contants;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.jdbc.core.PreparedStatementSetter;
+import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Repository;
 
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by user on 2016/9/23.
@@ -42,6 +47,79 @@ public class BidUserDAOImpl extends BaseDAO implements BidUserDAO {
             return id;
         }else{
             return Contants.FAILED;
+        }
+    }
+
+    public BidUser findBidUserByBidIdAndUserId(String bidId,String userId){
+        StringBuilder sql = new StringBuilder("");
+        sql.append("select * from t_bid_user where bid_id = ? and create_user_id = ?");
+
+        List<BidUser> bidUserList = getJdbcTemplate().query(sql.toString(),new Object[]{bidId,userId},new BidUserMapper());
+        if(bidUserList != null && !bidUserList.isEmpty()){
+            return bidUserList.get(0);
+        }
+        return null;
+    }
+
+    @Override
+    public String modifyBidUser(BidUser bidUser) {
+
+        StringBuilder sql = new StringBuilder("update t_bid_user set ");
+
+        if(StringUtils.isNotBlank(bidUser.getWinTheBid())){
+            sql.append(" win_the_bid = '"+bidUser.getWinTheBid()+"',");
+        }
+        if(bidUser.getIncomeFee() != null){
+            sql.append(" income_fee = "+bidUser.getIncomeFee()+",");
+        }
+        if(bidUser.getRating() != 0){
+            sql.append(" rating = "+bidUser.getRating()+",");
+        }
+        if(StringUtils.isNotBlank(bidUser.getLastModifyTime())){
+            sql.append(" last_modify_time = '"+bidUser.getLastModifyTime()+"',");
+        }
+
+        if (sql.lastIndexOf(",") + 1 == sql.length()) {
+            sql.delete(sql.lastIndexOf(","), sql.length());
+        }
+        sql.append(" where bid_user_id='" + bidUser.getBidUserId() + "'");
+        int result = getJdbcTemplate().update(sql.toString());
+        if(result > 0){
+            return bidUser.getBidUserId();
+        }else{
+            return Contants.FAILED;
+        }
+    }
+
+    @Override
+    public List<BidUser> findBidUserList(BidUser bidUser, int startIndex, int loadSize) {
+        StringBuilder sql = new StringBuilder("");
+        sql.append("select * from t_bid_user i where 1=1 ");
+        if(bidUser != null){
+            if (StringUtils.isNotBlank(bidUser.getUserId())) {
+                sql.append(" and i.create_user_id ='"+bidUser.getUserId()+"' ");
+            }
+        }
+        sql.append(" order by i.last_modify_time desc limit ?,?");
+        List<BidUser> bidUserList = getJdbcTemplate().query(sql.toString(),new Object[]{startIndex,loadSize},new BidUserMapper());
+
+        return bidUserList;
+    }
+
+    class BidUserMapper implements RowMapper<BidUser>{
+
+        @Override
+        public BidUser mapRow(ResultSet rs, int i) throws SQLException {
+            BidUser bidUser = new BidUser();
+            bidUser.setBidUserId(rs.getString("bid_user_id"));
+            bidUser.setBidId(rs.getString("bid_id"));
+            bidUser.setWinTheBid(rs.getString("win_the_bid"));
+            bidUser.setIncomeFee(rs.getBigDecimal("income_fee"));
+            bidUser.setCreateUserName(rs.getString("create_user_name"));
+            bidUser.setUserId(rs.getString("create_user_id"));
+            bidUser.setOptTime(rs.getString("opt_time"));
+            bidUser.setLastModifyTime(rs.getString("last_modify_time"));
+            return bidUser;
         }
     }
 }

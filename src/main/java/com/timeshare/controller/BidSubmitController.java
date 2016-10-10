@@ -1,14 +1,18 @@
 package com.timeshare.controller;
 
+import com.timeshare.domain.Bid;
 import com.timeshare.domain.BidSubmit;
 import com.timeshare.domain.SystemMessage;
 import com.timeshare.domain.UserInfo;
+import com.timeshare.service.BidService;
 import com.timeshare.service.BidSubmitService;
 import com.timeshare.utils.*;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.CookieValue;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
@@ -25,14 +29,21 @@ public class BidSubmitController extends BaseController{
 
     @Autowired
     BidSubmitService bidSubmitService;
+    @Autowired
+    BidService bidService;
 
-    @RequestMapping(value = "/to-add")
-    public String toAdd(Model model, HttpServletRequest request) {
-
+    @RequestMapping(value = "/to-submit/{bidId}")
+    public String toAdd(@PathVariable String bidId, Model model, HttpServletRequest request) {
+        if(StringUtils.isNotBlank(bidId)){
+            Bid bid = bidService.findBidById(bidId);
+            model.addAttribute("bidId",bidId);
+            model.addAttribute("bidStatus",bid.getBidStatus());
+        }
         //微信jssdk相关代码
         String url = WxUtils.getUrl(request);
         Map<String,String> parmsMap = WxUtils.sign(url);
         model.addAttribute("parmsMap",parmsMap);
+
         return "bid/bidsubmit";
     }
 
@@ -83,10 +94,11 @@ public class BidSubmitController extends BaseController{
 
     @ResponseBody
     @RequestMapping(value = "/findsubmitlist")
-    public List<BidSubmit> findSubmitList(String bidId) {
+    public List<BidSubmit> findSubmitList(String bidId,@CookieValue(value="time_sid", defaultValue="c9f7da60747f4cf49505123d15d29ac4") String userId) {
 
         BidSubmit bidSubmit = new BidSubmit();
         bidSubmit.setBidId(bidId);
+        bidSubmit.setUserId(userId);
         List<BidSubmit> bidSubmitList = bidSubmitService.findSubmitList(bidSubmit,0,0);
         return bidSubmitList;
     }

@@ -20,6 +20,13 @@ public class BaseDomain implements java.io.Serializable {
     String lastModifyTime;
 
     public String getLastModifyTime() {
+        if(lastModifyTime == null){
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+            lastModifyTime = sdf.format(new Date());
+        }
+        if(lastModifyTime != null && lastModifyTime.length() > 16){
+            return lastModifyTime.substring(0,16);
+        }
         return lastModifyTime;
     }
 
