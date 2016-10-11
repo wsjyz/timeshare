@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <title>我出售的</title>
+    <title><#if pageContentType == "mybid">我的飚<#else>我飚的</#if></title>
     <meta name="viewport" content="initial-scale=1, maximum-scale=1">
     <link rel="shortcut icon" href="/favicon.ico">
     <meta name="apple-mobile-web-app-capable" content="yes">
@@ -37,7 +37,7 @@
         .content .item-inner .col-40{width: 40%;float:left;margin-left: 0;height: 100%;box-sizing: border-box;text-align: left;}
         .content .item-inner .item-title-row{padding: .35rem 0;}
         .list-block ul{margin-bottom: -1px;}
-        .content .item-inner .item-text{position: absolute;top: 0;left: 0;right: 0;bottom: 0;padding-top: .8rem;}
+        .content .item-inner .item-text{position: absolute;top: 0;left: 0;right: 0;bottom: 0;padding-top: .2rem;font-size: small}
         .content .item-inner .item-title{
             color: #1b1b1b;
             width: 35%;
@@ -47,6 +47,7 @@
             display: -webkit-box;
             -webkit-line-clamp: 2;
             -webkit-box-orient: vertical;
+            font-size:large;
         }
         .list-block .item-after{color:#828282;}
         .list-block.media-list .item-inner{
@@ -141,6 +142,7 @@
     </style>
 </head>
 <body>
+<input type="hidden" id="pageContentType" value="${pageContentType}">
 <div class="page-group" >
     <div id="page-swiper" class="page">
         <nav class="bar bar-tab">
@@ -157,7 +159,7 @@
         <!--<div class="content" id=''>-->
             <header class="bar bar-nav">
                 <a class="icon icon-left pull-left back"></a>
-                <h1 class="title">我飚的</h1>
+                <h1 class="title"><#if pageContentType == "mybid">我的飚<#else>我飚的</#if></h1>
             </header>
 
             <div class="content infinite-scroll infinite-scroll-bottom" data-distance="100">
@@ -231,6 +233,9 @@
                     '<div class="row">'+
                     '<div class="col-60">'+item.submitCount+'人飚过</div>'+
                     '</div>'+
+                    '<div class="row">'+
+                    '<div class="col-60">'+item.clickRate+'人看过</div>'+
+                    '</div>'+
                     '</div>'+
                     '</div>'+
                     '</a>'+
@@ -260,7 +265,7 @@
         $.hideIndicator();
 
     }
-    $.post('${request.contextPath}/bid/list', {startIndex: 0,loadSize:itemsPerLoad}, function (response) {
+    $.post('${request.contextPath}/bid/list', {pageContentType:$('#pageContentType').val(),startIndex: 0,loadSize:itemsPerLoad}, function (response) {
         //预先加载20条
         addItems(itemsPerLoad, 0,response);
     });
@@ -277,7 +282,7 @@
 
         // 设置flag
         loading = true;
-        $.post('${request.contextPath}/bid/list', {startIndex: lastIndex,loadSize:itemsPerLoad}, function (response) {
+        $.post('${request.contextPath}/bid/list', {pageContentType:$('#pageContentType').val(),startIndex: lastIndex,loadSize:itemsPerLoad}, function (response) {
 
             // 模拟1s的加载过程
             setTimeout(function() {
@@ -304,7 +309,12 @@
 
     });
     function toView(id){
-        window.location.href = "${request.contextPath}/bid/to-view/"+id;
+        var pageContentType = $('#pageContentType').val();
+        if(pageContentType == 'mybid'){
+            window.location.href = "${request.contextPath}/bid/to-view/"+id;
+        }else if(pageContentType == 'mysubmit'){
+            window.location.href = '${request.contextPath}/bidsubmit/to-submit/'+id;
+        }
     }
     $("body").on( "click", "#indexBtn", function(){
         window.location.href = "${request.contextPath}/index/to-index";

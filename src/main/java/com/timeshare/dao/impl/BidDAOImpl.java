@@ -118,7 +118,12 @@ public class BidDAOImpl extends BaseDAO implements BidDAO {
 
     @Override
     public List<Bid> findBidList(Bid bid, int startIndex, int loadSize) {
-        StringBuilder sql = new StringBuilder("select * from t_bid i where 1=1 ");
+        StringBuilder sql = null;
+        if(bid.getPageContentType().equals("mybid")){
+            sql = new StringBuilder("select * from t_bid i where 1=1 ");
+        }else if(bid.getPageContentType().equals("mysubmit")){
+            sql = new StringBuilder("select i.* from t_bid i ,t_bid_user b where i.bid_id = b.bid_id ");
+        }
         if (StringUtils.isNotEmpty(bid.getBidStatus())) {
             sql.append(" and i.bid_status = '"+bid.getBidStatus()+"' ");
         }
@@ -128,10 +133,12 @@ public class BidDAOImpl extends BaseDAO implements BidDAO {
         if(StringUtils.isNotBlank(bid.getUserId())){
             sql.append(" and i.create_user_id = '"+bid.getUserId()+"' ");
         }
-
-        if(StringUtils.isBlank(bid.getBidStatus())){
-            sql.append(" i.bid_status = '"+Contants.BID_STATUS.ongoing.toString()+"' ");
+        if(bid.getPageContentType().equals("mysubmit") && StringUtils.isNotBlank(bid.getBidUserId())){
+            sql.append(" and b.create_user_id = '"+bid.getBidUserId()+"'");
         }
+//        if(StringUtils.isBlank(bid.getBidStatus())){
+//            sql.append(" and i.bid_status = '"+Contants.BID_STATUS.ongoing.toString()+"' ");
+//        }
         sql.append("  order by i.opt_time desc limit ?,?");
         return getJdbcTemplate().query(sql.toString(),new Object[]{startIndex,loadSize},new BidRowMapper());
     }

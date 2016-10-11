@@ -24,6 +24,7 @@
 </head>
 <body>
 <input type="hidden" name="bidId" id="bidId" value="${bidId}">
+<input type="hidden" name="userId" id="userId" value="${userId}">
 <audio id="play_audio" volume="2"></audio>
 <div class="page-group">
     <div class="page page-current">
@@ -114,7 +115,7 @@ $(function(){
             'uploadVoice'
         ] // 必填，需要使用的JS接口列表，所有JS接口列表见附录2
     });
-    $.post('${request.contextPath}/bidsubmit/findsubmitlist', {bidId:$('#bidId').val()}, function (response) {
+    $.post('${request.contextPath}/bidsubmit/findsubmitlist', {bidId:$('#bidId').val(),userId:$('#userId').val()}, function (response) {
         var size = 0;
         $.each(response, function(i, item){
             if(item.bidSubmitType == 'TEXT'){

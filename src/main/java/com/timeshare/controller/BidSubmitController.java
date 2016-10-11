@@ -33,12 +33,13 @@ public class BidSubmitController extends BaseController{
     BidService bidService;
 
     @RequestMapping(value = "/to-submit/{bidId}")
-    public String toAdd(@PathVariable String bidId, Model model, HttpServletRequest request) {
+    public String toAdd(@PathVariable String bidId,String userId, Model model, HttpServletRequest request) {
         if(StringUtils.isNotBlank(bidId)){
             Bid bid = bidService.findBidById(bidId);
             model.addAttribute("bidId",bidId);
             model.addAttribute("bidStatus",bid.getBidStatus());
         }
+        model.addAttribute("userId",userId);
         //微信jssdk相关代码
         String url = WxUtils.getUrl(request);
         Map<String,String> parmsMap = WxUtils.sign(url);
@@ -94,11 +95,15 @@ public class BidSubmitController extends BaseController{
 
     @ResponseBody
     @RequestMapping(value = "/findsubmitlist")
-    public List<BidSubmit> findSubmitList(String bidId,@CookieValue(value="time_sid", defaultValue="c9f7da60747f4cf49505123d15d29ac4") String userId) {
+    public List<BidSubmit> findSubmitList(String bidId,String userId,@CookieValue(value="time_sid", defaultValue="c9f7da60747f4cf49505123d15d29ac4") String currentUserId) {
 
         BidSubmit bidSubmit = new BidSubmit();
         bidSubmit.setBidId(bidId);
-        bidSubmit.setUserId(userId);
+        if(StringUtils.isBlank(userId)){
+            bidSubmit.setUserId(currentUserId);
+        }else{
+            bidSubmit.setUserId(userId);
+        }
         List<BidSubmit> bidSubmitList = bidSubmitService.findSubmitList(bidSubmit,0,0);
         return bidSubmitList;
     }

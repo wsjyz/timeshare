@@ -170,7 +170,7 @@
                                                 '<div class="col-30" style="font-size: smaller">距离结束：1小时20分</div>'+
                                             '</div>'+
                                             '<div class="row">'+
-                                            '<div class="col-100" style="padding-top: 0.2rem"><a href="#" class="button button-success" style="border: 1px solid #0894ec;color: #0894ec">去抢飚</a></div>'+
+                                            '<div class="col-100" style="padding-top: 0.2rem"><a href="#" class="button button-success" id="toSubmitBtn" bidid="'+item.bidId+'" style="border: 1px solid #0894ec;color: #0894ec">去抢飚</a></div>'+
                                             '</div>'+
                                         '</div>'+
                                     '</div>'+
@@ -252,7 +252,10 @@
 	            });
 	        });
 	    });
-
+        $("body").on( "click", "#toSubmitBtn", function(){
+            var bidId = $(this).attr('bidid');
+            window.location.href = '${request.contextPath}/bidsubmit/to-submit/'+bidId;
+        } );
 	    $("body").on( "click", "#myPageBtn", function(){
 	        window.location.href = '${request.contextPath}/wx/to-get-open-id';
 	    } );

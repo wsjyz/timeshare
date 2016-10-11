@@ -68,17 +68,23 @@ public class BidController extends BaseController{
         return null;
     }
     @RequestMapping(value = "/to-list")
-    public String bidList() {
+    public String bidList(@RequestParam String pageContentType,Model model) {
+        model.addAttribute("pageContentType",pageContentType);
         return "bid/myBidList";
     }
 
     @RequestMapping(value = "/list")
     @ResponseBody
-    public List<Bid> findItemList(@RequestParam int startIndex, @RequestParam int loadSize,
+    public List<Bid> findItemList(@RequestParam String pageContentType,@RequestParam int startIndex, @RequestParam int loadSize,
                                    @CookieValue(value="time_sid", defaultValue="c9f7da60747f4cf49505123d15d29ac4") String userId) {
         List<Bid> bidList = new ArrayList<Bid>();
         Bid parms = new Bid();
         parms.setUserId(userId);
+        parms.setPageContentType(pageContentType);
+        if(pageContentType.equals("mysubmit")){
+
+            parms.setBidUserId(userId);
+        }
         bidList = bidService.findBidList(parms,startIndex,loadSize);
         return bidList;
     }

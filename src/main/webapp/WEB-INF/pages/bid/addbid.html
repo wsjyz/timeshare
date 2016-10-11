@@ -156,7 +156,7 @@
             <div class="list-block">
                 <ul>
                     <form method="post" action="/time/bid/save">
-                        <input type="hidden" name="bidStatus" id="bidStatus">
+                        <input type="hidden" name="bidStatus" id="bidStatus" value="${bid.bidStatus}">
                         <input type="hidden" name="bidId" id="bidId" value="<#if bid??>${bid.bidId}<#else></#if>">
                     <!-- Text inputs -->
 
@@ -341,12 +341,12 @@
 
             if(response.messageType == 'success' ){
                 $('#bidId').val(response.objId);
-                $('#bidStatus').val('draft');
+                //$('#bidStatus').val('draft');
 
             }
         });
     }
-    setInterval("saveItemInterval()", 20000);
+    setInterval("saveItemInterval()", 50000);
     var endTime = "${bid.endTime!''}";
     if(endTime == ''){
         var date = new Date();

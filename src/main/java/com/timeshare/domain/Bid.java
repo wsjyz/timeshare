@@ -20,6 +20,26 @@ public class Bid extends BaseDomain{
     private String bidCatalog;
     private String stopReason;
 
+    //传值用
+    private String pageContentType;
+    private String bidUserId;
+
+    public String getBidUserId() {
+        return bidUserId;
+    }
+
+    public void setBidUserId(String bidUserId) {
+        this.bidUserId = bidUserId;
+    }
+
+    public String getPageContentType() {
+        return pageContentType;
+    }
+
+    public void setPageContentType(String pageContentType) {
+        this.pageContentType = pageContentType;
+    }
+
     public String getStopReason() {
         return stopReason;
     }

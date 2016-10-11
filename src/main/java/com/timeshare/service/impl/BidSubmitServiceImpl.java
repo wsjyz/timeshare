@@ -1,7 +1,9 @@
 package com.timeshare.service.impl;
 
+import com.timeshare.dao.BidDAO;
 import com.timeshare.dao.BidSubmitDAO;
 import com.timeshare.dao.BidUserDAO;
+import com.timeshare.domain.Bid;
 import com.timeshare.domain.BidSubmit;
 import com.timeshare.domain.BidUser;
 import com.timeshare.service.BidSubmitService;
@@ -22,6 +24,8 @@ public class BidSubmitServiceImpl implements BidSubmitService {
     BidSubmitDAO bidSubmitDAO;
     @Autowired
     BidUserDAO bidUserDAO;
+    @Autowired
+    BidDAO bidDAO;
 
     @Override
     public String saveBidSubmit(BidSubmit submit) {
@@ -33,6 +37,10 @@ public class BidSubmitServiceImpl implements BidSubmitService {
             bidUser.setBidUserId(submit.getUserId());
             bidUser.setUserId(submit.getUserId());
             bidUserDAO.saveBidUser(bidUser);
+            //增加人数
+            Bid bid = bidDAO.findBidById(submit.getBidId());
+            bid.setSubmitCount(bid.getSubmitCount() + 1);
+            bidDAO.modifyBid(bid);
         }else{
             SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
             bidUser.setLastModifyTime(sdf.format(new Date()));
