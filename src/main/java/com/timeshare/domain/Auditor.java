@@ -9,7 +9,16 @@ public class Auditor extends BaseDomain {
 
     private String auditorId;
     private String bidId;
-    private BigDecimal fee;
+    private int fee;
+    private String wxTradeNo;
+
+    public String getWxTradeNo() {
+        return wxTradeNo;
+    }
+
+    public void setWxTradeNo(String wxTradeNo) {
+        this.wxTradeNo = wxTradeNo;
+    }
 
     public String getAuditorId() {
         return auditorId;
@@ -27,11 +36,11 @@ public class Auditor extends BaseDomain {
         this.bidId = bidId;
     }
 
-    public BigDecimal getFee() {
+    public int getFee() {
         return fee;
     }
 
-    public void setFee(BigDecimal fee) {
+    public void setFee(int fee) {
         this.fee = fee;
     }
 }

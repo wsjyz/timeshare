@@ -29,10 +29,10 @@
     <div id="page-swiper" class="page">
        
         <nav class="bar bar-tab">
-            <a class="tab-item active" href="#">
+            <a class="tab-item" href="#">
                 <span class="tab-label buy-time">约</span>
             </a>
-            <a class="tab-item" id="mySellBtn">
+            <a class="tab-item active" id="mySellBtn">
                 <span class="tab-label sell-time">飚</span>
             </a>
             <a class="tab-item" href="#" id="myPageBtn">
@@ -125,13 +125,27 @@
 	        var itemsPerLoad = 10;
 	        // 最多可加载的条目
 	        var maxItems = 30;
-	        var  lastIndex = $('.list-block ul').length;
+	        var  lastIndex = $('.list-block .card').length;
 	        function addItems(number, lastIndex,data,tabId) {
 	            // 生成新条目的HTML
 	            var html = '';
 	            var dataLength = 0;
 	            $.each(data, function(i, item){
-
+                    var score = item.score;
+                    if(score == null){
+                        score = 0;
+                    }
+                    var btnHtml = '';
+                    if(tabId == "bidHallTab"){
+                        btnHtml = '<a href="#" class="button button-success" id="toSubmitBtn" bidid="'+item.bidId+'" style="border: 1px solid #0894ec;color: #0894ec">去抢飚</a>';
+                    }
+                    if(tabId == "auditTab"){
+                        var auditPrice = (item.price * 0.3).toFixed(2);
+                        btnHtml = '<a href="#" class="button button-success" id="toAuditBtn" bidid="'+item.bidId+'" style="border: 1px solid #0894ec;color: #0894ec">'+auditPrice+'元旁听</a>';
+                    }
+                    if(tabId == "heroTab"){
+                        btnHtml = '';
+                    }
 	                html += '<div class="card">'+
                                 '<div class="card-header"><i class="material-icons">blur_circular</i>'+item.title+'</div>'+
                                     '<div class="card-content">'+
@@ -140,7 +154,7 @@
                                                 '<div class="col-10"><i class="material-icons" >face</i></div>'+
                                                 '<div class="col-40">'+item.createUserName+'</div>'+
                                                 '<div class="col-12"><i class="material-icons">stars</i></div>'+
-                                                '<div class="col-30">'+item.score+'颗星</div>'+
+                                                '<div class="col-30">'+score+'颗星</div>'+
                                             '</div>'+
                                             '<div class="row">'+
                                                 '<div class="col-10"><i class="material-icons">attach_money</i></div>'+
@@ -170,7 +184,9 @@
                                                 '<div class="col-30" style="font-size: smaller">距离结束：1小时20分</div>'+
                                             '</div>'+
                                             '<div class="row">'+
-                                            '<div class="col-100" style="padding-top: 0.2rem"><a href="#" class="button button-success" id="toSubmitBtn" bidid="'+item.bidId+'" style="border: 1px solid #0894ec;color: #0894ec">去抢飚</a></div>'+
+                                            '<div class="col-100" style="padding-top: 0.2rem">' +
+                                                btnHtml +
+                                            '</div>'+
                                             '</div>'+
                                         '</div>'+
                                     '</div>'+
@@ -218,18 +234,18 @@
 	            var dataType = 'all';
 	            var tabId = $(this).find('.infinite-scroll.active').attr('id');
 	            if(tabId == "bidHallTab"){
-	                tabIndex = 1;
+	                tabIndex = 0;
 	                dataType = 'all';
 	            }
 	            if(tabId == "auditTab"){
-	                tabIndex = 2;
+	                tabIndex = 1;
 	                dataType = 'audit';
 	            }
 	            if(tabId == "heroTab"){
-	                tabIndex = 3;
+	                tabIndex = 2;
 	                dataType = 'complete';
 	            }
-	            lastIndex = $('.list-block').eq(tabIndex).find('ul').length;
+	            lastIndex = $('.list-block').eq(tabIndex).children('.card').length;
 	            $.post('${request.contextPath}/bid/list-by-condition', {condition:dataType,startIndex: lastIndex,loadSize:itemsPerLoad}, function (response) {
 	                setTimeout(function() {
 	                    // 重置加载flag
@@ -245,7 +261,7 @@
 	                    // 添加新条目
 	                    addItems(itemsPerLoad, lastIndex,response,tabId);
 	                    // 更新最后加载的序号
-	                    lastIndex = $('.list-block ul').length;
+	                    lastIndex = $('.list-block .card').length;
 	                    //容器发生改变,如果是js滚动，需要刷新滚动
 	                    $.refreshScroller();
 	                }, 1000);
@@ -255,6 +271,11 @@
         $("body").on( "click", "#toSubmitBtn", function(){
             var bidId = $(this).attr('bidid');
             window.location.href = '${request.contextPath}/bidsubmit/to-submit/'+bidId;
+        } );
+        $("body").on( "click", "#toAuditBtn", function(){
+            var bidId = $(this).attr('bidid');
+            //window.location.href = '${request.contextPath}/bid/to-audit?bidId='+bidId;
+            window.location.href = "https://open.weixin.qq.com/connect/oauth2/authorize?appid=wxcd8903dd6a9552eb&redirect_uri=http%3A%2F%2Fjk.zhangqidong.cn%2Ftime_test%2Fbid%2Fto-audit%2F&response_type=code&scope=snsapi_base&state="+bidId+"#wechat_redirect";
         } );
 	    $("body").on( "click", "#myPageBtn", function(){
 	        window.location.href = '${request.contextPath}/wx/to-get-open-id';

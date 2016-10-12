@@ -26,12 +26,15 @@ public class WxUtils {
         Iterator it = es.iterator();
         while(it.hasNext()) {
             Map.Entry entry = (Map.Entry)it.next();
-            String k = (String)entry.getKey();
-            String v = entry.getValue().toString();
-            if(null != v && !"".equals(v)
-                    && !"sign".equals(k) && !"key".equals(k)) {
-                sb.append(k + "=" + v + "&");
+            if(entry != null){
+                String k = (String)entry.getKey();
+                String v = entry.getValue().toString();
+                if(null != v && !"".equals(v)
+                        && !"sign".equals(k) && !"key".equals(k)) {
+                    sb.append(k + "=" + v + "&");
+                }
             }
+
         }
         sb.append("key=" + key);
 

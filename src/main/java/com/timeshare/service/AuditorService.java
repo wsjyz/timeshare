@@ -1,13 +1,13 @@
-package com.timeshare.dao;
+package com.timeshare.service;
 
 import com.timeshare.domain.Auditor;
 
 import java.util.List;
 
 /**
- * Created by user on 2016/9/23.
+ * Created by user on 2016/10/12.
  */
-public interface AuditorDAO {
+public interface AuditorService {
 
     String saveAuditor(Auditor auditor);
 
