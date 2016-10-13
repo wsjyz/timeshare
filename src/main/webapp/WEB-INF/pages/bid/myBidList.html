@@ -222,7 +222,7 @@
             }
             html += '<ul>'+
                     '<li>'+
-                    '<a href="#" class="item-link item-content" onclick="toView(\''+item.bidId+'\')">'+
+                    '<a href="#" class="item-link item-content" onclick="toView(\''+item.bidId+'\',\''+item.bidStatus+'\')">'+
                     '<div class="item-inner">'+
                     '<div class="item-title-row">'+
                     '<div class="item-title">'+item.title+'</div>'+
@@ -308,10 +308,15 @@
 
 
     });
-    function toView(id){
+    function toView(id,bidStatus){
         var pageContentType = $('#pageContentType').val();
         if(pageContentType == 'mybid'){
-            window.location.href = "${request.contextPath}/bid/to-view/"+id;
+            if(bidStatus == 'ongoing'){
+                window.location.href = "${request.contextPath}/biduser/to-list";
+            }else if(bidStatus == 'draft'){
+                window.location.href = "${request.contextPath}/bid/to-view/"+id;
+            }
+
         }else if(pageContentType == 'mysubmit'){
             window.location.href = '${request.contextPath}/bidsubmit/to-submit/'+id;
         }

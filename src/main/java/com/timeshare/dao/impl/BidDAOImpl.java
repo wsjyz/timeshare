@@ -138,6 +138,7 @@ public class BidDAOImpl extends BaseDAO implements BidDAO {
         if(StringUtils.isNotBlank(bid.getPageContentType()) && bid.getPageContentType().equals("mysubmit") && StringUtils.isNotBlank(bid.getBidUserId())){
             sql.append(" and b.create_user_id = '"+bid.getBidUserId()+"'");
         }
+        sql.append(" and i.end_time >= CURRENT_TIMESTAMP() ");
 //        if(StringUtils.isBlank(bid.getBidStatus())){
 //            sql.append(" and i.bid_status = '"+Contants.BID_STATUS.ongoing.toString()+"' ");
 //        }

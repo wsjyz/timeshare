@@ -250,7 +250,7 @@
             <div class="content-block new-main-btn">
                 <div class="row">
                     <div class="col-50">
-                        <#if bid.bidStatus == "draft">
+                        <#if bid.bidStatus == "draft" || bid.bidStatus == null>
                             <a href="#" class="button button-big button-fill button-danger" id="saveDraftBtn">保存草稿</a>
                         </#if>
                     </div>

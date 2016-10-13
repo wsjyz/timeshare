@@ -19,6 +19,15 @@ public class BaseController {
         ImageObj imageObj = new ImageObj();
         imageObj.setImageType(Contants.IMAGE_TYPE.USER_HEAD.toString());
         UserInfo userInfo = userService.findUserByUserId(userId,imageObj);
+        if(userInfo != null){
+            String headImg = userInfo.getImageObj().getImageUrl();
+            if(headImg.indexOf("http") == -1){//修改过头像
+                headImg = "/time"+headImg+"_320x240.jpg";
+            }
+            userInfo.setHeadImgPath(headImg);
+
+        }
+
         return userInfo;
     }
 

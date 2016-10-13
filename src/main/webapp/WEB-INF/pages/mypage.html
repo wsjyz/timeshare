@@ -164,13 +164,13 @@
         </header>
         <nav class="bar bar-tab">
             <a class="tab-item " id="indexBtn" href="#">
-                <span class="tab-label buy-time">买时间</span>
+                <span class="tab-label buy-time">约</span>
             </a>
-            <a class="tab-item" id="mySellBtn" href="#">
-                <span class="tab-label sell-time">卖时间</span>
+            <a class="tab-item" id="bidIndexBtn" href="#">
+                <span class="tab-label sell-time">飚</span>
             </a>
             <a class="tab-item active" href="#">
-                <span class="tab-label my-time">我的</span>
+                <span class="tab-label my-time">我</span>
             </a>
         </nav>
 
@@ -190,7 +190,7 @@
                     <div class="nickNameSp-box"><span id="nickNameSp"></span></div>
                 </div>
             </div>
-            <div class="content-block-title">订单明细</div>
+            <div class="content-block-title">约</div>
             <div class="list-block">
                 <ul>
                     <a href="#" id="toBuyerListBtn">
@@ -216,8 +216,49 @@
                         </li>
                     </a>
                 </ul>
+                <ul>
+                    <a href="#" id="mySellBtn">
+                        <li class="item-content bg-icon-1 item-link">
+                            <div class="item-media"><i class="icon icon-f7"></i></div>
+                            <div class="item-inner bg-icon-1">
+                                <div class="item-title">项目</div>
+                                <div class="item-after"><span id="myItemCountsSp"></span></div>
+                                <span class="badge" style="position: absolute;top: 0.5rem;left:4rem;background:red;color: white;display:none" id="myItemRemindCount"></span>
+                            </div>
+                        </li>
+                    </a>
+                </ul>
+            </div>
+
+            <div class="content-block-title">飚</div>
+            <div class="list-block">
+                <ul>
+                    <a href="#" id="toMyBidListBtn">
+                        <li class="item-content bg-icon-2 item-link">
+                            <div class="item-media"><i class="icon icon-f7"></i></div>
+                            <div class="item-inner">
+                                <div class="item-title">我发的飚</div>
+                                <div class="item-after"><span id="myBidCountsSp"></span></div>
+                                <span class="badge" style="position: absolute;top: 0.5rem;left:4rem;background:red;color: white;display:none" id="myBidRemindCount"></span>
+                            </div>
+                        </li>
+                    </a>
+                </ul>
+                <ul>
+                    <a href="#" id="toMyBidSubmitListBtn">
+                        <li class="item-content bg-icon-1 item-link">
+                            <div class="item-media"><i class="icon icon-f7"></i></div>
+                            <div class="item-inner bg-icon-1">
+                                <div class="item-title">我接的飚</div>
+                                <div class="item-after"><span id="myBidSubmitCountsSp"></span></div>
+                                <span class="badge" style="position: absolute;top: 0.5rem;left:4rem;background:red;color: white;display:none" id="myBidSubmitRemindCount"></span>
+                            </div>
+                        </li>
+                    </a>
+                </ul>
 
             </div>
+
             <div class="content-block-title" >资金明细</div>
             <div class="list-block r-mar-1em" style="margin: 0px;">
                 <ul>
@@ -329,6 +370,9 @@
     $("body").on( "click", "#indexBtn", function(){
         window.location.href = "${request.contextPath}/index/to-index";
     } );
+    $("body").on( "click", "#bidIndexBtn", function(){
+        window.location.href = "${request.contextPath}/bid/to-index";
+    } );
     $("body").on( "click", "#toUserInfoBtn", function(){
         window.location.href = "${request.contextPath}/user/to-userinfo";
     } );
@@ -337,6 +381,13 @@
     } );
     $("body").on( "click", "#connectUsBtn", function(){
         window.location.href = "${request.contextPath}/sys/to-connect-us";
+    } );
+
+    $("body").on( "click", "#toMyBidListBtn", function(){
+        window.location.href = "${request.contextPath}/bid/to-list?pageContentType=mybid";
+    } );
+    $("body").on( "click", "#toMyBidSubmitListBtn", function(){
+        window.location.href = "${request.contextPath}/bid/to-list?pageContentType=mysubmit"
     } );
     $.init();
 </script>

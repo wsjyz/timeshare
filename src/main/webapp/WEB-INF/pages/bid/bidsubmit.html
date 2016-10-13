@@ -12,19 +12,22 @@
     <link rel="stylesheet" href="//g.alicdn.com/msui/sm/0.6.2/css/sm.min.css">
     <link rel="stylesheet" href="//g.alicdn.com/msui/sm/0.6.2/css/sm-extend.min.css">
     <link rel="stylesheet" href="${request.contextPath}/css/main.css">
-    <link rel="stylesheet" href="${request.contextPath}/css/chat.css?t=20161008">
+    <link rel="stylesheet" href="${request.contextPath}/css/chat.css?t=20161013">
     <style>
         .chat-thread li.self:before {
-            background-image: url(http://jk.zhangqidong.cn/time/images/head.jpg);
+            background-image: url(${bidCreator.headImgPath});
+        }
+        .chat-thread li.other-side:before {
+            background-image: url(${currentUser.headImgPath});
         }
         .chat-thread{
-            height: <#if bidStatus == "finish">95%<#else>80%</#if>;
+            height: <#if bid.bidStatus == "finish" || audit == "audit">95%<#else>80%</#if>;
         }
     </style>
 </head>
 <body>
-<input type="hidden" name="bidId" id="bidId" value="${bidId}">
-<input type="hidden" name="userId" id="userId" value="${userId}">
+<input type="hidden" name="bidId" id="bidId" value="${bid.bidId}">
+<input type="hidden" name="bidUserId" id="bidUserId" value="${bidUserId}">
 <audio id="play_audio" volume="2"></audio>
 <div class="page-group">
     <div class="page page-current">
@@ -37,7 +40,7 @@
         </header>
         <div class="content">
             <ul class="chat-thread">
-                <li class="other-side">请问您这飚打算花多少钱啊?</li>
+                <li class="other-side">${bid.content}</li>
                 <!--<li>没多少，也就几个亿吧?</li>-->
                 <!--<li>OK，我能搞定</li>-->
                 <!--<li>Are we meeting today?</li>-->
@@ -56,7 +59,7 @@
                     <div id="speaker_phone_text">长按说话</div>
                 </div>
             </a>
-            <div class="popup-messages-footer" style="display: <#if bidStatus == "finish">none<#else>block</#if>">
+            <div class="popup-messages-footer" style="display: <#if bid.bidStatus == "finish" || audit == "audit">none<#else>block</#if>">
                 <div class="message-input">
                     <textarea id="status_message" placeholder="请输入您要说的话..." rows="10" cols="40" name="message"></textarea>
                     <a href="#" class="button button-light" id="sendBidSubmitBtn">飙他</a>
@@ -115,7 +118,7 @@ $(function(){
             'uploadVoice'
         ] // 必填，需要使用的JS接口列表，所有JS接口列表见附录2
     });
-    $.post('${request.contextPath}/bidsubmit/findsubmitlist', {bidId:$('#bidId').val(),userId:$('#userId').val()}, function (response) {
+    $.post('${request.contextPath}/bidsubmit/findsubmitlist', {bidId:$('#bidId').val(),bidUserId:$('#bidUserId').val()}, function (response) {
         var size = 0;
         $.each(response, function(i, item){
             if(item.bidSubmitType == 'TEXT'){

@@ -21,18 +21,25 @@
         .row .col-30{
             margin-left: 4%
         }
+        .float-btn-div{
+            position: fixed;top: 15rem;z-index: 100;right: 0rem;
+        }
+        .float-btn-div i:active {
+            color: #BCEE68;
+        }
     </style>
 </head>
 <body>
+
 <div class="page-group" >
 
     <div id="page-swiper" class="page">
        
         <nav class="bar bar-tab">
-            <a class="tab-item" href="#">
+            <a class="tab-item" href="#" id="indexBtn">
                 <span class="tab-label buy-time">约</span>
             </a>
-            <a class="tab-item active" id="mySellBtn">
+            <a class="tab-item active" id="bidIndexBtn">
                 <span class="tab-label sell-time">飚</span>
             </a>
             <a class="tab-item" href="#" id="myPageBtn">
@@ -103,7 +110,11 @@
 
                 </div>
 
-
+            <a id="floatBtn">
+                <div class="float-btn-div">
+                    <i class="material-icons fixed" style="font-size: 3rem;">add_circle_outline</i>
+                </div>
+            </a>
         </div>
     </div>
 
@@ -114,6 +125,16 @@
 	// setTimeout(startInit, 300);
     function toViewUserItem(userId,itemId){
         window.location.href = "${request.contextPath}/user/to-view-items/"+userId+"/"+itemId;
+    }
+    function fixTime(orginTime){
+        var finalStr = '';
+        if(orginTime != null){
+            var strArray = orginTime.split(" ");
+            var strDate = strArray[0].split("-");
+            var strTime = strArray[1].split(":");
+            finalStr = strDate[1].substring(1)+'月'+strDate[2]+'日' + strTime[0]+':'+strTime[1];
+        }
+        return finalStr;
     }
 	    $(document).on("pageInit", function() {
 	        var searchHeight = $('.bar-header-secondary').css('height');
@@ -135,6 +156,7 @@
                     if(score == null){
                         score = 0;
                     }
+                    var startTime = "";
                     var btnHtml = '';
                     if(tabId == "bidHallTab"){
                         btnHtml = '<a href="#" class="button button-success" id="toSubmitBtn" bidid="'+item.bidId+'" style="border: 1px solid #0894ec;color: #0894ec">去抢飚</a>';
@@ -179,8 +201,8 @@
                                             '</div>'+
                                             '<div class="row">'+
                                                 '<div class="col-5" ><i class="material-icons" style="font-size:  0.5rem">brightness_1</i></div>'+
-                                                '<div class="col-50" style="font-size: smaller">发起时间：2016-10-11 13:00</div>'+
-                                                '<div class="col-5" style=""><i class="material-icons" style="font-size:  0.5rem">brightness_1</i></div>'+
+                                                '<div class="col-50" style="font-size: smaller">发起时间：'+fixTime(item.optTime)+'</div>'+
+                                                '<div class="col-5" style="margin-left: 3%"><i class="material-icons" style="font-size:  0.5rem">brightness_1</i></div>'+
                                                 '<div class="col-30" style="font-size: smaller">距离结束：1小时20分</div>'+
                                             '</div>'+
                                             '<div class="row">'+
@@ -277,9 +299,15 @@
             //window.location.href = '${request.contextPath}/bid/to-audit?bidId='+bidId;
             window.location.href = "https://open.weixin.qq.com/connect/oauth2/authorize?appid=wxcd8903dd6a9552eb&redirect_uri=http%3A%2F%2Fjk.zhangqidong.cn%2Ftime_test%2Fbid%2Fto-audit%2F&response_type=code&scope=snsapi_base&state="+bidId+"#wechat_redirect";
         } );
+        $("body").on( "click", "#floatBtn", function(){
+            window.location.href = '${request.contextPath}/bid/to-add';
+        } );
 	    $("body").on( "click", "#myPageBtn", function(){
 	        window.location.href = '${request.contextPath}/wx/to-get-open-id';
 	    } );
+        $("body").on( "click", "#bidIndexBtn", function(){
+            window.location.href = "${request.contextPath}/bid/to-index";
+        } );
 	    $("body").on( "click", "#mySellBtn", function(){
 	        var backUrl = '/item/to-list';
 	        window.location.href = '${request.contextPath}/wx/to-get-open-id?backUrl='+encodeURIComponent(backUrl);

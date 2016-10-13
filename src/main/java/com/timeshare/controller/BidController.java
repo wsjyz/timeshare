@@ -46,7 +46,7 @@ public class BidController extends BaseController{
     public String save(Bid bid,@CookieValue(value="time_sid", defaultValue="c9f7da60747f4cf49505123d15d29ac4") String userId,Model model) {
         SystemMessage message = saveBid(bid,userId);
         model.addAttribute("message",message);
-        model.addAttribute("jumpUrl","/bid/to-list");
+        model.addAttribute("jumpUrl","/bid/to-list?pageContentType=mybid");
         return "info";
     }
     @ResponseBody
@@ -143,7 +143,7 @@ public class BidController extends BaseController{
         //判断是否支付过
         Auditor auditor = auditorService.findAuditorByBidIdAndUserId(bidId,userId);
         if(auditor != null){
-            return "redirect:/bidsubmit/to-submit/"+bidId;
+            return "redirect:/bidsubmit/to-submit/"+bidId+"?audit=audit";
         }
 
         Bid bid = bidService.findBidById(bidId);
