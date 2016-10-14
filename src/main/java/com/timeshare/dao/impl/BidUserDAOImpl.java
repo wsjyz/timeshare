@@ -99,6 +99,9 @@ public class BidUserDAOImpl extends BaseDAO implements BidUserDAO {
             if (StringUtils.isNotBlank(bidUser.getUserId())) {
                 sql.append(" and i.create_user_id ='"+bidUser.getUserId()+"' ");
             }
+            if (StringUtils.isNotBlank(bidUser.getBidId())) {
+                sql.append(" and i.bid_id ='"+bidUser.getBidId()+"' ");
+            }
         }
         sql.append(" order by i.last_modify_time desc limit ?,?");
         List<BidUser> bidUserList = getJdbcTemplate().query(sql.toString(),new Object[]{startIndex,loadSize},new BidUserMapper());

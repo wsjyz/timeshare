@@ -21,6 +21,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.UnsupportedEncodingException;
 import java.math.BigInteger;
 import java.net.URLDecoder;
+import java.net.URLEncoder;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.Date;
@@ -68,9 +69,15 @@ public class WxController {
         return result;
     }
     @RequestMapping(value = "/to-get-open-id")
-    public String toOauth(@RequestParam(value = "backUrl",required = false,defaultValue = "") String backUrl){
+    public String toOauth(@RequestParam(value = "backUrl",required = false,defaultValue = "") String backUrl,HttpServletRequest request){
+        String contextPath = request.getContextPath();
+        try {
+            contextPath = URLEncoder.encode(contextPath,"UTF-8");
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
         String wxOauthUrl = "https://open.weixin.qq.com/connect/oauth2/authorize?appid="
-                + Contants.APPID+"&redirect_uri=http%3A%2F%2F"+Contants.DOMAIN+"%2Ftime%2Fwx%2Fget-open-id%2F&response_type=code&scope=snsapi_base&state="+backUrl+"#wechat_redirect";
+                + Contants.APPID+"&redirect_uri=http%3A%2F%2F"+Contants.DOMAIN+contextPath+"%2Fwx%2Fget-open-id%2F&response_type=code&scope=snsapi_base&state="+backUrl+"#wechat_redirect";
         return "redirect:"+wxOauthUrl;
     }
     @RequestMapping(value = "/get-open-id")

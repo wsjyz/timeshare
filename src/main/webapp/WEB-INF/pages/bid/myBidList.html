@@ -311,8 +311,8 @@
     function toView(id,bidStatus){
         var pageContentType = $('#pageContentType').val();
         if(pageContentType == 'mybid'){
-            if(bidStatus == 'ongoing'){
-                window.location.href = "${request.contextPath}/biduser/to-list";
+            if(bidStatus == 'ongoing' || bidStatus == 'finish'){
+                window.location.href = "${request.contextPath}/biduser/to-list/"+id;
             }else if(bidStatus == 'draft'){
                 window.location.href = "${request.contextPath}/bid/to-view/"+id;
             }

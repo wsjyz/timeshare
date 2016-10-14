@@ -51,7 +51,7 @@
             <!-- 邂逅时刻log -->
             <div class="xhsk-fixed-log">
                 <div class="fixed-log-con">
-                    <img src="/time/images/icon/logo.png" alt="邂逅时刻">
+                    <img src="${request.contextPath}/images/icon/logo.png" alt="邂逅时刻">
                 </div>
             </div>
             <div class="swiper-container"  style="position: relative;padding-bottom: 0px;">
@@ -300,7 +300,8 @@
             window.location.href = "https://open.weixin.qq.com/connect/oauth2/authorize?appid=wxcd8903dd6a9552eb&redirect_uri=http%3A%2F%2Fjk.zhangqidong.cn%2Ftime_test%2Fbid%2Fto-audit%2F&response_type=code&scope=snsapi_base&state="+bidId+"#wechat_redirect";
         } );
         $("body").on( "click", "#floatBtn", function(){
-            window.location.href = '${request.contextPath}/bid/to-add';
+            var backUrl = '/bid/to-add';
+            window.location.href = '${request.contextPath}/wx/to-get-open-id?backUrl='+encodeURIComponent(backUrl);
         } );
 	    $("body").on( "click", "#myPageBtn", function(){
 	        window.location.href = '${request.contextPath}/wx/to-get-open-id';
@@ -308,10 +309,7 @@
         $("body").on( "click", "#bidIndexBtn", function(){
             window.location.href = "${request.contextPath}/bid/to-index";
         } );
-	    $("body").on( "click", "#mySellBtn", function(){
-	        var backUrl = '/item/to-list';
-	        window.location.href = '${request.contextPath}/wx/to-get-open-id?backUrl='+encodeURIComponent(backUrl);
-	    } );
+
 	    $("body").on( "submit", "#searchForm", function(){
 	        var keyword = $('#search').val();
 	        if(keyword == ''){

@@ -96,6 +96,18 @@
             }
         });
     }
+    function stopRecordVoiceFunc(){
+        clearTimeout(timeOutEvent);
+        $('#speakBtn').css('color', '#212121');
+        wx.stopRecord({
+            success: function (res) {
+                var localId = res.localId;
+                $('.chat-thread').append('<a class="play_voice" data="'+localId+'"><li class="self" ><i class="material-icons" >hearing</i></li></a>');
+                $('.speaker').hide();
+                uploadVoice(localId);
+            }
+        });
+    }
 
 $(function(){
     wx.config({
@@ -237,22 +249,14 @@ $(function(){
 
     });
     $("body").on( "touchend", "#speakBtn", function(){
-        clearTimeout(timeOutEvent);
-        $('#speakBtn').css('color', '#212121');
-        wx.stopRecord({
-            success: function (res) {
-                var localId = res.localId;
-                $('.chat-thread').append('<a class="play_voice" data="'+localId+'"><li class="self" ><i class="material-icons" >hearing</i></li></a>');
-                $('.speaker').hide();
-                uploadVoice(localId);
-            }
-        });
 
+        stopRecordVoiceFunc();
         return false;
     });
     $("body").on( "click", function(e){
         if($(e.target).closest('.speaker').length <= 0 && $(e.target).closest('#voiceBtn').length <= 0){
             $('.speaker').hide();
+            stopRecordVoiceFunc();
         }
 
     });

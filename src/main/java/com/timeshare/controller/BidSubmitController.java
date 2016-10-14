@@ -43,6 +43,9 @@ public class BidSubmitController extends BaseController{
         }
         //应标人的id
         String bidUserId = request.getParameter("bidUserId");
+        if(StringUtils.isBlank(bidUserId)){
+            bidUserId = currentUserId;
+        }
         model.addAttribute("bidUserId",bidUserId);
 
         String audit = request.getParameter("audit");

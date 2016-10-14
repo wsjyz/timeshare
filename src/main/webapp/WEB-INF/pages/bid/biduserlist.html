@@ -112,19 +112,10 @@
     </style>
 </head>
 <body>
+<input type="hidden" id="bidId" value="${bid.bidId}"/>
 <div class="page-group" >
     <div id="page-swiper" class="page">
-        <nav class="bar bar-tab">
-            <a class="tab-item active" href="#">
-                <span class="tab-label buy-time">约</span>
-            </a>
-            <a class="tab-item" id="mySellBtn">
-                <span class="tab-label sell-time">飚</span>
-            </a>
-            <a class="tab-item" href="#" id="myPageBtn">
-                <span class="tab-label my-time">我</span>
-            </a>
-        </nav>
+
         <!--<div class="content" id=''>-->
             <header class="bar bar-nav">
                 <a class="icon icon-left pull-left back"></a>
@@ -152,7 +143,7 @@
         // 生成新条目的HTML
         var html = '';
         var dataLength = 0;
-        var bidStatus = 'finish';
+        var bidStatus = '${bid.bidStatus}';
         $.each(data, function(i, item){
             var winTheBid = item.winTheBid;
             var starDisplay = 'none';
@@ -201,7 +192,7 @@
         $.hideIndicator();
 
     }
-    $.post('${request.contextPath}/biduser/find-list', {startIndex: 0,loadSize:50}, function (response) {
+    $.post('${request.contextPath}/biduser/find-list', {startIndex: 0,loadSize:50,bidId:$('#bidId').val()}, function (response) {
         addItems(response);
     });
     $("body").on( "click", "#winBtn", function(){
@@ -245,6 +236,7 @@
                             $.post('${request.contextPath}/biduser/modify', {bidUserId:bidUserId,winTheBid:'1',rating:rating,bidId:bidId}, function (response) {
                                 if(response.messageType != 'failed'){
                                     $.closeModal();
+                                    window.location.reload();
                                 }
                             });
 

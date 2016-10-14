@@ -155,7 +155,7 @@
         <div class="content main-editor-page">
             <div class="list-block">
                 <ul>
-                    <form method="post" action="/time/bid/save">
+                    <form method="post" action="${request.contextPath}//bid/save">
                         <input type="hidden" name="bidStatus" id="bidStatus" value="${bid.bidStatus}">
                         <input type="hidden" name="bidId" id="bidId" value="<#if bid??>${bid.bidId}<#else></#if>">
                     <!-- Text inputs -->
@@ -358,9 +358,13 @@
         if (strDate >= 0 && strDate <= 9) {
             strDate = "0" + strDate;
         }
+        var hours = date.getHours();
+        if(hours < 20){
+            hours = hours + 3;
+        }
         $("#endTime").datetimePicker({
 
-            value: [date.getFullYear(), month, strDate, date.getHours(), '00']
+            value: [date.getFullYear(), month, strDate, hours, '00']
         });
     }else{
         var year = endTime.substring(0,4);

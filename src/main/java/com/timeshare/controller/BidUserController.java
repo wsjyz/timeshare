@@ -10,10 +10,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.CookieValue;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.List;
@@ -30,20 +27,24 @@ public class BidUserController extends BaseController{
     @Autowired
     BidService bidService;
 
-    @RequestMapping(value = "/to-list")
-    public String toList() {
+    @RequestMapping(value = "/to-list/{bidId}")
+    public String toList(@PathVariable String bidId,Model model) {
 
+        if(StringUtils.isNotBlank(bidId)){
+            Bid bid = bidService.findBidById(bidId);
+            model.addAttribute("bid",bid);
+        }
 
         return "bid/biduserlist";
     }
 
     @ResponseBody
     @RequestMapping(value = "/find-list")
-    public List<BidUser> findList(@RequestParam int startIndex, @RequestParam int loadSize,
-                           @CookieValue(value="time_sid", defaultValue="c9f7da60747f4cf49505123d15d29ac4") String userId) {
+    public List<BidUser> findList(@RequestParam int startIndex, @RequestParam int loadSize,String bidId) {
 
         BidUser bidUser = new BidUser();
-        bidUser.setUserId(userId);
+        //bidUser.setUserId(userId);
+        bidUser.setBidId(bidId);
         List<BidUser> bidUserList = bidUserService.findBidUserList(bidUser,startIndex,loadSize);
         return bidUserList;
     }
