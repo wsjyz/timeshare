@@ -185,9 +185,11 @@
                     <li class="item-child-title item-list-title bg-icon2">
                         <div class="item-content">
                             <div class="item-media"><i class="icon icon-form-password"></i></div>
-                            <div class="item-inner jz-addtip-text">
-                                <div class="item-input" style="line-height:2.2rem;">招标金额：<input type="text" id="price" name="price"
-                                                                  value="<#if bid.price??>${bid.price}<#else>50</#if>" style="width: 10rem;display: inline"/></div>
+                            <div class="item-inner jz-addtip-text" style="height: 3rem;">
+                                <div class="item-input" style="line-height:2.2rem;">
+                                    招标金额：<input type="text" id="price" name="price"
+                                                                  value="<#if bid.price??>${bid.price}<#else>50</#if>" style="width: 6rem;display: inline"/>
+                                </div>
 
                             </div>
                         </div>
@@ -311,15 +313,24 @@
     $("body").on( "click", "#savePreBtn", function(){
         var vali = checkForm();
         if(vali){
-            $('#bidStatus').val('ongoing');
+            $('#bidStatus').val('draft');
             $(this).attr('disabled',false);
             $.showIndicator();
-            $('form').submit();
+            var serializeObj = serializeForm();
+
+            $.post('${request.contextPath}/bid/save-async', serializeObj, function (response) {
+
+                if(response.messageType == 'success' ){
+                    $('#bidId').val(response.objId);
+                    var contextPath = encodeURIComponent('${request.contextPath}');
+                    window.location.href = "https://open.weixin.qq.com/connect/oauth2/authorize?appid=wxcd8903dd6a9552eb&redirect_uri=http%3A%2F%2Fjk.zhangqidong.cn"+contextPath+"%2Fbid%2Fto-pay-for-bid%2F&response_type=code&scope=snsapi_base&state="+response.objId+"#wechat_redirect";
+
+                }
+            });
+
         }
     } );
-
-    function saveItemInterval(){
-
+    function serializeForm(){
         var serializeObj={}; // 目标对象
 
         var array = $('form').serializeArray(); // 转换数组格式
@@ -337,6 +348,12 @@
             }
 
         });
+        return serializeObj;
+    }
+    function saveItemInterval(){
+
+        var serializeObj = serializeForm();
+
         $.post('${request.contextPath}/bid/save-async', serializeObj, function (response) {
 
             if(response.messageType == 'success' ){

@@ -15,6 +15,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.servlet.http.HttpServletRequest;
 import java.io.UnsupportedEncodingException;
@@ -38,16 +39,35 @@ public class BidController extends BaseController{
     public static final String UNIFIEDORDER_URL = "https://api.mch.weixin.qq.com/pay/";
 
     @RequestMapping(value = "/to-add")
-    public String toAdd() {
-
+    public String toAdd(){
         return "bid/addbid";
     }
-    @RequestMapping(value = "/save")
-    public String save(Bid bid,@CookieValue(value="time_sid", defaultValue="c9f7da60747f4cf49505123d15d29ac4") String userId,Model model) {
-        SystemMessage message = saveBid(bid,userId);
-        model.addAttribute("message",message);
-        model.addAttribute("jumpUrl","/bid/to-list?pageContentType=mybid");
-        return "info";
+
+    @RequestMapping(value = "/to-pay-for-bid")
+    public String toPayForBid(HttpServletRequest request,RedirectAttributes attr,
+                        @CookieValue(value="time_sid", defaultValue="c9f7da60747f4cf49505123d15d29ac4") String userId) {
+
+        String bidId = request.getParameter("state");
+        Bid bid = new Bid();
+        if(StringUtils.isNotBlank(bidId)){
+            bid = bidService.findBidById(bidId);
+        }
+        String code = request.getParameter("code");
+        String payMessageTitle = "您在邂逅时刻的发飙款项："+bid.getTitle() ;
+
+        String jsApiParams = WxPayUtils.userPayToCorp(code,payMessageTitle,bid.getPrice());
+        attr.addAttribute("jsApiParams",jsApiParams);
+        attr.addAttribute("payTip","你确定要支付"+bid.getPrice()+"元吗");
+        attr.addAttribute("backUrl",request.getContextPath()+"/bid/modify-bid-status?bidId="+bidId+"&bidStatus=ongoing");
+        return "redirect:/wxPay/to-pay/";
+    }
+    @RequestMapping(value = "/modify-bid-status")
+    public String save(String bidId,String bidStatus,
+                       @CookieValue(value="time_sid", defaultValue="c9f7da60747f4cf49505123d15d29ac4") String userId,Model model) {
+        Bid bid = bidService.findBidById(bidId);
+        bid.setBidStatus(bidStatus);
+        saveBid(bid,userId);
+        return "redirect:/bid/to-list?pageContentType=mybid";
     }
     @ResponseBody
     @RequestMapping(value = "/save-async")

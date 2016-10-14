@@ -56,8 +56,9 @@ public class BidUserController extends BaseController{
         String result = "";
 
         if(bidUser != null){
+            Bid bid = bidService.findBidById(bidUser.getBidId());
             if(StringUtils.isNotBlank(bidUser.getWinTheBid()) && bidUser.getWinTheBid().equals("1")){
-                Bid bid = bidService.findBidById(bidUser.getBidId());
+
                 bid.setBidStatus(Contants.BID_STATUS.finish.toString());
                 bidService.modifyBid(bid);
                 bidUser.setIncomeFee(bid.getPrice());

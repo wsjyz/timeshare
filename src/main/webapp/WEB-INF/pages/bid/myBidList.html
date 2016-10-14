@@ -146,10 +146,10 @@
 <div class="page-group" >
     <div id="page-swiper" class="page">
         <nav class="bar bar-tab">
-            <a class="tab-item active" href="#">
+            <a class="tab-item " href="#" id="indexBtn">
                 <span class="tab-label buy-time">约</span>
             </a>
-            <a class="tab-item" id="mySellBtn">
+            <a class="tab-item" id="bidIndexBtn">
                 <span class="tab-label sell-time">飚</span>
             </a>
             <a class="tab-item" href="#" id="myPageBtn">
@@ -326,6 +326,9 @@
     } );
     $("body").on( "click", "#myPageBtn", function(){
         window.location.href = '${request.contextPath}/user/to-my-page';
+    } );
+    $("body").on( "click", "#bidIndexBtn", function(){
+        window.location.href = "${request.contextPath}/bid/to-index";
     } );
 </script>
 <script>
