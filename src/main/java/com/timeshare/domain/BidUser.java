@@ -13,6 +13,15 @@ public class BidUser extends BaseDomain {
     private String winTheBid;
     private BigDecimal incomeFee;
     private int rating;
+    private String wxTradeNo;
+
+    public String getWxTradeNo() {
+        return wxTradeNo;
+    }
+
+    public void setWxTradeNo(String wxTradeNo) {
+        this.wxTradeNo = wxTradeNo;
+    }
 
     public int getRating() {
         return rating;

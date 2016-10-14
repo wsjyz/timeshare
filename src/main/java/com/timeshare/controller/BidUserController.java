@@ -3,9 +3,12 @@ package com.timeshare.controller;
 import com.timeshare.domain.Bid;
 import com.timeshare.domain.BidUser;
 import com.timeshare.domain.SystemMessage;
+import com.timeshare.domain.UserInfo;
 import com.timeshare.service.BidService;
 import com.timeshare.service.BidUserService;
+import com.timeshare.utils.CommonStringUtils;
 import com.timeshare.utils.Contants;
+import com.timeshare.utils.WxPayUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -63,7 +66,12 @@ public class BidUserController extends BaseController{
                 bidService.modifyBid(bid);
                 bidUser.setIncomeFee(bid.getPrice());
             }
+            String outTradeNo = CommonStringUtils.gen18RandomNumber();
+            bidUser.setWxTradeNo(outTradeNo);
             result = bidUserService.modifyBidUser(bidUser);
+            String bidUserId = bidUser.getUserId();
+            UserInfo bidUserInfo = getCurrentUser(bidUserId);
+            WxPayUtils.payToSeller(outTradeNo,bid.getPrice(),bidUserInfo.getOpenId());
         }
         return getSystemMessage(result);
     }

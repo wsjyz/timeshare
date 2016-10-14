@@ -78,7 +78,9 @@ public class BidUserDAOImpl extends BaseDAO implements BidUserDAO {
         if(StringUtils.isNotBlank(bidUser.getLastModifyTime())){
             sql.append(" last_modify_time = '"+bidUser.getLastModifyTime()+"',");
         }
-
+        if(StringUtils.isNotBlank(bidUser.getWxTradeNo())){
+            sql.append(" wx_trade_no = '"+bidUser.getWxTradeNo()+"',");
+        }
         if (sql.lastIndexOf(",") + 1 == sql.length()) {
             sql.delete(sql.lastIndexOf(","), sql.length());
         }
@@ -122,6 +124,7 @@ public class BidUserDAOImpl extends BaseDAO implements BidUserDAO {
             bidUser.setUserId(rs.getString("create_user_id"));
             bidUser.setOptTime(rs.getString("opt_time"));
             bidUser.setLastModifyTime(rs.getString("last_modify_time"));
+            bidUser.setWxTradeNo(rs.getString("wx_trade_no"));
             return bidUser;
         }
     }

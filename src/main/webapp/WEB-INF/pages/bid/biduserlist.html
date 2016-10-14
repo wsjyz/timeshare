@@ -169,7 +169,7 @@
                             '<div class="card-content-inner">'+
                                 '<div class="row">'+
                                     '<div class="col-33">'+
-                                    '<a href="#" class="button button-success" id="winBtn" biduserid="'+item.bidUserId+'" bidid="'+item.bidId+'" style="display: '+winBtnDisplay+';">确定中标</a>'+
+                                    '<a href="#" class="button button-success" id="winBtn" userid="'+item.userId+'" biduserid="'+item.bidUserId+'" bidid="'+item.bidId+'" style="display: '+winBtnDisplay+';">确定中标</a>'+
                                     '</div>'+
                                     '<div class="col-33">&nbsp;</div>'+
                                     '<div class="col-33"><a href="#" class="button button-success" id="viewBtn" data="'+item.bidUserId+'" bidid="'+item.bidId+'">查看详情</a></div>'+
@@ -198,6 +198,7 @@
     $("body").on( "click", "#winBtn", function(){
         var bidUserId = $(this).attr('biduserid');
         var bidId = $(this).attr('bidid');
+        var userId = $(this).attr('userid');
         var starHtml = '请评价一下吧' +
                         '<fieldset class="starability-checkmark"  style="margin: 0 auto;">'+
                             '<input type="radio" id="rate5" name="rating" value="5" />'+
@@ -233,7 +234,7 @@
                         if(rating == null){
                             $.toast("请点击星星评价");
                         }else{
-                            $.post('${request.contextPath}/biduser/modify', {bidUserId:bidUserId,winTheBid:'1',rating:rating,bidId:bidId}, function (response) {
+                            $.post('${request.contextPath}/biduser/modify', {bidUserId:bidUserId,winTheBid:'1',rating:rating,bidId:bidId,userId:userId}, function (response) {
                                 if(response.messageType != 'failed'){
                                     $.closeModal();
                                     window.location.reload();
