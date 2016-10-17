@@ -108,6 +108,18 @@
             }
         });
     }
+    function uploadVoice(localId){
+        wx.uploadVoice({
+            localId: localId, // 需要上传的音频的本地ID，由stopRecord接口获得
+            isShowProgressTips: 1, // 默认为1，显示进度提示
+            success: function (res) {
+                var serverId = res.serverId; // 返回音频的服务器端ID
+                $.post('${request.contextPath}/bidsubmit/download-file', {bidId:$('#bidId').val(),serverId:serverId,fileType:'VOICE'}, function (response) {
+                    $('.chat-thread').scrollTop($('.chat-thread').height() + 60);
+                });
+            }
+        });
+    }
 
 $(function(){
     wx.config({
@@ -188,18 +200,7 @@ $(function(){
         clearTimeout(timeOutEvent);
         timeOutEvent = 0;
     });
-    function uploadVoice(localId){
-        wx.uploadVoice({
-            localId: localId, // 需要上传的音频的本地ID，由stopRecord接口获得
-            isShowProgressTips: 1, // 默认为1，显示进度提示
-            success: function (res) {
-                var serverId = res.serverId; // 返回音频的服务器端ID
-                $.post('${request.contextPath}/bidsubmit/download-file', {bidId:$('#bidId').val(),serverId:serverId,fileType:'VOICE'}, function (response) {
-                    $('.chat-thread').scrollTop($('.chat-thread').height() + 60);
-                });
-            }
-        });
-    }
+
     var playing = 0;
 
     var audio = document.getElementById('play_audio');

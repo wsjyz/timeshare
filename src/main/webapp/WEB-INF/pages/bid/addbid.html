@@ -367,18 +367,17 @@
     var endTime = "${bid.endTime!''}";
     if(endTime == ''){
         var date = new Date();
+        date.setDate(date.getDate()+2);//默认延迟2天
         var month = date.getMonth() + 1;
         var strDate = date.getDate();
+        var hours = date.getHours();
         if (month >= 1 && month <= 9) {
             month = "0" + month;
         }
         if (strDate >= 0 && strDate <= 9) {
             strDate = "0" + strDate;
         }
-        var hours = date.getHours();
-        if(hours < 20){
-            hours = hours + 3;
-        }
+
         $("#endTime").datetimePicker({
 
             value: [date.getFullYear(), month, strDate, hours, '00']

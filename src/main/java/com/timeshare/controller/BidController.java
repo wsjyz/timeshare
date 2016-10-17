@@ -62,7 +62,7 @@ public class BidController extends BaseController{
         return "redirect:/wxPay/to-pay/";
     }
     @RequestMapping(value = "/modify-bid-status")
-    public String save(String bidId,String bidStatus,
+    public String modifyBidStatus(String bidId,String bidStatus,
                        @CookieValue(value="time_sid", defaultValue="c9f7da60747f4cf49505123d15d29ac4") String userId,Model model) {
         Bid bid = bidService.findBidById(bidId);
         bid.setBidStatus(bidStatus);
@@ -74,6 +74,13 @@ public class BidController extends BaseController{
     public SystemMessage save(Bid bid, @CookieValue(value="time_sid", defaultValue="c9f7da60747f4cf49505123d15d29ac4") String userId) {
         SystemMessage message = saveBid(bid,userId);
         return message;
+    }
+    @RequestMapping(value = "/save")
+    public String save(Bid bid,@CookieValue(value="time_sid", defaultValue="c9f7da60747f4cf49505123d15d29ac4") String userId,Model model) {
+        SystemMessage message = saveBid(bid,userId);
+        model.addAttribute("message",message);
+        model.addAttribute("jumpUrl","/bid/to-list?pageContentType=mybid");
+        return "info";
     }
 
     private SystemMessage saveBid(Bid bid, String userId){
@@ -148,7 +155,7 @@ public class BidController extends BaseController{
             params.setBidStatus(Contants.BID_STATUS.ongoing.toString());
         }else if(condition.equals("audit")){
             params.setCanAudit("1");
-            params.setBidStatus(Contants.BID_STATUS.ongoing.toString());
+            params.setBidStatus(Contants.BID_STATUS.finish.toString());
         }else if(condition.equals("complete")){
             params.setBidStatus(Contants.BID_STATUS.finish.toString());
         }

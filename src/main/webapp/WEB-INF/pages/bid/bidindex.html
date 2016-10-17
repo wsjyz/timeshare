@@ -72,7 +72,7 @@
             <div class="buttons-tab">
                 <a href="#bidHallTab" class="tab-link active button">招标大厅</a>
                 <a href="#auditTab" class="tab-link button">旁听飚</a>
-                <a href="#heroTab" class="tab-link button">英雄飚</a>
+                <a href="#heroTab" class="tab-link button">历史飚</a>
             </div>
              
                 <div class="tabs">
@@ -132,9 +132,19 @@
             var strArray = orginTime.split(" ");
             var strDate = strArray[0].split("-");
             var strTime = strArray[1].split(":");
-            finalStr = strDate[1].substring(1)+'月'+strDate[2]+'日' + strTime[0]+':'+strTime[1];
+            finalStr = strDate[1]+'月'+strDate[2]+'日' + strTime[0]+':'+strTime[1];
         }
         return finalStr;
+    }
+    function calTime(endTime){
+        var calTime = {};
+        var endDate =  new Date(endTime.replace(/-/g,"/"));
+        var temDate =  endDate.getTime() - new Date().getTime();
+        var dayResult = Math.floor(temDate/(24*3600*1000));
+        var hoursResult = Math.floor(temDate%(24*3600*1000)/(3600*1000))
+        calTime.day = dayResult;
+        calTime.hour = hoursResult;
+        return calTime;
     }
 	    $(document).on("pageInit", function() {
 	        var searchHeight = $('.bar-header-secondary').css('height');
@@ -156,40 +166,79 @@
                     if(score == null){
                         score = 0;
                     }
+                    var calTimeObj = calTime(item.endTime);
                     var startTime = "";
                     var btnHtml = '';
+                    var attrHtml = '';
+                    var endTimeHtml = '';
                     if(tabId == "bidHallTab"){
                         btnHtml = '<a href="#" class="button button-success" id="toSubmitBtn" bidid="'+item.bidId+'" style="border: 1px solid #0894ec;color: #0894ec">去抢飚</a>';
+                        attrHtml = '<div class="row">'+
+                                '<div class="col-10"><i class="material-icons" >face</i></div>'+
+                                '<div class="col-30">'+item.createUserName+'&nbsp;&nbsp;</div>'+
+                                '<div class="col-10"><i class="material-icons">attach_money</i></div>'+
+                                '<div class="col-40">招标金额：'+item.price+'</div>'+
+                                '</div>'+
+                                '<div class="row">'+
+                                '<div class="col-10"><i class="material-icons">gps_fixed</i></div>'+
+                                '<div class="col-30">飚数：'+item.submitCount+'</div>'+
+                                '<div class="col-10"><i class="material-icons">hearing</i></div>'+
+                                '<div class="col-40">允许旁听：是</div>'+
+                                '</div>';
+                        endTimeHtml =  '<div class="row">'+
+//                                                '<div class="col-5" ><i class="material-icons" style="font-size:  0.5rem">brightness_1</i></div>'+
+//                                                '<div class="col-50" style="font-size: smaller">发起时间：'+fixTime(item.optTime)+'</div>'+
+//                                                '<div class="col-5" style="margin-left: 3%"><i class="material-icons" style="font-size:  0.5rem">brightness_1</i></div>'+
+                                '<div class="col-25" >&nbsp;</div>'+
+                                '<div class="col-30" style="font-size: smaller">距离结束：'+calTimeObj.day+'天'+calTimeObj.hour+'小时</div>'+
+                                '<div class="col-25" >&nbsp;</div>'+
+                                '</div>';
                     }
                     if(tabId == "auditTab"){
                         var auditPrice = (item.price * 0.3).toFixed(2);
                         btnHtml = '<a href="#" class="button button-success" id="toAuditBtn" bidid="'+item.bidId+'" style="border: 1px solid #0894ec;color: #0894ec">'+auditPrice+'元旁听</a>';
+                        attrHtml = '<div class="row">'+
+                                '<div class="col-10"><i class="material-icons" >face</i></div>'+
+                                '<div class="col-40">'+item.createUserName+'</div>'+
+                                '<div class="col-12"><i class="material-icons">stars</i></div>'+
+                                '<div class="col-30">'+score+'颗星</div>'+
+                                '</div>'+
+                                '<div class="row">'+
+                                '<div class="col-10"><i class="material-icons">attach_money</i></div>'+
+                                '<div class="col-40">招标金额：'+item.price+'</div>'+
+                                '<div class="col-12"><i class="material-icons">hearing</i></div>'+
+                                '<div class="col-30">允许旁听：是</div>'+
+                                '</div>'+
+                                '<div class="row">'+
+                                '<div class="col-10"><i class="material-icons">gps_fixed</i></div>'+
+                                '<div class="col-30">飚数：'+item.submitCount+'</div>'+
+                                '</div>';
                     }
                     if(tabId == "heroTab"){
                         btnHtml = '';
+                        attrHtml = '<div class="row">'+
+                                '<div class="col-10"><i class="material-icons" >face</i></div>'+
+                                '<div class="col-40">'+item.createUserName+'</div>'+
+                                '<div class="col-12"><i class="material-icons">stars</i></div>'+
+                                '<div class="col-30">'+score+'颗星</div>'+
+                                '</div>'+
+                                '<div class="row">'+
+                                '<div class="col-10"><i class="material-icons">attach_money</i></div>'+
+                                '<div class="col-40">招标金额：'+item.price+'</div>'+
+                                '<div class="col-12"><i class="material-icons">hearing</i></div>'+
+                                '<div class="col-30">允许旁听：是</div>'+
+                                '</div>'+
+                                '<div class="row">'+
+                                '<div class="col-10"><i class="material-icons">gps_fixed</i></div>'+
+                                '<div class="col-30">飚数：'+item.submitCount+'</div>'+
+                                '</div>';
                     }
+
 	                html += '<div class="card">'+
                                 '<div class="card-header"><i class="material-icons">blur_circular</i>'+item.title+'</div>'+
                                     '<div class="card-content">'+
                                         '<div class="card-content-inner">' +
-                                            '<div class="row">'+
-                                                '<div class="col-10"><i class="material-icons" >face</i></div>'+
-                                                '<div class="col-40">'+item.createUserName+'</div>'+
-                                                '<div class="col-12"><i class="material-icons">stars</i></div>'+
-                                                '<div class="col-30">'+score+'颗星</div>'+
-                                            '</div>'+
-                                            '<div class="row">'+
-                                                '<div class="col-10"><i class="material-icons">attach_money</i></div>'+
-                                                '<div class="col-40">招标金额：'+item.price+'</div>'+
-                                                '<div class="col-12"><i class="material-icons">hearing</i></div>'+
-                                                '<div class="col-30">允许旁听：是</div>'+
-                                            '</div>'+
-                                            '<div class="row">'+
-                                                '<div class="col-10"><i class="material-icons">pie_chart</i></div>'+
-                                                '<div class="col-40">点击率：'+item.clickRate+'</div>'+
-                                                '<div class="col-12"><i class="material-icons">gps_fixed</i></div>'+
-                                                '<div class="col-30">飚数：'+item.submitCount+'</div>'+
-                                            '</div>'+
+                                                attrHtml +
                                             '<div class="row" >'+
                                                 '<div class="col-100"><hr style="height:1px;border:none;border-top:1px solid #E1E1E1;"/></div>'+
                                             '</div>'+
@@ -199,12 +248,7 @@
                                             '<div class="row" >'+
                                             '<div class="col-100"><hr style="height:1px;border:none;border-top:1px solid #E1E1E1;"/></div>'+
                                             '</div>'+
-                                            '<div class="row">'+
-                                                '<div class="col-5" ><i class="material-icons" style="font-size:  0.5rem">brightness_1</i></div>'+
-                                                '<div class="col-50" style="font-size: smaller">发起时间：'+fixTime(item.optTime)+'</div>'+
-                                                '<div class="col-5" style="margin-left: 3%"><i class="material-icons" style="font-size:  0.5rem">brightness_1</i></div>'+
-                                                '<div class="col-30" style="font-size: smaller">距离结束：1小时20分</div>'+
-                                            '</div>'+
+                                            endTimeHtml+
                                             '<div class="row">'+
                                             '<div class="col-100" style="padding-top: 0.2rem">' +
                                                 btnHtml +
