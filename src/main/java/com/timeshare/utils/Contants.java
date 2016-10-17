@@ -66,4 +66,8 @@ public interface Contants {
     enum REMIND_TYPE {
         ORDER_BUYER,ORDER_SELLER
     }
+    enum PAGE_CONTENT_TYPE {
+        mysubmit,//我接的飚
+        mybid//我发的飚
+    }
 }

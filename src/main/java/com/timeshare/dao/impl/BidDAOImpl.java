@@ -62,7 +62,7 @@ public class BidDAOImpl extends BaseDAO implements BidDAO {
         if(StringUtils.isNotBlank(bid.getTitle())){
             sql.append(" title = '"+bid.getTitle()+"',");
         }
-        if(bid.getPrice() != null && bid.getPrice().intValue() != 0){
+        if(bid.getPrice() != null){
             sql.append(" price = "+bid.getPrice()+",");
         }
         if(bid.getScore() != null ){
@@ -135,10 +135,15 @@ public class BidDAOImpl extends BaseDAO implements BidDAO {
         if(StringUtils.isNotBlank(bid.getUserId())){
             sql.append(" and i.create_user_id = '"+bid.getUserId()+"' ");
         }
-        if(StringUtils.isNotBlank(bid.getPageContentType()) && bid.getPageContentType().equals("mysubmit") && StringUtils.isNotBlank(bid.getBidUserId())){
+        if(StringUtils.isNotBlank(bid.getPageContentType())
+                && bid.getPageContentType().equals("mysubmit")
+                && StringUtils.isNotBlank(bid.getBidUserId())){
             sql.append(" and b.create_user_id = '"+bid.getBidUserId()+"'");
         }
-        sql.append(" and i.end_time >= CURRENT_TIMESTAMP() ");
+        if(StringUtils.isBlank(bid.getPageContentType())){
+            sql.append(" and i.end_time >= CURRENT_TIMESTAMP() ");
+        }
+
 //        if(StringUtils.isBlank(bid.getBidStatus())){
 //            sql.append(" and i.bid_status = '"+Contants.BID_STATUS.ongoing.toString()+"' ");
 //        }

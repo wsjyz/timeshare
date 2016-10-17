@@ -58,7 +58,9 @@ public class BidController extends BaseController{
         String jsApiParams = WxPayUtils.userPayToCorp(code,payMessageTitle,bid.getPrice());
         attr.addAttribute("jsApiParams",jsApiParams);
         attr.addAttribute("payTip","你确定要支付"+bid.getPrice()+"元吗");
-        attr.addAttribute("backUrl",request.getContextPath()+"/bid/modify-bid-status?bidId="+bidId+"&bidStatus=ongoing");
+        //TODO 这里有一个漏洞，可以通过http工具查看到url，借此可以控制bidStatus
+        attr.addAttribute("okUrl",request.getContextPath()+"/bid/modify-bid-status?bidId="+bidId+"&bidStatus=ongoing");
+        attr.addAttribute("backUrl",request.getContextPath()+"/bid/modify-bid-status?bidId="+bidId+"&bidStatus=draft");
         return "redirect:/wxPay/to-pay/";
     }
     @RequestMapping(value = "/modify-bid-status")
@@ -116,9 +118,12 @@ public class BidController extends BaseController{
                                    @CookieValue(value="time_sid", defaultValue="c9f7da60747f4cf49505123d15d29ac4") String userId) {
         List<Bid> bidList = new ArrayList<Bid>();
         Bid parms = new Bid();
-        parms.setUserId(userId);
+        if(pageContentType.equals(Contants.PAGE_CONTENT_TYPE.mybid.toString())){
+            parms.setUserId(userId);
+        }
+
         parms.setPageContentType(pageContentType);
-        if(pageContentType.equals("mysubmit")){
+        if(pageContentType.equals(Contants.PAGE_CONTENT_TYPE.mysubmit.toString())){
 
             parms.setBidUserId(userId);
         }
