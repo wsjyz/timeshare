@@ -72,7 +72,7 @@
 <script type='text/javascript' src='//g.alicdn.com/msui/sm/0.6.2/js/sm-extend.min.js' charset='utf-8'></script>
 <script>
 
-
+    var okUrl = '${RequestParameters.okUrl}';
     $("body").on( "click", "#jumpBtn", function(){
         $.showIndicator();
         payIt();
@@ -87,10 +87,13 @@
                     if(res.err_msg == "get_brand_wcpay_request:ok" ) {
                         var bidId = $('#bidId').val();
                         var wxTradeNo = $('#wxTradeNo').val();
-                        window.location.href = "${okUrl}";
+                        window.location.href = okUrl;
                     }else if (res.err_msg == "get_brand_wcpay_request:cancel" ){//SB啊，从微信api网页上面复制的居然是错的,冒号是中文的，沃日
                         $.hideIndicator();
                         $.alert('订单已取消');
+                    }else if (res.err_msg == "get_brand_wcpay_request:fail" ){//SB啊，从微信api网页上面复制的居然是错的,冒号是中文的，沃日
+                        $.hideIndicator();
+                        $.alert('支付失败，订单已取消');
                     }
 
                 }

@@ -63,7 +63,7 @@ public class BidSubmitDAOImpl extends BaseDAO implements BidSubmitDAO {
     public List<BidSubmit> findSubmitList(BidSubmit submit, int startIndex, int loadSize) {
         StringBuilder sql = new StringBuilder("select * from t_bid_submit i where 1=1 ");
         if (StringUtils.isNotEmpty(submit.getUserId())) {
-            sql.append(" and i.create_user_id = '"+submit.getUserId()+"' ");
+            sql.append(" and (i.create_user_id = '"+submit.getUserId()+"' or i.create_user_id = '"+submit.getBidCreateUser()+"') ");
         }
         if (StringUtils.isNotEmpty(submit.getBidId())) {
             sql.append(" and i.bid_id = '"+submit.getBidId()+"' ");

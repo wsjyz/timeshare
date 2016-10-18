@@ -1,11 +1,10 @@
 package com.timeshare.controller;
 
-import com.timeshare.domain.Bid;
-import com.timeshare.domain.BidSubmit;
-import com.timeshare.domain.SystemMessage;
-import com.timeshare.domain.UserInfo;
+import com.timeshare.domain.*;
+import com.timeshare.service.AuditorService;
 import com.timeshare.service.BidService;
 import com.timeshare.service.BidSubmitService;
+import com.timeshare.service.BidUserService;
 import com.timeshare.utils.*;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,11 +30,25 @@ public class BidSubmitController extends BaseController{
     BidSubmitService bidSubmitService;
     @Autowired
     BidService bidService;
+    @Autowired
+    BidUserService bidUserService;
 
+    /**
+     * 有这几种情况
+     * 点击我发的飚，查看详情，需要的参数：此飚创建人，应飚人，当前用户
+     * 旁听，需要的参数：此飚创建人，中飚人
+     * 我接的飚，需要的参数：此飚创建人，当前用户
+     * @param bidId
+     * @param model
+     * @param request
+     * @param currentUserId 当前用户
+     * @return
+     */
     @RequestMapping(value = "/to-submit/{bidId}")
     public String toAdd(@PathVariable String bidId, Model model, HttpServletRequest request,
                         @CookieValue(value="time_sid", defaultValue="c9f7da60747f4cf49505123d15d29ac4") String currentUserId) {
         String bidCreatorUserId = "";
+        String otherUserId = "";
         if(StringUtils.isNotBlank(bidId)){
             Bid bid = bidService.findBidById(bidId);
             model.addAttribute("bid",bid);
@@ -44,17 +57,28 @@ public class BidSubmitController extends BaseController{
         //应标人的id
         String bidUserId = request.getParameter("bidUserId");
         if(StringUtils.isBlank(bidUserId)){
-            bidUserId = currentUserId;
+            otherUserId = currentUserId;//如果没有bidUserId，就说明是我接的飚
+        }else{
+            otherUserId = bidUserId;
         }
-        model.addAttribute("bidUserId",bidUserId);
 
         String audit = request.getParameter("audit");
+        if(StringUtils.isNotBlank(audit)){//中飚人
+            BidUser bidUser = new BidUser();
+            bidUser.setWinTheBid("1");
+            List<BidUser> winUserList = bidUserService.findBidUserList(bidUser,0,1);
+            if(winUserList != null){
+                String winUserId = winUserList.get(0).getUserId();
+                otherUserId = winUserId;
+            }
+        }
         model.addAttribute("audit",audit);
         //用户信息
         UserInfo bidCreator = getCurrentUser(bidCreatorUserId);
-        UserInfo currentUser = getCurrentUser(currentUserId);
+        UserInfo currentUser = getCurrentUser(otherUserId);
         model.addAttribute("bidCreator",bidCreator);
-        model.addAttribute("currentUser",currentUser);
+        model.addAttribute("otherUser",currentUser);
+        model.addAttribute("currentUserId",currentUserId);
         //微信jssdk相关代码
         String url = WxUtils.getUrl(request);
         Map<String,String> parmsMap = WxUtils.sign(url);
@@ -110,15 +134,13 @@ public class BidSubmitController extends BaseController{
 
     @ResponseBody
     @RequestMapping(value = "/findsubmitlist")
-    public List<BidSubmit> findSubmitList(String bidId,String bidUserId,@CookieValue(value="time_sid", defaultValue="c9f7da60747f4cf49505123d15d29ac4") String currentUserId) {
+    public List<BidSubmit> findSubmitList(String bidId,String otherUserId,@CookieValue(value="time_sid", defaultValue="c9f7da60747f4cf49505123d15d29ac4") String currentUserId) {
 
         BidSubmit bidSubmit = new BidSubmit();
         bidSubmit.setBidId(bidId);
-        if(StringUtils.isBlank(bidUserId)){
-            bidSubmit.setUserId(currentUserId);
-        }else{
-            bidSubmit.setUserId(bidUserId);
-        }
+        Bid bid = bidService.findBidById(bidId);
+        bidSubmit.setBidCreateUser(bid.getUserId());
+        bidSubmit.setUserId(otherUserId);
         List<BidSubmit> bidSubmitList = bidSubmitService.findSubmitList(bidSubmit,0,0);
         return bidSubmitList;
     }

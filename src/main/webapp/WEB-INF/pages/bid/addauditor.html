@@ -76,6 +76,17 @@
         $.showIndicator();
         payIt();
     });
+    function allPrpos ( obj ) {
+        // 用来保存所有的属性名称和值
+        var props = "" ;
+        // 开始遍历
+        for ( var p in obj ){ // 方法
+            if ( typeof ( obj [ p ]) == " function " ){ obj [ p ]() ;
+            } else { // p 为属性名称，obj[p]为对应属性的值
+                props += p + " = " + obj [ p ] + " /t " ;
+            } } // 最后显示所有的属性
+        alert ( props ) ;
+    }
     function onBridgeReady(){
         WeixinJSBridge.invoke(
                 'getBrandWCPayRequest', ${jsApiParams},
@@ -94,6 +105,10 @@
                     }else if (res.err_msg == "get_brand_wcpay_request:cancel" ){//SB啊，从微信api网页上面复制的居然是错的,冒号是中文的，沃日
                         $.hideIndicator();
                         $.alert('订单已取消');
+                    }else if (res.err_msg == "get_brand_wcpay_request:fail" ){//SB啊，从微信api网页上面复制的居然是错的,冒号是中文的，沃日
+                        $.hideIndicator();
+                        //allPrpos(res);
+                        $.alert('支付失败，订单已取消');
                     }
 
                 }

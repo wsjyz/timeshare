@@ -14,6 +14,17 @@ public class BidSubmit extends BaseDomain {
     private String wxServerId;
     private String serverPath;
 
+    //传值用
+    private String bidCreateUser;
+
+    public String getBidCreateUser() {
+        return bidCreateUser;
+    }
+
+    public void setBidCreateUser(String bidCreateUser) {
+        this.bidCreateUser = bidCreateUser;
+    }
+
     public String getBidSubmitId() {
         return bidSubmitId;
     }

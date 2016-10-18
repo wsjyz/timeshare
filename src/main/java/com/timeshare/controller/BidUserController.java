@@ -43,11 +43,13 @@ public class BidUserController extends BaseController{
 
     @ResponseBody
     @RequestMapping(value = "/find-list")
-    public List<BidUser> findList(@RequestParam int startIndex, @RequestParam int loadSize,String bidId) {
+    public List<BidUser> findList(@RequestParam int startIndex, @RequestParam int loadSize,String bidId,
+                                  @CookieValue(value="time_sid", defaultValue="c9f7da60747f4cf49505123d15d29ac4") String userId) {
 
         BidUser bidUser = new BidUser();
         //bidUser.setUserId(userId);
         bidUser.setBidId(bidId);
+        bidUser.setCurrentUserId(userId);
         List<BidUser> bidUserList = bidUserService.findBidUserList(bidUser,startIndex,loadSize);
         return bidUserList;
     }

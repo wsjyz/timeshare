@@ -15,10 +15,10 @@
     <link rel="stylesheet" href="${request.contextPath}/css/chat.css?t=20161013">
     <style>
         .chat-thread li.self:before {
-            background-image: url(${bidCreator.headImgPath});
+            background-image: url(${otherUser.headImgPath});
         }
         .chat-thread li.other-side:before {
-            background-image: url(${currentUser.headImgPath});
+            background-image: url(${bidCreator.headImgPath});
         }
         .chat-thread{
             height: <#if bid.bidStatus == "finish" || audit == "audit">95%<#else>80%</#if>;
@@ -27,7 +27,7 @@
 </head>
 <body>
 <input type="hidden" name="bidId" id="bidId" value="${bid.bidId}">
-<input type="hidden" name="bidUserId" id="bidUserId" value="${bidUserId}">
+<input type="hidden" name="otherUserId" id="otherUserId" value="${otherUser.userId}">
 <audio id="play_audio" volume="2"></audio>
 <div class="page-group">
     <div class="page page-current">
@@ -81,6 +81,14 @@
 <script>
     var timeOutEvent=0;
     var webServerDomain = 'http://jk.zhangqidong.cn/bidsubmit';
+    var currentUserId = '${currentUserId}';
+    var bidCreatorUserId = '${bidCreator.userId}';
+    var sendClassName;
+    if(currentUserId == bidCreatorUserId){
+        sendClassName = 'other-side';
+    }else{
+        sendClassName = 'self';
+    }
     function longPress(){
         timeOutEvent = 0;
         $('#speakBtn').css('color', '#ff6701');
@@ -90,7 +98,7 @@
             //这个函数不能算作监听，他一定要放在startRecord函数之后，否则不能执行，糟糕、愚蠢、误导人的设计
             complete: function (res) {
                 var localId = res.localId;
-                $('.chat-thread').append('<a class="play_voice" data="'+localId+'"><li class="self" ><i class="material-icons">hearing</i></li></a>');
+                $('.chat-thread').append('<a class="play_voice" data="'+localId+'"><li class="'+sendClassName+'" ><i class="material-icons">hearing</i></li></a>');
                 $('.speaker').hide();
                 uploadVoice(localId);
             }
@@ -102,7 +110,7 @@
         wx.stopRecord({
             success: function (res) {
                 var localId = res.localId;
-                $('.chat-thread').append('<a class="play_voice" data="'+localId+'"><li class="self" ><i class="material-icons" >hearing</i></li></a>');
+                $('.chat-thread').append('<a class="play_voice" data="'+localId+'"><li class="'+sendClassName+'" ><i class="material-icons" >hearing</i></li></a>');
                 $('.speaker').hide();
                 uploadVoice(localId);
             }
@@ -142,16 +150,22 @@ $(function(){
             'uploadVoice'
         ] // 必填，需要使用的JS接口列表，所有JS接口列表见附录2
     });
-    $.post('${request.contextPath}/bidsubmit/findsubmitlist', {bidId:$('#bidId').val(),bidUserId:$('#bidUserId').val()}, function (response) {
+    $.post('${request.contextPath}/bidsubmit/findsubmitlist', {bidId:$('#bidId').val(),otherUserId:$('#otherUserId').val()}, function (response) {
         var size = 0;
+        var className = '';
         $.each(response, function(i, item){
+            if(item.userId == bidCreatorUserId){
+                className = 'other-side';
+            }else{
+                className = 'self';
+            }
             if(item.bidSubmitType == 'TEXT'){
-                $('.chat-thread').append('<li class="self">'+item.bidSubmitText+'</li>');
+                $('.chat-thread').append('<li class="'+className+'">'+item.bidSubmitText+'</li>');
             }else if(item.bidSubmitType == 'IMAGE'){
                 var imagePath = webServerDomain+"/"+item.bidId+"/"+item.wxServerId+".jpg";
-                $('.chat-thread').append('<a class="play_img"><li class="self"><img style="height: 60px;width: 80px;" src="'+imagePath+'"/></li></a>');
+                $('.chat-thread').append('<a class="play_img"><li class="'+className+'"><img style="height: 60px;width: 80px;" src="'+imagePath+'"/></li></a>');
             }else if(item.bidSubmitType == 'VOICE'){
-                $('.chat-thread').append('<a class="play_voice" voice="'+item.wxServerId+'"><li class="self" ><i class="material-icons">hearing</i></li></a>');
+                $('.chat-thread').append('<a class="play_voice" voice="'+item.wxServerId+'"><li class="'+className+'" ><i class="material-icons">hearing</i></li></a>');
 
             }
             size = i ++;
@@ -167,7 +181,7 @@ $(function(){
             sourceType: ['album', 'camera'], // 可以指定来源是相册还是相机，默认二者都有
             success: function (res) {
                 var localIds = res.localIds; // 返回选定照片的本地ID列表，localId可以作为img标签的src属性显示图片
-                $('.chat-thread').append('<li class="self"><img style="height: 60px;width: 80px;" src="'+localIds+'"/></li>');
+                $('.chat-thread').append('<li class="'+sendClassName+'"><img style="height: 60px;width: 80px;" src="'+localIds+'"/></li>');
 //                $('.chat-thread').append('<li class="self" style="height: 90px;width: 120px;">' +
 //                        '<img style="height: 60px;width: 80px;position:absolute;" src="'+localIds+'"/>' +
 //                        '<div style="height: 60px;width: 80px;background-color: #00a1dc;position:absolute;z-index: 2;filter: alpha(opacity=70); opacity: 0.7;text-align: center;line-height: 60px;">0%</div>' +
@@ -276,7 +290,7 @@ $(function(){
     $("body").on( "click", "#sendBidSubmitBtn", function(){
         var messageText = $('#status_message').val();
         if(messageText != ''){
-            $('.chat-thread').append('<li class="self">'+messageText+'</li>');
+            $('.chat-thread').append('<li class="'+sendClassName+'">'+messageText+'</li>');
             $('#status_message').val('');
             $.post('${request.contextPath}/bidsubmit/addtext', {bidId:$('#bidId').val(),text:messageText}, function (response) {
 

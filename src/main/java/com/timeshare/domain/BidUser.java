@@ -15,6 +15,17 @@ public class BidUser extends BaseDomain {
     private int rating;
     private String wxTradeNo;
 
+    //传值用
+    private String currentUserId;
+
+    public String getCurrentUserId() {
+        return currentUserId;
+    }
+
+    public void setCurrentUserId(String currentUserId) {
+        this.currentUserId = currentUserId;
+    }
+
     public String getWxTradeNo() {
         return wxTradeNo;
     }
