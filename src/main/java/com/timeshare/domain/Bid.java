@@ -23,6 +23,15 @@ public class Bid extends BaseDomain{
     //传值用
     private String pageContentType;
     private String bidUserId;
+    private String auditUserId;
+
+    public String getAuditUserId() {
+        return auditUserId;
+    }
+
+    public void setAuditUserId(String auditUserId) {
+        this.auditUserId = auditUserId;
+    }
 
     public String getBidUserId() {
         return bidUserId;

@@ -187,8 +187,8 @@
                             <div class="item-media"><i class="icon icon-form-password"></i></div>
                             <div class="item-inner jz-addtip-text" style="height: 3rem;">
                                 <div class="item-input" style="line-height:2.2rem;">
-                                    招标金额：<input type="text" id="price" name="price"
-                                                                  value="<#if bid.price??>${bid.price}<#else>50</#if>" style="width: 6rem;display: inline"/>
+                                    招标金额：<input type="text" id="price" name="price" placeholder="请填写大于5元的金额"
+                                                                  value="<#if bid.price??>${bid.price}<#else></#if>" style="width: 7rem;display: inline"/>
                                 </div>
 
                             </div>
@@ -239,8 +239,8 @@
                                 <div class="item-inner">
                                     <div class="item-input jz-radio-list">
                                         <div class="row">
-                                            <div class="col-100"><input type="checkbox" name="canAudit" value="1">成功招标后，是否允许有偿旁听中标者应标详情
-                                                旁听费用统一为中标金额的30%，其中招标者分享10%，中标者分享20%,一旦设置允许旁听，不可修改</div>
+                                            <div class="col-100"><input type="checkbox" name="canAudit" value="1">
+                                                <span style="font-size: 12px;">成功中标后，是否允许旁听。旁听费用10元及以下标，统一为3元。10元以上标为金额的30%。发标和中标人平均分享。一旦设置，不可修改，请知晓</span></div>
                                         </div>
                                     </div>
                                 </div>
@@ -295,7 +295,11 @@
         }
         var price = $('#price').val();
         if(price == ''){
-            $.toast('请填写价格');
+            $.toast('请填写招标金额');
+            return false;
+        }
+        if(price < 5){
+            $.toast('招标金额需大于5元');
             return false;
         }
 

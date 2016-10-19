@@ -119,10 +119,15 @@ public class BidDAOImpl extends BaseDAO implements BidDAO {
     @Override
     public List<Bid> findBidList(Bid bid, int startIndex, int loadSize) {
         StringBuilder sql = null;
-        if(StringUtils.isNotBlank(bid.getPageContentType()) && bid.getPageContentType().equals("mybid")){
+        if(StringUtils.isNotBlank(bid.getPageContentType())
+                && bid.getPageContentType().equals(Contants.PAGE_CONTENT_TYPE.mybid.toString())){
             sql = new StringBuilder("select * from t_bid i where 1=1 ");
-        }else if(StringUtils.isNotBlank(bid.getPageContentType()) && bid.getPageContentType().equals("mysubmit")){
+        }else if(StringUtils.isNotBlank(bid.getPageContentType())
+                && bid.getPageContentType().equals(Contants.PAGE_CONTENT_TYPE.mysubmit.toString())){
             sql = new StringBuilder("select i.* from t_bid i ,t_bid_user b where i.bid_id = b.bid_id ");
+        }else if(StringUtils.isNotBlank(bid.getPageContentType())
+                && bid.getPageContentType().equals(Contants.PAGE_CONTENT_TYPE.myaudit.toString())){
+            sql = new StringBuilder("select i.* from t_bid i,t_auditor a where i.bid_id = a.bid_id ");
         }else{
             sql = new StringBuilder("select * from t_bid i where 1=1 ");//飚首页
         }
@@ -136,9 +141,14 @@ public class BidDAOImpl extends BaseDAO implements BidDAO {
             sql.append(" and i.create_user_id = '"+bid.getUserId()+"' ");
         }
         if(StringUtils.isNotBlank(bid.getPageContentType())
-                && bid.getPageContentType().equals("mysubmit")
+                && bid.getPageContentType().equals(Contants.PAGE_CONTENT_TYPE.mysubmit.toString())
                 && StringUtils.isNotBlank(bid.getBidUserId())){
             sql.append(" and b.create_user_id = '"+bid.getBidUserId()+"'");
+        }
+        if(StringUtils.isNotBlank(bid.getPageContentType())
+                && bid.getPageContentType().equals(Contants.PAGE_CONTENT_TYPE.myaudit.toString())
+                && StringUtils.isNotBlank(bid.getAuditUserId())){
+            sql.append(" and a.create_user_id = '"+bid.getAuditUserId()+"'");
         }
         if(StringUtils.isBlank(bid.getPageContentType())){
             sql.append(" and i.end_time >= CURRENT_TIMESTAMP() ");

@@ -7,6 +7,7 @@ import com.thoughtworks.xstream.io.xml.XmlFriendlyNameCoder;
 import com.timeshare.domain.*;
 import com.timeshare.service.AuditorService;
 import com.timeshare.service.BidService;
+import com.timeshare.service.BidUserService;
 import com.timeshare.utils.*;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
@@ -30,11 +31,14 @@ import java.util.*;
 public class BidController extends BaseController{
 
     protected Logger logger = LoggerFactory.getLogger(BidController.class);
+    protected Logger payLogger = LoggerFactory.getLogger("payLogger");
 
     @Autowired
     BidService bidService;
     @Autowired
     AuditorService auditorService;
+    @Autowired
+    BidUserService bidUserService;
 
     public static final String UNIFIEDORDER_URL = "https://api.mch.weixin.qq.com/pay/";
 
@@ -126,6 +130,11 @@ public class BidController extends BaseController{
         if(pageContentType.equals(Contants.PAGE_CONTENT_TYPE.mysubmit.toString())){
 
             parms.setBidUserId(userId);
+        }
+        if(pageContentType.equals(Contants.PAGE_CONTENT_TYPE.myaudit.toString())){
+
+            parms.setAuditUserId(userId);
+            parms.setBidStatus(Contants.BID_STATUS.finish.toString());
         }
         bidList = bidService.findBidList(parms,startIndex,loadSize);
         return bidList;
@@ -306,8 +315,20 @@ public class BidController extends BaseController{
         String result = auditorService.saveAuditor(auditor);
         SystemMessage message = getSystemMessage(result);
         //付款到相应的人
-        logger.info("付款给"+seller.getNickName());
-        WxPayUtils.payToSeller(wxTradeNo,bid.getPrice().multiply(new BigDecimal("0.3")),seller.getOpenId());
+        payLogger.info("旁听费付款给发飙人"+seller.getNickName());
+        WxPayUtils.payToSeller(wxTradeNo,bid.getPrice().multiply(new BigDecimal("0.15")),seller.getOpenId());
+        //查找成功应飚人
+        UserInfo winUser = new UserInfo();
+        BidUser bidUser = new BidUser();
+        bidUser.setWinTheBid("1");
+        bidUser.setBidId(bidId);
+        List<BidUser> winUserList = bidUserService.findBidUserList(bidUser,0,1);
+        if(winUserList != null){
+            String winUserId = winUserList.get(0).getUserId();
+            winUser = getCurrentUser(winUserId);
+        }
+        payLogger.info("旁听费付款给应飚人"+seller.getNickName());
+        WxPayUtils.payToSeller(wxTradeNo,bid.getPrice().multiply(new BigDecimal("0.15")),winUser.getOpenId());
         return message;
     }
 

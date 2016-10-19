@@ -37,7 +37,7 @@
         .content .item-inner .col-40{width: 40%;float:left;margin-left: 0;height: 100%;box-sizing: border-box;text-align: left;}
         .content .item-inner .item-title-row{padding: .35rem 0;}
         .list-block ul{margin-bottom: -1px;}
-        .content .item-inner .item-text{position: absolute;top: 0;left: 0;right: 0;bottom: 0;padding-top: .2rem;font-size: small}
+        .content .item-inner .item-text{position: absolute;top: 0;left: 0;right: 0;bottom: 0;padding-top: .8rem;font-size: small}
         .content .item-inner .item-title{
             color: #1b1b1b;
             width: 35%;
@@ -218,7 +218,7 @@
             var submitCount = item.submitCount;
             var remindHtml = '';
             if(submitCount > 0){
-                var remindHtml = '<span class="badge" style="position: absolute;top: 0.5rem;left:2rem;background:red;color: white;">'+submitCount+'</span>'
+                remindHtml = '<span class="badge" style="position: absolute;top: 0.5rem;left:2rem;background:red;color: white;">'+submitCount+'</span>'
             }
             html += '<ul>'+
                     '<li>'+
@@ -227,15 +227,15 @@
                     '<div class="item-title-row">'+
                     '<div class="item-title">'+item.title+'</div>'+
                     '<div class="item-after">'+bidStatus+'</div>'+
-                    remindHtml+
+//                    remindHtml+
                     '</div>'+
                     '<div class="item-text">'+
                     '<div class="row">'+
                     '<div class="col-60">'+item.submitCount+'人飚过</div>'+
                     '</div>'+
-                    '<div class="row">'+
-                    '<div class="col-60">'+item.clickRate+'人看过</div>'+
-                    '</div>'+
+//                    '<div class="row">'+
+//                    '<div class="col-60">'+item.clickRate+'人看过</div>'+
+//                    '</div>'+
                     '</div>'+
                     '</div>'+
                     '</a>'+
@@ -319,6 +319,8 @@
 
         }else if(pageContentType == 'mysubmit'){
             window.location.href = '${request.contextPath}/bidsubmit/to-submit/'+id;
+        }else if(pageContentType == 'myaudit'){
+            window.location.href = '${request.contextPath}/bidsubmit/to-submit/'+id+'?audit=audit';
         }
     }
     $("body").on( "click", "#indexBtn", function(){

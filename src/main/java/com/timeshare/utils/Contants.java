@@ -68,6 +68,7 @@ public interface Contants {
     }
     enum PAGE_CONTENT_TYPE {
         mysubmit,//我接的飚
-        mybid//我发的飚
+        mybid,//我发的飚
+        myaudit//我旁听的
     }
 }

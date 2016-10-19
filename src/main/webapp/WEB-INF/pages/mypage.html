@@ -256,6 +256,18 @@
                         </li>
                     </a>
                 </ul>
+                <ul>
+                    <a href="#" id="toMyAuditListBtn">
+                        <li class="item-content bg-icon-1 item-link">
+                            <div class="item-media"><i class="icon icon-f7"></i></div>
+                            <div class="item-inner bg-icon-1">
+                                <div class="item-title">我旁听过的飚</div>
+                                <div class="item-after"><span id="myAuditCountsSp"></span></div>
+                                <span class="badge" style="position: absolute;top: 0.5rem;left:4rem;background:red;color: white;display:none" id="myAuditRemindCount"></span>
+                            </div>
+                        </li>
+                    </a>
+                </ul>
 
             </div>
 
@@ -388,6 +400,9 @@
     } );
     $("body").on( "click", "#toMyBidSubmitListBtn", function(){
         window.location.href = "${request.contextPath}/bid/to-list?pageContentType=mysubmit"
+    } );
+    $("body").on( "click", "#toMyAuditListBtn", function(){
+        window.location.href = "${request.contextPath}/bid/to-list?pageContentType=myaudit"
     } );
     $.init();
 </script>

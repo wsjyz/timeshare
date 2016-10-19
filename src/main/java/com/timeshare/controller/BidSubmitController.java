@@ -66,6 +66,7 @@ public class BidSubmitController extends BaseController{
         if(StringUtils.isNotBlank(audit)){//中飚人
             BidUser bidUser = new BidUser();
             bidUser.setWinTheBid("1");
+            bidUser.setBidId(bidId);
             List<BidUser> winUserList = bidUserService.findBidUserList(bidUser,0,1);
             if(winUserList != null){
                 String winUserId = winUserList.get(0).getUserId();
