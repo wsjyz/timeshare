@@ -157,7 +157,8 @@ public class BidController extends BaseController{
     }
 
     @RequestMapping(value = "/to-index")
-    public String toBidIndex() {
+    public String toBidIndex(Model model,@CookieValue(value="time_sid", defaultValue="c9f7da60747f4cf49505123d15d29ac4") String userId) {
+        model.addAttribute("currentUserId", userId);
         return "bid/bidindex";
     }
 

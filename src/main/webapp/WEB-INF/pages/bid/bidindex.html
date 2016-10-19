@@ -123,6 +123,7 @@
 <script src="//g.alicdn.com/msui/sm/0.6.2/js/sm-extend.min.js"></script>
 <script>
 	// setTimeout(startInit, 300);
+    var currentUserId = '${currentUserId}';
     function toViewUserItem(userId,itemId){
         window.location.href = "${request.contextPath}/user/to-view-items/"+userId+"/"+itemId;
     }
@@ -172,7 +173,10 @@
                     var attrHtml = '';
                     var endTimeHtml = '';
                     if(tabId == "bidHallTab"){
-                        btnHtml = '<a href="#" class="button button-success" id="toSubmitBtn" bidid="'+item.bidId+'" style="border: 1px solid #0894ec;color: #0894ec">去抢飚</a>';
+                        if(currentUserId != item.userId){
+                            btnHtml = '<a href="#" class="button button-success" id="toSubmitBtn" bidid="'+item.bidId+'" style="border: 1px solid #0894ec;color: #0894ec">去抢飚</a>';
+                        }
+
                         attrHtml = '<div class="row">'+
                                 '<div class="col-10"><i class="material-icons" >face</i></div>'+
                                 '<div class="col-30">'+item.createUserName+'&nbsp;&nbsp;</div>'+
