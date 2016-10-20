@@ -187,7 +187,7 @@
                             <div class="item-media"><i class="icon icon-form-password"></i></div>
                             <div class="item-inner jz-addtip-text" style="height: 3rem;">
                                 <div class="item-input" style="line-height:2.2rem;">
-                                    招标金额：<input type="text" id="price" name="price" placeholder="请填写大于5元的金额"
+                                    招标金额：<input type="text" id="price" name="price" placeholder="请填写5-500的金额"
                                                                   value="<#if bid.price??>${bid.price}<#else></#if>" style="width: 7rem;display: inline"/>
                                 </div>
 
@@ -298,11 +298,22 @@
             $.toast('请填写招标金额');
             return false;
         }
-        if(price < 5){
-            $.toast('招标金额需大于5元');
+        if(price < 5 || price > 500){
+            $.toast('招标金额需填写5-500元的金额');
             return false;
         }
-
+        var endTimeStr = $('#endTime').val();
+        var endTimeDate =  new Date(endTimeStr.replace(/-/g,"/"));
+        var endTimeDateTime = endTimeDate.getTime();
+        var nowTimeDateTime = new Date().getTime();
+        if((endTimeDateTime - nowTimeDateTime) <= 0 ){
+            $.toast('结束时间不能填写之前的时间');
+            return false;
+        }
+        if((endTimeDateTime - nowTimeDateTime) > 3600 * 1000 *24 * 30 ){
+            $.toast('结束时间不能超过1个月');
+            return false;
+        }
         return true;
     }
     $("body").on( "click", "#saveDraftBtn", function(){
