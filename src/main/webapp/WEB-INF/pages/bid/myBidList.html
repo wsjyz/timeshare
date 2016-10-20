@@ -309,19 +309,44 @@
 
     });
     function toView(id,bidStatus){
+        var btnViewBidUser = {text: '查看应标人',bold: true,color: 'danger',onClick: function() {
+                                        window.location.href = "${request.contextPath}/biduser/to-list/"+id;
+                                    }
+                              };
+        var btnModifyBid = {text: '编辑飚',bold: true,color: 'danger',onClick: function() {
+                                    window.location.href = "${request.contextPath}/bid/to-view/"+id;
+                                }
+                            };
+        var btnToSubmit = {text: '继续应飚',bold: true,color: 'danger',onClick: function() {
+                                    window.location.href = '${request.contextPath}/bidsubmit/to-submit/'+id;
+                                }
+                            };
+        var btnToAudit = {text: '旁听',bold: true,color: 'danger',onClick: function() {
+                                    window.location.href = '${request.contextPath}/bidsubmit/to-submit/'+id+'?audit=audit';
+                                }
+                            };
+        var btnToShare = {text: '分享',bold: true,color: 'danger',onClick: function() {
+                                    window.location.href = '${request.contextPath}/bid/to-share-view/'+id;
+                                }
+                            };
+        var buttons1;
         var pageContentType = $('#pageContentType').val();
         if(pageContentType == 'mybid'){
-            if(bidStatus == 'ongoing' || bidStatus == 'finish'){
-                window.location.href = "${request.contextPath}/biduser/to-list/"+id;
+            if(bidStatus == 'ongoing'){
+                buttons1 = [btnViewBidUser,btnModifyBid,btnToShare];
+            }else if(bidStatus == 'finish'){
+                buttons1 = [btnViewBidUser,btnToShare];
             }else if(bidStatus == 'draft'){
-                window.location.href = "${request.contextPath}/bid/to-view/"+id;
+                buttons1 = [btnModifyBid];
             }
-
         }else if(pageContentType == 'mysubmit'){
-            window.location.href = '${request.contextPath}/bidsubmit/to-submit/'+id;
+            buttons1 = [btnToSubmit];
         }else if(pageContentType == 'myaudit'){
-            window.location.href = '${request.contextPath}/bidsubmit/to-submit/'+id+'?audit=audit';
+            buttons1 = [btnToAudit];
         }
+        var buttons2 = [{text: '取消',bg: 'danger'}];
+        var groups = [buttons1, buttons2];
+        $.actions(groups);
     }
     $("body").on( "click", "#indexBtn", function(){
         window.location.href = "${request.contextPath}/index/to-index";

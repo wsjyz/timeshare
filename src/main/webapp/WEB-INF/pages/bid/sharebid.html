@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>飚</title>
+    <meta name="viewport" content="initial-scale=1, maximum-scale=1">
+    <link rel="shortcut icon" href="/favicon.ico">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <link rel="stylesheet" href="${request.contextPath}/css/time.css">
+    <link rel="stylesheet" href="//g.alicdn.com/msui/sm/0.6.2/css/sm.min.css">
+    <link rel="stylesheet" href="//g.alicdn.com/msui/sm/0.6.2/css/sm-extend.min.css">
+    <link rel="stylesheet" href="${request.contextPath}/css/material-icon.css">
+    <link rel="stylesheet" href="${request.contextPath}/css/main.css">
+    <style>
+        .row .col-10{
+            margin-left: 10%
+        }
+        .row .col-30{
+            margin-left: 4%
+        }
+        .float-btn-div i:active {
+            color: #BCEE68;
+        }
+    </style>
+</head>
+<body>
+<input type="hidden" name="bidId" id="bidId" value="${bid.bidId}">
+<input type="hidden" id="headImgPath" value="${bidCreatorHeadImg}">
+<div class="page-group">
+    <div class="page page-current">
+        <!-- 你的html代码 -->
+        <header class="bar bar-nav">
+            <a class="icon icon-left pull-left back"></a>
+            <h1 class='title'></h1>
+            <!-- 邂逅时刻log -->
+            <div class="xhsk-fixed-log">
+                <div class="fixed-log-con">
+                    <img id="logoImg" src="${request.contextPath}/images/icon/logo.png" alt="邂逅时刻">
+                </div>
+            </div>
+        </header>
+        <div class="content">
+            <div id="bidDiv">
+
+            </div>
+        </div>
+        </div>
+</div>
+
+<script type='text/javascript' src='//g.alicdn.com/sj/lib/zepto/zepto.min.js' charset='utf-8'></script>
+<script type='text/javascript' src='//g.alicdn.com/msui/sm/0.6.2/js/sm.min.js' charset='utf-8'></script>
+<script type='text/javascript' src='//g.alicdn.com/msui/sm/0.6.2/js/sm-extend.min.js' charset='utf-8'></script>
+<script type='text/javascript' src='https://res.wx.qq.com/open/js/jweixin-1.0.0.js'></script>
+<script>
+    var shareImgUrl = $('#headImgPath').val();
+    if(shareImgUrl.indexOf('http') == -1){
+        shareImgUrl = 'http://jk.zhangqidong.cn'+shareImgUrl;
+    }
+    wx.config({
+        appId: "${parmsMap['appId']}", // 必填，公众号的唯一标识
+        timestamp:${parmsMap['timestamp']} , // 必填，生成签名的时间戳
+        nonceStr: "${parmsMap['nonceStr']}", // 必填，生成签名的随机串
+        signature: "${parmsMap['signature']}",// 必填，签名，见附录1
+        jsApiList: [
+            'checkJsApi',
+            'onMenuShareTimeline',
+            'onMenuShareAppMessage',
+            'onMenuShareQQ'
+        ] // 必填，需要使用的JS接口列表，所有JS接口列表见附录2
+    });
+    wx.ready(function(){
+        wx.onMenuShareAppMessage({
+            title: '邂逅时刻',
+            desc: $('.title').text(),
+            link: window.location.href,
+            imgUrl: shareImgUrl,
+            trigger: function (res) {
+                //alert('用户点击发送给朋友');
+            },
+            success: function (res) {
+                //$.toast('已分享');
+            },
+            cancel: function (res) {
+                //$.toast('已取消分享');
+            },
+            fail: function (res) {
+                console.log('失败');
+            }
+        });
+        wx.onMenuShareTimeline({
+            title: $('.title').text(), // 分享标题
+            link: window.location.href, // 分享链接
+            imgUrl: shareImgUrl, // 分享图标
+            success: function () {
+                // 用户确认分享后执行的回调函数
+            },
+            cancel: function () {
+                // 用户取消分享后执行的回调函数
+            }
+        });
+
+    });
+</script>
+<script>
+
+$(function(){
+    $.showIndicator();
+    var currentUserId = '${currentUserId}';
+    function fixTime(orginTime){
+        var finalStr = '';
+        if(orginTime != null){
+            var strArray = orginTime.split(" ");
+            var strDate = strArray[0].split("-");
+            var strTime = strArray[1].split(":");
+            finalStr = strDate[1]+'月'+strDate[2]+'日' + strTime[0]+':'+strTime[1];
+        }
+        return finalStr;
+    }
+    function calTime(endTime){
+        var calTime = {};
+        var endDate =  new Date(endTime.replace(/-/g,"/"));
+        var temDate =  endDate.getTime() - new Date().getTime();
+        var dayResult = Math.floor(temDate/(24*3600*1000));
+        var hoursResult = Math.floor(temDate%(24*3600*1000)/(3600*1000));
+        calTime.day = dayResult;
+        calTime.hour = hoursResult;
+        return calTime;
+    }
+    function addItems(item,contentId) {
+        $('.title').text(item.title);
+        // 生成新条目的HTML
+        var html = '';
+
+        var score = item.score;
+        if(score == null){
+            score = 0;
+        }
+        var calTimeObj = calTime(item.endTime);
+        var btnHtml = '';
+        var attrHtml = '';
+        var endTimeHtml = '';
+        if(item.bidStatus == "ongoing"){
+            if(currentUserId != item.userId){
+                btnHtml = '<a href="#" class="button button-success" id="toSubmitBtn" bidid="'+item.bidId+'" style="border: 1px solid #0894ec;color: #0894ec">去抢飚</a>';
+            }
+
+            attrHtml = '<div class="row">'+
+                    '<div class="col-10"><i class="material-icons" >face</i></div>'+
+                    '<div class="col-30">'+item.createUserName+'&nbsp;&nbsp;</div>'+
+                    '<div class="col-10"><i class="material-icons">attach_money</i></div>'+
+                    '<div class="col-40">招标金额：'+item.price+'</div>'+
+                    '</div>'+
+                    '<div class="row">'+
+                    '<div class="col-10"><i class="material-icons">gps_fixed</i></div>'+
+                    '<div class="col-30">飚数：'+item.submitCount+'</div>'+
+                    '<div class="col-10"><i class="material-icons">hearing</i></div>'+
+                    '<div class="col-40">允许旁听：是</div>'+
+                    '</div>';
+            endTimeHtml =  '<div class="row">'+
+//                                                '<div class="col-5" ><i class="material-icons" style="font-size:  0.5rem">brightness_1</i></div>'+
+//                                                '<div class="col-50" style="font-size: smaller">发起时间：'+fixTime(item.optTime)+'</div>'+
+//                                                '<div class="col-5" style="margin-left: 3%"><i class="material-icons" style="font-size:  0.5rem">brightness_1</i></div>'+
+                    '<div class="col-25" >&nbsp;</div>'+
+                    '<div class="col-30" style="font-size: smaller">距离结束：'+calTimeObj.day+'天'+calTimeObj.hour+'小时</div>'+
+                    '<div class="col-25" >&nbsp;</div>'+
+                    '</div>';
+        }
+        if((item.bidStatus == "finish") && (item.canAudit == '1')){
+            var auditPrice = (item.price * 0.3).toFixed(2);
+            btnHtml = '<a href="#" class="button button-success" id="toAuditBtn" bidid="'+item.bidId+'" style="border: 1px solid #0894ec;color: #0894ec">'+auditPrice+'元旁听</a>';
+            attrHtml = '<div class="row">'+
+                    '<div class="col-10"><i class="material-icons" >face</i></div>'+
+                    '<div class="col-40">'+item.createUserName+'</div>'+
+                    '<div class="col-12"><i class="material-icons">stars</i></div>'+
+                    '<div class="col-30">'+score+'颗星</div>'+
+                    '</div>'+
+                    '<div class="row">'+
+                    '<div class="col-10"><i class="material-icons">attach_money</i></div>'+
+                    '<div class="col-40">招标金额：'+item.price+'</div>'+
+                    '<div class="col-12"><i class="material-icons">hearing</i></div>'+
+                    '<div class="col-30">允许旁听：是</div>'+
+                    '</div>'+
+                    '<div class="row">'+
+                    '<div class="col-10"><i class="material-icons">gps_fixed</i></div>'+
+                    '<div class="col-30">飚数：'+item.submitCount+'</div>'+
+                    '</div>';
+        }
+//        if(tabId == "heroTab"){
+//            btnHtml = '';
+//            attrHtml = '<div class="row">'+
+//                    '<div class="col-10"><i class="material-icons" >face</i></div>'+
+//                    '<div class="col-40">'+item.createUserName+'</div>'+
+//                    '<div class="col-12"><i class="material-icons">stars</i></div>'+
+//                    '<div class="col-30">'+score+'颗星</div>'+
+//                    '</div>'+
+//                    '<div class="row">'+
+//                    '<div class="col-10"><i class="material-icons">attach_money</i></div>'+
+//                    '<div class="col-40">招标金额：'+item.price+'</div>'+
+//                    '<div class="col-12"><i class="material-icons">hearing</i></div>'+
+//                    '<div class="col-30">允许旁听：是</div>'+
+//                    '</div>'+
+//                    '<div class="row">'+
+//                    '<div class="col-10"><i class="material-icons">gps_fixed</i></div>'+
+//                    '<div class="col-30">飚数：'+item.submitCount+'</div>'+
+//                    '</div>';
+//        }
+
+        html += '<div class="card">'+
+                '<div class="card-header"><i class="material-icons">blur_circular</i>'+item.title+'</div>'+
+                '<div class="card-content">'+
+                '<div class="card-content-inner">' +
+                attrHtml +
+                '<div class="row" >'+
+                '<div class="col-100"><hr style="height:1px;border:none;border-top:1px solid #E1E1E1;"/></div>'+
+                '</div>'+
+                '<div class="row" style="margin-top: 0.5rem;">'+
+                '<div class="col-100">'+item.content+'</div>'+
+                '</div>'+
+                '<div class="row" >'+
+                '<div class="col-100"><hr style="height:1px;border:none;border-top:1px solid #E1E1E1;"/></div>'+
+                '</div>'+
+                endTimeHtml+
+                '<div class="row">'+
+                '<div class="col-100" style="padding-top: 0.2rem">' +
+                btnHtml +
+                '</div>'+
+                '</div>'+
+                '</div>'+
+                '</div>'+
+
+                '</div>';
+
+
+        $('#'+contentId).append(html);
+
+
+    }
+    $.post('${request.contextPath}/bid/find-bid/'+$('#bidId').val(), function (response) {
+        $('#bidDiv').empty();
+        addItems(response,'bidDiv');
+        $.hideIndicator();
+    });
+    $("body").on( "click", "#toAuditBtn", function(){
+        var bidId = $(this).attr('bidid');
+        //window.location.href = '${request.contextPath}/bid/to-audit?bidId='+bidId;
+        var contextPath = encodeURIComponent('${request.contextPath}');
+        window.location.href = "https://open.weixin.qq.com/connect/oauth2/authorize?appid=wxcd8903dd6a9552eb&redirect_uri=http%3A%2F%2Fjk.zhangqidong.cn"+contextPath+"%2Fbid%2Fto-audit%2F&response_type=code&scope=snsapi_base&state="+bidId+"#wechat_redirect";
+    } );
+})
+</script>
+</body>
+</html>

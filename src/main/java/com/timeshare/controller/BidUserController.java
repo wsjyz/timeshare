@@ -67,6 +67,7 @@ public class BidUserController extends BaseController{
                 bid.setBidStatus(Contants.BID_STATUS.finish.toString());
                 bidService.modifyBid(bid);
                 bidUser.setIncomeFee(bid.getPrice());
+
             }
             String outTradeNo = CommonStringUtils.gen18RandomNumber();
             bidUser.setWxTradeNo(outTradeNo);
@@ -74,6 +75,9 @@ public class BidUserController extends BaseController{
             String bidUserId = bidUser.getUserId();
             UserInfo bidUserInfo = getCurrentUser(bidUserId);
             WxPayUtils.payToSeller(outTradeNo,bid.getPrice(),bidUserInfo.getOpenId());
+            //修改收入
+            bidUserInfo.setIncome(bidUserInfo.getIncome().add(bid.getPrice()));
+            userService.modifyUser(bidUserInfo);
         }
         return getSystemMessage(result);
     }

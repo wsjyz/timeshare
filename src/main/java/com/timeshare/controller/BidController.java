@@ -89,14 +89,13 @@ public class BidController extends BaseController{
         return "info";
     }
 
-    private SystemMessage saveBid(Bid bid, String userId){
+    private SystemMessage saveBid(Bid bid, String bidCreatUserId){
         if(bid != null){
-            UserInfo user = getCurrentUser(userId);
-            bid.setCreateUserName(user.getNickName());
-            bid.setUserId(userId);
+            UserInfo seller = getCurrentUser(bidCreatUserId);
+            bid.setCreateUserName(seller.getNickName());
+            bid.setUserId(bidCreatUserId);
             String result = "";
-            //TODO 测试时为1分
-            //item.setPrice(new BigDecimal("0.01"));
+
             if(StringUtils.isNotBlank(bid.getBidId())){
                 result = bidService.modifyBid(bid);
             }else{
@@ -104,6 +103,11 @@ public class BidController extends BaseController{
                     result = bidService.saveBid(bid);
                 }
 
+            }
+            if(bid.getBidStatus().equals(Contants.BID_STATUS.ongoing.toString())){
+                //修改支出
+                seller.setSumCost(seller.getIncome().add(bid.getPrice()));
+                userService.modifyUser(seller);
             }
 
            return getSystemMessage(result);
@@ -128,7 +132,7 @@ public class BidController extends BaseController{
 
         parms.setPageContentType(pageContentType);
         if(pageContentType.equals(Contants.PAGE_CONTENT_TYPE.mysubmit.toString())){
-
+            parms.setBidStatus(Contants.BID_STATUS.finish.toString());
             parms.setBidUserId(userId);
         }
         if(pageContentType.equals(Contants.PAGE_CONTENT_TYPE.myaudit.toString())){
@@ -154,6 +158,31 @@ public class BidController extends BaseController{
         }
 
         return returnStr;
+    }
+    @ResponseBody
+    @RequestMapping(value = "/find-bid/{bidId}")
+    public Bid findBidById(@PathVariable String bidId) {
+
+        Bid bid = bidService.findBidById(bidId);
+
+        return bid;
+    }
+
+    @RequestMapping(value = "/to-share-view/{bidId}")
+    public String toShare(@PathVariable String bidId,Model model,
+                          @CookieValue(value="time_sid", defaultValue="c9f7da60747f4cf49505123d15d29ac4") String userId,
+                          HttpServletRequest request) {
+        model.addAttribute("currentUserId", userId);
+        Bid bid = bidService.findBidById(bidId);
+        String bidCreatorHeadImg = getCurrentUser(bid.getUserId()).getHeadImgPath();
+        model.addAttribute("bid",bid);
+        model.addAttribute("bidCreatorHeadImg",bidCreatorHeadImg);
+
+        //微信jssdk相关代码
+        String url = WxUtils.getUrl(request);
+        Map<String,String> parmsMap = WxUtils.sign(url);
+        model.addAttribute("parmsMap",parmsMap);
+        return "bid/sharebid";
     }
 
     @RequestMapping(value = "/to-index")
@@ -318,6 +347,10 @@ public class BidController extends BaseController{
         //付款到相应的人
         payLogger.info("旁听费付款给发飙人"+seller.getNickName());
         WxPayUtils.payToSeller(wxTradeNo,bid.getPrice().multiply(new BigDecimal("0.15")),seller.getOpenId());
+        //修改收入
+        seller.setIncome(seller.getIncome().add(bid.getPrice()));
+        userService.modifyUser(seller);
+
         //查找成功应飚人
         UserInfo winUser = new UserInfo();
         BidUser bidUser = new BidUser();
@@ -328,8 +361,14 @@ public class BidController extends BaseController{
             String winUserId = winUserList.get(0).getUserId();
             winUser = getCurrentUser(winUserId);
         }
-        payLogger.info("旁听费付款给应飚人"+seller.getNickName());
+        payLogger.info("旁听费付款给应飚人"+winUser.getNickName());
         WxPayUtils.payToSeller(wxTradeNo,bid.getPrice().multiply(new BigDecimal("0.15")),winUser.getOpenId());
+        //修改收入
+        winUser.setIncome(winUser.getIncome().add(bid.getPrice()));
+        userService.modifyUser(winUser);
+        //修改支出
+        buyer.setSumCost(buyer.getIncome().add(bid.getPrice()));
+        userService.modifyUser(buyer);
         return message;
     }
 
