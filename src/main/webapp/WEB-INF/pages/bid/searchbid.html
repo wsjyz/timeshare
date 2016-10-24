@@ -1,0 +1,342 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>搜索</title>
+    <meta name="viewport" content="initial-scale=1, maximum-scale=1">
+    <link rel="shortcut icon" href="/favicon.ico">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <link rel="stylesheet" href="//g.alicdn.com/msui/sm/0.6.2/css/sm.min.css">
+    <link rel="stylesheet" href="//g.alicdn.com/msui/sm/0.6.2/css/sm-extend.min.css">
+    <link rel="apple-touch-icon-precomposed" href="/assets/img/apple-touch-icon-114x114.png">
+    <!--<link rel="stylesheet" href="${request.contextPath}/css/time.css">-->
+    <link rel="stylesheet" href="${request.contextPath}/css/material-icon.css">
+    <script src="//g.alicdn.com/sj/lib/zepto/zepto.min.js"></script>
+    <style>
+        .search-input input[type="search"]{padding-left: 1.4rem;}
+        .row .col-10{
+            margin-left: 10%
+        }
+        .row .col-30{
+            margin-left: 4%
+        }
+        .float-btn-div i:active {
+            color: #BCEE68;
+        }
+    </style>
+</head>
+<body>
+
+<div class="page-group" >
+
+    <div id="page-swiper" class="page page-current">
+
+        <div class="bar bar-header-secondary" style="top:0;">
+            <div class="searchbar">
+                <a class="searchbar-cancel">取消</a>
+                <div class="search-input">
+                    <label class="icon icon-search" for="search"></label>
+                    <form id="searchForm"><input type="search" id='search' placeholder='输入卖家or项目名称...' value="${keyword}"/></form>
+                </div>
+            </div>
+        </div>
+
+        <div class="content" id=''>
+
+            <div id="bid_list" class="infinite-scroll">
+
+                <div class="list-block media-list" style="margin-top:  0px;">
+
+                </div>
+                <!-- 加载提示符 -->
+                <div class="infinite-scroll-preloader">
+                    <div class="preloader">
+                    </div>
+                </div>
+            </div>
+
+
+        </div>
+    </div>
+
+</div>
+<script src="//g.alicdn.com/msui/sm/0.6.2/js/sm.min.js"></script>
+<script src="//g.alicdn.com/msui/sm/0.6.2/js/sm-extend.min.js"></script>
+<script>
+	// setTimeout(startInit, 300);
+    var currentUserId = '${currentUserId}';
+    function toViewUserItem(userId,itemId){
+        window.location.href = "${request.contextPath}/user/to-view-items/"+userId+"/"+itemId;
+    }
+    function fixTime(orginTime){
+        var finalStr = '';
+        if(orginTime != null){
+            var strArray = orginTime.split(" ");
+            var strDate = strArray[0].split("-");
+            var strTime = strArray[1].split(":");
+            finalStr = strDate[1]+'月'+strDate[2]+'日' + strTime[0]+':'+strTime[1];
+        }
+        return finalStr;
+    }
+    function calTime(endTime){
+        var calTime = {};
+        var endDate =  new Date(endTime.replace(/-/g,"/"));
+        var temDate =  endDate.getTime() - new Date().getTime();
+        var dayResult = Math.floor(temDate/(24*3600*1000));
+        var hoursResult = Math.floor(temDate%(24*3600*1000)/(3600*1000))
+        calTime.day = dayResult;
+        calTime.hour = hoursResult;
+        return calTime;
+    }
+    $(document).on("pageInit", function() {
+        var searchHeight = $('.bar-header-secondary').css('height');
+        $('.content').css('top',searchHeight);
+        $.showIndicator();
+        //多个标签页下的无限滚动
+        var loading = false;
+        // 每次加载添加多少条目
+        var itemsPerLoad = 10;
+        // 最多可加载的条目
+        var maxItems = 30;
+        var  lastIndex = $('.list-block .card').length;
+        function addItems(number, lastIndex,data) {
+            // 生成新条目的HTML
+            var html = '';
+            var dataLength = 0;
+            $.each(data, function(i, item){
+                var score = item.score;
+                if(score == null){
+                    score = 0;
+                }
+                var calTimeObj = calTime(item.endTime);
+                var startTime = "";
+                var btnHtml = '';
+                var attrHtml = '';
+                var endTimeHtml = '';
+                if(item.bidStatus == "ongoing"){
+                    if(currentUserId != item.userId){
+                        btnHtml = '<a href="#" class="button button-success" id="toSubmitBtn" bidid="'+item.bidId+'" style="border: 1px solid #0894ec;color: #0894ec">去抢飚</a>';
+                    }
+
+                    attrHtml = '<div class="row">'+
+                            '<div class="col-10"><i class="material-icons" >face</i></div>'+
+                            '<div class="col-30">'+item.createUserName+'&nbsp;&nbsp;</div>'+
+                            '<div class="col-10"><i class="material-icons">attach_money</i></div>'+
+                            '<div class="col-40">招标金额：'+item.price+'</div>'+
+                            '</div>'+
+                            '<div class="row">'+
+                            '<div class="col-10"><i class="material-icons">gps_fixed</i></div>'+
+                            '<div class="col-30">飚数：'+item.submitCount+'</div>'+
+                            '<div class="col-10"><i class="material-icons">hearing</i></div>'+
+                            '<div class="col-40">允许旁听：是</div>'+
+                            '</div>';
+                    endTimeHtml =  '<div class="row">'+
+//                                                '<div class="col-5" ><i class="material-icons" style="font-size:  0.5rem">brightness_1</i></div>'+
+//                                                '<div class="col-50" style="font-size: smaller">发起时间：'+fixTime(item.optTime)+'</div>'+
+//                                                '<div class="col-5" style="margin-left: 3%"><i class="material-icons" style="font-size:  0.5rem">brightness_1</i></div>'+
+                            '<div class="col-25" >&nbsp;</div>'+
+                            '<div class="col-30" style="font-size: smaller">距离结束：'+calTimeObj.day+'天'+calTimeObj.hour+'小时</div>'+
+                            '<div class="col-25" >&nbsp;</div>'+
+                            '</div>';
+                }
+                if(item.bidStatus == "finish" && item.canAudit == "1"){
+                    var auditPrice = (item.price * 0.3).toFixed(2);
+                    btnHtml = '<a href="#" class="button button-success" id="toAuditBtn" bidid="'+item.bidId+'" style="border: 1px solid #0894ec;color: #0894ec">'+auditPrice+'元旁听</a>';
+                    attrHtml = '<div class="row">'+
+                            '<div class="col-10"><i class="material-icons" >face</i></div>'+
+                            '<div class="col-40">'+item.createUserName+'</div>'+
+                            '<div class="col-12"><i class="material-icons">stars</i></div>'+
+                            '<div class="col-30">'+score+'颗星</div>'+
+                            '</div>'+
+                            '<div class="row">'+
+                            '<div class="col-10"><i class="material-icons">attach_money</i></div>'+
+                            '<div class="col-40">招标金额：'+item.price+'</div>'+
+                            '<div class="col-12"><i class="material-icons">hearing</i></div>'+
+                            '<div class="col-30">允许旁听：是</div>'+
+                            '</div>'+
+                            '<div class="row">'+
+                            '<div class="col-10"><i class="material-icons">gps_fixed</i></div>'+
+                            '<div class="col-30">飚数：'+item.submitCount+'</div>'+
+                            '</div>';
+                }
+                if(item.bidStatus == "finish" && (item.canAudit == "0" || item.canAudit == null)){
+                    btnHtml = '';
+                    attrHtml = '<div class="row">'+
+                            '<div class="col-10"><i class="material-icons" >face</i></div>'+
+                            '<div class="col-40">'+item.createUserName+'</div>'+
+                            '<div class="col-12"><i class="material-icons">stars</i></div>'+
+                            '<div class="col-30">'+score+'颗星</div>'+
+                            '</div>'+
+                            '<div class="row">'+
+                            '<div class="col-10"><i class="material-icons">attach_money</i></div>'+
+                            '<div class="col-40">招标金额：'+item.price+'</div>'+
+                            '<div class="col-12"><i class="material-icons">hearing</i></div>'+
+                            '<div class="col-30">允许旁听：是</div>'+
+                            '</div>'+
+                            '<div class="row">'+
+                            '<div class="col-10"><i class="material-icons">gps_fixed</i></div>'+
+                            '<div class="col-30">飚数：'+item.submitCount+'</div>'+
+                            '</div>';
+                }
+
+                html += '<div class="card">'+
+                        '<div class="card-header"><i class="material-icons">blur_circular</i>'+item.title+'</div>'+
+                        '<div class="card-content">'+
+                        '<div class="card-content-inner">' +
+                        attrHtml +
+                        '<div class="row" >'+
+                        '<div class="col-100"><hr style="height:1px;border:none;border-top:1px solid #E1E1E1;"/></div>'+
+                        '</div>'+
+                        '<div class="row" style="margin-top: 0.5rem;">'+
+                        '<div class="col-100">'+item.content+'</div>'+
+                        '</div>'+
+                        '<div class="row" >'+
+                        '<div class="col-100"><hr style="height:1px;border:none;border-top:1px solid #E1E1E1;"/></div>'+
+                        '</div>'+
+                        endTimeHtml+
+                        '<div class="row">'+
+                        '<div class="col-100" style="padding-top: 0.2rem">' +
+                        btnHtml +
+                        '</div>'+
+                        '</div>'+
+                        '</div>'+
+                        '</div>'+
+
+                        '</div>';
+                dataLength += 1;
+            });
+            if(dataLength == 0){
+                $('.no-record').show();
+                $('.infinite-scroll-preloader').remove();
+            }else{
+                $('.no-record').hide();
+                $('.infinite-scroll-preloader').hide();
+                // 添加新条目
+                //$('.active.infinite-scroll .list-block').append(html);
+                $('#bid_list.infinite-scroll .list-block').append(html);
+            }
+
+
+        }
+        $.post('${request.contextPath}/bid/search', {keyword:$('#search').val(),startIndex: 0,loadSize:itemsPerLoad}, function (response) {
+            $('#bid_list.infinite-scroll .list-block').empty();
+            //预先加载20条
+            // new XhskSwiper(response);
+            addItems(itemsPerLoad, 0,response);
+            $.hideIndicator();
+        });
+
+
+        $(document).on('infinite', function() {
+            // 如果正在加载，则退出
+            if (loading) return;
+            // 设置flag
+            loading = true;
+            var tabIndex = 0;
+            var dataType = 'all';
+
+            lastIndex = $('.list-block').eq(tabIndex).children('.card').length;
+            $.post('${request.contextPath}/bid/list-by-condition', {condition:dataType,startIndex: lastIndex,loadSize:itemsPerLoad}, function (response) {
+                setTimeout(function() {
+                    // 重置加载flag
+                    loading = false;
+
+                    if (lastIndex >= maxItems) {
+                        // 加载完毕，则注销无限加载事件，以防不必要的加载
+                        $.detachInfiniteScroll($('.infinite-scroll'));
+                        // 删除加载提示符
+                        $('.infinite-scroll-preloader').remove();
+                        return;
+                    }
+                    // 添加新条目
+                    addItems(itemsPerLoad, lastIndex,response);
+                    // 更新最后加载的序号
+                    lastIndex = $('.list-block .card').length;
+                    //容器发生改变,如果是js滚动，需要刷新滚动
+                    $.refreshScroller();
+                }, 1000);
+            });
+        });
+    });
+    $("body").on( "click", "#toSubmitBtn", function(){
+        var bidId = $(this).attr('bidid');
+        window.location.href = '${request.contextPath}/bidsubmit/to-submit/'+bidId;
+    } );
+    $("body").on( "click", "#toAuditBtn", function(){
+        var bidId = $(this).attr('bidid');
+        //window.location.href = '${request.contextPath}/bid/to-audit?bidId='+bidId;
+        var contextPath = encodeURIComponent('${request.contextPath}');
+        window.location.href = "https://open.weixin.qq.com/connect/oauth2/authorize?appid=wxcd8903dd6a9552eb&redirect_uri=http%3A%2F%2Fjk.zhangqidong.cn"+contextPath+"%2Fbid%2Fto-audit%2F&response_type=code&scope=snsapi_base&state="+bidId+"#wechat_redirect";
+    } );
+
+    $("body").on( "click", "#myPageBtn", function(){
+        window.location.href = '${request.contextPath}/wx/to-get-open-id';
+    } );
+    $("body").on( "click", "#bidIndexBtn", function(){
+        window.location.href = "${request.contextPath}/bid/to-index";
+    } );
+
+    $("body").on( "submit", "#searchForm", function(){
+        var keyword = $('#search').val();
+        if(keyword == ''){
+            return false;
+        }
+        searchFunc();
+        return false;
+    } );
+    var searchFunc = function(){
+        $.post('${request.contextPath}/item/search', {keyword:$('#search').val(),startIndex: 0,loadSize:itemsPerLoad}, function (response) {
+            $('.infinite-scroll .list-block').empty();
+            //预先加载20条
+            addItems(itemsPerLoad, 0,response);
+            $.hideIndicator();
+        });
+    };
+    $.init();
+</script>
+
+<script>
+    // 重写底部botton事件
+    $(function(){
+        var $arr=$('.tab-item');
+        var $len=$arr.length;
+        $('.tab-item').each(function(index,ele){
+            var $childDOM=$(ele).children('.tab-label');
+            $($childDOM).on('touchstart',function(e){
+                if($(ele).hasClass('addactive')){
+                    return;
+                }
+                for(var i=0;i<$len;i++){
+                    if($($arr[i]).hasClass('active')){
+                        $($arr[i]).removeClass('active');
+                    }
+                    if($($arr[i]).hasClass('addactive')){
+                        $($arr[i]).removeClass('addactive');
+                    }
+                }
+                $(ele).addClass('addactive');
+            })
+        });
+        $('.tab-item').each(function(index,ele){
+            $(ele).on('touchstart',function(e){
+                if($(ele).hasClass('addactive')){
+                    return;
+                }
+                for(var i=0;i<$len;i++){
+                    if($($arr[i]).hasClass('active')){
+                        $($arr[i]).removeClass('active');
+                    }
+                    if($($arr[i]).hasClass('addactive')){
+                        $($arr[i]).removeClass('addactive');
+                    }
+                }
+                $(ele).addClass('addactive');
+            })
+        });
+    })
+
+</script>
+</body>
+</html>

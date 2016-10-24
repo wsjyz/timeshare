@@ -6,10 +6,10 @@ import com.timeshare.domain.SystemMessage;
 import com.timeshare.domain.UserInfo;
 import com.timeshare.service.BidService;
 import com.timeshare.service.BidUserService;
-import com.timeshare.utils.CommonStringUtils;
-import com.timeshare.utils.Contants;
-import com.timeshare.utils.WxPayUtils;
+import com.timeshare.utils.*;
 import org.apache.commons.lang3.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -24,6 +24,8 @@ import java.util.List;
 @Controller
 @RequestMapping(value = "/biduser")
 public class BidUserController extends BaseController{
+
+    protected Logger logger = LoggerFactory.getLogger(BidUserController.class);
 
     @Autowired
     BidUserService bidUserService;
@@ -78,6 +80,17 @@ public class BidUserController extends BaseController{
             //修改收入
             bidUserInfo.setIncome(bidUserInfo.getIncome().add(bid.getPrice()));
             userService.modifyUser(bidUserInfo);
+
+            //发短信通知中标者
+            SmsContentBean bean = new SmsContentBean();
+            bean.setTemplateCode("SMS_21235044");
+            bean.setToMobile(bidUserInfo.getMobile());
+            bean.setContent("{\"bidName\":\""+bid.getTitle()+"\",\"bidPrice\":\""+bid.getPrice()+"\"}");
+            System.out.println("您的应飚“"+bid.getTitle()+"”已被飚主接受，项目款项"+bid.getPrice()+"元已入账，请进入微信服务号“邂逅时刻”查看");
+            String response = SmsUtils.senMessage(bean);
+            if(response.indexOf("error_response") != -1){
+                logger.error(response);
+            }
         }
         return getSystemMessage(result);
     }

@@ -278,19 +278,19 @@
 
 	        }
 	        $.post('${request.contextPath}/bid/list-by-condition', {condition:'all',startIndex: 0,loadSize:itemsPerLoad}, function (response) {
-	            $('#recommendTab.infinite-scroll .list-block').empty();
+	            $('#bidHallTab.infinite-scroll .list-block').empty();
 	            //预先加载20条
 	            // new XhskSwiper(response);
 	            addItems(itemsPerLoad, 0,response,'bidHallTab');
 	            $.hideIndicator();
 	        });
 	        $.post('${request.contextPath}/bid/list-by-condition', {condition:'audit',startIndex: 0,loadSize:itemsPerLoad}, function (response) {
-	            $('#newTab.infinite-scroll .list-block').empty();
+	            $('#auditTab.infinite-scroll .list-block').empty();
 	            //预先加载20条
 	            addItems(itemsPerLoad, 0,response,'auditTab');
 	        });
 	        $.post('${request.contextPath}/bid/list-by-condition', {condition:'complete',startIndex: 0,loadSize:itemsPerLoad}, function (response) {
-	            $('#hotTab.infinite-scroll .list-block').empty();
+	            $('#heroTab.infinite-scroll .list-block').empty();
 	            //预先加载20条
 	            addItems(itemsPerLoad, 0,response,'heroTab');
 	        });
@@ -364,7 +364,7 @@
 	        if(keyword == ''){
 	            return false;
 	        }
-	        $('form').attr('action','${request.contextPath}/item/to-search');
+	        $('form').attr('action','${request.contextPath}/bid/to-search');
 	        $('form').submit();
 	    } );
 </script>
@@ -414,7 +414,7 @@
         }
         return htmlDomObj;
     }
-    $.post('${request.contextPath}/item/list-by-condition', {condition:'recommend',startIndex: 0,loadSize:10}, function (response) {
+    $.post('${request.contextPath}/bid/list-by-condition', {condition:'all',startIndex: 0,loadSize:10}, function (response) {
         new XhskSwiper(response);
             $.init();
         });

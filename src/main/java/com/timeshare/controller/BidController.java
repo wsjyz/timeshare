@@ -346,10 +346,21 @@ public class BidController extends BaseController{
         SystemMessage message = getSystemMessage(result);
         //付款到相应的人
         payLogger.info("旁听费付款给发飙人"+seller.getNickName());
-        WxPayUtils.payToSeller(wxTradeNo,bid.getPrice().multiply(new BigDecimal("0.15")),seller.getOpenId());
+        BigDecimal sellerFee = bid.getPrice().multiply(new BigDecimal("0.15"));
+        WxPayUtils.payToSeller(wxTradeNo,sellerFee,seller.getOpenId());
         //修改收入
         seller.setIncome(seller.getIncome().add(bid.getPrice()));
         userService.modifyUser(seller);
+        //发短信给发飙人
+        SmsContentBean bean = new SmsContentBean();
+        bean.setTemplateCode("SMS_21390019");
+        bean.setToMobile(seller.getMobile());
+        bean.setContent("{\"bidName\":\""+bid.getTitle()+"\",\"bidPrice\":\""+sellerFee+"\"}");
+        System.out.println("您发的飚“"+bid.getTitle()+"”有人旁听了，项目款项"+sellerFee+"元已入账，请进入微信服务号“邂逅时刻”查看");
+        String response = SmsUtils.senMessage(bean);
+        if(response.indexOf("error_response") != -1){
+            logger.error(response);
+        }
 
         //查找成功应飚人
         UserInfo winUser = new UserInfo();
@@ -366,10 +377,40 @@ public class BidController extends BaseController{
         //修改收入
         winUser.setIncome(winUser.getIncome().add(bid.getPrice()));
         userService.modifyUser(winUser);
-        //修改支出
+        //发短信给中标人
+        bean = new SmsContentBean();
+        bean.setTemplateCode("SMS_21700251");
+        bean.setToMobile(winUser.getMobile());
+        bean.setContent("{\"bidName\":\""+bid.getTitle()+"\",\"bidPrice\":\""+sellerFee+"\"}");
+        System.out.println("您的应飚“"+bid.getTitle()+"”有人旁听了，项目款项"+sellerFee+"元已入账，请进入微信服务号“邂逅时刻”查看");
+        response = SmsUtils.senMessage(bean);
+        if(response.indexOf("error_response") != -1){
+            logger.error(response);
+        }
+
+
+        //修改旁听者支出
         buyer.setSumCost(buyer.getIncome().add(bid.getPrice()));
         userService.modifyUser(buyer);
         return message;
     }
+
+    @RequestMapping(value = "/to-search")
+    public String toSearch(@RequestParam String keyword,Model model,@CookieValue(value="time_sid", defaultValue="c9f7da60747f4cf49505123d15d29ac4") String userId) {
+        model.addAttribute("currentUserId", userId);
+        model.addAttribute("keyword",keyword);
+        return "bid/searchbid";
+    }
+
+    @RequestMapping(value = "/search")
+    @ResponseBody
+    public List<Bid> search(@RequestParam String keyword ,@RequestParam int startIndex, @RequestParam int loadSize) {
+        Bid bid = new Bid();
+        bid.setTitle(keyword);
+        bid.setCreateUserName(keyword);
+        List<Bid> bidList = bidService.searchBidList(bid,startIndex,loadSize);
+        return bidList;
+    }
+
 
 }

@@ -19,4 +19,6 @@ public interface BidDAO {
 
     int findBidCount(Bid bid);
 
+    List<Bid> searchBidList(Bid bid, int startIndex, int loadSize);
+
 }

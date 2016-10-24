@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <title><#if pageContentType == "mybid">我的飚<#else>我飚的</#if></title>
+    <title><#if pageContentType == "mybid">我的飚<#elseif pageContentType == "myaudit">我旁听过的飚<#else>我飚的</#if></title>
     <meta name="viewport" content="initial-scale=1, maximum-scale=1">
     <link rel="shortcut icon" href="/favicon.ico">
     <meta name="apple-mobile-web-app-capable" content="yes">
@@ -159,7 +159,7 @@
         <!--<div class="content" id=''>-->
             <header class="bar bar-nav">
                 <a class="icon icon-left pull-left back"></a>
-                <h1 class="title"><#if pageContentType == "mybid">我的飚<#else>我飚的</#if></h1>
+                <h1 class="title"><#if pageContentType == "mybid">我的飚<#elseif pageContentType == "myaudit">我旁听过的飚<#else>我飚的</#if></h1>
             </header>
 
             <div class="content infinite-scroll infinite-scroll-bottom" data-distance="100">
@@ -266,6 +266,7 @@
 
     }
     $.post('${request.contextPath}/bid/list', {pageContentType:$('#pageContentType').val(),startIndex: 0,loadSize:itemsPerLoad}, function (response) {
+        $('.infinite-scroll-bottom .list-block').empty();
         //预先加载20条
         addItems(itemsPerLoad, 0,response);
     });

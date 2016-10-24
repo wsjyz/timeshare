@@ -162,6 +162,25 @@ public class BidDAOImpl extends BaseDAO implements BidDAO {
     }
 
     @Override
+    public List<Bid> searchBidList(Bid bid, int startIndex, int loadSize) {
+        StringBuilder sql =  new StringBuilder("select * from t_bid i where 1=1 ");//飚首页
+
+        sql.append(" and (i.bid_status = '"+Contants.BID_STATUS.finish+"' or i.bid_status = '"+Contants.BID_STATUS.ongoing+"')");
+        if (StringUtils.isNotEmpty(bid.getCanAudit())) {
+            sql.append(" and i.can_audit = '"+bid.getCanAudit()+"' ");
+        }
+        if(StringUtils.isNotBlank(bid.getUserId())){
+            sql.append(" and i.create_user_id = '"+bid.getUserId()+"' ");
+        }
+        sql.append(" and (i.title like '%"+bid.getTitle()+"%' or i.create_user_name like '%"+bid.getCreateUserName()+"%')");
+
+        sql.append(" and i.end_time >= CURRENT_TIMESTAMP() ");
+
+        sql.append("  order by i.opt_time desc limit ?,?");
+        return getJdbcTemplate().query(sql.toString(),new Object[]{startIndex,loadSize},new BidRowMapper());
+    }
+
+    @Override
     public int findBidCount(Bid bid) {
         StringBuilder countSql = new StringBuilder(
                 "select count(*) from t_bid where 1=1 ");
