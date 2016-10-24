@@ -155,14 +155,14 @@
             </div>
         </div>
         <nav class="bar bar-tab">
-            <a class="tab-item " href="#" id="indexBtn">
-                <span class="tab-label buy-time">买时间</span>
+            <a class="tab-item " id="indexBtn" href="#">
+                <span class="tab-label buy-time">约</span>
+            </a>
+            <a class="tab-item" id="bidIndexBtn" href="#">
+                <span class="tab-label sell-time">飚</span>
             </a>
             <a class="tab-item active" href="#">
-                <span class="tab-label sell-time">卖时间</span>
-            </a>
-            <a class="tab-item" href="#" id="myPageBtn">
-                <span class="tab-label my-time">我的</span>
+                <span class="tab-label my-time">我</span>
             </a>
         </nav>
         <!--<div class="content" id=''>-->
@@ -329,11 +329,14 @@
     function toView(id){
         window.location.href = "${request.contextPath}/item/to-view/"+id;
     }
+    $("body").on( "click", "#myPageBtn", function(){
+        window.location.href = '${request.contextPath}/wx/to-get-open-id';
+    } );
+    $("body").on( "click", "#bidIndexBtn", function(){
+        window.location.href = "${request.contextPath}/bid/to-index";
+    } );
     $("body").on( "click", "#indexBtn", function(){
         window.location.href = "${request.contextPath}/index/to-index";
-    } );
-    $("body").on( "click", "#myPageBtn", function(){
-        window.location.href = '${request.contextPath}/user/to-my-page';
     } );
 </script>
 <script>

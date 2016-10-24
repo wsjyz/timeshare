@@ -358,6 +358,9 @@
         $("body").on( "click", "#bidIndexBtn", function(){
             window.location.href = "${request.contextPath}/bid/to-index";
         } );
+    $("body").on( "click", "#indexBtn", function(){
+        window.location.href = "${request.contextPath}/index/to-index";
+    } );
 
 	    $("body").on( "submit", "#searchForm", function(){
 	        var keyword = $('#search').val();

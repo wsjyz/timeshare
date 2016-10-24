@@ -11,6 +11,7 @@
     <link rel="stylesheet" href="//g.alicdn.com/msui/sm/0.6.2/css/sm.min.css">
     <link rel="stylesheet" href="//g.alicdn.com/msui/sm/0.6.2/css/sm-extend.min.css">
     <link rel="apple-touch-icon-precomposed" href="/assets/img/apple-touch-icon-114x114.png">
+    <link rel="stylesheet" href="${request.contextPath}/css/material-icon.css">
     <style type="text/css">
         body{font-family: Arial, Helvetica, sans-serif;}
         .infinite-scroll-preloader {
@@ -214,6 +215,12 @@
         .xhsk-fixed-log .fixed-log-con,
         .xhsk-fixed-log img{width:1.7rem;height: 1.7rem;font-size: 12px;}
         .xhsk-fixed-log img{vertical-align: top;}
+        .float-btn-div{
+            position: fixed;top: 15rem;z-index: 100;right: 0rem;
+        }
+        .float-btn-div i:active {
+            color: #BCEE68;
+        }
     </style>
     <script src="//g.alicdn.com/sj/lib/zepto/zepto.min.js"></script>
 
@@ -222,16 +229,16 @@
 <div class="page-group" >
 
     <div id="page-swiper" class="page">
-       
+
         <nav class="bar bar-tab">
-            <a class="tab-item active" href="#">
-                <span class="tab-label buy-time">买时间</span>
+            <a class="tab-item active" href="#" id="indexBtn">
+                <span class="tab-label buy-time">约</span>
             </a>
-            <a class="tab-item" id="mySellBtn">
-                <span class="tab-label sell-time">卖时间</span>
+            <a class="tab-item" id="bidIndexBtn">
+                <span class="tab-label sell-time">飚</span>
             </a>
             <a class="tab-item" href="#" id="myPageBtn">
-                <span class="tab-label my-time">我的</span>
+                <span class="tab-label my-time">我</span>
             </a>
         </nav>
 
@@ -308,6 +315,11 @@
                     </div>
                 </div>
 
+            <a id="floatBtn">
+                <div class="float-btn-div">
+                    <i class="material-icons fixed" style="font-size: 3rem;">add_circle_outline</i>
+                </div>
+            </a>
 
         </div>
     </div>
@@ -454,13 +466,19 @@
 	        }
 
 	    });
-	    $("body").on( "click", "#myPageBtn", function(){
-	        window.location.href = '${request.contextPath}/wx/to-get-open-id';
-	    } );
-	    $("body").on( "click", "#mySellBtn", function(){
-	        var backUrl = '/item/to-list';
-	        window.location.href = '${request.contextPath}/wx/to-get-open-id?backUrl='+encodeURIComponent(backUrl);
-	    } );
+    $("body").on( "click", "#myPageBtn", function(){
+        window.location.href = '${request.contextPath}/wx/to-get-open-id';
+    } );
+    $("body").on( "click", "#bidIndexBtn", function(){
+        window.location.href = "${request.contextPath}/bid/to-index";
+    } );
+    $("body").on( "click", "#indexBtn", function(){
+        window.location.href = "${request.contextPath}/index/to-index";
+    } );
+    $("body").on( "click", "#floatBtn", function(){
+        var backUrl = '/item/to-add';
+        window.location.href = '${request.contextPath}/wx/to-get-open-id?backUrl='+encodeURIComponent(backUrl);
+    } );
 	    $("body").on( "submit", "#searchForm", function(){
 	        var keyword = $('#search').val();
 	        if(keyword == ''){
