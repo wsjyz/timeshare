@@ -559,11 +559,11 @@
         }
         var itemType = $('input[name="itemType"]:checked ').val();
         var price = $('#price').val();
-        if(itemType == 'tel' && price > 50){
-            $.toast('电话直连的价格不能超过50元');
+        if(itemType == 'tel' && (price < 1 || price > 500)){
+            $.toast('电话直连的价格为1-500元');
             return false;
-        }else if(itemType == 'meet' && price > 200){
-            $.toast('直约面对面的价格不能超过200元');
+        }else if(itemType == 'meet' && (price < 1 || price > 1000)){
+            $.toast('直约面对面的价格为1-1000元');
             return false;
         }
         return true;
