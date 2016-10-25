@@ -375,7 +375,7 @@
                             <div class="item-media"><i class="icon icon-form-password"></i></div>
                             <div class="item-inner jz-addtip-text">
                                 <div class="item-input" style="line-height:2.2rem;">计费方式：<input type="text" id="price" name="price"
-                                                                  value="<#if item.price??>${item.price}<#else>50</#if>" style="width: 1.5rem;display: inline"/></div>
+                                                                  value="<#if item.price??>${item.price}<#else></#if>" style="width: 1.5rem;display: inline"/></div>
                                 <div class="item-input" style="width:100%;font-size:.7rem;">元/<input type="text" name="duration" id="durationId"
                                                                   value="<#if item.duration??>${item.duration}<#else>60</#if>" style="width: 1.5rem;display: inline;">分钟</div>
 
@@ -559,11 +559,11 @@
         }
         var itemType = $('input[name="itemType"]:checked ').val();
         var price = $('#price').val();
-        if(itemType == 'tel' && (price < 1 || price > 500)){
-            $.toast('电话直连的价格为1-500元');
+        if(itemType == 'tel' && (price < 2 || price > 500 || price =='')){
+            $.toast('电话直连的价格为2-500元');
             return false;
-        }else if(itemType == 'meet' && (price < 1 || price > 1000)){
-            $.toast('直约面对面的价格为1-1000元');
+        }else if(itemType == 'meet' && (price < 2 || price > 1000 || price =='')){
+            $.toast('直约面对面的价格为2-1000元');
             return false;
         }
         return true;
