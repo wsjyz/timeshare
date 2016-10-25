@@ -56,16 +56,31 @@ public class BidSubmitServiceImpl implements BidSubmitService {
             bidUserDAO.modifyBidUser(bidUser);
         }
         //发短信
-        UserInfo bidCreator = userService.findUserByUserId(bid.getUserId());
         SmsContentBean bean = new SmsContentBean();
-        bean.setTemplateCode("SMS_21385035");
-        bean.setToMobile(bidCreator.getMobile());
-        bean.setContent("{\"bidName\":\""+bid.getTitle()+"\"}");
-        System.out.println("向卖家"+bidCreator.getMobile()+"发短信："+"您的“"+bid.getTitle()+"”有人应飚了，请进入微信服务号“邂逅时刻 ”查看");
-        String response = SmsUtils.senMessage(bean);
-        if(response.indexOf("error_response") != -1){
-            logger.error(response);
+        UserInfo bidCreator = userService.findUserByUserId(bid.getUserId());
+        if(bidCreator.getUserId().equals(submit.getUserId())){//回答别人的应飚
+            UserInfo bidUserInfo = userService.findUserByUserId(bidUser.getUserId());
+            bean = new SmsContentBean();
+            bean.setTemplateCode("SMS_22275127");
+            bean.setToMobile(bidUserInfo.getMobile());
+            bean.setContent("{\"bidName\":\""+bid.getTitle()+"\"}");
+            System.out.println("向"+bidCreator.getMobile()+"发短信："+"飚主回答了您的“"+bid.getTitle()+"”应飚，请进入微信服务号“邂逅时刻 ”查看");
+            String response = SmsUtils.senMessage(bean);
+            if(response.indexOf("error_response") != -1){
+                logger.error(response);
+            }
+        }else{
+            bean = new SmsContentBean();
+            bean.setTemplateCode("SMS_21385035");
+            bean.setToMobile(bidCreator.getMobile());
+            bean.setContent("{\"bidName\":\""+bid.getTitle()+"\"}");
+            System.out.println("向"+bidCreator.getMobile()+"发短信："+"您的“"+bid.getTitle()+"”有人应飚了，请进入微信服务号“邂逅时刻 ”查看");
+            String response = SmsUtils.senMessage(bean);
+            if(response.indexOf("error_response") != -1){
+                logger.error(response);
+            }
         }
+
         return bidSubmitDAO.saveBidSubmit(submit);
     }
 
