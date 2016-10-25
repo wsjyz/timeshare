@@ -341,7 +341,9 @@
                 buttons1 = [btnModifyBid];
             }
         }else if(pageContentType == 'mysubmit'){
-            buttons1 = [btnToSubmit];
+            if(bidStatus == 'ongoing'){
+                buttons1 = [btnToSubmit];
+            }
         }else if(pageContentType == 'myaudit'){
             buttons1 = [btnToAudit];
         }

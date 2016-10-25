@@ -34,7 +34,7 @@
 <div class="page-group" >
 
     <div id="page-swiper" class="page">
-       
+
         <nav class="bar bar-tab">
             <a class="tab-item" href="#" id="indexBtn">
                 <span class="tab-label buy-time">约</span>
@@ -74,7 +74,7 @@
                 <a href="#auditTab" class="tab-link button">旁听飚</a>
                 <a href="#heroTab" class="tab-link button">历史飚</a>
             </div>
-             
+
                 <div class="tabs">
                     <div id="bidHallTab" class="tab active infinite-scroll">
 
@@ -200,7 +200,9 @@
                     }
                     if(tabId == "auditTab"){
                         var auditPrice = (item.price * 0.3).toFixed(2);
-                        btnHtml = '<a href="#" class="button button-success" id="toAuditBtn" bidid="'+item.bidId+'" style="border: 1px solid #0894ec;color: #0894ec">'+auditPrice+'元旁听</a>';
+                        f(currentUserId != item.userId){
+                            btnHtml = '<a href="#" class="button button-success" id="toAuditBtn" bidid="'+item.bidId+'" style="border: 1px solid #0894ec;color: #0894ec">'+auditPrice+'元旁听</a>';
+                        }
                         attrHtml = '<div class="row">'+
                                 '<div class="col-10"><i class="material-icons" >face</i></div>'+
                                 '<div class="col-40">'+item.createUserName+'</div>'+

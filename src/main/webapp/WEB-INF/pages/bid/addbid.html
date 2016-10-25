@@ -328,20 +328,26 @@
     $("body").on( "click", "#savePreBtn", function(){
         var vali = checkForm();
         if(vali){
-            $('#bidStatus').val('draft');
+            var bidStatus = $('#bidStatus').val();
             $(this).attr('disabled',false);
             $.showIndicator();
-            var serializeObj = serializeForm();
 
-            $.post('${request.contextPath}/bid/save-async', serializeObj, function (response) {
+            if(bidStatus == 'ongoing'){
+                $('form').submit();
+            }else{
+                $('#bidStatus').val('draft');
+                var serializeObj = serializeForm();
+                $.post('${request.contextPath}/bid/save-async', serializeObj, function (response) {
 
-                if(response.messageType == 'success' ){
-                    $('#bidId').val(response.objId);
-                    var contextPath = encodeURIComponent('${request.contextPath}');
-                    window.location.href = "https://open.weixin.qq.com/connect/oauth2/authorize?appid=wxcd8903dd6a9552eb&redirect_uri=http%3A%2F%2Fjk.zhangqidong.cn"+contextPath+"%2Fbid%2Fto-pay-for-bid%2F&response_type=code&scope=snsapi_base&state="+response.objId+"#wechat_redirect";
+                    if(response.messageType == 'success' ){
+                        $('#bidId').val(response.objId);
+                        var contextPath = encodeURIComponent('${request.contextPath}');
+                        window.location.href = "https://open.weixin.qq.com/connect/oauth2/authorize?appid=wxcd8903dd6a9552eb&redirect_uri=http%3A%2F%2Fjk.zhangqidong.cn"+contextPath+"%2Fbid%2Fto-pay-for-bid%2F&response_type=code&scope=snsapi_base&state="+response.objId+"#wechat_redirect";
 
-                }
-            });
+                    }
+                });
+            }
+
 
         }
     } );

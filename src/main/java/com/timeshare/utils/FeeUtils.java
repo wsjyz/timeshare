@@ -23,4 +23,12 @@ public class FeeUtils {
         return finalAmountYuan.multiply(new BigDecimal(100)).intValue();
     }
 
+    public static void main(String[] args) {
+        BigDecimal a = new BigDecimal("40.00");
+        BigDecimal b = new BigDecimal("10.00").multiply(new BigDecimal("0.3"));
+        BigDecimal c = a.add(new BigDecimal("10").multiply(new BigDecimal("0.15")));
+
+        System.out.println(c);
+    }
+
 }

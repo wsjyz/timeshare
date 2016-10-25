@@ -132,6 +132,11 @@ public class BidDAOImpl extends BaseDAO implements BidDAO {
             sql = new StringBuilder("select * from t_bid i where 1=1 ");//飚首页
         }
         if (StringUtils.isNotEmpty(bid.getBidStatus())) {
+            if(StringUtils.isNotBlank(bid.getPageContentType())
+                    && bid.getPageContentType().equals(Contants.PAGE_CONTENT_TYPE.mysubmit.toString())
+                    && StringUtils.isNotBlank(bid.getBidUserId())){
+                sql.append(" and (i.bid_status = '"+Contants.BID_STATUS.finish+"' or i.bid_status = '"+Contants.BID_STATUS.ongoing+"')");
+            }
             sql.append(" and i.bid_status = '"+bid.getBidStatus()+"' ");
         }
         if (StringUtils.isNotEmpty(bid.getCanAudit())) {

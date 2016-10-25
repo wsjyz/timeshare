@@ -106,7 +106,7 @@ public class BidController extends BaseController{
             }
             if(bid.getBidStatus().equals(Contants.BID_STATUS.ongoing.toString())){
                 //修改支出
-                seller.setSumCost(seller.getIncome().add(bid.getPrice()));
+                seller.setSumCost(seller.getSumCost().add(bid.getPrice()));
                 userService.modifyUser(seller);
             }
 
@@ -132,7 +132,6 @@ public class BidController extends BaseController{
 
         parms.setPageContentType(pageContentType);
         if(pageContentType.equals(Contants.PAGE_CONTENT_TYPE.mysubmit.toString())){
-            parms.setBidStatus(Contants.BID_STATUS.finish.toString());
             parms.setBidUserId(userId);
         }
         if(pageContentType.equals(Contants.PAGE_CONTENT_TYPE.myaudit.toString())){
@@ -375,7 +374,7 @@ public class BidController extends BaseController{
         payLogger.info("旁听费付款给应飚人"+winUser.getNickName());
         WxPayUtils.payToSeller(wxTradeNo,bid.getPrice().multiply(new BigDecimal("0.15")),winUser.getOpenId());
         //修改收入
-        winUser.setIncome(winUser.getIncome().add(bid.getPrice()));
+        winUser.setIncome(winUser.getIncome().add(bid.getPrice().multiply(new BigDecimal("0.15"))));
         userService.modifyUser(winUser);
         //发短信给中标人
         bean = new SmsContentBean();
