@@ -246,7 +246,10 @@ public class BidController extends BaseController{
         parameters.put("out_trade_no",outTradeNo);
 
 
-        int fenPrice = (bid.getPrice().multiply(new BigDecimal(100)).multiply(new BigDecimal("0.3"))).intValue();
+        int fenPrice = 300;
+        if(bid.getPrice().compareTo(new BigDecimal("10")) == 1){
+           fenPrice = (bid.getPrice().multiply(new BigDecimal(100)).multiply(new BigDecimal("0.3"))).intValue();
+        }
         System.out.println(" 价格为 "+fenPrice);
         config.setTotal_fee(fenPrice);
         parameters.put("total_fee",fenPrice);
@@ -324,7 +327,12 @@ public class BidController extends BaseController{
 
 
         model.addAttribute("bidId",bidId);
-        model.addAttribute("auditPrice",bid.getPrice().multiply(new BigDecimal("0.3")));
+        if(bid.getPrice().compareTo(new BigDecimal("10")) == 1){
+            model.addAttribute("auditPrice",bid.getPrice().multiply(new BigDecimal("0.3")));
+        }else{
+            model.addAttribute("auditPrice",3);
+        }
+
         return "bid/addauditor";
     }
 
@@ -339,23 +347,29 @@ public class BidController extends BaseController{
         auditor.setCreateUserName(buyer.getNickName());
         auditor.setUserId(userId);
         auditor.setWxTradeNo(wxTradeNo);
-        int fenFee = FeeUtils.payAmount(bid.getPrice(),new BigDecimal("0.7"));
-        auditor.setFee(fenFee);
+
+        //计算旁听需要支付的费用
+        BigDecimal payPrice = new BigDecimal("3");
+        if(bid.getPrice().compareTo(new BigDecimal("10")) == 1){//大于10元
+            payPrice = bid.getPrice().multiply(new BigDecimal("0.3"));
+        }
+        auditor.setFee(payPrice.multiply(new BigDecimal("100")).intValue());
+
         String result = auditorService.saveAuditor(auditor);
         SystemMessage message = getSystemMessage(result);
         //付款到相应的人
         payLogger.info("旁听费付款给发飙人"+seller.getNickName());
-        BigDecimal sellerFee = bid.getPrice().multiply(new BigDecimal("0.15"));
-        WxPayUtils.payToSeller(wxTradeNo,sellerFee,seller.getOpenId());
-        //修改收入
-        seller.setIncome(seller.getIncome().add(bid.getPrice()));
+        BigDecimal percentageFee = payPrice.multiply(new BigDecimal("0.5"));
+        WxPayUtils.payToSeller(wxTradeNo,percentageFee,seller.getOpenId());
+        //修改发飙人收入
+        seller.setIncome(seller.getIncome().add(percentageFee));
         userService.modifyUser(seller);
         //发短信给发飙人
         SmsContentBean bean = new SmsContentBean();
         bean.setTemplateCode("SMS_21390019");
         bean.setToMobile(seller.getMobile());
-        bean.setContent("{\"bidName\":\""+bid.getTitle()+"\",\"bidPrice\":\""+sellerFee+"\"}");
-        System.out.println("您发的飚“"+bid.getTitle()+"”有人旁听了，项目款项"+sellerFee+"元已入账，请进入微信服务号“邂逅时刻”查看");
+        bean.setContent("{\"bidName\":\""+bid.getTitle()+"\",\"bidPrice\":\""+percentageFee+"\"}");
+        System.out.println("您发的飚“"+bid.getTitle()+"”有人旁听了，项目款项"+percentageFee+"元已入账，请进入微信服务号“邂逅时刻”查看");
         String response = SmsUtils.senMessage(bean);
         if(response.indexOf("error_response") != -1){
             logger.error(response);
@@ -371,17 +385,18 @@ public class BidController extends BaseController{
             String winUserId = winUserList.get(0).getUserId();
             winUser = getCurrentUser(winUserId);
         }
-        payLogger.info("旁听费付款给应飚人"+winUser.getNickName());
-        WxPayUtils.payToSeller(wxTradeNo,bid.getPrice().multiply(new BigDecimal("0.15")),winUser.getOpenId());
+        payLogger.info("旁听费付款给中标人"+winUser.getNickName());
+        wxTradeNo = CommonStringUtils.gen18RandomNumber();
+        WxPayUtils.payToSeller(wxTradeNo,percentageFee,winUser.getOpenId());
         //修改收入
-        winUser.setIncome(winUser.getIncome().add(bid.getPrice().multiply(new BigDecimal("0.15"))));
+        winUser.setIncome(winUser.getIncome().add(percentageFee));
         userService.modifyUser(winUser);
         //发短信给中标人
         bean = new SmsContentBean();
         bean.setTemplateCode("SMS_21700251");
         bean.setToMobile(winUser.getMobile());
-        bean.setContent("{\"bidName\":\""+bid.getTitle()+"\",\"bidPrice\":\""+sellerFee+"\"}");
-        System.out.println("您的应飚“"+bid.getTitle()+"”有人旁听了，项目款项"+sellerFee+"元已入账，请进入微信服务号“邂逅时刻”查看");
+        bean.setContent("{\"bidName\":\""+bid.getTitle()+"\",\"bidPrice\":\""+percentageFee+"\"}");
+        System.out.println("您的应飚“"+bid.getTitle()+"”有人旁听了，项目款项"+percentageFee+"元已入账，请进入微信服务号“邂逅时刻”查看");
         response = SmsUtils.senMessage(bean);
         if(response.indexOf("error_response") != -1){
             logger.error(response);
@@ -389,7 +404,7 @@ public class BidController extends BaseController{
 
 
         //修改旁听者支出
-        buyer.setSumCost(buyer.getIncome().add(bid.getPrice()));
+        buyer.setSumCost(buyer.getSumCost().add(payPrice));
         userService.modifyUser(buyer);
         return message;
     }

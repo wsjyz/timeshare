@@ -83,6 +83,9 @@ public class BidDAOImpl extends BaseDAO implements BidDAO {
         if(StringUtils.isNotBlank(bid.getStopReason())){
             sql.append(" stop_reason = '"+bid.getStopReason()+"',");
         }
+        if(StringUtils.isNotBlank(bid.getEndTime())){
+            sql.append(" end_time = '"+bid.getEndTime()+"',");
+        }
         if(bid.getClickRate() != 0){
             sql.append(" click_rate = "+bid.getClickRate()+",");
         }

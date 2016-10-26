@@ -179,15 +179,15 @@
 
                         attrHtml = '<div class="row">'+
                                 '<div class="col-10"><i class="material-icons" >face</i></div>'+
-                                '<div class="col-30">'+item.createUserName+'&nbsp;&nbsp;</div>'+
-                                '<div class="col-10"><i class="material-icons">attach_money</i></div>'+
-                                '<div class="col-40">招标金额：'+item.price+'</div>'+
+                                '<div class="col-40">'+item.createUserName+'&nbsp;&nbsp;</div>'+
+                                '<div class="col-8"><i class="material-icons">attach_money</i></div>'+
+                                '<div class="col-38">招标金额：'+item.price+'</div>'+
                                 '</div>'+
                                 '<div class="row">'+
                                 '<div class="col-10"><i class="material-icons">gps_fixed</i></div>'+
-                                '<div class="col-30">飚数：'+item.submitCount+'</div>'+
-                                '<div class="col-10"><i class="material-icons">hearing</i></div>'+
-                                '<div class="col-40">允许旁听：是</div>'+
+                                '<div class="col-40">飚数：'+item.submitCount+'</div>'+
+                                '<div class="col-8"><i class="material-icons">hearing</i></div>'+
+                                '<div class="col-38">允许旁听：是</div>'+
                                 '</div>';
                         endTimeHtml =  '<div class="row">'+
 //                                                '<div class="col-5" ><i class="material-icons" style="font-size:  0.5rem">brightness_1</i></div>'+
@@ -199,8 +199,11 @@
                                 '</div>';
                     }
                     if(tabId == "auditTab"){
-                        var auditPrice = (item.price * 0.3).toFixed(2);
-                        f(currentUserId != item.userId){
+                        var auditPrice = 3;
+                        if(item.price > 10){
+                           auditPrice = (item.price * 0.3).toFixed(2);
+                        }
+                        if(currentUserId != item.userId){
                             btnHtml = '<a href="#" class="button button-success" id="toAuditBtn" bidid="'+item.bidId+'" style="border: 1px solid #0894ec;color: #0894ec">'+auditPrice+'元旁听</a>';
                         }
                         attrHtml = '<div class="row">'+
