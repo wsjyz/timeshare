@@ -15,6 +15,7 @@
 
     <link rel="apple-touch-icon-precomposed" href="/assets/img/apple-touch-icon-114x114.png">
     <script src="//g.alicdn.com/sj/lib/zepto/zepto.min.js"></script>
+    <script src="${request.contextPath}/js/star.js"></script>
     <style type="text/css">
         body{font-family: Arial, Helvetica, sans-serif;}
         .infinite-scroll-preloader {
@@ -157,16 +158,11 @@
             if(bidStatus == 'ongoing'){
                 winBtnDisplay = 'block';
             }
+            var starHtml = genStar(5,item.rating);
             html += '<li class="card">'+
                         '<div class="card-header">'+
                             '<span>'+item.createUserName+'</span>'+
-                            '<fieldset class="starability-checkmark" style="display: '+starDisplay+'">'+
-                            '<label  title="Amazing">5 stars</label>'+
-                            '<label  title="Very good">4 stars</label>'+
-                            '<label  title="Average">3 stars</label>'+
-                            '<label  title="Not good">2 stars</label>'+
-                            '<label  title="Terrible" style="background-position: 0 -30px;">1 star</label>'+
-                            '</fieldset>'+
+                            starHtml+
                         '</div>'+
                         '<div class="card-content">'+
                             '<div class="card-content-inner">'+

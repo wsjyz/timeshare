@@ -123,6 +123,7 @@ public class BidUserDAOImpl extends BaseDAO implements BidUserDAO {
             bidUser.setIncomeFee(rs.getBigDecimal("income_fee"));
             bidUser.setCreateUserName(rs.getString("create_user_name"));
             bidUser.setUserId(rs.getString("create_user_id"));
+            bidUser.setRating(rs.getInt("rating"));
             bidUser.setOptTime(rs.getString("opt_time"));
             bidUser.setLastModifyTime(rs.getString("last_modify_time"));
             bidUser.setWxTradeNo(rs.getString("wx_trade_no"));
