@@ -65,7 +65,7 @@ public class BidDAOImpl extends BaseDAO implements BidDAO {
         if(bid.getPrice() != null){
             sql.append(" price = "+bid.getPrice()+",");
         }
-        if(bid.getScore() != null ){
+        if(bid.getScore() != 0 ){
             sql.append(" score = "+bid.getScore()+",");
         }
         if(StringUtils.isNotBlank(bid.getContent())){
@@ -222,7 +222,7 @@ public class BidDAOImpl extends BaseDAO implements BidDAO {
             bid.setUserId(rs.getString("create_user_id"));
             bid.setOptTime(rs.getString("opt_time"));
             bid.setLastModifyTime(rs.getString("last_modify_time"));
-            bid.setScore(rs.getBigDecimal("score"));
+            bid.setScore(rs.getInt("score"));
             bid.setBidCatalog(rs.getString("bid_catalog"));
             bid.setStopReason(rs.getString("stop_reason"));
             return bid;

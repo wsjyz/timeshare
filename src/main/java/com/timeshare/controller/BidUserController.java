@@ -80,6 +80,8 @@ public class BidUserController extends BaseController{
             //修改收入
             bidUserInfo.setIncome(bidUserInfo.getIncome().add(bid.getPrice()));
             userService.modifyUser(bidUserInfo);
+            //修改飚的得分
+            bid.setScore(bidUser.getRating());
 
             //发短信通知中标者
             SmsContentBean bean = new SmsContentBean();

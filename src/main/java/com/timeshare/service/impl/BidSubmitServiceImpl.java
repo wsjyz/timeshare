@@ -46,9 +46,9 @@ public class BidSubmitServiceImpl implements BidSubmitService {
             bidUser.setCreateUserName(submit.getCreateUserName());
             bidUser.setBidUserId(submit.getUserId());
             bidUser.setUserId(submit.getUserId());
-            bidUserDAO.saveBidUser(bidUser);
             //增加人数
             if(!bid.getUserId().equals(submit.getUserId())){
+                bidUserDAO.saveBidUser(bidUser);
                 bid.setSubmitCount(bid.getSubmitCount() + 1);
             }
             bidDAO.modifyBid(bid);

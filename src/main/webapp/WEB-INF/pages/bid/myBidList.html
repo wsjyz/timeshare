@@ -343,6 +343,9 @@
         }else if(pageContentType == 'mysubmit'){
             if(bidStatus == 'ongoing'){
                 buttons1 = [btnToSubmit];
+            }else if(bidStatus == 'finish'){
+                btnToSubmit.text = '查看';
+                buttons1 = [btnToSubmit];
             }
         }else if(pageContentType == 'myaudit'){
             buttons1 = [btnToAudit];

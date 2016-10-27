@@ -90,12 +90,12 @@ public class BidSubmitController extends BaseController{
 
     @ResponseBody
     @RequestMapping(value = "/addtext")
-    public SystemMessage addText(String bidId,String text,@CookieValue(value="time_sid", defaultValue="c9f7da60747f4cf49505123d15d29ac4") String userId) {
+    public SystemMessage addText(String bidId,String text,String otherUserId,@CookieValue(value="time_sid", defaultValue="c9f7da60747f4cf49505123d15d29ac4") String userId) {
 
         BidSubmit bidSubmit = saveSubmitBase(userId,bidId);
         bidSubmit.setBidSubmitType(Contants.BID_SUBMIT_TYPE.TEXT.toString());
         bidSubmit.setBidSubmitText(text);
-
+        bidSubmit.setOtherUserId(otherUserId);
         String result = bidSubmitService.saveBidSubmit(bidSubmit);
         return getSystemMessage(result);
     }
@@ -110,7 +110,7 @@ public class BidSubmitController extends BaseController{
     }
     @ResponseBody
     @RequestMapping(value = "/download-file")
-    public String downloadFile(String bidId,String serverId,String fileType,@CookieValue(value="time_sid", defaultValue="c9f7da60747f4cf49505123d15d29ac4") String userId){
+    public String downloadFile(String bidId,String serverId,String fileType,String otherUserId,@CookieValue(value="time_sid", defaultValue="c9f7da60747f4cf49505123d15d29ac4") String userId){
         OkhttpClient client = new OkhttpClient();
         String accessToken = WxUtils.getAccessToken().getAccess_token();
         String fileUrl = "http://file.api.weixin.qq.com/cgi-bin/media/get?access_token="+accessToken+"&media_id="+serverId;
@@ -121,6 +121,7 @@ public class BidSubmitController extends BaseController{
                 BidSubmit bidSubmit = saveSubmitBase(userId,bidId);
                 bidSubmit.setBidSubmitType(fileType);
                 bidSubmit.setWxServerId(serverId);
+                bidSubmit.setOtherUserId(otherUserId);
                 //bidSubmit.setServerPath(bidId +"/"+ fileBean.getFileName());
                 if(fileType.equals(Contants.BID_SUBMIT_TYPE.VOICE.toString())){
                     VoiceFileUtils.amrToMp3(savePath+serverId+".amr");
@@ -142,6 +143,7 @@ public class BidSubmitController extends BaseController{
         Bid bid = bidService.findBidById(bidId);
         bidSubmit.setBidCreateUser(bid.getUserId());
         bidSubmit.setUserId(otherUserId);
+        bidSubmit.setOtherUserId(otherUserId);
         List<BidSubmit> bidSubmitList = bidSubmitService.findSubmitList(bidSubmit,0,0);
         return bidSubmitList;
     }

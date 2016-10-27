@@ -35,10 +35,10 @@
 
         <div class="bar bar-header-secondary" style="top:0;">
             <div class="searchbar">
-                <a class="searchbar-cancel">取消</a>
+                <a class="searchbar-cancel" id="searchBtn">搜索</a>
                 <div class="search-input">
                     <label class="icon icon-search" for="search"></label>
-                    <form id="searchForm"><input type="search" id='search' placeholder='输入卖家or项目名称...' value="${keyword}"/></form>
+                    <form id="searchForm"><input type="search" id='search' placeholder='输入飚主or飚名称...' value="${keyword}"/></form>
                 </div>
             </div>
         </div>
@@ -67,6 +67,135 @@
 <script>
 	// setTimeout(startInit, 300);
     var currentUserId = '${currentUserId}';
+    // 每次加载添加多少条目
+    var itemsPerLoad = 10;
+    // 最多可加载的条目
+    var maxItems = 30;
+    var  lastIndex = $('.list-block .card').length;
+    function addItems(number, lastIndex,data) {
+        // 生成新条目的HTML
+        var html = '';
+        var dataLength = 0;
+        $.each(data, function(i, item){
+            var score = item.score;
+            if(score == null){
+                score = 0;
+            }
+            var calTimeObj = calTime(item.endTime);
+            var startTime = "";
+            var btnHtml = '';
+            var attrHtml = '';
+            var endTimeHtml = '';
+            if(item.bidStatus == "ongoing"){
+                if(currentUserId != item.userId){
+                    btnHtml = '<a href="#" class="button button-success" id="toSubmitBtn" bidid="'+item.bidId+'" style="border: 1px solid #0894ec;color: #0894ec">去抢飚</a>';
+                }
+
+                attrHtml = '<div class="row">'+
+                        '<div class="col-10"><i class="material-icons" >face</i></div>'+
+                        '<div class="col-30">'+item.createUserName+'&nbsp;&nbsp;</div>'+
+                        '<div class="col-10"><i class="material-icons">attach_money</i></div>'+
+                        '<div class="col-40">招标金额：'+item.price+'</div>'+
+                        '</div>'+
+                        '<div class="row">'+
+                        '<div class="col-10"><i class="material-icons">gps_fixed</i></div>'+
+                        '<div class="col-30">飚数：'+item.submitCount+'</div>'+
+                        '<div class="col-10"><i class="material-icons">hearing</i></div>'+
+                        '<div class="col-40">允许旁听：是</div>'+
+                        '</div>';
+                endTimeHtml =  '<div class="row">'+
+//                                                '<div class="col-5" ><i class="material-icons" style="font-size:  0.5rem">brightness_1</i></div>'+
+//                                                '<div class="col-50" style="font-size: smaller">发起时间：'+fixTime(item.optTime)+'</div>'+
+//                                                '<div class="col-5" style="margin-left: 3%"><i class="material-icons" style="font-size:  0.5rem">brightness_1</i></div>'+
+                        '<div class="col-25" >&nbsp;</div>'+
+                        '<div class="col-30" style="font-size: smaller">距离结束：'+calTimeObj.day+'天'+calTimeObj.hour+'小时</div>'+
+                        '<div class="col-25" >&nbsp;</div>'+
+                        '</div>';
+            }
+            if(item.bidStatus == "finish" && item.canAudit == "1"){
+                var auditPrice = 3;
+                if(item.price > 10){
+                    auditPrice = (item.price * 0.3).toFixed(2);
+                }
+                if(currentUserId != item.userId) {
+                    btnHtml = '<a href="#" class="button button-success" id="toAuditBtn" bidid="' + item.bidId + '" style="border: 1px solid #0894ec;color: #0894ec">' + auditPrice + '元旁听</a>';
+                }
+                attrHtml = '<div class="row">'+
+                        '<div class="col-10"><i class="material-icons" >face</i></div>'+
+                        '<div class="col-40">'+item.createUserName+'</div>'+
+                        '<div class="col-12"><i class="material-icons">stars</i></div>'+
+                        '<div class="col-30">'+score+'颗星</div>'+
+                        '</div>'+
+                        '<div class="row">'+
+                        '<div class="col-10"><i class="material-icons">attach_money</i></div>'+
+                        '<div class="col-40">招标金额：'+item.price+'</div>'+
+                        '<div class="col-12"><i class="material-icons">hearing</i></div>'+
+                        '<div class="col-30">允许旁听：是</div>'+
+                        '</div>'+
+                        '<div class="row">'+
+                        '<div class="col-10"><i class="material-icons">gps_fixed</i></div>'+
+                        '<div class="col-30">飚数：'+item.submitCount+'</div>'+
+                        '</div>';
+            }
+            if(item.bidStatus == "finish" && (item.canAudit == "0" || item.canAudit == null)){
+                btnHtml = '';
+                attrHtml = '<div class="row">'+
+                        '<div class="col-10"><i class="material-icons" >face</i></div>'+
+                        '<div class="col-40">'+item.createUserName+'</div>'+
+                        '<div class="col-12"><i class="material-icons">stars</i></div>'+
+                        '<div class="col-30">'+score+'颗星</div>'+
+                        '</div>'+
+                        '<div class="row">'+
+                        '<div class="col-10"><i class="material-icons">attach_money</i></div>'+
+                        '<div class="col-40">招标金额：'+item.price+'</div>'+
+                        '<div class="col-12"><i class="material-icons">hearing</i></div>'+
+                        '<div class="col-30">允许旁听：是</div>'+
+                        '</div>'+
+                        '<div class="row">'+
+                        '<div class="col-10"><i class="material-icons">gps_fixed</i></div>'+
+                        '<div class="col-30">飚数：'+item.submitCount+'</div>'+
+                        '</div>';
+            }
+
+            html += '<div class="card">'+
+                    '<div class="card-header"><i class="material-icons">blur_circular</i>'+item.title+'</div>'+
+                    '<div class="card-content">'+
+                    '<div class="card-content-inner">' +
+                    attrHtml +
+                    '<div class="row" >'+
+                    '<div class="col-100"><hr style="height:1px;border:none;border-top:1px solid #E1E1E1;"/></div>'+
+                    '</div>'+
+                    '<div class="row" style="margin-top: 0.5rem;">'+
+                    '<div class="col-100">'+item.content+'</div>'+
+                    '</div>'+
+                    '<div class="row" >'+
+                    '<div class="col-100"><hr style="height:1px;border:none;border-top:1px solid #E1E1E1;"/></div>'+
+                    '</div>'+
+                    endTimeHtml+
+                    '<div class="row">'+
+                    '<div class="col-100" style="padding-top: 0.2rem">' +
+                    btnHtml +
+                    '</div>'+
+                    '</div>'+
+                    '</div>'+
+                    '</div>'+
+
+                    '</div>';
+            dataLength += 1;
+        });
+        if(dataLength == 0){
+            $('.no-record').show();
+            $('.infinite-scroll-preloader').remove();
+        }else{
+            $('.no-record').hide();
+            $('.infinite-scroll-preloader').hide();
+            // 添加新条目
+            //$('.active.infinite-scroll .list-block').append(html);
+            $('#bid_list.infinite-scroll .list-block').append(html);
+        }
+
+
+    }
     function toViewUserItem(userId,itemId){
         window.location.href = "${request.contextPath}/user/to-view-items/"+userId+"/"+itemId;
     }
@@ -96,130 +225,8 @@
         $.showIndicator();
         //多个标签页下的无限滚动
         var loading = false;
-        // 每次加载添加多少条目
-        var itemsPerLoad = 10;
-        // 最多可加载的条目
-        var maxItems = 30;
-        var  lastIndex = $('.list-block .card').length;
-        function addItems(number, lastIndex,data) {
-            // 生成新条目的HTML
-            var html = '';
-            var dataLength = 0;
-            $.each(data, function(i, item){
-                var score = item.score;
-                if(score == null){
-                    score = 0;
-                }
-                var calTimeObj = calTime(item.endTime);
-                var startTime = "";
-                var btnHtml = '';
-                var attrHtml = '';
-                var endTimeHtml = '';
-                if(item.bidStatus == "ongoing"){
-                    if(currentUserId != item.userId){
-                        btnHtml = '<a href="#" class="button button-success" id="toSubmitBtn" bidid="'+item.bidId+'" style="border: 1px solid #0894ec;color: #0894ec">去抢飚</a>';
-                    }
-
-                    attrHtml = '<div class="row">'+
-                            '<div class="col-10"><i class="material-icons" >face</i></div>'+
-                            '<div class="col-30">'+item.createUserName+'&nbsp;&nbsp;</div>'+
-                            '<div class="col-10"><i class="material-icons">attach_money</i></div>'+
-                            '<div class="col-40">招标金额：'+item.price+'</div>'+
-                            '</div>'+
-                            '<div class="row">'+
-                            '<div class="col-10"><i class="material-icons">gps_fixed</i></div>'+
-                            '<div class="col-30">飚数：'+item.submitCount+'</div>'+
-                            '<div class="col-10"><i class="material-icons">hearing</i></div>'+
-                            '<div class="col-40">允许旁听：是</div>'+
-                            '</div>';
-                    endTimeHtml =  '<div class="row">'+
-//                                                '<div class="col-5" ><i class="material-icons" style="font-size:  0.5rem">brightness_1</i></div>'+
-//                                                '<div class="col-50" style="font-size: smaller">发起时间：'+fixTime(item.optTime)+'</div>'+
-//                                                '<div class="col-5" style="margin-left: 3%"><i class="material-icons" style="font-size:  0.5rem">brightness_1</i></div>'+
-                            '<div class="col-25" >&nbsp;</div>'+
-                            '<div class="col-30" style="font-size: smaller">距离结束：'+calTimeObj.day+'天'+calTimeObj.hour+'小时</div>'+
-                            '<div class="col-25" >&nbsp;</div>'+
-                            '</div>';
-                }
-                if(item.bidStatus == "finish" && item.canAudit == "1"){
-                    var auditPrice = (item.price * 0.3).toFixed(2);
-                    btnHtml = '<a href="#" class="button button-success" id="toAuditBtn" bidid="'+item.bidId+'" style="border: 1px solid #0894ec;color: #0894ec">'+auditPrice+'元旁听</a>';
-                    attrHtml = '<div class="row">'+
-                            '<div class="col-10"><i class="material-icons" >face</i></div>'+
-                            '<div class="col-40">'+item.createUserName+'</div>'+
-                            '<div class="col-12"><i class="material-icons">stars</i></div>'+
-                            '<div class="col-30">'+score+'颗星</div>'+
-                            '</div>'+
-                            '<div class="row">'+
-                            '<div class="col-10"><i class="material-icons">attach_money</i></div>'+
-                            '<div class="col-40">招标金额：'+item.price+'</div>'+
-                            '<div class="col-12"><i class="material-icons">hearing</i></div>'+
-                            '<div class="col-30">允许旁听：是</div>'+
-                            '</div>'+
-                            '<div class="row">'+
-                            '<div class="col-10"><i class="material-icons">gps_fixed</i></div>'+
-                            '<div class="col-30">飚数：'+item.submitCount+'</div>'+
-                            '</div>';
-                }
-                if(item.bidStatus == "finish" && (item.canAudit == "0" || item.canAudit == null)){
-                    btnHtml = '';
-                    attrHtml = '<div class="row">'+
-                            '<div class="col-10"><i class="material-icons" >face</i></div>'+
-                            '<div class="col-40">'+item.createUserName+'</div>'+
-                            '<div class="col-12"><i class="material-icons">stars</i></div>'+
-                            '<div class="col-30">'+score+'颗星</div>'+
-                            '</div>'+
-                            '<div class="row">'+
-                            '<div class="col-10"><i class="material-icons">attach_money</i></div>'+
-                            '<div class="col-40">招标金额：'+item.price+'</div>'+
-                            '<div class="col-12"><i class="material-icons">hearing</i></div>'+
-                            '<div class="col-30">允许旁听：是</div>'+
-                            '</div>'+
-                            '<div class="row">'+
-                            '<div class="col-10"><i class="material-icons">gps_fixed</i></div>'+
-                            '<div class="col-30">飚数：'+item.submitCount+'</div>'+
-                            '</div>';
-                }
-
-                html += '<div class="card">'+
-                        '<div class="card-header"><i class="material-icons">blur_circular</i>'+item.title+'</div>'+
-                        '<div class="card-content">'+
-                        '<div class="card-content-inner">' +
-                        attrHtml +
-                        '<div class="row" >'+
-                        '<div class="col-100"><hr style="height:1px;border:none;border-top:1px solid #E1E1E1;"/></div>'+
-                        '</div>'+
-                        '<div class="row" style="margin-top: 0.5rem;">'+
-                        '<div class="col-100">'+item.content+'</div>'+
-                        '</div>'+
-                        '<div class="row" >'+
-                        '<div class="col-100"><hr style="height:1px;border:none;border-top:1px solid #E1E1E1;"/></div>'+
-                        '</div>'+
-                        endTimeHtml+
-                        '<div class="row">'+
-                        '<div class="col-100" style="padding-top: 0.2rem">' +
-                        btnHtml +
-                        '</div>'+
-                        '</div>'+
-                        '</div>'+
-                        '</div>'+
-
-                        '</div>';
-                dataLength += 1;
-            });
-            if(dataLength == 0){
-                $('.no-record').show();
-                $('.infinite-scroll-preloader').remove();
-            }else{
-                $('.no-record').hide();
-                $('.infinite-scroll-preloader').hide();
-                // 添加新条目
-                //$('.active.infinite-scroll .list-block').append(html);
-                $('#bid_list.infinite-scroll .list-block').append(html);
-            }
 
 
-        }
         $.post('${request.contextPath}/bid/search', {keyword:$('#search').val(),startIndex: 0,loadSize:itemsPerLoad}, function (response) {
             $('#bid_list.infinite-scroll .list-block').empty();
             //预先加载20条
@@ -277,7 +284,14 @@
     $("body").on( "click", "#bidIndexBtn", function(){
         window.location.href = "${request.contextPath}/bid/to-index";
     } );
-
+    $("body").on( "click", "#searchBtn", function(){
+        var keyword = $('#search').val();
+        if(keyword == ''){
+            return false;
+        }
+        searchFunc();
+        return false;
+    } );
     $("body").on( "submit", "#searchForm", function(){
         var keyword = $('#search').val();
         if(keyword == ''){
@@ -287,7 +301,7 @@
         return false;
     } );
     var searchFunc = function(){
-        $.post('${request.contextPath}/item/search', {keyword:$('#search').val(),startIndex: 0,loadSize:itemsPerLoad}, function (response) {
+        $.post('${request.contextPath}/bid/search', {keyword:$('#search').val(),startIndex: 0,loadSize:itemsPerLoad}, function (response) {
             $('.infinite-scroll .list-block').empty();
             //预先加载20条
             addItems(itemsPerLoad, 0,response);

@@ -16,7 +16,7 @@ public class Bid extends BaseDomain{
     private String canAudit;
     private int clickRate;
     private int submitCount;
-    private BigDecimal score;
+    private int score;
     private String bidCatalog;
     private String stopReason;
 
@@ -65,11 +65,11 @@ public class Bid extends BaseDomain{
         this.bidCatalog = bidCatalog;
     }
 
-    public BigDecimal getScore() {
+    public int getScore() {
         return score;
     }
 
-    public void setScore(BigDecimal score) {
+    public void setScore(int score) {
         this.score = score;
     }
 

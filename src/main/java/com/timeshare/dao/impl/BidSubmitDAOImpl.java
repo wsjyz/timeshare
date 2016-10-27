@@ -23,8 +23,8 @@ public class BidSubmitDAOImpl extends BaseDAO implements BidSubmitDAO {
     @Override
     public String saveBidSubmit(BidSubmit submit) {
         StringBuilder sql = new StringBuilder("insert into t_bid_submit " +
-                "(bid_submit_id,bid_submit_text,bid_submit_type,bid_id,wx_server_id,server_path,create_user_id,opt_time,create_user_name,last_modify_time)" +
-                " values(?,?,?,?,?,?,?,?,?,?)");
+                "(bid_submit_id,bid_submit_text,bid_submit_type,bid_id,wx_server_id,server_path,create_user_id,opt_time,create_user_name,last_modify_time,other_user_id)" +
+                " values(?,?,?,?,?,?,?,?,?,?,?)");
         final String id = CommonStringUtils.genPK();
         int result = getJdbcTemplate().update(sql.toString(), new PreparedStatementSetter() {
             @Override
@@ -39,6 +39,7 @@ public class BidSubmitDAOImpl extends BaseDAO implements BidSubmitDAO {
                 ps.setString(8,submit.getOptTime());
                 ps.setString(9,submit.getCreateUserName());
                 ps.setString(10,submit.getLastModifyTime());
+                ps.setString(11,submit.getOtherUserId());
             }
         });
         if(result > 0){
@@ -63,7 +64,7 @@ public class BidSubmitDAOImpl extends BaseDAO implements BidSubmitDAO {
     public List<BidSubmit> findSubmitList(BidSubmit submit, int startIndex, int loadSize) {
         StringBuilder sql = new StringBuilder("select * from t_bid_submit i where 1=1 ");
         if (StringUtils.isNotEmpty(submit.getUserId())) {
-            sql.append(" and (i.create_user_id = '"+submit.getUserId()+"' or i.create_user_id = '"+submit.getBidCreateUser()+"') ");
+            sql.append(" and (i.create_user_id = '"+submit.getUserId()+"' or (i.create_user_id = '"+submit.getBidCreateUser()+"' and i.other_user_id = '"+submit.getOtherUserId()+"')) ");
         }
         if (StringUtils.isNotEmpty(submit.getBidId())) {
             sql.append(" and i.bid_id = '"+submit.getBidId()+"' ");
@@ -93,6 +94,7 @@ public class BidSubmitDAOImpl extends BaseDAO implements BidSubmitDAO {
             submit.setUserId(rs.getString("create_user_id"));
             submit.setOptTime(rs.getString("opt_time"));
             submit.setLastModifyTime(rs.getString("last_modify_time"));
+            submit.setOtherUserId(rs.getString("other_user_id"));
             return submit;
         }
     }

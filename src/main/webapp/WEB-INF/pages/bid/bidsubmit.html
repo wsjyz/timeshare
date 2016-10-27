@@ -122,7 +122,7 @@
             isShowProgressTips: 1, // 默认为1，显示进度提示
             success: function (res) {
                 var serverId = res.serverId; // 返回音频的服务器端ID
-                $.post('${request.contextPath}/bidsubmit/download-file', {bidId:$('#bidId').val(),serverId:serverId,fileType:'VOICE'}, function (response) {
+                $.post('${request.contextPath}/bidsubmit/download-file', {bidId:$('#bidId').val(),serverId:serverId,otherUserId:$('#otherUserId').val(),fileType:'VOICE'}, function (response) {
                     $('.chat-thread').scrollTop($('.chat-thread').height() + 60);
                 });
             }
@@ -192,7 +192,7 @@ $(function(){
                     isShowProgressTips: 1, // 默认为1，显示进度提示
                     success: function (res) {
                         var serverId = res.serverId; // 返回图片的服务器端ID
-                        $.post('${request.contextPath}/bidsubmit/download-file', {bidId:$('#bidId').val(),serverId:serverId,fileType:'IMAGE'}, function (response) {
+                        $.post('${request.contextPath}/bidsubmit/download-file', {bidId:$('#bidId').val(),serverId:serverId,otherUserId:$('#otherUserId').val(),fileType:'IMAGE'}, function (response) {
                             $('.chat-thread').scrollTop($('.chat-thread').height() + 60);
                         });
                     }
@@ -292,7 +292,7 @@ $(function(){
         if(messageText != ''){
             $('.chat-thread').append('<li class="'+sendClassName+'">'+messageText+'</li>');
             $('#status_message').val('');
-            $.post('${request.contextPath}/bidsubmit/addtext', {bidId:$('#bidId').val(),text:messageText}, function (response) {
+            $.post('${request.contextPath}/bidsubmit/addtext', {bidId:$('#bidId').val(),otherUserId:$('#otherUserId').val(),text:messageText}, function (response) {
 
                 if(response.messageType == 'success' ){
 

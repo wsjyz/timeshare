@@ -94,6 +94,9 @@ public class BidController extends BaseController{
             UserInfo seller = getCurrentUser(bidCreatUserId);
             bid.setCreateUserName(seller.getNickName());
             bid.setUserId(bidCreatUserId);
+            if(bid.getCanAudit() == null){
+                bid.setCanAudit("0");
+            }
             String result = "";
 
             if(StringUtils.isNotBlank(bid.getBidId())){
