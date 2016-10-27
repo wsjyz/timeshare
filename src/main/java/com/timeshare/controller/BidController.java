@@ -90,7 +90,7 @@ public class BidController extends BaseController{
     }
 
     private SystemMessage saveBid(Bid bid, String bidCreatUserId){
-        if(bid != null){
+        if(bid != null && StringUtils.isNotBlank(bid.getBidId())){
             UserInfo seller = getCurrentUser(bidCreatUserId);
             bid.setCreateUserName(seller.getNickName());
             bid.setUserId(bidCreatUserId);
