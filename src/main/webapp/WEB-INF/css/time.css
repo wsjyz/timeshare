@@ -200,3 +200,9 @@ body{font-family: Arial, Helvetica, sans-serif;}
 .xhsk-fixed-log .fixed-log-con,
 .xhsk-fixed-log img{width:1.7rem;height: 1.7rem;font-size: 12px;}
 .xhsk-fixed-log img{vertical-align: top;}
+.readmore{
+    color: #7F7F7F;font-size: small;float: right;margin-top: .5rem;
+}
+.moretext{
+    max-height: 3rem;text-overflow: ellipsis;overflow: hidden
+}

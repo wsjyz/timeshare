@@ -11,7 +11,7 @@
     <link rel="stylesheet" href="//g.alicdn.com/msui/sm/0.6.2/css/sm.min.css">
     <link rel="stylesheet" href="//g.alicdn.com/msui/sm/0.6.2/css/sm-extend.min.css">
     <link rel="apple-touch-icon-precomposed" href="/assets/img/apple-touch-icon-114x114.png">
-    <link rel="stylesheet" href="${request.contextPath}/css/time.css">
+    <link rel="stylesheet" href="${request.contextPath}/css/time.css?t=20161028">
     <link rel="stylesheet" href="${request.contextPath}/css/material-icon.css">
     <script src="//g.alicdn.com/sj/lib/zepto/zepto.min.js"></script>
     <style>
@@ -242,7 +242,16 @@
                                 '<div class="col-30">飚数：'+item.submitCount+'</div>'+
                                 '</div>';
                     }
-
+                    var contentHtml;
+                    if(item.content.length > 100){
+                        contentHtml = '<div class="col-100"><div class="moretext">'+
+                                            item.content+
+                                        '</div><div class="readmore">显示更多》</div>' +
+                                        '</div>';
+                    }else{
+                        contentHtml = '<div class="col-100" style="max-height: 12rem;">'+
+                                item.content+ '</div>';
+                    }
 	                html += '<div class="card">'+
                                 '<div class="card-header"><i class="material-icons">blur_circular</i>'+item.title+'</div>'+
                                     '<div class="card-content">'+
@@ -251,8 +260,8 @@
                                             '<div class="row" >'+
                                                 '<div class="col-100"><hr style="height:1px;border:none;border-top:1px solid #E1E1E1;"/></div>'+
                                             '</div>'+
-                                            '<div class="row" style="margin-top: 0.5rem;">'+
-                                                    '<div class="col-100">'+item.content+'</div>'+
+                                            '<div class="row bid-content" style="margin-top: 0.5rem;">'+
+                                                contentHtml+
                                             '</div>'+
                                             '<div class="row" >'+
                                             '<div class="col-100"><hr style="height:1px;border:none;border-top:1px solid #E1E1E1;"/></div>'+
@@ -375,6 +384,14 @@
 	        $('form').attr('action','${request.contextPath}/bid/to-search');
 	        $('form').submit();
 	    } );
+    $("body").on( "click", ".readmore", function(){
+        $(this).prev().toggleClass('moretext');
+        if($(this).text() == '显示更多》'){
+            $(this).text('收起');
+        }else{
+            $(this).text('显示更多》');
+        }
+    } );
 </script>
 <script>
      function XhskSwiper(datas){

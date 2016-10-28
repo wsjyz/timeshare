@@ -342,7 +342,8 @@
             }
         }else if(pageContentType == 'mysubmit'){
             if(bidStatus == 'ongoing'){
-                buttons1 = [btnToSubmit];
+                btnToShare.text = '邀请别人应飚';
+                buttons1 = [btnToSubmit,btnToShare];
             }else if(bidStatus == 'finish'){
                 btnToSubmit.text = '查看';
                 buttons1 = [btnToSubmit];

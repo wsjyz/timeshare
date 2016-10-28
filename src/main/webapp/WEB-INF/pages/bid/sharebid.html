@@ -42,9 +42,10 @@
             </div>
         </header>
         <div class="content">
-            <div style="width: 100%">
+            <div style="width: 100%;margin-top: 0.5rem;">
                 <img src="${request.contextPath}/images/qrcode_8cm.jpg" style="width: 4.5rem;height: 4.5rem;display:block;margin:0 auto;"/>
-                <div style="text-align: center">请关注公众号 邂逅时刻 （xiehoushike）探索更多精彩</div>
+                <div style="text-align: center">更多精彩，敬请关注邂逅时刻</div>
+                <div style="text-align: center">（公众号：xiehoushike）</div>
             </div>
 
             <div id="bidDiv">
@@ -153,15 +154,15 @@ $(function(){
 
             attrHtml = '<div class="row">'+
                     '<div class="col-10"><i class="material-icons" >face</i></div>'+
-                    '<div class="col-30">'+item.createUserName+'&nbsp;&nbsp;</div>'+
-                    '<div class="col-10"><i class="material-icons">attach_money</i></div>'+
-                    '<div class="col-40">招标金额：'+item.price+'</div>'+
+                    '<div class="col-40">'+item.createUserName+'&nbsp;&nbsp;</div>'+
+                    '<div class="col-8"><i class="material-icons">attach_money</i></div>'+
+                    '<div class="col-38">招标金额：'+item.price+'</div>'+
                     '</div>'+
                     '<div class="row">'+
                     '<div class="col-10"><i class="material-icons">gps_fixed</i></div>'+
-                    '<div class="col-30">飚数：'+item.submitCount+'</div>'+
-                    '<div class="col-10"><i class="material-icons">hearing</i></div>'+
-                    '<div class="col-40">允许旁听：是</div>'+
+                    '<div class="col-40">飚数：'+item.submitCount+'</div>'+
+                    '<div class="col-8"><i class="material-icons">hearing</i></div>'+
+                    '<div class="col-38">允许旁听：是</div>'+
                     '</div>';
             endTimeHtml =  '<div class="row">'+
 //                                                '<div class="col-5" ><i class="material-icons" style="font-size:  0.5rem">brightness_1</i></div>'+

@@ -25,6 +25,12 @@
         .float-btn-div i:active {
             color: #BCEE68;
         }
+        .readmore{
+            color: #7F7F7F;font-size: small;float: right;margin-top: .5rem;
+        }
+        .moretext{
+            max-height: 3rem;text-overflow: ellipsis;overflow: hidden
+        }
     </style>
 </head>
 <body>
@@ -156,7 +162,16 @@
                         '<div class="col-30">飚数：'+item.submitCount+'</div>'+
                         '</div>';
             }
-
+            var contentHtml;
+            if(item.content.length > 100){
+                contentHtml = '<div class="col-100"><div class="moretext">'+
+                        item.content+
+                        '</div><div class="readmore">显示更多》</div>' +
+                        '</div>';
+            }else{
+                contentHtml = '<div class="col-100" style="max-height: 12rem;">'+
+                        item.content+ '</div>';
+            }
             html += '<div class="card">'+
                     '<div class="card-header"><i class="material-icons">blur_circular</i>'+item.title+'</div>'+
                     '<div class="card-content">'+
@@ -166,7 +181,7 @@
                     '<div class="col-100"><hr style="height:1px;border:none;border-top:1px solid #E1E1E1;"/></div>'+
                     '</div>'+
                     '<div class="row" style="margin-top: 0.5rem;">'+
-                    '<div class="col-100">'+item.content+'</div>'+
+                    contentHtml+
                     '</div>'+
                     '<div class="row" >'+
                     '<div class="col-100"><hr style="height:1px;border:none;border-top:1px solid #E1E1E1;"/></div>'+
@@ -245,7 +260,7 @@
             var dataType = 'all';
 
             lastIndex = $('.list-block').eq(tabIndex).children('.card').length;
-            $.post('${request.contextPath}/bid/list-by-condition', {condition:dataType,startIndex: lastIndex,loadSize:itemsPerLoad}, function (response) {
+            $.post('${request.contextPath}/bid/search', {keyword:$('#search').val(),startIndex: lastIndex,loadSize:itemsPerLoad}, function (response) {
                 setTimeout(function() {
                     // 重置加载flag
                     loading = false;
@@ -308,6 +323,14 @@
             $.hideIndicator();
         });
     };
+    $("body").on( "click", ".readmore", function(){
+        $(this).prev().toggleClass('moretext');
+        if($(this).text() == '显示更多》'){
+            $(this).text('收起');
+        }else{
+            $(this).text('显示更多》');
+        }
+    } );
     $.init();
 </script>
 
