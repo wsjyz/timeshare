@@ -118,7 +118,7 @@
                     auditPrice = (item.price * 0.3).toFixed(2);
                 }
                 if(currentUserId != item.userId) {
-                    btnHtml = '<a href="#" class="button button-success" id="toAuditBtn" bidid="' + item.bidId + '" style="border: 1px solid #0894ec;color: #0894ec">' + auditPrice + '元旁听</a>';
+                    btnHtml = '<a href="#" class="button button-success" id="toAuditBtn" bidid="' + item.bidId + '" style="border: 1px solid #0894ec;color: #0894ec">' + auditPrice + '元旁听(如已付费，不需重复付款)</a>';
                 }
                 attrHtml = '<div class="row">'+
                         '<div class="col-10"><i class="material-icons" >face</i></div>'+

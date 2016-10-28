@@ -98,7 +98,7 @@
                         $.post('${request.contextPath}/bid/save-auditor', {bidId:bidId,wxTradeNo: wxTradeNo}, function (response) {
                             if(response.messageType == 'success' ){
 
-                                window.location.href = '${request.contextPath}/bidsubmit/to-submit/'+bidId;
+                                window.location.href = '${request.contextPath}/bidsubmit/to-submit/'+bidId+'?audit=audit';
 
                             }
                         });

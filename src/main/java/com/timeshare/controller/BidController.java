@@ -90,7 +90,7 @@ public class BidController extends BaseController{
     }
 
     private SystemMessage saveBid(Bid bid, String bidCreatUserId){
-        if(bid != null && StringUtils.isNotBlank(bid.getBidId())){
+        if(bid != null){
             UserInfo seller = getCurrentUser(bidCreatUserId);
             bid.setCreateUserName(seller.getNickName());
             bid.setUserId(bidCreatUserId);
@@ -107,7 +107,7 @@ public class BidController extends BaseController{
                 }
 
             }
-            if(bid.getBidStatus().equals(Contants.BID_STATUS.ongoing.toString())){
+            if(StringUtils.isNotBlank(bid.getBidStatus()) && bid.getBidStatus().equals(Contants.BID_STATUS.ongoing.toString())){
                 //修改支出
                 seller.setSumCost(seller.getSumCost().add(bid.getPrice()));
                 userService.modifyUser(seller);
@@ -172,7 +172,7 @@ public class BidController extends BaseController{
 
     @RequestMapping(value = "/to-share-view/{bidId}")
     public String toShare(@PathVariable String bidId,Model model,
-                          @CookieValue(value="time_sid", defaultValue="c9f7da60747f4cf49505123d15d29ac4") String userId,
+                          @CookieValue(value="time_sid", defaultValue="") String userId,
                           HttpServletRequest request) {
         model.addAttribute("currentUserId", userId);
         Bid bid = bidService.findBidById(bidId);
@@ -205,6 +205,7 @@ public class BidController extends BaseController{
         }else if(condition.equals("complete")){
             params.setBidStatus(Contants.BID_STATUS.finish.toString());
         }
+        params.setCondition(condition);
         List<Bid> bidList = bidService.findBidList(params,startIndex,loadSize);
         return bidList;
     }

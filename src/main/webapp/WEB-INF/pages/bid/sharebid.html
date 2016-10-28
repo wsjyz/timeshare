@@ -37,11 +37,16 @@
             <!-- 邂逅时刻log -->
             <div class="xhsk-fixed-log">
                 <div class="fixed-log-con">
-                    <img id="logoImg" src="${request.contextPath}/images/icon/logo.png" alt="邂逅时刻">
+                    <img id="logoImg" src="${request.contextPath}/images/icon/logo.png" alt="邂逅时刻" >
                 </div>
             </div>
         </header>
         <div class="content">
+            <div style="width: 100%">
+                <img src="${request.contextPath}/images/qrcode_8cm.jpg" style="width: 4.5rem;height: 4.5rem;display:block;margin:0 auto;"/>
+                <div style="text-align: center">请关注公众号 邂逅时刻 （xiehoushike）探索更多精彩</div>
+            </div>
+
             <div id="bidDiv">
 
             </div>
@@ -173,7 +178,7 @@ $(function(){
                 auditPrice = (item.price * 0.3).toFixed(2);
             }
             if(currentUserId != item.userId) {
-                btnHtml = '<a href="#" class="button button-success" id="toAuditBtn" bidid="' + item.bidId + '" style="border: 1px solid #0894ec;color: #0894ec">' + auditPrice + '元旁听</a>';
+                btnHtml = '<a href="#" class="button button-success" id="toAuditBtn" bidid="' + item.bidId + '" style="border: 1px solid #0894ec;color: #0894ec">' + auditPrice + '元旁听(如已付费，不需重复付款)</a>';
             }
             attrHtml = '<div class="row">'+
                     '<div class="col-10"><i class="material-icons" >face</i></div>'+

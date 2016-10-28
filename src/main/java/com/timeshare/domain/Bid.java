@@ -24,6 +24,15 @@ public class Bid extends BaseDomain{
     private String pageContentType;
     private String bidUserId;
     private String auditUserId;
+    private String condition;
+
+    public String getCondition() {
+        return condition;
+    }
+
+    public void setCondition(String condition) {
+        this.condition = condition;
+    }
 
     public String getAuditUserId() {
         return auditUserId;
