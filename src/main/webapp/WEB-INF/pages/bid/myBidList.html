@@ -205,8 +205,16 @@
         var dataLength = 0;
         $.each(data, function(i, item){
             var bidStatus = "";
+            var nowTimeDateTime = new Date().getTime();
+            var endTimeDateTime;
+            if(item.endTime != null){
+                endTimeDateTime =  new Date(item.endTime.replace(/-/g,"/")).getTime();
+            }
             if(item.bidStatus == 'ongoing'){
                 bidStatus = "进行中";
+                if(endTimeDateTime < nowTimeDateTime){
+                    bidStatus = "已过期";
+                }
             }else if(item.bidStatus == 'stopped'){
                 bidStatus = "已终止";
             }else if(item.bidStatus == 'draft'){
