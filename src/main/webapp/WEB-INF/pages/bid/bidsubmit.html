@@ -12,7 +12,7 @@
     <link rel="stylesheet" href="//g.alicdn.com/msui/sm/0.6.2/css/sm.min.css">
     <link rel="stylesheet" href="//g.alicdn.com/msui/sm/0.6.2/css/sm-extend.min.css">
     <link rel="stylesheet" href="${request.contextPath}/css/main.css">
-    <link rel="stylesheet" href="${request.contextPath}/css/chat.css?t=20161013">
+    <link rel="stylesheet" href="${request.contextPath}/css/chat.css?t=20161029">
     <style>
         .chat-thread li.self:before {
             background-image: url(${otherUser.headImgPath});
@@ -53,9 +53,9 @@
                 <!--<li>yes, what time suits you?</li>-->
                 <!--<li>I was thinking after lunch, I have a meeting in the morning</li>-->
             </ul>
-            <a id="speakBtn">
-                <div class="speaker" style="display: none">
-                    <i id="speaker_phone" class="material-icons" style="font-size: 2rem;margin-top: 0.4rem">speaker_phone</i>
+            <a id="speakBtn" style="display: none">
+                <div class="speaker" >
+                    <i id="speaker_phone" class="material-icons" style="font-size: 2rem;">speaker_phone</i>
                     <div id="speaker_phone_text">长按说话</div>
                 </div>
             </a>
@@ -91,7 +91,7 @@
     }
     function longPress(){
         timeOutEvent = 0;
-        $('#speakBtn').css('color', '#ff6701');
+        $('#speakBtn').css({'-webkit-animation-name':'greenPulse','-webkit-animation-duration':'3s','-webkit-animation-iteration-count':'infinite'});
         wx.startRecord();
         wx.onVoiceRecordEnd({
             // 录音时间超过一分钟没有停止的时候会执行 complete 回调
@@ -99,19 +99,19 @@
             complete: function (res) {
                 var localId = res.localId;
                 $('.chat-thread').append('<a class="play_voice" data="'+localId+'"><li class="'+sendClassName+'" ><i class="material-icons">hearing</i></li></a>');
-                $('.speaker').hide();
+                $('#speakBtn').hide();
                 uploadVoice(localId);
             }
         });
     }
     function stopRecordVoiceFunc(){
         clearTimeout(timeOutEvent);
-        $('#speakBtn').css('color', '#212121');
+        $('#speakBtn').css({'-webkit-animation-name':'none','-webkit-animation-duration':'0','-webkit-animation-iteration-count':'infinite'});
         wx.stopRecord({
             success: function (res) {
                 var localId = res.localId;
                 $('.chat-thread').append('<a class="play_voice" data="'+localId+'"><li class="'+sendClassName+'" ><i class="material-icons" >hearing</i></li></a>');
-                $('.speaker').hide();
+                $('#speakBtn').hide();
                 uploadVoice(localId);
             }
         });
@@ -203,7 +203,7 @@ $(function(){
 
     } );
     $("body").on( "click", "#voiceBtn", function(){
-        $('.speaker').show();
+        $('#speakBtn').show();
     });
 
     $("body").on( "touchstart", "#speakBtn", function(e){
@@ -264,13 +264,12 @@ $(function(){
 
     });
     $("body").on( "touchend", "#speakBtn", function(){
-
         stopRecordVoiceFunc();
         return false;
     });
     $("body").on( "click", function(e){
-        if($(e.target).closest('.speaker').length <= 0 && $(e.target).closest('#voiceBtn').length <= 0){
-            $('.speaker').hide();
+        if($(e.target).closest('#speakBtn').length <= 0 && $(e.target).closest('#voiceBtn').length <= 0){
+            $('#speakBtn').hide();
             stopRecordVoiceFunc();
         }
 
