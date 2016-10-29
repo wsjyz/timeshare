@@ -12,7 +12,7 @@
     <link rel="stylesheet" href="//g.alicdn.com/msui/sm/0.6.2/css/sm.min.css">
     <link rel="stylesheet" href="//g.alicdn.com/msui/sm/0.6.2/css/sm-extend.min.css">
     <link rel="stylesheet" href="${request.contextPath}/css/main.css">
-    <link rel="stylesheet" href="${request.contextPath}/css/chat.css?t=20161029">
+    <link rel="stylesheet" href="${request.contextPath}/css/chat.css?t=201610291">
     <style>
         .chat-thread li.self:before {
             background-image: url(${otherUser.headImgPath});
@@ -56,7 +56,7 @@
             <a id="speakBtn" style="display: none">
                 <div class="speaker" >
                     <i id="speaker_phone" class="material-icons" style="font-size: 2rem;">speaker_phone</i>
-                    <div id="speaker_phone_text">长按说话</div>
+                    <div id="speaker_phone_text" style="font-size: small">长按说话</div>
                 </div>
             </a>
             <div class="popup-messages-footer" style="display: <#if bid.bidStatus == "finish" || audit == "audit">none<#else>block</#if>">
@@ -92,6 +92,7 @@
     function longPress(){
         timeOutEvent = 0;
         $('#speakBtn').css({'-webkit-animation-name':'greenPulse','-webkit-animation-duration':'3s','-webkit-animation-iteration-count':'infinite'});
+        $('#speaker_phone_text').text('正在录音，点击其他地方停止');
         wx.startRecord();
         wx.onVoiceRecordEnd({
             // 录音时间超过一分钟没有停止的时候会执行 complete 回调
@@ -107,6 +108,7 @@
     function stopRecordVoiceFunc(){
         clearTimeout(timeOutEvent);
         $('#speakBtn').css({'-webkit-animation-name':'none','-webkit-animation-duration':'0','-webkit-animation-iteration-count':'infinite'});
+        $('#speaker_phone_text').text('长按说话');
         wx.stopRecord({
             success: function (res) {
                 var localId = res.localId;
