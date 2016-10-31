@@ -14,4 +14,6 @@ public interface BidSubmitDAO {
     String deleteBidSubmit(String submitId);
 
     List<BidSubmit> findSubmitList(BidSubmit submit,int startIndex, int loadSize);
+
+    BidSubmit findPreviouSubmit(BidSubmit submit);
 }

@@ -1,6 +1,7 @@
 package com.timeshare.service.impl;
 
 import com.timeshare.dao.BidUserDAO;
+import com.timeshare.dao.impl.BidUserInfo;
 import com.timeshare.domain.BidUser;
 import com.timeshare.service.BidUserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,5 +36,10 @@ public class BidUserServiceImpl implements BidUserService {
     @Override
     public List<BidUser> findBidUserList(BidUser bidUser, int startIndex, int loadSize) {
         return bidUserDAO.findBidUserList(bidUser,startIndex,loadSize);
+    }
+
+    @Override
+    public List<BidUserInfo> findNotWinBidUserList(BidUser bidUser) {
+        return bidUserDAO.findNotWinBidUserList(bidUser);
     }
 }

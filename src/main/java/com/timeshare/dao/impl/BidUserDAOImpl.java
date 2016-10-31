@@ -115,6 +115,24 @@ public class BidUserDAOImpl extends BaseDAO implements BidUserDAO {
         return bidUserList;
     }
 
+    public List<BidUserInfo> findNotWinBidUserList(BidUser bidUser) {
+        StringBuilder sql = new StringBuilder("");
+        sql.append("select u.mobile,u.nick_name from t_bid_user i,t_user_info u where i.create_user_id = u.user_id and i.bid_id = ? and i.win_the_bid is null");
+
+        List<BidUserInfo> bidUserList = getJdbcTemplate().query(sql.toString(), new Object[]{bidUser.getBidId()}, new RowMapper<BidUserInfo>() {
+            @Override
+            public BidUserInfo mapRow(ResultSet rs, int i) throws SQLException {
+                BidUserInfo bidUserInfo = new BidUserInfo();
+                bidUserInfo.setMobile(rs.getString("mobile"));
+                bidUserInfo.setNickName(rs.getString("nick_name"));
+                return bidUserInfo;
+            }
+        });
+
+        return bidUserList;
+    }
+
+
     class BidUserMapper implements RowMapper<BidUser>{
 
         @Override

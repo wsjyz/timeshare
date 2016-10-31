@@ -79,6 +79,25 @@ public class BidSubmitDAOImpl extends BaseDAO implements BidSubmitDAO {
 
     }
 
+    public BidSubmit findPreviouSubmit(BidSubmit submit){
+        StringBuilder sql = new StringBuilder("select * from t_bid_submit i where 1=1 ");
+        if (StringUtils.isNotBlank(submit.getBidId())) {
+            sql.append(" and i.bid_id = '"+submit.getBidId()+"' ");
+        }
+        if (StringUtils.isNotBlank(submit.getUserId())) {
+            sql.append(" and i.create_user_id = '"+submit.getUserId()+"'");
+        }
+        if (StringUtils.isNotBlank(submit.getOtherUserId())) {
+            sql.append(" and i.other_user_id = '"+submit.getOtherUserId()+"'");
+        }
+        sql.append("  order by i.opt_time desc limit 0,1");
+        List<BidSubmit> bidSubmits = getJdbcTemplate().query(sql.toString(),new BidSubmitRowMapper());
+        if(bidSubmits != null && bidSubmits.size() > 0){
+            return bidSubmits.get(0);
+        }
+        return null;
+    }
+
     class BidSubmitRowMapper implements RowMapper<BidSubmit>{
 
         @Override

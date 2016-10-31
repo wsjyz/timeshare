@@ -1,5 +1,6 @@
 package com.timeshare.service;
 
+import com.timeshare.dao.impl.BidUserInfo;
 import com.timeshare.domain.BidUser;
 
 import java.util.List;
@@ -16,5 +17,7 @@ public interface BidUserService {
     String modifyBidUser(BidUser bidUser);
 
     List<BidUser> findBidUserList(BidUser bidUser, int startIndex, int loadSize);
+
+    List<BidUserInfo> findNotWinBidUserList(BidUser bidUser);
 
 }

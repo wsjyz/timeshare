@@ -1,5 +1,6 @@
 package com.timeshare.service.impl;
 
+import com.alibaba.fastjson.JSON;
 import com.timeshare.dao.BidDAO;
 import com.timeshare.dao.BidSubmitDAO;
 import com.timeshare.dao.BidUserDAO;
@@ -16,6 +17,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
@@ -40,6 +42,7 @@ public class BidSubmitServiceImpl implements BidSubmitService {
     public String saveBidSubmit(BidSubmit submit) {
         BidUser bidUser = bidUserDAO.findBidUserByBidIdAndUserId(submit.getBidId(),submit.getUserId());
         Bid bid = bidDAO.findBidById(submit.getBidId());
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         if(bidUser == null){
             bidUser = new BidUser();
             bidUser.setBidId(submit.getBidId());
@@ -53,37 +56,84 @@ public class BidSubmitServiceImpl implements BidSubmitService {
             }
             bidDAO.modifyBid(bid);
         }else{
-            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
             bidUser.setLastModifyTime(sdf.format(new Date()));
             bidUserDAO.modifyBidUser(bidUser);
         }
         //发短信
-//        SmsContentBean bean;
-//        UserInfo bidCreator = userService.findUserByUserId(bid.getUserId());
-//        if(bidCreator.getUserId().equals(submit.getUserId())){//回答别人的应飚
-//            UserInfo bidUserInfo = userService.findUserByUserId(bidUser.getUserId());
-//            bean = new SmsContentBean();
-//            bean.setTemplateCode("SMS_22275127");
-//            bean.setToMobile();//这里有问题，需要知道回复谁的
-//            bean.setContent("{\"bidName\":\""+bid.getTitle()+"\"}");
-//            System.out.println("向"+bidCreator.getMobile()+"发短信："+"飚主回答了您的“"+bid.getTitle()+"”应飚，请进入微信服务号“邂逅时刻 ”查看");
-//            String response = SmsUtils.senMessage(bean);
-//            if(response.indexOf("error_response") != -1){
-//                logger.error(response);
-//            }
-//        }else{
-//            bean = new SmsContentBean();
-//            bean.setTemplateCode("SMS_21385035");
-//            bean.setToMobile(bidCreator.getMobile());
-//            bean.setContent("{\"bidName\":\""+bid.getTitle()+"\"}");
-//            System.out.println("向"+bidCreator.getMobile()+"发短信："+"您的“"+bid.getTitle()+"”有人应飚了，请进入微信服务号“邂逅时刻 ”查看");
-//            String response = SmsUtils.senMessage(bean);
-//            if(response.indexOf("error_response") != -1){
-//                logger.error(response);
-//            }
-//        }
+        SmsContentBean bean;
+        UserInfo bidCreator = userService.findUserByUserId(bid.getUserId());
+        if(bidCreator.getUserId().equals(submit.getUserId())){//回答别人的应飚
+            BidSubmit params = new BidSubmit();
+            params.setBidId(bid.getBidId());
+            params.setUserId(bidCreator.getUserId());
+            params.setOtherUserId(submit.getOtherUserId());
+            BidSubmit previousSubmit = bidSubmitDAO.findPreviouSubmit(params);
+
+            UserInfo otherUser = userService.findUserByUserId(submit.getOtherUserId());
+            if(previousSubmit == null){
+                sendmmsToBidUser(bid.getTitle(),otherUser.getMobile());
+            }else{
+                long previousTime = 0;
+                try {
+                    previousTime = sdf.parse(previousSubmit.getOptTime()).getTime();
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                }
+                Date nowDate = new Date();
+                if ((nowDate.getTime() - previousTime) > (1000 * 60 * 3)){
+                    sendmmsToBidUser(bid.getTitle(),otherUser.getMobile());
+                }
+            }
+
+
+        }else{
+            BidSubmit params = new BidSubmit();
+            params.setBidId(bid.getBidId());
+            params.setUserId(submit.getUserId());
+            BidSubmit previousSubmit = bidSubmitDAO.findPreviouSubmit(params);
+            //System.out.println(JSON.toJSONString(previousSubmit));
+            if(previousSubmit == null){
+                sendmmsToBidCreator(bid.getTitle(),bidCreator.getMobile());
+            }else{
+                long previousTime = 0;
+                try {
+                    previousTime = sdf.parse(previousSubmit.getOptTime()).getTime();
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                }
+                Date nowDate = new Date();
+                if ((nowDate.getTime() - previousTime) > (1000 * 60 * 10)){
+                    sendmmsToBidCreator(bid.getTitle(),bidCreator.getMobile());
+                }
+            }
+
+
+        }
 
         return bidSubmitDAO.saveBidSubmit(submit);
+    }
+    private void sendmmsToBidUser(String bidTitle,String mobile){
+        SmsContentBean bean = new SmsContentBean();
+        bean.setTemplateCode("SMS_22275127");
+        bean.setToMobile(mobile);//这里有问题，需要知道回复谁的
+        bean.setContent("{\"bidName\":\""+bidTitle+"\"}");
+        System.out.println("向"+mobile+"发短信："+"飚主回答了您的“"+bidTitle+"”应飚，请进入微信服务号“邂逅时刻 ”查看");
+        String response = SmsUtils.senMessage(bean);
+        if(response.indexOf("error_response") != -1){
+            logger.error(response);
+        }
+    }
+
+    private void sendmmsToBidCreator(String bidTitle,String mobile){
+        SmsContentBean bean = new SmsContentBean();
+        bean.setTemplateCode("SMS_21385035");
+        bean.setToMobile(mobile);
+        bean.setContent("{\"bidName\":\""+bidTitle+"\"}");
+        System.out.println("向"+mobile+"发短信："+"您的“"+bidTitle+"”有人应飚了，请进入微信服务号“邂逅时刻 ”查看");
+        String response = SmsUtils.senMessage(bean);
+        if(response.indexOf("error_response") != -1){
+            logger.error(response);
+        }
     }
 
     @Override

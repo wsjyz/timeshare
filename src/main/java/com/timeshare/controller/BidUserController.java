@@ -1,5 +1,6 @@
 package com.timeshare.controller;
 
+import com.timeshare.dao.impl.BidUserInfo;
 import com.timeshare.domain.Bid;
 import com.timeshare.domain.BidUser;
 import com.timeshare.domain.SystemMessage;
@@ -85,15 +86,32 @@ public class BidUserController extends BaseController{
 
 
             //发短信通知中标者
-            SmsContentBean bean = new SmsContentBean();
+            SmsContentBean bean = null;
+            String response = "";
+            bean = new SmsContentBean();
             bean.setTemplateCode("SMS_21235044");
             bean.setToMobile(bidUserInfo.getMobile());
             bean.setContent("{\"bidName\":\""+bid.getTitle()+"\",\"bidPrice\":\""+bid.getPrice()+"\"}");
             System.out.println("您的应飚“"+bid.getTitle()+"”已被飚主接受，项目款项"+bid.getPrice()+"元已入账，请进入微信服务号“邂逅时刻”查看");
-            String response = SmsUtils.senMessage(bean);
+            response = SmsUtils.senMessage(bean);
             if(response.indexOf("error_response") != -1){
                 logger.error(response);
             }
+
+            //通知其他应飚者
+            List<BidUserInfo> bidUserInfos = bidUserService.findNotWinBidUserList(bidUser);
+            for(BidUserInfo user:bidUserInfos){
+                bean = new SmsContentBean();
+                bean.setTemplateCode("SMS_24880304");
+                bean.setToMobile(user.getMobile());
+                bean.setContent("{\"bidName\":\""+bid.getTitle()+"\"}");
+                System.out.println("发短信给"+user.getMobile()+"感谢您参与"+bid.getTitle()+"的接飚，很遗憾未能中标，期待下次精彩合作！邂逅时刻");
+                response = SmsUtils.senMessage(bean);
+                if(response.indexOf("error_response") != -1){
+                    logger.error(response);
+                }
+            }
+
         }
         return getSystemMessage(result);
     }
