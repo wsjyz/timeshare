@@ -89,9 +89,15 @@ public class WxController {
         String openId = oauth.obtainOpenId(code);
         UserInfo userInfo = userService.findUserByOpenId(openId);
         String sendUrl = "";
+        String contextPath = request.getContextPath();
+        try {
+            contextPath = URLEncoder.encode(contextPath,"UTF-8");
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
         if(userInfo == null || StringUtils.isBlank(openId)){//TODO openId貌似有空的情况，但微信还是给我跳转到这里
             sendUrl = "https://open.weixin.qq.com/connect/oauth2/authorize?appid="
-                    + Contants.APPID+"&redirect_uri=http%3A%2F%2F"+Contants.DOMAIN+"%2Ftime%2Fwx%2Foauth%2F&response_type=code&scope=snsapi_userinfo&state="+toUrl+"#wechat_redirect";
+                    + Contants.APPID+"&redirect_uri=http%3A%2F%2F"+Contants.DOMAIN+contextPath+"%2Fwx%2Foauth%2F&response_type=code&scope=snsapi_userinfo&state="+toUrl+"#wechat_redirect";
         }else{
 
             String userId = CookieUtils.getCookie(request,"time_sid");
@@ -113,7 +119,7 @@ public class WxController {
 
             }else{
 
-                sendUrl = "/user/to-userinfo?userId="+userInfo.getUserId();
+                sendUrl = "/user/to-userinfo?userId="+userInfo.getUserId()+"&toUrl="+toUrl;
             }
         }
         return "redirect:"+sendUrl;
@@ -151,7 +157,7 @@ public class WxController {
         }
 
         request.setAttribute("user",user);
-        String sendUrl = "/user/to-userinfo?userId="+userId;
+        String sendUrl = "/user/to-userinfo?userId="+userId+"&toUrl="+toUrl;
 
         return "redirect:"+sendUrl;
     }

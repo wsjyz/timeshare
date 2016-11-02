@@ -358,7 +358,9 @@
 	    });
         $("body").on( "click", "#toSubmitBtn", function(){
             var bidId = $(this).attr('bidid');
-            window.location.href = '${request.contextPath}/bidsubmit/to-submit/'+bidId;
+            var contextPath = encodeURIComponent('${request.contextPath}');
+            var backUrl = '/bidsubmit/to-submit/'+bidId;
+            window.location.href = '${request.contextPath}/wx/to-get-open-id?backUrl='+encodeURIComponent(backUrl);
         } );
         $("body").on( "click", "#toAuditBtn", function(){
             var bidId = $(this).attr('bidid');

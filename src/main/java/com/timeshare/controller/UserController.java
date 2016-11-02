@@ -176,8 +176,9 @@ public class UserController extends BaseController{
         return remind;
     }
 
+    @ResponseBody
     @RequestMapping(value = "/save")
-    public String save(UserInfo user,Model model) {
+    public SystemMessage save(UserInfo user,Model model) {
         SystemMessage message = new SystemMessage();
         if(user != null){
 
@@ -187,8 +188,7 @@ public class UserController extends BaseController{
                 message.setContent("操作成功！");
             }
         }
-        model.addAttribute("message",message);
-        model.addAttribute("jumpUrl","/user/to-my-page");
-        return "info";
+
+        return message;
     }
 }
