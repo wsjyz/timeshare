@@ -149,9 +149,11 @@ $(function(){
             'pauseVoice',
             'stopVoice',
             'onVoicePlayEnd',
-            'uploadVoice'
+            'uploadVoice',
+            'hideOptionMenu'
         ] // 必填，需要使用的JS接口列表，所有JS接口列表见附录2
     });
+
     $.post('${request.contextPath}/bidsubmit/findsubmitlist', {bidId:$('#bidId').val(),otherUserId:$('#otherUserId').val()}, function (response) {
         var size = 0;
         var className = '';
@@ -302,8 +304,20 @@ $(function(){
             });
         }
     } );
-
 })
+    function onBridgeReady(){
+        WeixinJSBridge.call('hideOptionMenu');
+    }
+    if (typeof WeixinJSBridge == "undefined"){
+        if( document.addEventListener ){
+            document.addEventListener('WeixinJSBridgeReady', onBridgeReady, false);
+        }else if (document.attachEvent){
+            document.attachEvent('WeixinJSBridgeReady', onBridgeReady);
+            document.attachEvent('onWeixinJSBridgeReady', onBridgeReady);
+        }
+    }else{
+        onBridgeReady();
+    }
 </script>
 </body>
 </html>
