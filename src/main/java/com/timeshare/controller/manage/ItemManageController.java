@@ -1,6 +1,7 @@
 package com.timeshare.controller.manage;
 
 
+import com.timeshare.controller.ItemDTO;
 import com.timeshare.domain.*;
 import com.timeshare.service.ItemService;
 import com.timeshare.service.UserService;
@@ -32,23 +33,16 @@ public class ItemManageController {
 
     @RequestMapping(value = "/list")
     @ResponseBody
-    public PageModel findItemList(PageModel pageModel,String itemStatus) {
+    public List<ItemDTO> findItemList(@RequestParam String itemStatus, @RequestParam int startIndex, @RequestParam int loadSize) {
 
-        List<Item> itemList = new ArrayList<>();
+
         Item parms = new Item();
         if(StringUtils.isNotBlank(itemStatus) && !itemStatus.equals("all")){
             parms.setItemStatus(itemStatus);
         }
         //parms.setItemStatus(Contants.ITEM_STATUS.apply_for_online.toString());
-        itemList = itemService.findItemList(parms,pageModel.getiDisplayStart(),pageModel.getiDisplayStart()+pageModel.getiDisplayLength());
-        int count = itemService.findItemCount(parms);
-        PageModel pt = new PageModel();
-        pt.setsEcho(pageModel.getsEcho());
-        pt.setiTotalRecords(count);
-        pt.setiTotalDisplayRecords(count);
-        pt.setAaData(itemList);
-        pt.setiDisplayLength(count);
-        return pt;
+        List<ItemDTO> itemList = itemService.findItemManagerList(parms,startIndex,loadSize);
+        return itemList;
     }
     @RequestMapping(value = "/modify")
     @ResponseBody
@@ -100,11 +94,25 @@ public class ItemManageController {
     public String toUserManage(Model model){
         return "manager/item";
     }
+    @RequestMapping(value = "/to-yue-manage")
+    public String toYueList(Model model){
+        return "manager/yue";
+    }
 
     @ResponseBody
     @RequestMapping(value = "/find-item-count")
     public int findItemCount(Item item){
         int count = itemService.findItemCount(item);
         return count;
+    }
+
+    @RequestMapping(value = "/get-item")
+    @ResponseBody
+    public Item getItemById(@RequestParam String itemId) {
+        Item item = itemService.findItemByItemId(itemId);
+        if(item == null){
+            item = new Item();
+        }
+        return item;
     }
 }

@@ -34,4 +34,6 @@ public interface ItemDAO {
 
     int findItemCount(Item item);
 
+    List<Item> findItemManagerList(Item item, int startIndex, int loadSize);
+
 }

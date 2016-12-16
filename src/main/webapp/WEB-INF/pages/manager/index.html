@@ -1,532 +1,72 @@
-<!doctype html>
-<html class="no-js">
+<!DOCTYPE html>
+<html>
 <head>
-    <meta charset="UTF-8">
-    <title>Metis</title>
-
-    <!--IE Compatibility modes-->
+    <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-
-    <!--Mobile first-->
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-
-    <!-- Bootstrap -->
-    <link rel="stylesheet" href="//cdn.bootcss.com/bootstrap/3.3.6/css/bootstrap.min.css">
-
-    <!-- Font Awesome -->
-    <link rel="stylesheet" href="//cdn.bootcss.com/font-awesome/4.5.0/css/font-awesome.css">
-
-    <!-- Metis core stylesheet -->
-    <link rel="stylesheet" href="${request.contextPath}/css/main.min.css">
-
-    <!-- metisMenu stylesheet -->
-    <link rel="stylesheet" href="${request.contextPath}/css/metisMenu.min.css">
-
-    <link rel="stylesheet/less" type="text/css" href="${request.contextPath}/css/theme.less">
-
-    <link rel="stylesheet" href="${request.contextPath}/css/dataTables.bootstrap.min.css">
-    <script src="//cdn.bootcss.com/less.js/2.2.0/less.min.js"></script>
-    <style>
-        .bg-dark{
-            color:#0e0e0e!important;
-        }
-    </style>
+    <title>时刻</title>
+    <meta name="viewport" content="initial-scale=1, maximum-scale=1">
+    <link rel="shortcut icon" href="/favicon.ico">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <link rel="stylesheet" href="//g.alicdn.com/msui/sm/0.6.2/css/sm.min.css">
+    <link rel="stylesheet" href="//g.alicdn.com/msui/sm/0.6.2/css/sm-extend.min.css">
 </head>
-<body class="  ">
-<div class="bg-dark dk" id="wrap">
-    <div id="top">
+<body>
+<!-- page集合的容器，里面放多个平行的.page，其他.page作为内联页面由路由控制展示 -->
+<div class="page-group">
+    <!-- 单个page ,第一个.page默认被展示-->
+    <div class="page">
+        <!-- 标题栏 -->
+        <header class="bar bar-nav">
+            <a class="icon icon-menu pull-left open-panel"></a>
+            <h1 class="title">管理</h1>
+        </header>
 
-        <!-- .navbar -->
-        <nav class="navbar navbar-inverse navbar-static-top">
-            <div class="container-fluid">
-
-                <!-- Brand and toggle get grouped for better mobile display -->
-                <header class="navbar-header">
-                    <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-ex1-collapse">
-                        <span class="sr-only">Toggle navigation</span>
-                        <span class="icon-bar"></span>
-                        <span class="icon-bar"></span>
-                        <span class="icon-bar"></span>
-                    </button>
-                    <a href="index.html" class="navbar-brand">
-                        <img src="${request.contextPath}/images/logo.png" alt="">
-                    </a>
-                </header>
-                <div class="topnav">
-                    <div class="btn-group">
-                        <a href="login.html" data-toggle="tooltip" data-original-title="Logout" data-placement="bottom" class="btn btn-metis-1 btn-sm">
-                            <i class="fa fa-power-off"></i>
-                        </a>
-                    </div>
-                    <div class="btn-group">
-                        <a data-placement="bottom" data-original-title="Show / Hide Left" data-toggle="tooltip" class="btn btn-primary btn-sm toggle-left" id="menu-toggle">
-                            <i class="fa fa-bars"></i>
-                        </a>
-                    </div>
-                </div>
-
-            </div><!-- /.container-fluid -->
-        </nav><!-- /.navbar -->
-        <header class="head">
-
-            <div class="main-bar">
-                <h3>
-                    <i class="fa fa-home"></i>&nbsp; Metis</h3>
-            </div><!-- /.main-bar -->
-        </header><!-- /.head -->
-    </div><!-- /#top -->
-    <div id="left">
-        <div class="media user-media bg-dark dker">
-            <div class="user-media-toggleHover">
-                <span class="fa fa-user"></span>
-            </div>
-            <div class="user-wrapper bg-dark">
-                <a class="user-link" href="">
-                    <img class="media-object img-thumbnail user-img" alt="User Picture" src="${request.contextPath}/images/user.gif">
-                    <span class="label label-danger user-label">16</span>
-                </a>
-                <div class="media-body">
-                    <h5 class="media-heading">管理员</h5>
-                    <ul class="list-unstyled user-info">
-                        <li> <a href="">Administrator</a>  </li>
-                        <li>Last Access :
-                            <br>
-                            <small>
-                                <i class="fa fa-calendar"></i>&nbsp;16 Mar 16:32</small>
-                        </li>
-                    </ul>
-                </div>
-            </div>
-        </div>
-
-        <!-- #menu -->
-        <ul id="menu" class="bg-blue dker">
-            <li class="nav-header">Menu</li>
-            <li class="nav-divider"></li>
-            <li class="active">
-                <a href="#" id="indexBtn">
-                    <i class="fa fa-dashboard"></i><span class="link-title">&nbsp;项目管理</span>
-                </a>
-            </li>
-            <li>
-                <a href="#" id="needApplyBtn">
-                    <i class="fa fa-table"></i>
-                    <span class="link-title">待审批的项目</span>
-                    <span id="applyNotification" class="label label-danger user-label" style="display: none">16</span>
-                </a>
-            </li>
-            <li>
-                <a href="#" id="userManageBtn">
-                    <i class="fa fa-map-marker"></i><span class="link-title">&nbsp;用户管理</span>
-                </a>
-            </li>
-
-
-            <li class="nav-divider"></li>
-
-
-        </ul><!-- /#menu -->
-    </div><!-- /#left -->
-    <div id="content">
-        <div class="outer">
-            <div class="inner bg-light lter">
-                <h1 id="bootstrap-admin-template">Bootstrap-Admin-Template</h1>
-                    <table id="example" class="table table-striped table-bordered" cellspacing="0" width="100%">
-                        <thead>
-                        <tr>
-                            <th>标题</th>
-                            <th>价格</th>
-                            <th>时长</th>
-                            <th>状态</th>
-                            <th>操作</th>
-                        </tr>
-                        </thead>
-                        <tbody>
-                        <tr>
-                            <td>Tiger Nixon</td>
-                            <td>System Architect</td>
-                            <td>Edinburgh</td>
-                            <td>61</td>
-                            <td>2011/04/25</td>
-                        </tr>
-                        <tr>
-                            <td>Garrett Winters</td>
-                            <td>Accountant</td>
-                            <td>Tokyo</td>
-                            <td>63</td>
-                            <td>2011/07/25</td>
-                        </tr>
-                        <tr>
-                            <td>Ashton Cox</td>
-                            <td>Junior Technical Author</td>
-                            <td>San Francisco</td>
-                            <td>66</td>
-                            <td>2009/01/12</td>
-                        </tr>
-                        </tbody>
-                        </table>
-
-            </div><!-- /.inner -->
-        </div><!-- /.outer -->
-    </div><!-- /#content -->
-    <!-- Modal -->
-    <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
-        <div class="modal-dialog" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                    <h4 class="modal-title" id="myModalLabel" style="color: #0e0e0e!important;">Modal title</h4>
-                </div>
-                <div class="modal-body">
-                    <input type="hidden" id="itemId" >
-                    <div class="container-fluid">
-                        <div class="row">
-                            <div class="col-md-4"><label  class="control-label">提交人：</label></div>
-                            <div class="col-md-8"><span id="nicknameSp"></span></div>
-                        </div>
-                        <div class="row">
-                            <div class="col-md-4"><label  class="control-label">提交人手机号：</label></div>
-                            <div class="col-md-8"><span id="mobileSp"></span></div>
-                        </div>
-                        <div class="row">
-                            <div class="col-md-4"><label  class="control-label">提交人公司：</label></div>
-                            <div class="col-md-8"><span id="corpSp"></span></div>
-                        </div>
-                        <div class="row">
-                            <div class="col-md-4"><label  class="control-label">自我介绍：</label></div>
-                            <div class="col-md-8"></div>
-                        </div>
-                        <div class="row">
-                            <div class="col-md-12"><div id="userDescriptionDiv"></div></div>
-                        </div>
-                        <div class="row">
-                            <div class="col-md-4"><label  class="control-label">提交人职位：</label></div>
-                            <div class="col-md-8"><span id="positionSp"></span></div>
-                        </div>
-                        <div class="row">
-                            <div class="col-md-4"><label  class="control-label">提交时间：</label></div>
-                            <div class="col-md-8">2016-06-22 14:22:10</div>
-                        </div>
-                        <div class="row">
-                            <div class="col-md-4"><label  class="control-label">标题：</label></div>
-                            <div class="col-md-8"><span id="titleSp"></span></div>
-                        </div>
-                        <div class="row">
-                            <div class="col-md-4"><label  class="control-label">价格：</label></div>
-                            <div class="col-md-8"><span id="priceSp"></span>元</div>
-                        </div>
-                        <div class="row">
-                            <div class="col-md-4"><label  class="control-label">时长：</label></div>
-                            <div class="col-md-8"><span id="durationSp"></span>分钟</div>
-                        </div>
-                        <div class="row">
-                            <div class="col-md-4"><label  class="control-label">类型：</label></div>
-                            <div class="col-md-8"><span id="itemTypeSp"></span></div>
-                        </div>
-                        <div class="row">
-                            <div class="col-md-4"><label  class="control-label">项目描述或特色：</label></div>
-                            <div class="col-md-8"></div>
-                        </div>
-                        <div class="row">
-                            <div class="col-md-12"><div id="descriptionDiv"></div></div>
-                        </div>
-                        <div class="row">
-                            <div class="col-md-4"><label  class="control-label">项目实践时间：</label></div>
-                            <div class="col-md-8"></div>
-                        </div>
-                        <div class="row">
-                            <div class="col-md-12"><div id="practiceTimeSp"></div></div>
-                        </div>
-                        <div class="row">
-                            <div class="col-md-6"><label  class="control-label">项目对象所在行业、层级和特征：</label></div>
-                            <div class="col-md-4"></div>
-                        </div>
-                        <div class="row">
-                            <div class="col-md-12"><div id="itemToObjectSp"></div></div>
-                        </div>
-                        <div class="row">
-                            <div class="col-md-4"><label  class="control-label">项目创造的价值：</label></div>
-                            <div class="col-md-8"></div>
-                        </div>
-                        <div class="row">
-                            <div class="col-md-12"><div id="itemValueSp"></div></div>
-                        </div>
-                        <div class="row">
-                            <div class="col-md-4"><label  class="control-label">直约分享内容描述：</label></div>
-                            <div class="col-md-8"></div>
-                        </div>
-                        <div class="row">
-                            <div class="col-md-12"><div id="practiceDescriptionSp"></div></div>
-                        </div>
-                        <div class="row">
-                            <div class="col-md-4"><label  class="control-label">项目分类：</label></div>
-                            <div class="col-md-8"></div>
-                        </div>
-                        <div class="row">
-                            <div class="col-md-12"><div id="itemCatalogSp"></div></div>
-                        </div>
-                        <div class="row">
-                            <div class="col-md-4"><label  class="control-label">不通过原因：</label></div>
-                            <div class="col-md-8"></div>
-                        </div>
-                        <div class="row">
-                            <div class="col-md-12"><textarea id="notPassReason" style="width: 400px;"></textarea></div>
-                        </div>
-                    </div>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
-                    <button type="button" class="btn btn-primary" id="applyBtn">通过</button>
-                    <button type="button" class="btn btn-primary" id="notPassBtn">不通过</button>
-                </div>
-            </div>
+        <!-- 这里是页面内容区 -->
+        <div class="content">
+            <div class="content-block">邂逅时刻管理后台</div>
         </div>
     </div>
 
+</div>
 
-</div><!-- /#wrap -->
-<footer class="Footer bg-dark dker">
-    <p>2016 &copy; Time Admin</p>
-</footer><!-- /#footer -->
+<!-- popup, panel 等放在这里 -->
+<div class="panel-overlay"></div>
+<!-- Left Panel with Reveal effect -->
+<div class="panel panel-left panel-reveal">
+    <div class="content-block">
+        <p>菜单</p>
+        <div class="list-block">
+            <ul style="background: #1c1d1f;">
+                <a href="${request.contextPath}/manager/item/to-yue-manage" data-no-cache="true" class="close-panel">
+                    <li class="item-content item-link">
+                        <div class="item-media"><i class="icon icon-f7"></i></div>
+                        <div class="item-inner">
+                            <div class="item-title">约管理</div>
+                        </div>
+                    </li>
+                </a>
+                <li class="item-content item-link">
+                    <div class="item-media"><i class="icon icon-f7"></i></div>
+                    <div class="item-inner">
+                        <div class="item-title">飚管理</div>
+                    </div>
+                </li>
+                <li class="item-content item-link">
+                    <div class="item-media"><i class="icon icon-f7"></i></div>
+                    <div class="item-inner">
+                        <div class="item-title">用户管理</div>
+                    </div>
+                </li>
+            </ul>
+        </div>
+    </div>
+</div>
 
 
-
-<!--jQuery -->
-<script src="//cdn.bootcss.com/jquery/2.1.3/jquery.min.js"></script>
-<script src="${request.contextPath}/js/jquery.dataTables.min.js"></script>
-<script src="${request.contextPath}/js/dataTables.bootstrap.min.js"></script>
-
-<!--Bootstrap -->
-<script src="//cdn.bootcss.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
-<script src="${request.contextPath}/js/layer.js"></script>
-
-<!-- MetisMenu -->
-<script src="${request.contextPath}/js/metisMenu.min.js"></script>
-<script type="text/javascript" language="javascript" class="init">
-
-    function findApplyCount(){
-        $('#applyNotification').hide();
-        $.get('${request.contextPath}/manager/item/find-item-count', {itemStatus: 'apply_for_online'}, function (response) {
-            if(response){
-                if(response != '0'){
-                    $('#applyNotification').text(response);
-                    $('#applyNotification').show();
-                }
-
-            }
-        });
-    }
-    findApplyCount();
-    setInterval("findApplyCount()", 60000);
-
-    var toEdit = function (itemId,opt){
-        $('#itemId').val(itemId);
-        if(opt == 'apply'){
-            $('#myModalLabel').text('审批');
-
-            $.get('${request.contextPath}/item/get-item', {itemId: itemId,userId: ''}, function (response) {
-                if(response){
-                    if(response.item.itemType == 'tel'){
-                        $('#itemTypeSp').text('电话直连');
-                    }else if(response.itemType == 'meet'){
-                        $('#itemTypeSp').text('直约面对面');
-                    }
-                    $('#priceSp').text(response.item.price);
-                    $('#titleSp').text(response.item.title);
-                    $('#descriptionDiv').text(response.item.description);
-
-                    $('#practiceTimeSp').text(response.item.practiceTime);
-                    $('#itemToObjectSp').text(response.item.itemToObject);
-                    $('#itemValueSp').text(response.item.itemValue);
-                    $('#practiceDescriptionSp').text(response.item.practiceDescription);
-                    $('#itemCatalogSp').text(response.item.itemCatalog);
-
-                    $('#durationSp').text(response.item.duration);
-                    $('#corpSp').text(response.userInfo.corp);
-                    $('#positionSp').text(response.userInfo.position);
-                    $('#userDescriptionDiv').text(response.userInfo.description);
-                    $('#mobileSp').text(response.userInfo.mobile);
-                    $('#nicknameSp').text(response.userInfo.nickName);
-                    $('#myModal').modal('show');
-                }
-            });
-
-        }else if(opt == 'undercarriage'){
-            $.get('${request.contextPath}/manager/item/modify', {itemId: itemId,itemStatus: 'undercarriage'}, function (response) {
-
-                if(response){
-                    if(response != null && response != ''&& response != 'failed'){
-                        alert('下架成功');
-                        window.location.reload();
-                    }else{
-                        alert('审批失败');
-                    }
-                }
-            });
-        }else if(opt == 'delete'){
-            if(confirm("你是否要删除？")){
-
-            }
-        }else if(opt == 'recommend'){
-            layer.open({//http://layer.layui.com/api.html
-                type: 2,
-                title: '推荐',
-                shadeClose: true,
-                shade: 0.8,
-                area: ['60%', '50%'],
-                btn: ['推荐到首页','取消']
-                ,yes:function(index, layero){
-                    $.get('${request.contextPath}/manager/item/modify', {itemId: itemId,itemStatus: 'for_sale',recommend:'true'}, function (response) {
-
-                        if(response){
-                            if(response != 'failed'){
-                                alert('推荐成功');
-                                window.location.reload();
-                            }else{
-                                alert('推荐失败');
-                            }
-                        }
-
-                    });
-
-                }
-                ,btn2:function(index){
-
-                    },
-                content: '${request.contextPath}/manager/item/to-upload-img?itemId='+itemId //iframe的url
-
-            });
-        }else if(opt == 'unrecommend'){
-            layer.confirm('你真的要取消推荐?', {icon: 3, title:'提示',btn: ['我就是要取消','算了吧'],
-                yes:function(index, layero){
-                    $.get('${request.contextPath}/manager/item/modify', {itemId: itemId,recommend:'false'}, function (response) {
-
-                        if(response){
-                            if(response != 'failed'){
-                                alert('操作成功');
-                                window.location.reload();
-                            }else{
-                                alert('操作失败');
-                            }
-                        }
-
-                    });
-
-                }
-            });
-        }else if(opt == 'onshelf'){
-            $.get('${request.contextPath}/manager/item/modify', {itemId: itemId,itemStatus: 'for_sale'}, function (response) {
-
-                if(response){
-                    if(response != null && response != ''&& response != 'failed'){
-                        alert('上架成功');
-                        window.location.reload();
-                    }else{
-                        alert('上架失败');
-                    }
-                }
-            });
-        }
-
-    }
-    $("#applyBtn").on('click', function () {
-        var itemId = $('#itemId').val();
-        $.get('${request.contextPath}/manager/item/modify', {itemId: itemId,itemStatus: 'for_sale'}, function (response) {
-
-            if(response){
-                if(response != null && response != ''&& response != 'failed'){
-                    alert('审批成功');
-                    window.location.reload();
-                }else{
-                    alert('审批失败');
-                }
-            }
-
-        });
-
-    });
-    $("#notPassBtn").on('click', function () {
-        var itemId = $('#itemId').val();
-        $.get('${request.contextPath}/manager/item/modify', {itemId: itemId,itemStatus: 'not_pass',notPassReason:$('#notPassReason').val()}, function (response) {
-
-            if(response){
-                if(response != null && response != ''&& response != 'failed'){
-                    alert('审批成功');
-                    window.location.reload();
-                }else{
-                    alert('审批失败');
-                }
-            }
-
-        });
-
-    });
-
-    $("#userManageBtn").on('click', function () {
-        $("#content").load("${request.contextPath}/manager/user/to-user-manage");
-    });
-    $("#indexBtn").on('click', function () {
-        window.location.href = '${request.contextPath}/manager/main/to-index';
-    });
-    $("#needApplyBtn").on('click', function () {
-        $("#content").load("${request.contextPath}/manager/item/to-item-manage");
-    });
-
-    $("#menu-toggle").on('click', function () {
-        $("body").toggleClass('sidebar-left-opened');
-    });
-    $(document).ready(function() {
-        var oTable = $('#example').dataTable( {
-            "bJQueryUI": true,
-            "sPaginationType": "full_numbers",
-            "bProcessing": true,
-            "sAjaxSource": "${request.contextPath}/manager/item/list?itemStatus=all",
-            "fnServerParams": function ( aoData ) {
-                aoData.push( { "name": "start", "value": 0 } );
-                aoData.push( { "name": "end", "value": -1 } );
-            },
-            "bServerSide": true,
-            "aoColumns": [
-                { "mData": "title" },
-                { "mData": "price" },
-                { "mData": "duration" },
-                { "mData": "itemStatus" },
-                { "mData": "itemId" },
-                { "mData": "recommend" }
-            ],
-            "aoColumnDefs": [
-                {
-                    "mRender": function ( data, type, row ) {
-                        var htmlStr = '';
-                        var itemStatus = row.itemStatus;
-                        var recommend = row.recommend;
-                        if(itemStatus == 'apply_for_online'){
-                            htmlStr += '<a href ="#" onclick="toEdit(\''+data+'\',\'apply\')">审批</a>'+'&nbsp;';
-                        }else if(itemStatus == 'for_sale'){
-                            htmlStr+='<a href ="#" onclick="toEdit(\''+data+'\',\'undercarriage\')">下架</a>'+'&nbsp;';
-                            if(recommend != 'true'){
-                                htmlStr+='<a href ="#" onclick="toEdit(\''+data+'\',\'recommend\')">推荐</a>'+'&nbsp;';
-                            }else{
-                                htmlStr+='<a href ="#" onclick="toEdit(\''+data+'\',\'unrecommend\')">取消推荐</a>'+'&nbsp;';
-                            }
-
-                        }else if(itemStatus == 'undercarriage'){
-                            htmlStr+='<a href ="#" onclick="toEdit(\''+data+'\',\'onshelf\')">上架</a>'+'&nbsp;';
-                        }
-                        //htmlStr+='<a href ="#" onclick="toEdit(\''+data+'\',\'delete\')">删除</a>'+'&nbsp;';
-
-                        return htmlStr;
-                    },
-                    "aTargets": [ 4 ]
-                },
-                {
-                    "bVisible": false, "aTargets": [5]
-                }
-            ]
-        } );
-
-    } );
-
-</script>
-
+<!-- 默认必须要执行$.init(),实际业务里一般不会在HTML文档里执行，通常是在业务页面代码的最后执行 -->
+<script type='text/javascript' src='//g.alicdn.com/sj/lib/zepto/zepto.min.js' charset='utf-8'></script>
+<script type='text/javascript' src='//g.alicdn.com/msui/sm/0.6.2/js/sm.min.js' charset='utf-8'></script>
+<script type='text/javascript' src='//g.alicdn.com/msui/sm/0.6.2/js/sm-extend.min.js' charset='utf-8'></script>
+<script>$.init()</script>
 </body>

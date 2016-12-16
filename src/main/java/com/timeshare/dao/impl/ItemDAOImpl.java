@@ -204,6 +204,15 @@ public class ItemDAOImpl extends BaseDAO implements ItemDAO {
 
     @Override
     public List<Item> findItemList(Item item, int startIndex, int loadSize) {
+        StringBuilder reviewSql =  findItemListSql(item);
+        reviewSql.append("  order by i.opt_time desc limit ?,?");
+        List<String> excludeFields = new ArrayList<>();
+        excludeFields.add("remindCount");
+        List<Item> itemList = getJdbcTemplate().query(reviewSql.toString(),new Object[]{startIndex,loadSize},new ItemMapper(excludeFields));
+
+        return itemList;
+    }
+    public StringBuilder findItemListSql(Item item){
         StringBuilder reviewSql = new StringBuilder("");
 
         reviewSql.append("select i.item_id,i.title,i.price,i.score,i.item_type,i.duration,i.item_status,i.use_count,i.recommend,i.create_user_id,i.opt_time,i.create_user_name from t_item i where 1=1 ");
@@ -218,13 +227,9 @@ public class ItemDAOImpl extends BaseDAO implements ItemDAO {
             if (StringUtils.isNotEmpty(item.getCreateUserName()) && StringUtils.isNotEmpty(item.getTitle())) {
                 reviewSql.append(" and (i.create_user_name like '%"+item.getCreateUserName()+"%' or i.title like '%"+item.getTitle()+"%')");
             }
+            reviewSql.append(" and i.item_status is not null and i.item_status != '' ");
         }
-        reviewSql.append("  order by i.opt_time desc limit ?,?");
-        List<String> excludeFields = new ArrayList<>();
-        excludeFields.add("remindCount");
-        List<Item> itemList = getJdbcTemplate().query(reviewSql.toString(),new Object[]{startIndex,loadSize},new ItemMapper(excludeFields));
-
-        return itemList;
+        return reviewSql;
     }
     @Override
     public int findItemCount(Item item) {
@@ -234,6 +239,17 @@ public class ItemDAOImpl extends BaseDAO implements ItemDAO {
             countSql.append(" and item_status = '"+item.getItemStatus()+"' ");
         }
         return getJdbcTemplate().queryForObject(countSql.toString(), Integer.class);
+    }
+
+    @Override
+    public List<Item> findItemManagerList(Item item, int startIndex, int loadSize) {
+        StringBuilder reviewSql =  findItemListSql(item);
+        reviewSql.append("  order by i.item_status asc,i.opt_time desc limit ?,?");
+        List<String> excludeFields = new ArrayList<>();
+        excludeFields.add("remindCount");
+        List<Item> itemList = getJdbcTemplate().query(reviewSql.toString(),new Object[]{startIndex,loadSize},new ItemMapper(excludeFields));
+
+        return itemList;
     }
 
     public class ItemMapper implements RowMapper<Item>{

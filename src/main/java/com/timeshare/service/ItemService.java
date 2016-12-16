@@ -34,4 +34,6 @@ public interface ItemService {
 
     List<ItemDTO> searchItemList(Item item, int startIndex, int loadSize);
 
+    List<ItemDTO> findItemManagerList(Item item, int startIndex, int loadSize);
+
 }

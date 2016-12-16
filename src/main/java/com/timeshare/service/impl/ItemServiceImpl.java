@@ -72,6 +72,12 @@ public class ItemServiceImpl implements ItemService {
     }
 
     @Override
+    public List<ItemDTO> findItemManagerList(Item item, int startIndex, int loadSize) {
+        List<Item> dtoDbList = itemDAO.findItemManagerList(item,startIndex,loadSize);
+        return fixImg(dtoDbList);
+    }
+
+    @Override
     public int findItemCount(Item item) {
         return itemDAO.findItemCount(item);
     }
