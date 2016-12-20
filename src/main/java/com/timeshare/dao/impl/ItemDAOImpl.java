@@ -108,6 +108,9 @@ public class ItemDAOImpl extends BaseDAO implements ItemDAO {
         if(StringUtils.isNotBlank(item.getItemCatalog())){
             sql.append(" item_catalog = '"+item.getItemCatalog()+"',");
         }
+        if(StringUtils.isNotBlank(item.getOptTime())){
+            sql.append(" opt_time = '"+item.getOptTime()+"',");
+        }
         if (sql.lastIndexOf(",") + 1 == sql.length()) {
             sql.delete(sql.lastIndexOf(","), sql.length());
         }

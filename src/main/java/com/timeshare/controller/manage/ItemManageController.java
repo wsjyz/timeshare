@@ -62,7 +62,7 @@ public class ItemManageController {
 
             }
         }
-
+        item.setOptTime(item.getLastModifyTime());
         String result = itemService.modifyItem(item);
         return result;
     }

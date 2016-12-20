@@ -180,14 +180,14 @@
                 <div class="card-content">
                     <div class="card-content-inner">
                         <div class="item-input">
-                            <textarea id="notPassReason" style="width: 100%" placeholder="请输入不通过原因"><#if item??>${item.practiceDescription}<#else></#if></textarea>
+                            <textarea id="notPassReason" style="width: 100%" placeholder="请输入不通过原因"></textarea>
                         </div>
                     </div>
                 </div>
             </li>
         </ul>
     </div>
-    <div class="content-block new-main-btn">
+    <div class="content-block new-main-btn" id="btnDiv">
         <div class="row">
             <div class="col-50"><a href="#" class="button button-big button-fill button-danger" id="applyBtn">通过</a></div>
             <div class="col-50"><a href="#" class="button button-big button-fill button-success" id="notpassBtn">不通过</a></div>
@@ -217,7 +217,7 @@
                 headPic = '${request.contextPath}/images/default_head.jpg';
             }
 
-            html += '<ul>'+
+            html += '<ul id="'+item.item.itemId+'">'+
                     '<li>'+
                     '<a href="#" class="item-link item-content" onclick="toViewUserItem(\''+item.item.itemId+'\',\''+item.item.itemStatus+'\',\''+item.item.recommend+'\')">'+
                     '<div class="item-media">' +
@@ -272,11 +272,11 @@
                 dataType = 'for_sale';
             }
             if(tabId == "notpassTab"){
-                tabIndex = 2;
+                tabIndex = 3;
                 dataType = 'not_pass';
             }
             if(tabId == "undercarriageTab"){
-                tabIndex = 3;
+                tabIndex = 2;
                 dataType = 'undercarriage';
             }
             lastIndex = $('.list-block').eq(tabIndex).find('ul').length;
@@ -311,30 +311,31 @@
         });
     }
     function toViewUserItem(id,itemStatus,recommend){
-        history.pushState(null, "预览", window.location.href+"#");
+
         var btnApply = {text: '审批',bold: true,color: 'danger',onClick: function() {
-            findItemById(id);
+            findItemById(id,'apply');
             $.popup('.popup');
         }
         };
         var btnUndercarriage = {text: '下架',bold: true,color: 'danger',onClick: function() {
-            window.location.href = "${request.contextPath}/bid/to-view/"+id;
+            toEdit(id,'undercarriage');
         }
         };
         var btnRecommend = {text: '推荐',bold: true,color: 'danger',onClick: function() {
-            window.location.href = '${request.contextPath}/bidsubmit/to-submit/'+id;
+            toEdit(id,'recommend');
         }
         };
         var btnUnrecommend = {text: '取消推荐',bold: true,color: 'danger',onClick: function() {
-            window.location.href = '${request.contextPath}/bidsubmit/to-submit/'+id+'?audit=audit';
+            toEdit(id,'unrecommend');
         }
         };
         var btnOnshelf = {text: '上架',bold: true,color: 'danger',onClick: function() {
-            window.location.href = '${request.contextPath}/bid/to-share-view/'+id;
+            toEdit(id,'onshelf');
         }
         };
         var detailApply = {text: '详情',bold: true,color: 'danger',onClick: function() {
-            window.location.href = "${request.contextPath}/biduser/to-list/"+id;
+            findItemById(id,'view');
+            $.popup('.popup');
         }
         };
         var buttons1;
@@ -358,7 +359,13 @@
     window.onpopstate = function(){
         $.closeModal();
     };
-    function findItemById(itemId){
+    function findItemById(itemId,opt){
+        history.pushState(null, "预览", window.location.href+"#");
+        if(opt == 'view'){
+            $('#btnDiv').hide();
+        }else{
+            $('#btnDiv').show();
+        }
         $.showIndicator();
         $.get('${request.contextPath}/manager/item/get-item', {itemId: itemId}, function (response) {
             if(response){
@@ -368,28 +375,25 @@
                 }else if(response.itemType == 'meet'){
                     $('#itemTypeSp').text('直约面对面');
                 }
-
-                //$('#priceSp').text(response.price);
-                //$('#scoreSp').text(response.score);
                 $('#titleSp').text(response.title);
                 $('#priceSp').text(response.price);
                 $('#durationSp').text(response.duration);
-                //$('#durationSp').text(response.duration);
                 $('#descriptionDiv').text(response.description);
                 $('#practiceDescriptionDiv').text(response.practiceDescription);
                 $('#practiceTimeDiv').text(response.practiceTime);
                 $('#itemToObjectDiv').text(response.itemToObject);
                 $('#itemValueDiv').text(response.itemValue);
                 $('#itemCatalogDiv').text(response.itemCatalog);
-
-                //$('#corpSp').text(response.userInfo.corp);
-                //$('#nicknameSp').text(response.userInfo.nickName);
-
                 $('#useCountSp').text(response.useCount);
-                //$('#userDesP').text(response.userInfo.description);
+                if(response.itemStatus == 'not_pass'){
+                    $('#notPassReason').text(response.notPassReason);
+                }
                 $.hideIndicator();
             }
         });
+    }
+    function removeRecord(id) {
+        $('#'+id).remove();
     }
     $("body").on( "click", "#applyBtn", function(){
         var itemId = $('#itemId').val();
@@ -397,6 +401,7 @@
             if(response){
                 if(response != null && response != ''&& response != 'failed'){
                     $.toast('审批成功');
+                    removeRecord(itemId);
                     setTimeout('$.router.back()',2000);
                 }else{
                     $.toast('审批失败');
@@ -411,6 +416,7 @@
             if(response){
                 if(response != null && response != ''&& response != 'failed'){
                     $.toast('审批成功');
+                    removeRecord(itemId);
                     setTimeout('$.router.back()',2000);
                 }else{
                     $.toast('审批失败');
@@ -419,6 +425,63 @@
 
         });
     });
+    var toEdit = function (itemId,opt){
+        if(opt == 'undercarriage'){
+            $.get('${request.contextPath}/manager/item/modify', {itemId: itemId,itemStatus: 'undercarriage'}, function (response) {
+
+                if(response){
+                    if(response != null && response != ''&& response != 'failed'){
+                        $.alert('下架成功');
+                        removeRecord(itemId);
+                    }else{
+                        $.alert('审批失败');
+                    }
+                }
+            });
+        }else if(opt == 'delete'){
+            if(confirm("你是否要删除？")){
+
+            }
+        }else if(opt == 'recommend'){
+
+            $.get('${request.contextPath}/manager/item/modify', {itemId: itemId,itemStatus: 'for_sale',recommend:'true'}, function (response) {
+                if(response){
+                    if(response != 'failed'){
+                        $.alert('推荐成功');
+                    }else{
+                        $.alert('推荐失败');
+                    }
+                }
+            });
+
+        }else if(opt == 'unrecommend'){
+
+                $.get('${request.contextPath}/manager/item/modify', {itemId: itemId,recommend:'false'}, function (response) {
+
+                    if(response){
+                        if(response != 'failed'){
+                            $.alert('操作成功');
+                        }else{
+                            $.alert('操作失败');
+                        }
+                    }
+
+                });
+        }else if(opt == 'onshelf'){
+            $.get('${request.contextPath}/manager/item/modify', {itemId: itemId,itemStatus: 'for_sale'}, function (response) {
+
+                if(response){
+                    if(response != null && response != ''&& response != 'failed'){
+                        $.alert('上架成功');
+                        removeRecord(itemId);
+                    }else{
+                        $.alert('上架失败');
+                    }
+                }
+            });
+        }
+
+    }
 </script>
 <script>$.init()</script>
 </body>
