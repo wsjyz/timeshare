@@ -16,26 +16,6 @@
         .infinite-scroll-preloader {
             margin-top:-20px;
         }
-        .commentAvatarDiv{
-            width: 50px;
-            height: 50px;
-            padding:0px;
-            background: #ececec;
-            border-radius:50px;
-            box-shadow: 0px 0px 0px rgba(0,0,0,0.4);
-            -moz-border-radius: 50px;
-            -webkit-border-radius: 50px;
-        }
-        .commentAvatarImage{
-            width:50px;
-            height:50px;
-            line-height: 0;	 /* remove line-height */
-            display: inline-block;	/* circle wraps image */
-            border-radius: 50%;	/* relative value */
-            -moz-border-radius: 50%;
-            -webkit-border-radius: 50%;
-            transition: linear 0.25s;
-        }
     </style>
 </head>
 <body>
@@ -46,20 +26,19 @@
         <!-- 标题栏 -->
         <header class="bar bar-nav">
             <a class="icon icon-menu pull-left open-panel"></a>
-            <h1 class="title">约管理</h1>
+            <h1 class="title">飚管理</h1>
         </header>
 
         <!-- 这里是页面内容区 -->
         <div class="content">
             <div class="buttons-tab">
-                <a href="#applyTab" class="tab-link active button">待审批</a>
-                <a href="#saleTab" class="tab-link button">销售中</a>
-                <a href="#undercarriageTab" class="tab-link button">已下架</a>
-                <a href="#notpassTab" class="tab-link button">审核未通过</a>
+                <a href="#ongoingTab" class="tab-link active button">进行中</a>
+                <a href="#finishTab" class="tab-link button">已完成</a>
+                <a href="#stoppedTab" class="tab-link button">已终止</a>
             </div>
 
             <div class="tabs">
-                <div id="applyTab" class="tab active infinite-scroll">
+                <div id="ongoingTab" class="tab active infinite-scroll">
 
                     <div class="list-block media-list" style="margin-top:  0px;">
 
@@ -70,7 +49,7 @@
                         </div>
                     </div>
                 </div>
-                <div id="saleTab" class="tab infinite-scroll">
+                <div id="finishTab" class="tab infinite-scroll">
                     <div class="list-block media-list" style="margin-top:  0px;">
 
                     </div>
@@ -80,17 +59,7 @@
                         </div>
                     </div>
                 </div>
-                <div id="undercarriageTab" class="tab infinite-scroll">
-                    <div class="list-block media-list" style="margin-top:  0px;">
-
-                    </div>
-                    <!-- 加载提示符 -->
-                    <div class="infinite-scroll-preloader">
-                        <div class="preloader">
-                        </div>
-                    </div>
-                </div>
-                <div id="notpassTab" class="tab infinite-scroll">
+                <div id="stoppedTab" class="tab infinite-scroll">
                     <div class="list-block media-list" style="margin-top:  0px;">
 
                     </div>
@@ -129,7 +98,7 @@
                             <div class="item-title">飚管理</div>
                         </div>
                     </li>
-                </a>
+                 </a>
                 <li class="item-content item-link">
                     <div class="item-media"><i class="icon icon-f7"></i></div>
                     <div class="item-inner">
@@ -144,45 +113,28 @@
     <div class="content-block yl-content">
         <header class="bar bar-nav">
             <a class="icon icon-left pull-left back"></a>
-            <h1 class="title">预览</h1>
+            <h1 class="title">查看</h1>
         </header>
         <div class="yl-panel">
             <div class="row">
                 <div class="col-100"><h2 style="color: #000;"><span id="titleSp"></span></h2></div>
             </div>
-            <div class="row direct-telephone-con" >
-                <div class="jz-yl-contac jz-yl-list2" id="itemTypeSp"></div>
-                <div class="col-50 jz-yl-list2 jz-list-toggle1"><span id="priceSp"></span>元/<span id="durationSp" ></span>分钟</div>
-            </div>
-
         </div>
         <div class="content-padded">
-            <input type="hidden" id="itemId">
-            <h5 class="m-title-bg-icon">项目实践时间</h5>
-            <div id="practiceTimeDiv" class="pos-r-b"></div>
-            <h5>项目对象所在行业、层级和特征</h5>
-            <div id="itemToObjectDiv"></div>
-            <h5>项目描述或特色</h5>
-            <div id="descriptionDiv"></div>
-            <h5>项目创造的价值</h5>
-            <div id="itemValueDiv"></div>
-            <h5>直约分享内容描述</h5>
-            <div id="practiceDescriptionDiv"></div>
-            <h5>分类</h5>
-            <div id="itemCatalogDiv" class="un-border" style="display:none;"></div>
-            <div class="un-border jz-add-data">
-            </div>
+            <input type="hidden" id="bidId">
+            <h5 class="m-title-bg-icon">内容</h5>
+            <div id="contentDiv" ></div>
         </div>
 
     </div>
     <div class="list-block cards-list" style="margin-top: 0">
         <ul>
             <li class="card item-list-title box-shadow-bottom">
-                <div class="card-header">不通过原因</div>
+                <div class="card-header">终止原因</div>
                 <div class="card-content">
                     <div class="card-content-inner">
                         <div class="item-input">
-                            <textarea id="notPassReason" style="width: 100%" placeholder="请输入不通过原因"></textarea>
+                            <textarea id="stopReason" style="width: 100%" placeholder="请输入终止原因"></textarea>
                         </div>
                     </div>
                 </div>
@@ -191,8 +143,7 @@
     </div>
     <div class="content-block new-main-btn" id="btnDiv">
         <div class="row">
-            <div class="col-50"><a href="#" class="button button-big button-fill button-danger" id="applyBtn">通过</a></div>
-            <div class="col-50"><a href="#" class="button button-big button-fill button-success" id="notpassBtn">不通过</a></div>
+            <div class="col-100"><a href="#" class="button button-big button-fill button-success" id="stopBtn">终止</a></div>
         </div>
     </div>
 </div>
@@ -214,25 +165,22 @@
         var html = '';
         var dataLength = 0;
         $.each(data, function(i, item){
-            var headPic = item.headImgPath;
-            if(headPic == '' || headPic == null){
-                headPic = '${request.contextPath}/images/default_head.jpg';
+            var endDate =  new Date(item.endTime.replace(/-/g,"/"));
+            var endTimeStr = '';
+            if(endDate.getTime() < new Date().getTime()){
+                endTimeStr = '已过期';
+            }else{
+                endTimeStr = '截止日期：'+item.endTime;
             }
-
-            html += '<ul id="'+item.item.itemId+'">'+
+            html += '<ul id="'+item.bidId+'">'+
                     '<li>'+
-                    '<a href="#" class="item-link item-content" onclick="toViewUserItem(\''+item.item.itemId+'\',\''+item.item.itemStatus+'\',\''+item.item.recommend+'\')">'+
-                    '<div class="item-media">' +
-                    '<div class="commentAvatarDiv">' +
-                    '<img class="commentAvatarImage" src="'+headPic+'" />' +
-                    '</div>' +
-                    '</div>'+
+                    '<a href="#" class="item-link item-content" onclick="toViewBid(\''+item.bidId+'\',\''+item.bidStatus+'\',\''+item.userId+'\')">'+
                     '<div class="item-inner">'+
                     '<div class="item-title-row">'+
-                    '<div class="item-title">'+item.item.title+'</div>'+
+                    '<div class="item-title">'+item.title+'</div>'+
                     '</div>'+
-                    '<div class="item-subtitle">'+item.item.createUserName+'</div>'+
-                    '<div class="item-text">'+item.item.price+'元</div>'+
+                    '<div class="item-subtitle">'+item.createUserName+'<span style="float: right">飚数：'+item.submitCount+'</span></div>'+
+                    '<div class="item-text">'+item.price+'元<span style="float: right">'+endTimeStr+'</span></div>'+
                     '</div>'+
                     '</a>'+
                     '</li>'+
@@ -256,10 +204,9 @@
         $.showIndicator();
 
         var  lastIndex = $('.list-block ul').length;
-        loadFirst('apply_for_online','applyTab');
-        loadFirst('for_sale','saleTab');
-        loadFirst('not_pass','notpassTab');
-        loadFirst('undercarriage','undercarriageTab');
+        loadFirst('ongoing','ongoingTab');
+        loadFirst('finish','finishTab');
+        loadFirst('stopped','stoppedTab');
 
         $(document).on('infinite', function() {
             // 如果正在加载，则退出
@@ -267,22 +214,18 @@
             // 设置flag
             loading = true;
             var tabIndex = 0;
-            var dataType = 'apply_for_online';
+            var dataType = 'ongoing';
             var tabId = $(this).find('.infinite-scroll.active').attr('id');
-            if(tabId == "saleTab"){
+            if(tabId == "finishTab"){
                 tabIndex = 1;
-                dataType = 'for_sale';
+                dataType = 'finish';
             }
-            if(tabId == "notpassTab"){
-                tabIndex = 3;
-                dataType = 'not_pass';
-            }
-            if(tabId == "undercarriageTab"){
+            if(tabId == "stoppedTab"){
                 tabIndex = 2;
-                dataType = 'undercarriage';
+                dataType = 'stopped';
             }
             lastIndex = $('.list-block').eq(tabIndex).find('ul').length;
-            $.post('${request.contextPath}/manager/item/list', {itemStatus:dataType,startIndex: lastIndex,loadSize:itemsPerLoad}, function (response) {
+            $.post('${request.contextPath}/manager/bid/list', {bidStatus:dataType,startIndex: lastIndex,loadSize:itemsPerLoad}, function (response) {
                 setTimeout(function() {
                     // 重置加载flag
                     loading = false;
@@ -304,55 +247,37 @@
             });
         });
     });
-    var loadFirst = function(itemStatus,tabId){
-        $.post('${request.contextPath}/manager/item/list', {itemStatus:itemStatus,startIndex: 0,loadSize:itemsPerLoad}, function (response) {
+    var loadFirst = function(bidStatus,tabId){
+        $.post('${request.contextPath}/manager/bid/list', {bidStatus:bidStatus,startIndex: 0,loadSize:itemsPerLoad}, function (response) {
             $('#'+tabId+'.infinite-scroll .list-block').empty();
             //预先加载20条
             addItems(itemsPerLoad, 0,response,tabId);
             $.hideIndicator();
         });
     }
-    function toViewUserItem(id,itemStatus,recommend){
+    function toViewBid(id,bidStatus,createUserId){
 
-        var btnApply = {text: '审批',bold: true,color: 'danger',onClick: function() {
-            findItemById(id,'apply');
-            $.popup('.popup');
+        var btnViewPhone = {text: '查看飚主电话',bold: true,color: 'danger',onClick: function() {
+            $.showIndicator();
+            $.post('${request.contextPath}/user/get-simple-userinfo', {userId:createUserId}, function (response) {
+                $.alert(response.mobile);
+                $.hideIndicator();
+            });
+
         }
         };
-        var btnUndercarriage = {text: '下架',bold: true,color: 'danger',onClick: function() {
-            toEdit(id,'undercarriage');
-        }
-        };
-        var btnRecommend = {text: '推荐',bold: true,color: 'danger',onClick: function() {
-            toEdit(id,'recommend');
-        }
-        };
-        var btnUnrecommend = {text: '取消推荐',bold: true,color: 'danger',onClick: function() {
-            toEdit(id,'unrecommend');
-        }
-        };
-        var btnOnshelf = {text: '上架',bold: true,color: 'danger',onClick: function() {
-            toEdit(id,'onshelf');
-        }
-        };
-        var detailApply = {text: '详情',bold: true,color: 'danger',onClick: function() {
-            findItemById(id,'view');
+        var btnDetail = {text: '飚详情',bold: true,color: 'danger',onClick: function() {
+            findItemById(id,bidStatus);
             $.popup('.popup');
         }
         };
         var buttons1;
-        if(itemStatus == 'apply_for_online'){
-            buttons1 = [btnApply,detailApply];
-        }else if(itemStatus == 'for_sale'){
-            if(recommend != 'true'){
-                buttons1 = [btnUndercarriage,btnRecommend,detailApply];
-            }else{
-                buttons1 = [btnUndercarriage,btnUnrecommend,detailApply];
-            }
-        }else if(itemStatus == 'undercarriage'){
-            buttons1 = [btnOnshelf,detailApply];
-        }else{
-            buttons1 = [detailApply];
+        if(bidStatus == 'ongoing'){
+            buttons1 = [btnViewPhone,btnDetail];
+        }else if(bidStatus == 'finish'){
+            buttons1 = [btnViewPhone,btnDetail];
+        }else if(bidStatus == 'stopped'){
+            buttons1 = [btnViewPhone,btnDetail];
         }
         var buttons2 = [{text: '取消',bg: 'danger'}];
         var groups = [buttons1, buttons2];
@@ -361,34 +286,23 @@
     window.onpopstate = function(){
         $.closeModal();
     };
-    function findItemById(itemId,opt){
+    function findItemById(bidId,bidStatus){
         history.pushState(null, "预览", window.location.href+"#");
-        if(opt == 'view'){
+        if(bidStatus == 'stopped'){
             $('#btnDiv').hide();
         }else{
             $('#btnDiv').show();
         }
         $.showIndicator();
-        $.get('${request.contextPath}/manager/item/get-item', {itemId: itemId}, function (response) {
+        $.get('${request.contextPath}/manager/bid/get-bid', {bidId: bidId}, function (response) {
             if(response){
-                $('#itemId').val(itemId);
-                if(response.itemType == 'tel'){
-                    $('#itemTypeSp').text('电话直连');
-                }else if(response.itemType == 'meet'){
-                    $('#itemTypeSp').text('直约面对面');
-                }
+                $('#bidId').val(bidId);
+
                 $('#titleSp').text(response.title);
-                $('#priceSp').text(response.price);
-                $('#durationSp').text(response.duration);
-                $('#descriptionDiv').text(response.description);
-                $('#practiceDescriptionDiv').text(response.practiceDescription);
-                $('#practiceTimeDiv').text(response.practiceTime);
-                $('#itemToObjectDiv').text(response.itemToObject);
-                $('#itemValueDiv').text(response.itemValue);
-                $('#itemCatalogDiv').text(response.itemCatalog);
-                $('#useCountSp').text(response.useCount);
-                if(response.itemStatus == 'not_pass'){
-                    $('#notPassReason').text(response.notPassReason);
+                $('#contentDiv').text(response.content);
+
+                if(response.bidStatus == 'stopped'){
+                    $('#stopReason').text(response.stopReason);
                 }
                 $.hideIndicator();
             }
@@ -397,31 +311,17 @@
     function removeRecord(id) {
         $('#'+id).remove();
     }
-    $("body").on( "click", "#applyBtn", function(){
-        var itemId = $('#itemId').val();
-        $.get('${request.contextPath}/manager/item/modify', {itemId: itemId,itemStatus: 'for_sale'}, function (response) {
-            if(response){
-                if(response != null && response != ''&& response != 'failed'){
-                    $.toast('审批成功');
-                    removeRecord(itemId);
-                    setTimeout('$.router.back()',2000);
-                }else{
-                    $.toast('审批失败');
-                }
-            }
 
-        });
-    } );
-    $("body").on( "click", "#notpassBtn", function() {
-        var itemId = $('#itemId').val();
-        $.get('${request.contextPath}/manager/item/modify', {itemId: itemId,itemStatus: 'not_pass',notPassReason:$('#notPassReason').val()}, function (response) {
+    $("body").on( "click", "#stopBtn", function() {
+        var bidId = $('#bidId').val();
+        $.get('${request.contextPath}/manager/bid/modify', {bidId: bidId,bidStatus: 'stopped',stopReason:$('#stopReason').val()}, function (response) {
             if(response){
                 if(response != null && response != ''&& response != 'failed'){
-                    $.toast('审批成功');
-                    removeRecord(itemId);
+                    $.toast('终止成功');
+                    removeRecord(bidId);
                     setTimeout('$.router.back()',2000);
                 }else{
-                    $.toast('审批失败');
+                    $.toast('终止失败');
                 }
             }
 

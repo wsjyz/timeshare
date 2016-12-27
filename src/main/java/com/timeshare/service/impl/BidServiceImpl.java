@@ -46,4 +46,9 @@ public class BidServiceImpl implements BidService {
     public List<Bid> searchBidList(Bid bid, int startIndex, int loadSize) {
         return bidDAO.searchBidList(bid,startIndex,loadSize);
     }
+
+    @Override
+    public List<Bid> findBidListForManage(Bid bid, int startIndex, int loadSize) {
+        return bidDAO.findBidListForManage(bid,startIndex,loadSize);
+    }
 }

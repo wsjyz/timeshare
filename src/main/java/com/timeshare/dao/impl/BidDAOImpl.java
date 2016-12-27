@@ -189,6 +189,16 @@ public class BidDAOImpl extends BaseDAO implements BidDAO {
     }
 
     @Override
+    public List<Bid> findBidListForManage(Bid bid, int startIndex, int loadSize) {
+        StringBuilder sql = new StringBuilder("select * from t_bid i where 1=1 ");
+        if (StringUtils.isNotEmpty(bid.getBidStatus())) {
+            sql.append(" and i.bid_status = '"+bid.getBidStatus()+"' ");
+        }
+        sql.append("  order by i.opt_time desc limit ?,?");
+        return getJdbcTemplate().query(sql.toString(),new Object[]{startIndex,loadSize},new BidRowMapper());
+    }
+
+    @Override
     public int findBidCount(Bid bid) {
         StringBuilder countSql = new StringBuilder(
                 "select count(*) from t_bid where 1=1 ");

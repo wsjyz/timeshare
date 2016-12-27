@@ -60,6 +60,13 @@ public class UserController extends BaseController{
         }
         return userInfo;
     }
+    @ResponseBody
+    @RequestMapping(value = "/get-simple-userinfo")
+    public UserInfo getSimpleUserInfo(String userId) {
+
+        UserInfo userInfo = userService.findUserByUserId(userId);
+        return userInfo;
+    }
 
 
     @RequestMapping(value = "/to-my-page")

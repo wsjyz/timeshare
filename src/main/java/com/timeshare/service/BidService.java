@@ -21,4 +21,6 @@ public interface BidService {
 
     List<Bid> searchBidList(Bid bid, int startIndex, int loadSize);
 
+    List<Bid> findBidListForManage(Bid bid, int startIndex, int loadSize);
+
 }
