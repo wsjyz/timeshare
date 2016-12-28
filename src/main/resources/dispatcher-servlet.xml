@@ -34,12 +34,16 @@
     <mvc:resources mapping="/css/**" location="/WEB-INF/css/"/>
     <mvc:resources mapping="/js/**" location="/WEB-INF/js/"/>
     <mvc:default-servlet-handler/>
-<!--     <mvc:interceptors> -->
-<!--         <mvc:interceptor> -->
-<!--             <mvc:mapping path="/**"/> -->
-<!--             <bean class="com.eighth.housekeeping.web.TokenInterceptor"/> -->
-<!--         </mvc:interceptor> -->
-<!--     </mvc:interceptors> -->
+
+     <mvc:interceptors>
+         <mvc:interceptor>
+             <mvc:mapping path="/manager/**"/>
+             <mvc:exclude-mapping path="/manager/main/to-login"/>
+             <mvc:exclude-mapping path="/manager/main/login"/>
+             <bean class="com.timeshare.web.AdminHandlerInterceptor"/>
+         </mvc:interceptor>
+     </mvc:interceptors>
+
     <bean class="org.springframework.web.servlet.view.BeanNameViewResolver" p:order="0"/>
     <!-- Content Negotiating View Resolver -->
     <bean class="org.springframework.web.servlet.view.ContentNegotiatingViewResolver" p:order="1">

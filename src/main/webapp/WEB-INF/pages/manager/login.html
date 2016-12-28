@@ -1,65 +1,195 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-    <meta charset="UTF-8">
-    <title>Admin</title>
-    <meta name="msapplication-TileColor" content="#5bc0de" />
-    <meta name="msapplication-TileImage" content="${request.contextPath}/images/metis-tile.png" />
-
-    <!-- Bootstrap -->
-    <link rel="stylesheet" href="//cdn.bootcss.com/bootstrap/3.3.6/css/bootstrap.min.css">
-    <link rel="stylesheet" href="//cdn.bootcss.com/animate.css/3.2.0/animate.min.css">
-
-    <!-- Metis core stylesheet -->
-    <link rel="stylesheet" href="${request.contextPath}/css/main.min.css">
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>时刻</title>
+    <meta name="viewport" content="initial-scale=1, maximum-scale=1">
+    <link rel="shortcut icon" href="/favicon.ico">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <link rel="stylesheet" href="//g.alicdn.com/msui/sm/0.6.2/css/sm.min.css">
+    <link rel="stylesheet" href="//g.alicdn.com/msui/sm/0.6.2/css/sm-extend.min.css">
+    <style type="text/css">
+        body{font-family: Arial, Helvetica, sans-serif;}
+        hr {
+            margin-top: 20px;
+            margin-bottom: 20px;
+            border: 0;
+            border-top: 1px solid #eee;
+        }
+        .form-control {
+            display: block;
+            width: 100%;
+            height: 2rem;
+            line-height: 1rem;
+            color: #555;
+            text-indent: .5rem;
+            background-color: #fff;
+            background-image: none;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            -webkit-box-shadow: inset 0 1px 1px rgba(0,0,0,.075);
+            box-shadow: inset 0 1px 1px rgba(0,0,0,.075);
+            -webkit-transition: border-color ease-in-out .15s,-webkit-box-shadow ease-in-out .15s;
+            -o-transition: border-color ease-in-out .15s,box-shadow ease-in-out .15s;
+            transition: border-color ease-in-out .15s,box-shadow ease-in-out .15s;
+        }
+        input.bottom {
+            border-top-left-radius: 0;
+            border-top-right-radius: 0;
+        }
+        input.top {
+            margin-bottom: -1px;
+            border-bottom-left-radius: 0;
+            border-bottom-right-radius: 0;
+        }
+        .blackground{
+            background-color: #444;
+        }
+        .text-center{
+            text-align: center;
+        }
+        .login-logo{
+            height: 68px;width: 68px;
+        }
+    </style>
 </head>
-<body class="login">
-<div class="form-signin">
-    <div class="text-center">
-        <img src="${request.contextPath}/images/logo.png" alt="Metis Logo">
-    </div>
-    <hr>
-    <div class="tab-content">
-        <div id="login" class="tab-pane active">
-            <form action="index.html">
-                <p class="text-muted text-center">
-                    输入用户名密码
-                </p>
-                <input type="text" placeholder="用户名" class="form-control top">
-                <input type="password" placeholder="密码" class="form-control bottom">
-                <div class="checkbox">
-                    <label>
-                        <input type="checkbox"> 记住我
-                    </label>
-                </div>
-                <button class="btn btn-lg btn-primary btn-block" type="submit">登录</button>
-            </form>
-        </div>
+<body>
+<!-- page集合的容器，里面放多个平行的.page，其他.page作为内联页面由路由控制展示 -->
+<div class="page-group">
+    <!-- 单个page ,第一个.page默认被展示-->
+    <div class="page">
 
+        <!-- 这里是页面内容区 -->
+        <div class="content blackground">
+            <div class="content-block">
+                <div class="card">
+                    <div class="card-content">
+                        <div class="card-content-inner">
+                            <form method="post" >
+                            <div class="row">
+                                <div class="col-100 text-center">
+                                    <img src="${request.contextPath}/images/icon/logo.png"
+                                         class="login-logo"/>
+                                </div>
+                                <div class="col-100"><hr></div>
+                                <div class="col-100 text-center"><p>邂逅时刻管理后台</p></div>
+                                <div class="col-100">
+                                    <input type="text" placeholder="用户名" name="username" id="usernameId" class="form-control top">
+                                    <input type="password" placeholder="密码" name="password" id="passwordId" class="form-control bottom">
+                                </div>
+                                <div class="col-100" style="margin-top: .5rem;">
+                                    <a href="#" class="button button-big button-fill" id="loginBtn">登录</a></div>
+                            </div>
+                            </form>
+                            <div class="col-100"><hr></div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
-    <hr>
 
 </div>
 
-<!--jQuery -->
-<script src="//cdn.bootcss.com/jquery/2.1.3/jquery.min.js"></script>
+<!-- popup, panel 等放在这里 -->
+<div class="panel-overlay"></div>
+<!-- Left Panel with Reveal effect -->
+<div class="panel panel-left panel-reveal">
+    <div class="content-block">
+        <p>菜单</p>
+        <div class="list-block">
+            <ul style="background: #1c1d1f;">
+                <a href="${request.contextPath}/manager/item/to-yue-manage" data-no-cache="true" class="close-panel">
+                    <li class="item-content item-link">
+                        <div class="item-media"><i class="icon icon-f7"></i></div>
+                        <div class="item-inner">
+                            <div class="item-title">约管理</div>
+                        </div>
+                    </li>
+                </a>
+                <a href="${request.contextPath}/manager/bid/to-bid-manage" data-no-cache="true" class="close-panel">
+                    <li class="item-content item-link">
+                        <div class="item-media"><i class="icon icon-f7"></i></div>
+                        <div class="item-inner">
+                            <div class="item-title">飚管理</div>
+                        </div>
+                    </li>
+                </a>
+                <a href="${request.contextPath}/manager/user/to-user-manage" data-no-cache="true" class="close-panel">
+                    <li class="item-content item-link">
+                        <div class="item-media"><i class="icon icon-f7"></i></div>
+                        <div class="item-inner">
+                            <div class="item-title">用户管理</div>
+                        </div>
+                    </li>
+                </a>
+            </ul>
+        </div>
+    </div>
+</div>
 
-<!--Bootstrap -->
-<script src="//cdn.bootcss.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
-<script type="text/javascript">
-    (function($) {
-        $(document).ready(function() {
-            $('.list-inline li > a').click(function() {
-                var activeForm = $(this).attr('href') + ' > form';
-                //console.log(activeForm);
-                $(activeForm).addClass('animated fadeIn');
-                //set timer to 1 seconds, after that, unload the animate animation
-                setTimeout(function() {
-                    $(activeForm).removeClass('animated fadeIn');
-                }, 1000);
-            });
+
+<!-- 默认必须要执行$.init(),实际业务里一般不会在HTML文档里执行，通常是在业务页面代码的最后执行 -->
+<script type='text/javascript' src='//g.alicdn.com/sj/lib/zepto/zepto.min.js' charset='utf-8'></script>
+<script type='text/javascript' src='//g.alicdn.com/msui/sm/0.6.2/js/sm.min.js' charset='utf-8'></script>
+<script type='text/javascript' src='//g.alicdn.com/msui/sm/0.6.2/js/sm-extend.min.js' charset='utf-8'></script>
+<script>
+    function checkForm(){
+        var title = $('#usernameId').val();
+        if(title == ''){
+            $.toast('请输入用户名');
+            return false;
+        }
+        var duration = $('#passwordId').val();
+        if(duration == ''){
+            $.toast('请输入密码');
+            return false;
+        }
+        return true;
+    }
+    function packageForm(){
+
+        var serializeObj={}; // 目标对象
+
+        var array = $('form').serializeArray(); // 转换数组格式
+
+        $(array).each(function(){ // 遍历数组的每个元素 {name : xx , value : xxx}
+
+            if(serializeObj[this.name]){ // 判断对象中是否已经存在 name，如果存在name
+                // 将元素变为 数组
+                serializeObj[this.name]=serializeObj[this.name]+','+this.value;
+
+            }else{
+
+                serializeObj[this.name]=this.value; // 如果元素name不存在，添加一个属性 name:value
+
+            }
+
         });
-    })(jQuery);
+        return serializeObj;
+    }
+    $("body").on( "click", "#loginBtn", function(){
+        var vali = checkForm();
+        if(vali){
+            $(this).attr('disabled',false);
+            $.showIndicator();
+            var formData = packageForm();
+            $.post('${request.contextPath}/manager/main/login', formData, function (response) {
+                if(response == 'success' ){
+                    $.router.load("${request.contextPath}/manager/main/to-index",true);
+                    $('.content').removeClass('blackground')
+                }else if(response == 'account_not_correct'){
+                    $.alert('用户名密码错误');
+                }else{
+                    $.alert('登录错误');
+                }
+                $.hideIndicator();
+            });
+        }
+    } );
 </script>
+<script>$.init()</script>
 </body>
-</html>
