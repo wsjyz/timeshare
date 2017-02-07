@@ -141,10 +141,10 @@
         <header class="bar bar-nav">
             <a class="icon icon-left pull-left back"></a>
             <h1 class="title">项目列表</h1>
-            <!-- 邂逅时刻log -->
+            <!-- 邂逅拾刻log -->
             <div class="xhsk-fixed-log">
                 <div class="fixed-log-con">
-                    <img src="/time/images/icon/logo.png" alt="邂逅时刻">
+                    <img src="/time/images/icon/logo.png" alt="邂逅拾刻">
                 </div>
             </div>
         </header>
@@ -212,7 +212,7 @@
     });
     wx.ready(function(){
         wx.onMenuShareAppMessage({
-            title: $('#nickNameSp').text()+'在邂逅时刻等你',
+            title: $('#nickNameSp').text()+'在邂逅拾刻等你',
             desc: $('#userDesP').text(),
             link: window.location.href,
             imgUrl: $('#headImgPath').val(),
@@ -230,7 +230,7 @@
             }
         });
         wx.onMenuShareTimeline({
-            title: $('#nickNameSp').text()+'在邂逅时刻等你', // 分享标题
+            title: $('#nickNameSp').text()+'在邂逅拾刻等你', // 分享标题
             link: window.location.href, // 分享链接
             imgUrl: $('#headImgPath').val(), // 分享图标
             success: function () {

@@ -34,17 +34,17 @@
         <header class="bar bar-nav">
             <a class="icon icon-left pull-left back"></a>
             <h1 class='title'></h1>
-            <!-- 邂逅时刻log -->
+            <!-- 邂逅拾刻log -->
             <div class="xhsk-fixed-log">
                 <div class="fixed-log-con">
-                    <img id="logoImg" src="${request.contextPath}/images/icon/logo.png" alt="邂逅时刻" >
+                    <img id="logoImg" src="${request.contextPath}/images/icon/logo.png" alt="邂逅拾刻" >
                 </div>
             </div>
         </header>
         <div class="content">
             <div style="width: 100%;margin-top: 0.5rem;">
                 <img src="${request.contextPath}/images/qrcode_8cm.jpg" style="width: 4.5rem;height: 4.5rem;display:block;margin:0 auto;"/>
-                <div style="text-align: center">更多精彩，敬请关注邂逅时刻</div>
+                <div style="text-align: center">更多精彩，敬请关注邂逅拾刻</div>
                 <div style="text-align: center">（公众号：xiehoushike）</div>
             </div>
 
@@ -78,7 +78,7 @@
     });
     wx.ready(function(){
         wx.onMenuShareAppMessage({
-            title: '邂逅时刻',
+            title: '邂逅拾刻',
             desc: $('.title').text(),
             link: window.location.href,
             imgUrl: shareImgUrl,
