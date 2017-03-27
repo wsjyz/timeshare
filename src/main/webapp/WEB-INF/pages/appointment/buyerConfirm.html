@@ -257,11 +257,16 @@
 
         var vali = checkForm();
         if(vali){
-            $.confirm('您需要支付'+${order.price}+'元,确定吗？',
-                    function () {
-                        payIt();
-                    }
-            );
+            var serializeObj = serializeForm();
+            $.post('${request.contextPath}/order/save-async', serializeObj, function (response) {
+                if(response == 'success' ){
+                    var orderId = $('#orderId').val();
+                    var finalAppointmentTime = $('#finalAppointmentTime').val();
+                    window.location.href = "https://open.weixin.qq.com/connect/oauth2/authorize?appid=wxcd8903dd6a9552eb" +
+                            "&redirect_uri=http%3A%2F%2Fjk.zhangqidong.cn%2Ftime%2Forder%2Fto-pay-for-confirm%2F&response_type=code&scope=snsapi_base" +
+                            "&state="+orderId+"#wechat_redirect";
+                }
+            });
         }
 
 
@@ -272,30 +277,7 @@
         $(this).addClass('payment-item-selected');
     });
 
-    function onBridgeReady(){
-        WeixinJSBridge.invoke(
-                'getBrandWCPayRequest', ${jsApiParams},
-                function(res){
-                    if(res.err_msg == "get_brand_wcpay_request:ok" ) {
-                        $.alert('支付成功，卖家的手机号是'+$('#sellerPhone').val(), function () {
-                            $('form').submit();
-                        });
-                    }	 // 使用以上方式判断前端返回,微信团队郑重提示：res.err_msg将在用户支付成功后返回	ok，但并不保证它绝对可靠。
-                }
-        );
-    }
-    function payIt(){
-        if (typeof WeixinJSBridge == "undefined"){
-            if( document.addEventListener ){
-                document.addEventListener('WeixinJSBridgeReady', onBridgeReady, false);
-            }else if (document.attachEvent){
-                document.attachEvent('WeixinJSBridgeReady', onBridgeReady);
-                document.attachEvent('onWeixinJSBridgeReady', onBridgeReady);
-            }
-        }else{
-            onBridgeReady();
-        }
-    }
+
 
     var finalAppointmentTime = $("#finalAppointmentTime").val();
 

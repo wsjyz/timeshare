@@ -31,7 +31,7 @@ public class VoiceFileUtils {
             p = run.exec("ffmpeg -i "+amrFilePath+" -vol 300 "+mp3FilePath);//执行ffmpeg.exe,前面是ffmpeg.exe的地址，中间是需要转换的文件地址，后面是转换后的文件地址。-i是转换方式，意思是可编码解码，mp3编码方式采用的是libmp3lame
             logger.info("ffmpeg -i "+amrFilePath+" -vol 300 "+mp3FilePath);
             //释放进程
-            InputStream stdout = p.getInputStream ();
+            InputStream stdout = p.getErrorStream ();
             BufferedReader reader = new BufferedReader (new InputStreamReader(stdout));
             String line;
             while ((line = reader.readLine ()) != null) {

@@ -476,7 +476,7 @@
         window.location.href = "${request.contextPath}/index/to-index";
     } );
     $("body").on( "click", "#floatBtn", function(){
-        var backUrl = '/item/to-add';
+        var backUrl = 'http://jk.zhangqidong.cn'+'${request.contextPath}/item/to-add';
         window.location.href = '${request.contextPath}/wx/to-get-open-id?backUrl='+encodeURIComponent(backUrl);
     } );
 	    $("body").on( "submit", "#searchForm", function(){

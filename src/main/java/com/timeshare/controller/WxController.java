@@ -73,6 +73,7 @@ public class WxController {
         String contextPath = request.getContextPath();
         try {
             contextPath = URLEncoder.encode(contextPath,"UTF-8");
+            backUrl = URLEncoder.encode(backUrl,"UTF-8");
         } catch (UnsupportedEncodingException e) {
             e.printStackTrace();
         }
@@ -85,6 +86,7 @@ public class WxController {
 
         String toUrl = request.getParameter("state");
         String code = request.getParameter("code");
+        System.out.println("in get open id:state-"+toUrl+" code-"+code);
         WeixinOauth oauth = new WeixinOauth();
         String openId = oauth.obtainOpenId(code);
         UserInfo userInfo = userService.findUserByOpenId(openId);

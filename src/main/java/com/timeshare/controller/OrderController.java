@@ -13,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.servlet.http.HttpServletRequest;
 import java.io.UnsupportedEncodingException;
@@ -172,116 +173,44 @@ public class OrderController extends BaseController{
         model.addAttribute("order",order);
         return toStr;
     }
-    @RequestMapping(value = "/to-buyer-confirm/")
-    public String toByerConfirm(HttpServletRequest request,Model model) {
+    @RequestMapping(value = "/to-buyer-confirm/{orderId}")
+    public String toByerConfirm(HttpServletRequest request,@PathVariable String orderId) {
 
-        String code = request.getParameter("code");
-        String orderId = request.getParameter("state");
-        WeixinOauth weixinOauth = new WeixinOauth();
-        String openId = weixinOauth.obtainOpenId(code);
         ItemOrder order = orderService.findOrderByOrderId(orderId);
         remindService.deleteRemindByObjIdAndUserId(orderId,order.getUserId());
         request.setAttribute("order",order);
-        request.setAttribute("openId",openId);
-        WxPayConfigBean config = new WxPayConfigBean();
-        SortedMap parameters = new TreeMap<>();
 
-        config.setAppid(Contants.APPID);
-        parameters.put("appid",Contants.APPID);
-
-        config.setMch_id(Contants.MCHID);
-        parameters.put("mch_id",Contants.MCHID);
-
-        String noceStr = CommonStringUtils.genPK();
-        config.setNonce_str(noceStr);
-        parameters.put("nonce_str",noceStr);
-
-        String bodyStr = order.getItemTitle() + "|" + order.getOrderUserName();
-        config.setBody(bodyStr);
-        parameters.put("body",bodyStr);
-
-        String outTradeNo = CommonStringUtils.gen18RandomNumber();
-        config.setOut_trade_no(outTradeNo);
-        parameters.put("out_trade_no",outTradeNo);
-        order.setWxTradeNo(outTradeNo);
-
-        int fenPrice = (order.getPrice().multiply(new BigDecimal(100))).intValue();
-        System.out.println(" 价格为 "+fenPrice);
-        config.setTotal_fee(fenPrice);
-        parameters.put("total_fee",fenPrice);
-
-        //ip sbwx
-        config.setSpbill_create_ip("123.0.1.2");
-        parameters.put("spbill_create_ip","123.0.1.2");
-
-        config.setTrade_type("JSAPI");
-        parameters.put("trade_type","JSAPI");
-
-        config.setNotify_url("http://jk.zhangqidong.cn/time/wxPay/notify-url");
-        parameters.put("notify_url","http://jk.zhangqidong.cn/time/wxPay/notify-url");
-
-        config.setOpenid(openId);
-        parameters.put("openid",openId);
-
-        parameters.put("key",Contants.KEY);
-
-        String signStr = WxUtils.createSign(parameters,Contants.KEY);
-        config.setSign(signStr);
-
-        XStream xs = new XStream(new DomDriver("UTF-8", new XmlFriendlyNameCoder("-_", "_")));
-        xs.processAnnotations(config.getClass());
-        String xml = xs.toXML(config);
-        System.out.println("xml is "+xml);
-
-        HTTPSClient client = new HTTPSClient();
-        client.setSERVER_HOST_URL(UNIFIEDORDER_URL);
-        client.setServiceUri("unifiedorder");
-        try {
-            client.setBodyParams(new String(xml.getBytes("UTF-8"),"ISO-8859-1"));//狗日的微信，神经病
-        } catch (UnsupportedEncodingException e) {
-            e.printStackTrace();
-        }
-        String response = client.request();
-        System.out.println("response is "+response);
-
-
-        WxResponseBean responseBean = new WxResponseBean();
-        xs.processAnnotations(responseBean.getClass());
-        responseBean = (WxResponseBean)xs.fromXML(response);
-        String prepayId = "";
-        String payStatus = "NOTPAY";
-        String jsApiParams = "\'\'";
-        if(responseBean.getReturn_code() != null && responseBean.getReturn_code().equals("SUCCESS")){
-
-            if(responseBean.getResult_code() != null && responseBean.getResult_code().equals("FAIL")){
-                if(responseBean.getErr_code().equals("ORDERPAID")){//已支付过了
-                    payStatus = "ORDERPAID";
-                }
-
-            }else if(responseBean.getResult_code() != null && responseBean.getResult_code().equals("SUCCESS")){
-                prepayId = responseBean.getPrepay_id();
-                SortedMap signMap = new TreeMap<>();
-                signMap.put("appId",Contants.APPID);
-                String timestampStr = System.currentTimeMillis()+"";
-                signMap.put("timeStamp",timestampStr);
-                String randomStr = CommonStringUtils.genPK();
-                signMap.put("nonceStr",randomStr);
-                signMap.put("package","prepay_id="+prepayId);
-                signMap.put("signType","MD5");
-
-                String paySign = WxUtils.createSign(signMap,Contants.KEY);
-                signMap.put("paySign",paySign);
-                jsApiParams = JSON.toJSONString(signMap);
-                System.out.println("jsApiParams "+jsApiParams);
-
-            }
-
-        }
-        model.addAttribute("jsApiParams",jsApiParams);
-        model.addAttribute("payStatus",payStatus);
-        model.addAttribute("order",order);
         return "appointment/buyerConfirm";
 
+    }
+    @RequestMapping(value = "/to-pay-for-confirm")
+    public String toPayForConfirm(HttpServletRequest request,RedirectAttributes attr) {
+
+        String code = request.getParameter("code");
+        String orderId = request.getParameter("state");
+        ItemOrder order = orderService.findOrderByOrderId(orderId);
+
+        String payMessageTitle = "您在邂逅拾刻的发飙款项："+order.getItemTitle() ;
+        String jsApiParams = WxPayUtils.userPayToCorp(code,payMessageTitle,order.getPrice());
+        attr.addAttribute("jsApiParams",jsApiParams);
+        attr.addAttribute("payTip","你确定要支付"+order.getPrice()+"元吗");
+        attr.addAttribute("okUrl",request.getContextPath()+"/to-buyer-confirm/"+orderId);
+        attr.addAttribute("backUrl",request.getContextPath()+"/modify-order-status?orderId="+orderId+"&bidStatus=SELLER_APPLY");
+
+        return "redirect:/wxPay/to-pay/";
+    }
+    @ResponseBody
+    @RequestMapping(value = "/save-async")
+    public String saveAsync(ItemOrder order,Model model,@CookieValue(value="time_sid", defaultValue="") String userId) {
+        String result = orderService.saveOrder(order);
+        return result;
+    }
+    @RequestMapping(value = "/modify-order-status")
+    public String modifyBidStatus(String orderId,String bidStatus,HttpServletRequest request) {
+        ItemOrder order = orderService.findOrderByOrderId(orderId);
+        order.setOrderStatus(bidStatus);
+        orderService.saveOrder(order);
+        return "redirect:"+request.getContextPath()+"/to-buyer-confirm/"+orderId;
     }
 
     @RequestMapping(value = "/to-seller-order-list")

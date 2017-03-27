@@ -57,7 +57,7 @@ public class BidController extends BaseController{
             bid = bidService.findBidById(bidId);
         }
         String code = request.getParameter("code");
-        String payMessageTitle = "您在邂逅时刻的发飙款项："+bid.getTitle() ;
+        String payMessageTitle = "您在邂逅拾刻的发飙款项："+bid.getTitle() ;
 
         String jsApiParams = WxPayUtils.userPayToCorp(code,payMessageTitle,bid.getPrice());
         attr.addAttribute("jsApiParams",jsApiParams);
