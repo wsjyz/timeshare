@@ -44,7 +44,9 @@ public interface Contants {
         tel,meet
     }
     enum IMAGE_TYPE {
-        ITEM_SHOW_IMG,USER_HEAD
+        ITEM_SHOW_IMG,USER_HEAD,
+        ASSEMBLY_SHOW_IMG,//活动封面
+        ASSEMBLY_CONTENT_IMG,//活动内容图片
     }
     enum ORDER_TYPE {
         ONLINE,OFFLINE
