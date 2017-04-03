@@ -8,10 +8,28 @@ import com.timeshare.domain.BaseDomain;
  */
 public class Attender extends BaseDomain {
 
+    private String attenderId;
     //用户id
     private String userId;
     //所属费用项
     private String feedId;
+    private String assemblyId;
+
+    public void setAttenderId(String attenderId) {
+        this.attenderId = attenderId;
+    }
+
+    public String getAttenderId() {
+        return attenderId;
+    }
+
+    public String getAssemblyId() {
+        return assemblyId;
+    }
+
+    public void setAssemblyId(String assemblyId) {
+        this.assemblyId = assemblyId;
+    }
 
     @Override
     public String getUserId() {

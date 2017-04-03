@@ -11,6 +11,7 @@ public class AppTest {
     public static void main(String[] args) {
         Server jettyServer = new Server(8080);
 
+
         WebAppContext wah = new WebAppContext();
         wah.setContextPath("/time");
         wah.setWar("src/main/webapp");

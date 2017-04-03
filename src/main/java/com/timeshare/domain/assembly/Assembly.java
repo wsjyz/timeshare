@@ -6,7 +6,7 @@ import java.math.BigDecimal;
 
 /**
  * Created by user on 2017/3/23.
- * 报名
+ * 活动
  */
 public class Assembly extends BaseDomain{
 
