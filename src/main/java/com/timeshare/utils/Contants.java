@@ -73,4 +73,7 @@ public interface Contants {
         mybid,//我发的飚
         myaudit//我旁听的
     }
+    enum ACOUNT_TYPE {
+        VIP
+    }
 }

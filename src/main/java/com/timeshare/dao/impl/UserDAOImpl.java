@@ -34,8 +34,8 @@ public class UserDAOImpl extends BaseDAO implements UserDAO {
     public String saveUser(final UserInfo info) {
         StringBuilder sql = new StringBuilder("insert into t_user_info " +
                 "(user_id,mobile,open_id,user_name,nick_name,income,sum_cost," +
-                "sell_counts,buy_counts,description,position,corp,industry,city,ageGroup,sex,opt_time)" +
-                " values(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)");
+                "sell_counts,buy_counts,description,position,corp,industry,city,ageGroup,sex,opt_time,acount_type)" +
+                " values(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)");
 
         int result = getJdbcTemplate().update(sql.toString(), new PreparedStatementSetter() {
             @Override
@@ -57,6 +57,7 @@ public class UserDAOImpl extends BaseDAO implements UserDAO {
                 ps.setString(15,info.getAgeGroup());
                 ps.setInt(16,info.getSex());
                 ps.setString(17,info.getOptTime());
+                ps.setString(18,info.getAcountType());
             }
         });
         ImageObj obj = info.getImageObj();
@@ -117,6 +118,9 @@ public class UserDAOImpl extends BaseDAO implements UserDAO {
             }
             if(StringUtils.isNotBlank(userInfo.getAgeGroup())){
                 sql.append(" ageGroup = '"+userInfo.getAgeGroup()+"',");
+            }
+            if(StringUtils.isNotBlank(userInfo.getAcountType())){
+                sql.append(" acount_type = '"+userInfo.getAcountType()+"',");
             }
             sql.append(" sex = "+userInfo.getSex()+",");
             if (sql.lastIndexOf(",") + 1 == sql.length()) {
@@ -242,6 +246,7 @@ public class UserDAOImpl extends BaseDAO implements UserDAO {
             userInfo.setAgeGroup(rs.getString("ageGroup"));
             userInfo.setOpenId(rs.getString("open_id"));
             userInfo.setSex(rs.getInt("sex"));
+            userInfo.setAcountType(rs.getString("acount_type"));
             if(!excludeFields.contains("image_url")){
                 ImageObj img = new ImageObj();
                 img.setImageUrl(rs.getString("image_url"));

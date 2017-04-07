@@ -36,6 +36,7 @@ public class UserInfo extends BaseDomain{
     private String ageGroup;//年龄段
     private String openId;
     private int sex;
+    private String acountType;
     //数据传输用
     /**
      * 展示图片
@@ -202,5 +203,13 @@ public class UserInfo extends BaseDomain{
 
     public void setBuyCounts(int buyCounts) {
         this.buyCounts = buyCounts;
+    }
+
+    public String getAcountType() {
+        return acountType;
+    }
+
+    public void setAcountType(String acountType) {
+        this.acountType = acountType;
     }
 }

@@ -69,17 +69,28 @@ public class CommonStringUtils {
 
 
     public static void main(String[] args) {
-        String s = "appid=wxcd8903dd6a9552eb&body=agw|管理员&mch_id=1358876502&nonce_str=eaf60281f10e457eb0a83d6f59124f3b&out_trade_no=2d420b55a30948579f3ed7c8c091502a&spbill_create_ip=123.0.1.2&total_fee=1&trade_type=JSAPI&key=5bab4e2c09194e6198fe351a04991949";
-        //System.out.println(MD5(s,"gbk"));
-
-        Map<String,String> jsParmsMap = new HashMap<>();
-        jsParmsMap.put("appId","xxx");
-        jsParmsMap.put("timeStamp",System.currentTimeMillis()+"");
-        jsParmsMap.put("nonceStr",genPK());
-        jsParmsMap.put("package","prepay_id=fuck");
-        jsParmsMap.put("signType","MD5");
-        jsParmsMap.put("paySign","xxx");
-        System.out.println(JSON.toJSONString(jsParmsMap));
+//        String s = "appid=wxcd8903dd6a9552eb&body=agw|管理员&mch_id=1358876502&nonce_str=eaf60281f10e457eb0a83d6f59124f3b&out_trade_no=2d420b55a30948579f3ed7c8c091502a&spbill_create_ip=123.0.1.2&total_fee=1&trade_type=JSAPI&key=5bab4e2c09194e6198fe351a04991949";
+//        //System.out.println(MD5(s,"gbk"));
+//
+//        Map<String,String> jsParmsMap = new HashMap<>();
+//        jsParmsMap.put("appId","xxx");
+//        jsParmsMap.put("timeStamp",System.currentTimeMillis()+"");
+//        jsParmsMap.put("nonceStr",genPK());
+//        jsParmsMap.put("package","prepay_id=fuck");
+//        jsParmsMap.put("signType","MD5");
+//        jsParmsMap.put("paySign","xxx");
+//        System.out.println(JSON.toJSONString(jsParmsMap));
+        for(int i = 0;i < 20;i ++){
+            String randomStr = gen18RandomNumber();
+            String insertSQL = "INSERT INTO `m`.`t_wgs_invitation` (`invitation_id`, `invitation_code`, `create_time`, `status`)" +
+                    " VALUES ('"+randomStr+"', '"+randomStr+"', NULL, 'NO_USED');";
+            System.out.println(insertSQL);
+            try {
+                Thread.sleep(1000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
     }
 
 }
