@@ -1,0 +1,140 @@
+<div class="pull-to-refresh-content" >
+    <div class="swiper-container">
+        <div class="swiper-wrapper">
+            <div class="swiper-slide">
+                <a href="detail.html"><img src="${request.contextPath}/images/assembly/sample/img1.png" /></a>
+            </div>
+            <div class="swiper-slide">
+                <img src="${request.contextPath}/images/assembly/sample/img2.png" />
+            </div>
+            <div class="swiper-slide">
+                <img src="${request.contextPath}/images/assembly/sample/img1.png"/>
+            </div>
+        </div>
+    </div>
+    <div class="content-block card-container">
+    </div>
+    <!-- 默认的下拉刷新层 -->
+    <div class="pull-to-refresh-layer" style="margin-top:-2.2rem;">
+        <div class="preloader"></div>
+        <div class="no-record" style="display: none;text-align: center">
+            没有更多记录了
+        </div>
+    </div>
+</div>
+
+<script>
+    $.init();
+    //banner图轮播
+    setTimeout(function () {
+        var swiper = new Swiper('.swiper-container', {
+            direction: 'horizontal',
+            spaceBetween: 30,
+            centeredSlides: true,
+            autoplay: 2000,
+            autoplayDisableOnInteraction: false,
+            loop: true
+        });
+    }, 0);
+    $('.pull-to-refresh-layer').hide();
+
+    var loading = false;
+    // 最多可加载的条目
+    var maxItems = 100;
+
+    // 每次加载添加多少条目
+    var assemblysPerLoad = 10;
+
+    function addassemblys(number, lastIndex,data) {
+        // 生成新条目的HTML
+        var html = '';
+        var dataLength = 0;
+        $.each(data, function(i, assembly){
+            var type="线上活动";
+            if(assembly.type=="online"){
+                type="线上活动";
+            }
+            if(assembly.type=="face"){
+                type="线下活动";
+            }
+            if(assembly.type=="train"){
+                type="培训分享";
+            }
+            if(assembly.type=="company"){
+                type="企业参考";
+            }
+            html +=' <div class="card">' +
+                    ' <div class="userRow">'+
+                    '  <a href="${request.contextPath}/assembly/to-detail?assemblyId='+assembly.assemblyId+'"><img class="userPhoto" src="'+assembly.userImg+'" align="left" />'+
+                    ' <span class="userName">'+assembly.userName+'</span>'+
+                    '</div>'+
+                    ' <div>'+
+                    ' <img src="'+assembly.titleImg+'" class="fullWidth" />'+
+                    ' </div>'+
+
+                    ' <h4 class="activityTitle">'+assembly.title+'</h4>'+
+                    ' <div class="activityDesc">'+
+                    ' <div class="startTime">'+assembly.startTime+' 开始</div>'+
+                    '<div class="activityType">'+type+'</div>'+
+                    ' <div class="activityPrice">'+
+                    '￥<span class="priceNum">'+assembly.cost+'</span>起'+
+                    '</div>'+
+                    '</a></div>'+
+                    '</div>';
+            dataLength += 1;
+        });
+        if(dataLength == 0){
+            $('.no-record').show();
+            $('.pull-to-refresh-layer').remove();
+        }else{
+            $('.no-record').hide();
+            // 添加新条目
+            $('.pull-to-refresh-content .content-block').append(html);
+        }
+        $.hideIndicator();
+
+    }
+    $.post('${request.contextPath}/assembly/list', {type:"${type}",searchName:"${searchName}",citySelect:"${citySelect}",startIndex: 0,loadSize:assemblysPerLoad}, function (response) {
+        //预先加载20条
+        addassemblys(assemblysPerLoad, 0,response);
+    });
+
+
+    // 上次加载的序号
+
+    var lastIndex = 10;
+
+    // 注册'infinite'事件处理函数
+    $(document).on('refresh', '.pull-to-refresh-content',function(e) {
+        // 如果正在加载，则退出
+        if (loading) return;
+
+        // 设置flag
+        loading = true;
+        $.post('${request.contextPath}/assembly/list', {type:"${type}",searchName:"${searchName}",citySelect:"${citySelect}",startIndex: lastIndex,loadSize:assemblysPerLoad}, function (response) {
+
+            // 模拟1s的加载过程
+            setTimeout(function() {
+                // 重置加载flag
+                loading = false;
+
+                if (lastIndex >= maxassemblys) {
+                    // 加载完毕，则注销无限加载事件，以防不必要的加载
+                    $.detachInfiniteScroll($('.infinite-scroll'));
+                    // 删除加载提示符
+                    $('.pull-to-refresh-layer').remove();
+                    return;
+                }
+
+                // 添加新条目
+                addassemblys(assemblysPerLoad, lastIndex,response);
+                // 更新最后加载的序号
+                lastIndex = $('.content-block .card').length;
+                //容器发生改变,如果是js滚动，需要刷新滚动
+                $.refreshScroller();
+            }, 1000);
+        });
+
+
+    });
+</script>

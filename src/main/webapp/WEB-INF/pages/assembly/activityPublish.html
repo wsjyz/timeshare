@@ -1,0 +1,543 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>活动发布</title>
+    <meta name="viewport" content="initial-scale=1, maximum-scale=1">
+    <link rel="shortcut icon" href="/favicon.ico">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+
+    <link rel="stylesheet" href="http://g.alicdn.com/msui/sm/0.6.2/css/sm.min.css">
+    <link rel="stylesheet" href="http://g.alicdn.com/msui/sm/0.6.2/css/sm-extend.min.css">
+    <link rel="stylesheet" href="${request.contextPath}/css/assembly/main.css">
+    <link rel="stylesheet" href="${request.contextPath}/css/upload.css">
+</head>
+<body>
+<div class="page-group">
+    <div class="page page-current" id="routerActivityPublish">
+        <div class="activityPublishHeader header">
+            <h1 class="title">活动发布</h1>
+            <a class="button button-link button-nav back pull-left" external href="${request.contextPath}/assembly/to-index">
+                <span class="icon icon-left"></span>
+                返回
+            </a>
+            <a class="button button-link button-nav back pull-right publish"  external href="javaScript:void(0)" onclick="saveAssembly()">
+                发布
+            </a>
+            <!--<a class="button button-link button-nav back pull-right "  external href="${request.contextPath}/assembly/to-index">-->
+                <!--预览-->
+            <!--</a>-->
+        </div>
+        <input type="hidden" id="imageType" value=""/>
+        <div class="content activityPublishContent">
+            <form id="saveAssemblyForm" name="saveAssemblyForm" type="post">
+            <div class="list-block">
+                <ul>
+                    <li class="activitySubject">
+                        <div class="item-content">
+                            <div class="item-inner">
+                                <div class="item-title label">活动主题</div>
+                                <div class="item-input">
+                                    <input type="text" name="assemblyTitle" placeholder="" value="">
+                                </div>
+                                <a class="subjectPicture" href="#routerAddWallpaper" onclick="updateType('ASSEMBLY_SHOW_IMG')"> | <span class="icon icon-picture choosePicture" ></span></a>
+                                <input type="hidden"  name="imageIdStr" value="">
+                            </div>
+                        </div>
+
+                    </li>
+                </ul>
+                <ul>
+                    <li>
+                        <div class="item-content">
+                            <div class="item-inner">
+                                <div class="item-title label">活动开始时间</div>
+                                <div class="item-input">
+                                    <input type="date" class="datetimePicker" name="startTime" placeholder="">
+                                </div>
+                            </div>
+                        </div>
+                    </li>
+                    <li>
+                        <div class="item-content">
+                            <div class="item-inner">
+                                <div class="item-title label">活动结束时间</div>
+                                <div class="item-input">
+                                    <input type="date" class="datetimePicker" name="endTime" placeholder="">
+                                </div>
+                            </div>
+                        </div>
+                    </li>
+                    <li>
+                        <div class="item-content">
+                            <div class="item-inner">
+                                <div class="item-title label" style="width:20%">活动举办地点</div>
+                                <div class="cities">
+                                    <select class="citySelect">
+                                        <option value="北京">北京</option>
+                                        <option value="重庆">重庆</option>
+                                        <option value="大连">大连</option>
+                                        <option value="广州">广州</option>
+                                        <option value="青岛">青岛</option>
+                                        <option value="上海">上海</option>
+                                        <option value="苏州">苏州</option>
+                                        <option value="四川">四川</option>
+                                        <option value="武汉">武汉</option>
+                                        <option value="西安">西安</option>
+                                    </select>
+                                </div>
+                                <div class="item-input">
+                                    <input type="text" placeholder="" name="rendezvous">
+                                </div>
+                            </div>
+                        </div>
+                    </li>
+                    <li style="padding-bottom:.5rem;">
+                        <div class="item-content">
+                            <div class="item-inner">
+                                <div class="item-title label">活动详细描述</div>
+                                <div class="item-input activityDescImgs">
+                                    <input type="hidden"  name="imageIdStrDesc" value="">
+                                    <a class="subjectPicture" href="#routerAddWallpaper" onclick="updateType('ASSEMBLY_CONTENT_IMG')">   <img src="${request.contextPath}/images/assembly/icon/publishImg.png" /></a>
+                                    <!--<img src="${request.contextPath}/images/assembly/icon/publishCamera.png" />-->
+                                    <!--<img src="${request.contextPath}/images/assembly/icon/publishCamera2.png" />-->
+                                    <!--<img src="${request.contextPath}/images/assembly/icon/publishBall.png" />-->
+                                </div>
+                            </div>
+                        </div>
+                        <textarea class="activityDesc" name="description"></textarea>
+                    </li>
+                </ul>
+                <ul class="activitySettings">
+                    <li>
+                        <input type="hidden" name="assemblyType"  value="online"/>
+                        活动类型
+                        <a class="icon icon-right pull-right" href="#routerActivityType"></a>
+                    </li>
+                    <li>
+                        <input type="hidden" name="feeId"  value=""/>
+                        报名费用
+                        <a class="icon icon-right pull-right" href="#routerActivityFee"></a>
+                    </li>
+                    <li>
+                        <input type="hidden" name="onApply"  value=""/>
+                        <input type="hidden" name="phoneNumber"  value=""/>
+                        <input type="hidden" name="applyId"  value=""/>
+                        报名设置
+                        <a class="icon icon-right pull-right" href="#routerEnrollSetting"></a>
+                    </li>
+                </ul>
+            </div>
+            </form>
+        </div>
+    </div>
+
+    <div class="page" id="routerActivityType">
+        <div class="activityPublishHeader header">
+            <h1 class="title">活动类型</h1>
+            <a class="button button-link button-nav back pull-left">
+                <span class="icon icon-left"></span>
+                返回
+            </a>
+            <a class="button button-link button-nav back pull-right publish">
+                完成
+            </a>
+        </div>
+
+        <div class="content activityPublishContent">
+            <div class="list-block">
+                <ul class="activityTypes">
+                    <li>
+                        线上活动
+                        <span class="pull-right">
+                            <label radioName="activityType" class="radioLabel" id="activityType1"></label>
+                            <input for="activityType1" name="activityType" type="radio" value="1">
+                        </span>
+                    </li>
+                    <li>
+                        线下活动
+                        <span class="pull-right">
+                            <label radioName="activityType" class="radioLabel" id="activityType2"></label>
+                            <input for="activityType2" name="activityType" type="radio" value="2">
+                        </span>
+                    </li>
+                    <li>
+                        培训分享
+                        <span class="pull-right">
+                            <label radioName="activityType" class="radioLabel" id="activityType3"></label>
+                            <input for="activityType3" name="activityType" type="radio" value="3">
+                        </span>
+                    </li>
+                    <li>
+                        企业参访
+                        <span class="pull-right">
+                            <label radioName="activityType" class="radioLabel" id="activityType4"></label>
+                            <input for="activityType4" name="activityType" type="radio" value="4">
+                        </span>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    <div class="page" id="routerAddWallpaper">
+        <div class="activityPublishHeader header">
+            <h1 class="title">添加海报</h1>
+            <a class="button button-link button-nav back pull-left">
+                <span class="icon icon-left"></span>
+                返回
+            </a>
+            <a class="button button-link button-nav back pull-right publish">
+                完成
+            </a>
+        </div>
+        <div class="content activityPublishContent">
+            <div class="list-block">
+                <input type="hidden" id="imageId" value=""/>
+                <img src="" id="imageUrl" style="display: none;margin: 0 auto;height: 9rem;width: 16rem;"/>
+                <div class="main-wrap">
+                    <div id="uploader">
+                        <div class="queueList fix">
+                            <div class="filelist"></div>
+                            <div id="filePicker">
+                                <label class="trigger">+</label>
+                                <input type="file" name="file" class="webuploader-element-invisible" accept="image/*">
+                            </div>
+                        </div>
+                        <div class="progress-box">
+                            <div class="progress">
+                                <span class="text">0%</span>
+                                <span class="percentage"></span>
+                            </div><div class="info"></div>
+                        </div>
+                    </div>
+                </div>
+                <input type="button" value="确定" id="saveImgBtn" class="button button-fill button-danger button-big" style="margin: 1rem;width: 90%"/>
+            </div>
+        </div>
+    </div>
+
+    <div class="page" id="routerActivityFee">
+        <div class="activityPublishHeader header">
+            <h1 class="title">报名费用</h1>
+            <a class="button button-link button-nav back pull-left">
+                <span class="icon icon-left"></span>
+                返回
+            </a>
+            <a class="button button-link button-nav back pull-right publish" onclick="saveFee()">
+                完成
+            </a>
+        </div>
+
+        <div class="content activityPublishContent">
+            <form type="post" id="addFee" name="addFee" >
+            <div class="list-block">
+                <ul class="fees">
+                    <li class="feeItemDefault">
+                        <div class="item-content">
+                            <div class="item-inner">
+                                <div class="item-title label">费用名称</div>
+                                <div class="item-input">
+                                    <input type="text" placeholder="" name="feeTitle">
+                                </div>
+                            </div>
+                        </div>
+                    </li>
+                    <li class="feeItemDefault">
+                        <div class="item-content">
+                            <div class="item-inner">
+                                <div class="item-title label">金额</div>
+                                <div class="item-input">
+                                    <input type="text" placeholder="" name="feeStr">
+                                </div>
+                            </div>
+                        </div>
+                    </li>
+                    <li class="feeItemDefault">
+                        <div class="item-content">
+                            <div class="item-inner">
+                                <div class="item-title label">名额限制</div>
+                                <div class="item-input">
+                                    <input type="text" placeholder="" name="quota">
+                                </div>
+                            </div>
+                        </div>
+                    </li>
+                </ul>
+                <span class="addFeeItem">+添加费用项</span>
+            </div>
+            </form>
+        </div>
+    </div>
+
+
+    <div class="page" id="routerEnrollSetting">
+        <div class="activityPublishHeader header">
+            <h1 class="title">报名设置</h1>
+            <a class="button button-link button-nav back pull-left">
+                <span class="icon icon-left"></span>
+                返回
+            </a>
+            <a class="button button-link button-nav back pull-right publish" onclick="saveSetting()">
+                完成
+            </a>
+        </div>
+
+        <div class="content activityPublishContent">
+            <div class="list-block">
+                <ul class="fees">
+                    <li>
+                        <div class="item-content">
+                            <div class="item-inner">
+                                <div class="item-title label">联系方式</div>
+                                <div class="item-input">
+                                    <input type="text" placeholder="手机号/座机号/微信号" name="phoneNumberStr">
+                                </div>
+                                <span class="pull-right icon icon-right"></span>
+                            </div>
+                        </div>
+                    </li>
+                    <li>
+                        <div class="item-content">
+                            <div class="item-inner">
+                                <div class="item-title label" style="overflow: visible;">活动结束前均可报名</div>
+                                <div class="item-input">
+                                    <label class="label-switch pull-right">
+                                        <input type="checkbox" name="onApplyStr" value="是">
+                                        <div class="checkbox"></div>
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                    </li>
+                    </ul>
+
+                    <div class="formDesc">设置用户报名时的必填项</div>
+                    <ul class="customItems">
+                        <li class="customItemDefault">
+                            <div class="item-content">
+                                <div class="item-inner">
+                                    <div class="item-title label">姓名</div>
+                                <span class="pull-right">
+                                    <label class="checkboxLabel checked" id="nameRequireLabel"></label>
+                                    <input for="nameRequireLabel" name="nameCheckbox" type="checkbox" checked value="userName">
+                                </span>
+                                </div>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="item-content">
+                                <div class="item-inner">
+                                    <div class="item-title label">电话</div>
+                                    <span class="pull-right">
+                                        <label class="checkboxLabel" id="phoneRequireLabel"></label>
+                                        <input for="phoneRequireLabel" name="nameCheckbox" type="checkbox" value="phone">
+                                    </span>
+                                </div>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="item-content">
+                                <div class="item-inner">
+                                    <div class="item-title label">微信号</div>
+                                    <span class="pull-right">
+                                        <label class="checkboxLabel" id="WXRequireLabel"></label>
+                                        <input for="WXRequireLabel" name="nameCheckbox" type="checkbox" value="wx">
+                                    </span>
+                                </div>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="item-content">
+                                <div class="item-inner">
+                                    <div class="item-title label">邮箱</div>
+                                    <span class="pull-right">
+                                        <label class="checkboxLabel" id="emailRequireLabel"></label>
+                                        <input for="emailRequireLabel" name="nameCheckbox" type="checkbox" value="email">
+                                    </span>
+                                </div>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="item-content">
+                                <div class="item-inner">
+                                    <div class="item-title label">所在企业</div>
+                                    <span class="pull-right">
+                                        <label class="checkboxLabel" id="companyRequireLabel"></label>
+                                        <input for="companyRequireLabel" name="nameCheckbox" type="checkbox" value="company">
+                                    </span>
+                                </div>
+                            </div>
+                        </li>
+                    </ul>
+            </div>
+        </div>
+    </div>
+</div>
+<script type='text/javascript' src='${request.contextPath}/js/zepto.min.js' charset='utf-8'></script>
+<script type='text/javascript' src='${request.contextPath}/js/upload.js?v=20160720-2' charset='utf-8'></script>
+<script type='text/javascript' src='http://g.alicdn.com/msui/sm/0.6.2/js/sm.min.js' charset='utf-8'></script>
+<script type='text/javascript' src='http://g.alicdn.com/msui/sm/0.6.2/js/sm-extend.min.js' charset='utf-8'></script>
+<script type='text/javascript' src='${request.contextPath}/js/assembly/main.js' charset='utf-8'></script>
+
+<script>
+    $(function(){
+        $(".datetimePicker").datetimePicker({
+            value: ['2017', '03', '31', '9', '34']
+        });
+
+        $(document).on('beforePageSwitch', '#routerAddWallpaper', function(){
+            var imageId = $('#imageId').val();
+            var imageType= $('#imageType').val();
+            if(imageType=="ASSEMBLY_SHOW_IMG"){
+                $("input[name='imageIdStr']").val(imageId);
+            }else{
+                $("input[name='imageIdStrDesc']").val($("input[name='imageIdStrDesc']").val()+","+imageId);
+            }
+
+        });
+        $(document).on('beforePageSwitch', '#routerActivityType', function(){
+            var value=$('input[name="activityType"]:checked').val();
+            var assemblyType="";
+            if(value=="1"){
+                assemblyType="online"
+            }else if(value=="2"){
+                assemblyType="face";
+            }else if(value=="3"){
+                assemblyType="train";
+            }else if(value=="4"){
+                assemblyType="company";
+            }
+            $('input[name="assemblyType"]').val(assemblyType)
+        });
+        //添加费用项
+        $('.addFeeItem').click(function(){
+            var $fees = $(this).parent().find('.fees');
+            var $defaultFeeItems = $fees.find('li.feeItemDefault');
+            var feeSpacingLine = $('<li class="feeSpacingLine"></li>');
+            var $newItems = $defaultFeeItems.clone();
+            $newItems.removeClass('feeItemDefault');
+            $newItems.find('input').val('');
+            $fees.append(feeSpacingLine).append($newItems);
+        });
+    })
+    $.init();
+    function saveFee(){
+        var feeTitle=$("input[name='feeTitle']").val();
+        var feeStr=$("input[name='feeStr']").val();
+        var quota=$("input[name='quota']").val();
+        if(feeTitle==""){
+            $.alert("费用名称不能为空!");
+            return false;
+        }
+        if(feeStr==""){
+            $.alert("金额不能为空!");
+            return false;
+        }
+        if(quota==""){
+            $.alert("名额限制不能为空!");
+            return false;
+        }
+        var params=$("#addFee").serialize();
+        $.post("${request.contextPath}/assembly/saveFee",params,function (data) {
+            if(data=="ERROR"){
+                $.alert("保存失败，请稍后再试!");
+            }else{
+                $('input[name="feeId"]').val(data)
+            }
+        })
+    };
+    function saveSetting() {
+       var phoneNumberStr= $('input[name="phoneNumberStr"]').val()
+        var onApplyStr= $('input[name="onApplyStr"]:checked').val()
+        if(onApplyStr==""){
+            $.alert("活动结束前报名设置不能为空!");
+            return false;
+        }
+        if(phoneNumberStr==""){
+            $.alert("联系方式不能为空!");
+            return false;
+        }
+
+        var apply="";
+        $('input[name="nameCheckbox"]:checked').each(function(){
+            if(apply==""){
+                apply=$(this).val();
+            }else{
+                apply=$(this).val()+","+apply;
+            }
+        })
+        $('input[name="applyId"]').val(apply);
+        $('input[name="onApply"]').val(onApplyStr);
+        $('input[name="phoneNumber"]').val(phoneNumberStr);
+    }
+    function updateType(type) {
+        $("#imageType").val(type);
+    }
+    function  saveAssembly() {
+        $("input[name='rendezvous']").val($(".citySelect").val()+$("input[name='rendezvous']").val());
+        var assemblyTitle=$("input[name='assemblyTitle']").val();
+        var startTime=$("input[name='startTime']").val();
+        var endTime=$("input[name='endTime']").val();
+        var description=$("textarea[name='description']").val();
+        var assemblyType=$("input[name='assemblyType']").val();
+        var feeId=$("input[name='feeId']").val();
+        var applyId=$("input[name='applyId']").val();
+        if(assemblyTitle==""){
+            $.alert("活动主题不能为空!");
+            return false;
+        }
+        if(startTime==""){
+            $.alert("开始时间不能为空!");
+            return false;
+        }
+        if(endTime==""){
+            $.alert("结束时间不能为空!");
+            return false;
+        }
+        if(description==""){
+            $.alert("活动描述不能为空!");
+            return false;
+        }
+        if(assemblyType==""){
+            $.alert("活动类型不能为空!");
+            return false;
+        }
+        if(feeId==""){
+            $.alert("报名费用不能为空!");
+            return false;
+        }
+        if(applyId==""){
+            $.alert("报名设置不能为空!");
+            return false;
+        }
+        var params=$("#saveAssemblyForm").serialize();
+        $.post("${request.contextPath}/assembly/saveAssembly",params,function (data) {
+            if(data=="ERROR"){
+                $.alert("保存失败，请稍后再试!");
+            }else{
+                location.href="${request.contextPath}/assembly/to-success?assemblyId="+data;
+            }
+        })
+    }
+    Zepto(function($) {
+        var imageId = $('#imageId').val();
+        if(imageId != ''){
+            $('#imageUrl').css('display','block');
+        }
+    });
+    $("#saveImgBtn").on('click', function () {
+        var imageId = $('#imageId').val();
+        var imageType= $('#imageType').val();
+        var imageUrl = $('#imageUrl')[0].src;
+        $.post('/time/assembly/save-img', {imageId:imageId,imgUrl:imageUrl,imageType:imageType}, function(response){
+            if(response != 'error'){
+                $.alert("保存成功");
+                $('#imageId').val(response);
+            }
+        })
+    });
+</script>
+</body>
+</html>

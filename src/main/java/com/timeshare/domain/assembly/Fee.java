@@ -18,6 +18,15 @@ public class Fee extends BaseDomain{
     private int quota;
     //所属活动
     private String assemblyId;
+    private String quotaTitle;
+
+    public void setQuotaTitle(String quotaTitle) {
+        this.quotaTitle = quotaTitle;
+    }
+
+    public String getQuotaTitle() {
+        return quotaTitle;
+    }
 
     public String getFeeId() {
         return feeId;

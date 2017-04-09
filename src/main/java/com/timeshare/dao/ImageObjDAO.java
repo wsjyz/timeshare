@@ -3,6 +3,7 @@ package com.timeshare.dao;
 import com.timeshare.domain.ImageObj;
 import org.springframework.stereotype.Repository;
 
+import java.awt.*;
 import java.util.List;
 
 /**
@@ -18,4 +19,7 @@ public interface ImageObjDAO {
     String saveImg(ImageObj obj);
 
     List<ImageObj> findImgByObjIds(String objIds);
+
+    ImageObj findById(String imageId);
+
 }

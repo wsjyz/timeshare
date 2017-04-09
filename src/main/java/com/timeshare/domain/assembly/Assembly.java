@@ -1,8 +1,10 @@
 package com.timeshare.domain.assembly;
 
 import com.timeshare.domain.BaseDomain;
+import com.timeshare.domain.ImageObj;
 
 import java.math.BigDecimal;
+import java.util.List;
 
 /**
  * Created by user on 2017/3/23.
@@ -18,7 +20,7 @@ public class Assembly extends BaseDomain{
     private String description;
     private String type;
     //封面，存在ImageObj对象中
-
+    private String isOnApply;
     //联系人手机号
     private String phoneNumber;
     //参加人数
@@ -28,6 +30,108 @@ public class Assembly extends BaseDomain{
 
     //是否出现在首页轮播
     private String isOnIndex;
+    //显示哪些报名设置
+    private String showApplyProblem;
+    private int browseTimes;
+    private String userId;
+
+    private String userName;
+    private String userImg;
+    private String cost;
+    private String titleImg;
+    private List<Fee> feeList;
+    private List<Comment> commentList;
+    private List<String> contentImgList;
+
+    public void setContentImgList(List<String> contentImgList) {
+        this.contentImgList = contentImgList;
+    }
+
+    public List<String> getContentImgList() {
+        return contentImgList;
+    }
+
+    public void setBrowseTimes(int browseTimes) {
+        this.browseTimes = browseTimes;
+    }
+
+    public int getBrowseTimes() {
+        return browseTimes;
+    }
+
+    public void setCommentList(List<Comment> commentList) {
+        this.commentList = commentList;
+    }
+
+    public List<Comment> getCommentList() {
+        return commentList;
+    }
+
+    public void setFeeList(List<Fee> feeList) {
+        this.feeList = feeList;
+    }
+
+    public List<Fee> getFeeList() {
+        return feeList;
+    }
+
+    public void setTitleImg(String titleImg) {
+        this.titleImg = titleImg;
+    }
+
+    public String getTitleImg() {
+        return titleImg;
+    }
+
+    public String getUserName() {
+        return userName;
+    }
+
+    public void setUserName(String userName) {
+        this.userName = userName;
+    }
+
+    public String getUserImg() {
+        return userImg;
+    }
+
+    public void setUserImg(String userImg) {
+        this.userImg = userImg;
+    }
+
+    public String getCost() {
+        return cost;
+    }
+
+    public void setCost(String cost) {
+        this.cost = cost;
+    }
+
+    @Override
+    public void setUserId(String userId) {
+        this.userId = userId;
+    }
+
+    @Override
+    public String getUserId() {
+        return userId;
+    }
+
+    public String getShowApplyProblem() {
+        return showApplyProblem;
+    }
+
+    public void setShowApplyProblem(String showApplyProblem) {
+        this.showApplyProblem = showApplyProblem;
+    }
+
+    public void setIsOnApply(String isOnApply) {
+        this.isOnApply = isOnApply;
+    }
+
+    public String getIsOnApply() {
+        return isOnApply;
+    }
 
     public String getAssemblyId() {
         return assemblyId;

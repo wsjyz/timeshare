@@ -8,6 +8,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.jdbc.core.PreparedStatementSetter;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Repository;
+import org.springframework.util.CollectionUtils;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -45,10 +46,11 @@ public class ImageObjDAOImpl extends BaseDAO implements ImageObjDAO {
     public String saveImg(final ImageObj obj) {
         StringBuilder sql = new StringBuilder("insert into t_img_obj (image_id,image_type,obj_id,create_user_id,opt_time,image_url)" +
                 " values(?,?,?,?,?,?)");
+        String id=CommonStringUtils.genPK();
         int result = getJdbcTemplate().update(sql.toString(), new PreparedStatementSetter() {
             @Override
             public void setValues(PreparedStatement ps) throws SQLException {
-                ps.setString(1, CommonStringUtils.genPK());
+                ps.setString(1, id);
                 ps.setString(2,obj.getImageType());
                 ps.setString(3,obj.getObjId());
                 ps.setString(4,obj.getUserId());
@@ -57,7 +59,7 @@ public class ImageObjDAOImpl extends BaseDAO implements ImageObjDAO {
             }
         });
         if(result > 0){
-            return "SUCCESS";
+            return id;
         }else{
             return "FAILED";
         }
@@ -72,6 +74,18 @@ public class ImageObjDAOImpl extends BaseDAO implements ImageObjDAO {
             imgObjList = getJdbcTemplate().query(reviewSql.toString(),new ImageObjMapper());
         }
         return imgObjList;
+    }
+
+    @Override
+    public ImageObj findById(String imageId) {
+        List<ImageObj> imgObjList = new ArrayList<>();
+        StringBuilder reviewSql = new StringBuilder("");
+        reviewSql.append("select * from t_img_obj where image_id =?");
+            imgObjList = getJdbcTemplate().query(reviewSql.toString(),new ImageObjMapper(),imageId);
+        if (CollectionUtils.isEmpty(imgObjList)){
+            return new ImageObj();
+        }
+        return imgObjList.get(0);
     }
 
     public class ImageObjMapper implements RowMapper<ImageObj>{

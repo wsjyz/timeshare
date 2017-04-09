@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>我要点评</title>
+    <meta name="viewport" content="initial-scale=1, maximum-scale=1">
+    <link rel="shortcut icon" href="/favicon.ico">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+
+    <link rel="stylesheet" href="http://g.alicdn.com/msui/sm/0.6.2/css/sm.min.css">
+    <link rel="stylesheet" href="http://g.alicdn.com/msui/sm/0.6.2/css/sm-extend.min.css">
+    <link rel="stylesheet" href="${request.contextPath}/css/assembly/main.css"/>
+    <link rel="stylesheet" href="${request.contextPath}/css/upload.css"/>
+</head>
+<body>
+<div class="page-group">
+    <div class="page page-current" id="routerCommentPublish">
+        <div class="activityPublishHeader commentPublishHeader header">
+            <h1 class="title">我要点评</h1>
+            <a class="button button-link button-nav back pull-left" external href="${request.contextPath}/assembly/to-detail?assemblyId=${assembly.assemblyId}">
+                <span class="icon icon-left"></span>
+                取消
+            </a>
+            <a class="button button-link button-nav pull-right publish" onclick="saveConmment()">
+                发表
+            </a>
+        </div>
+
+        <div class="content commentPublishContent">
+            <div class="list-block">
+                <ul>
+                    <li class="activitySubject">
+                        <div class="item-content">
+                            <div class="item-inner">
+                                <input type="hidden" name="rating" value="3"/>
+                                <div class="item-title label" style="">总体
+                                    <span class="stars" style="">
+                                        <span class="filledStar oneStar"></span>
+                                        <span class="filledStar oneStar"></span>
+                                        <span class="filledStar oneStar"></span>
+                                        <span class="emptyStar oneStar"></span>
+                                        <span class="emptyStar oneStar"></span>
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+
+                    </li>
+                </ul>
+                <ul>
+                    <li style="padding-top:.5rem;">
+
+                        <textarea class="activityDesc" name="content" placeholder="亲写下你的活动感受吧"></textarea>
+                        <div class="item-content">
+                            <div class="item-inner">
+                                <div class="item-input commentDescImgs">
+                                    <input type="hidden"  name="imageIdStrComment" value="">
+                                    <a class="subjectPicture" href="#routerAddWallpaper" >   <img src="${request.contextPath}/images/assembly/icon/publishImg.png" /></a>
+                                </div>
+                            </div>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+        </div>
+
+    </div>
+    <div class="page" id="routerAddWallpaper">
+        <div class="activityPublishHeader header">
+            <h1 class="title">添加图片</h1>
+            <a class="button button-link button-nav back pull-left">
+                <span class="icon icon-left"></span>
+                返回
+            </a>
+            <a class="button button-link button-nav back pull-right publish">
+                完成
+            </a>
+        </div>
+        <div class="content activityPublishContent">
+            <div class="list-block">
+                <input type="hidden" id="imageId" value=""/>
+                <input type="hidden" id="imageType" value="ASSEMBLY_COMMENT_IMG"/>
+                <img src="" id="imageUrl" style="display: none;margin: 0 auto;height: 9rem;width: 16rem;"/>
+                <div class="main-wrap">
+                    <div id="uploader">
+                        <div class="queueList fix">
+                            <div class="filelist"></div>
+                            <div id="filePicker">
+                                <label class="trigger">+</label>
+                                <input type="file" name="file" class="webuploader-element-invisible" accept="image/*">
+                            </div>
+                        </div>
+                        <div class="progress-box">
+                            <div class="progress">
+                                <span class="text">0%</span>
+                                <span class="percentage"></span>
+                            </div><div class="info"></div>
+                        </div>
+                    </div>
+                </div>
+                <input type="button" value="确定" id="saveImgBtn" class="button button-fill button-danger button-big" style="margin: 1rem;width: 90%"/>
+            </div>
+        </div>
+    </div>
+</div>
+<script type='text/javascript' src='${request.contextPath}/js/zepto.min.js' charset='utf-8'></script>
+<script type='text/javascript' src='${request.contextPath}/js/upload.js?v=20160720-2' charset='utf-8'></script>
+<script type='text/javascript' src='http://g.alicdn.com/msui/sm/0.6.2/js/sm.min.js' charset='utf-8'></script>
+<script type='text/javascript' src='http://g.alicdn.com/msui/sm/0.6.2/js/sm-extend.min.js' charset='utf-8'></script>
+<script type='text/javascript' src='${request.contextPath}/js/assembly/main.js' charset='utf-8'></script>
+<script>
+    $(function(){
+        $(document).on('click', '.oneStar',function(){
+            var index =$(this).index();
+            var $stars = $(this).parent().find('.oneStar');
+            $stars.removeClass('filledStar').removeClass('emptyStar');
+            $stars.each(function(key, item){
+                if(key<=index){
+                    $(item).addClass('filledStar');
+                }else{
+                    $(item).addClass('emptyStar');
+                }
+            })
+            $('#rating').val(index+1);
+        })
+        $(document).on('beforePageSwitch', '#routerAddWallpaper', function(){
+            var imageId = $('#imageId').val();
+                $("input[name='imageIdStrComment']").val($("input[name='imageIdStrComment']").val()+","+imageId);
+        });
+
+    })
+    $.init();
+    function  saveConmment() {
+        var content=$("textarea[name='content']").val();
+        var rating=$("input[name='rating']").val();
+        var imageIdStrComment=$("input[name='imageIdStrComment']").val();
+        $.post("${request.contextPath}/assembly/saveComment",{"content":content,"rating":rating,"assemblyId":"${assembly.assemblyId}","imageIdStrComment":imageIdStrComment},function (data) {
+            if (data!="error"){
+                location='${request.contextPath}/assembly/to-detail?assemblyId=${assembly.assemblyId}';
+            }
+        })
+    }
+    Zepto(function($) {
+        var imageId = $('#imageId').val();
+        if(imageId != ''){
+            $('#imageUrl').css('display','block');
+        }
+    });
+    $("#saveImgBtn").on('click', function () {
+        var imageId = $('#imageId').val();
+        var imageType= $('#imageType').val();
+        var imageUrl = $('#imageUrl')[0].src;
+        $.post('/time/assembly/save-img', {imageId:imageId,imgUrl:imageUrl,imageType:imageType}, function(response){
+            if(response != 'error'){
+                $.alert("保存成功");
+                $('#imageId').val(response);
+            }
+        })
+    });
+</script>
+</body>
+</html>

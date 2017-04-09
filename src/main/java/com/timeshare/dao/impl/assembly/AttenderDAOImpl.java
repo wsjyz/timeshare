@@ -24,16 +24,17 @@ public class AttenderDAOImpl extends BaseDAO implements AttenderDAO {
 
     @Override
     public String saveAttender(Attender Attender) {
-        StringBuilder sql = new StringBuilder("INSERT INTO t_attender (attender_id, user_id, assembly_id, fee_id) VALUES (?, ?, ?, ?);");
+        StringBuilder sql = new StringBuilder("INSERT INTO t_attender (attender_id, user_id, assembly_id, fee_id,create_time,question_answer) VALUES (?, ?, ?, ?,?,?);");
         final String id = CommonStringUtils.genPK();
         int result = getJdbcTemplate().update(sql.toString(), new PreparedStatementSetter() {
             @Override
             public void setValues(PreparedStatement ps) throws SQLException {
                 ps.setString(1,id);
-                ps.setString(2,Attender.getAttenderId());
-                ps.setString(3,Attender.getUserId());
-                ps.setString(4,Attender.getAssemblyId());
-                ps.setString(5,Attender.getFeedId());
+                ps.setString(2,Attender.getUserId());
+                ps.setString(3,Attender.getAssemblyId());
+                ps.setString(4,Attender.getFeedId());
+                ps.setString(5,Attender.getCreateTime());
+                ps.setString(6,Attender.getQuestionAnswer());
             }
         });
         if(result > 0){
@@ -98,8 +99,13 @@ public class AttenderDAOImpl extends BaseDAO implements AttenderDAO {
         return getJdbcTemplate().queryForObject(countSql.toString(), Integer.class);
     }
 
-    class AttenderRowMapper implements RowMapper<Attender>{
+    @Override
+    public List<Attender> getListByAssemblyId(String assemblyId) {
+        StringBuilder sql = new StringBuilder("select * from t_attender where assembly_id=?");
+        return getJdbcTemplate().query(sql.toString(),new Object[]{assemblyId},new AttenderRowMapper());
+    }
 
+    class AttenderRowMapper implements RowMapper<Attender>{
         @Override
         public Attender mapRow(ResultSet rs, int i) throws SQLException {
             Attender attender = new Attender();
@@ -107,6 +113,8 @@ public class AttenderDAOImpl extends BaseDAO implements AttenderDAO {
             attender.setAssemblyId(rs.getString("assembly_id"));
             attender.setFeedId(rs.getString("fee_id"));
             attender.setUserId(rs.getString("user_id"));
+            attender.setCreateTime(rs.getString("create_time"));
+            attender.setQuestionAnswer(rs.getString("question_answer"));
             return attender;
         }
     }

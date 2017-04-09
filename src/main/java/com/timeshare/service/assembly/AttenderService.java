@@ -1,13 +1,15 @@
-package com.timeshare.dao.assembly;
+package com.timeshare.service.assembly;
 
 import com.timeshare.domain.assembly.Attender;
 
 import java.util.List;
 
+/**
+ * Created by user on 2016/9/23.
+ */
+public interface AttenderService {
 
-public interface AttenderDAO {
-
-     String saveAttender(Attender Attender);
+    String saveAttender(Attender Attender);
 
     String modifyAttender(Attender Attender);
 
@@ -17,4 +19,5 @@ public interface AttenderDAO {
 
     int findAttenderCount(Attender Attender);
     List<Attender> getListByAssemblyId(String assemblyId);
+
 }

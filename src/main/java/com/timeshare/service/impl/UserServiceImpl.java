@@ -58,11 +58,12 @@ public class UserServiceImpl implements UserService{
     }
 
     @Override
-    public void saveOrUpdateImg(ImageObj obj) {
+    public String  saveOrUpdateImg(ImageObj obj) {
         if(StringUtils.isBlank(obj.getImageId())){
-            imageObjDAO.saveImg(obj);
+           return  imageObjDAO.saveImg(obj);
         }else{
             imageObjDAO.updateImg(obj);
+            return "";
         }
     }
 
@@ -122,5 +123,10 @@ public class UserServiceImpl implements UserService{
     @Override
     public int findUserHasMobileCount() {
         return userDAO.findUserHasMobileCount();
+    }
+
+    @Override
+    public ImageObj findById(String imageId) {
+        return imageObjDAO.findById(imageId);
     }
 }

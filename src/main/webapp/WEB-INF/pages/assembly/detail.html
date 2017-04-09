@@ -1,0 +1,498 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>活动详情</title>
+    <meta name="viewport" content="initial-scale=1, maximum-scale=1">
+    <link rel="shortcut icon" href="/favicon.ico">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+
+    <link rel="stylesheet" href="http://g.alicdn.com/msui/sm/0.6.2/css/sm.min.css">
+    <link rel="stylesheet" href="http://g.alicdn.com/msui/sm/0.6.2/css/sm-extend.min.css">
+    <link rel="stylesheet" href="${request.contextPath}/css/assembly/main.css">
+  </head>
+  <body>
+  <div class="page-group">
+      <div class="page">
+          <div class="detailHeader header">
+              <h1 class="title">邂逅活动</h1>
+              <a class="button button-link button-nav back pull-left" style="" external href="${request.contextPath}/assembly/to-index">
+                  <span class="icon icon-left"></span>
+                  返回
+              </a>
+          </div>
+
+          <nav class="bar bar-tab activityFooter">
+              <a class="tab-item external" href="#">
+                  <span class="icon icon-message"></span>
+                  <span class="tab-label">在线咨询</span>
+              </a>
+
+              <a class="tab-item external" href="#">
+                  <span class="icon icon-star"></span>
+                  <span class="tab-label">收藏(30)</span>
+              </a>
+              <a class="tab-item external item-me" href="#">
+                  <span class="icon icon-me"></span>
+                  <span>我要报名</span>
+              </a>
+          </nav>
+
+          <div class="content activityContent">
+              <div class="content-block">
+                  <input type="hidden" name="feeId" value="">
+                  <img class="fullWidth" src="${assembly.titleImg}"  />
+                  <h4 class="activityTitle">${assembly.title}</h4>
+                  <div class="activityDesc">
+                      <span>${assembly.createTime}</span>
+                      <img class="eyeImg" src="${request.contextPath}/images/assembly/icon/eye.svg" />
+                      <span class="viewNum">${assembly.browseTimes}</span>
+                  </div>
+                  <div class="activityRow">
+                      <img class="clockImg" src="${request.contextPath}/images/assembly/icon/clock.png"/>
+                      <span>${assembly.startTime}至  ${assembly.endTime}</span>
+                  </div>
+                  <div class="activityRow">
+                      <img src="${request.contextPath}/images/assembly/icon/type.png" />
+                      <#if assembly.type=="online">
+                          <span>线上活动</span>
+                          <#elseif  assembly.type=="face">
+                              <span>线下活动</span>
+                      <#elseif assembly.type=="train">
+                          <span>培训分享</span>
+                      <#elseif assembly.type=="company">
+                          <span>企业参考</span>
+                      </#if>
+                  </div>
+                  <div class="activityRow">
+                      <img src="${request.contextPath}/images/assembly/icon/human.png" />
+                      <span>已报名${userCount}人</span>
+                  </div>
+                  <div class="activityRow">
+                      <img class="moneyImg" src="${request.contextPath}/images/assembly/icon/money.png" />
+                      <span class="money">${minMoney}-${maxMoney}</span>
+                  </div>
+
+                  <div class="userRow">
+                      <img class="userPhoto" src="${assembly.userImg}" align="left" />
+                      <span class="userName">${assembly.userName}</span>
+                      <span class="darkBg">主办方</span>
+                  </div>
+
+                  <div class="activityDetailWrap" style="height: 18.8rem;z-index:2;position:relative;overflow: hidden;">
+                      <div class="activityDetail">
+                          <img src="${request.contextPath}/images/assembly/sample/img2.png" class="fullWidth" />
+                          <#list assembly.contentImgList as contentImg>
+                              <img src="${contentImg}" class="fullWidth"  />
+                          </#list>
+                          <div>${assembly.description}</div>
+                      </div>
+                  </div>
+                  <div class="showMoreDetail">显示更多详情 <span class="icon icon-down"></span></div>
+                  <section class="userSection">
+                      <header>
+                          <span class="pull-left">已报名(${userCount})</span>
+                          <a class="pull-right" href="${request.contextPath}/assembly/showAttender?assemblyId=${assembly.assemblyId}">
+                              更多报名
+                              <span class="icon icon-right"></span>
+                          </a>
+                      </header>
+                      <hr />
+                      <ul class="userList">
+                          <#list attenderList as attender>
+                          <li>
+                              <img src="${attender.userImg}" />
+                              <div>${attender.userName}</div>
+                          </li>
+                          </#list>
+                      </ul>
+                  </section>
+
+                  <section class="commentSection" style="">
+                      <header>
+                          <span class="pull-left">点评</span>
+                          <#if userInfo.autoType=="">
+                          <a class="pull-right" href="${request.contextPath}/assembly/to-comment?assemblyId=${assembly.assemblyId}">
+                              我要点评
+                              <span class="icon icon-right"></span>
+                          </a>
+                          </#if>
+                      </header>
+                      <ul class="commentTagList">
+                      </ul>
+                      <hr />
+                          <#list commentList as comment>
+                              <header class="commentUser clearFix">
+                              <img class="pull-left userPhoto" src="${comment.userImg}" />
+                              <div class="pull-left" style="padding-top: .3rem;">
+                                  <span class="commentUserName">${comment.userName}</span>
+                                  <span class="darkBg">${comment.acountType}</span> <br />
+                                  打分
+                                  <#if comment.rating gte 1>
+                                      <span class="filledStar"></span>
+                                      <#else>
+                                          <span class="emptyStar"></span>
+                                  </#if>
+                                  <#if comment.rating gte 2>
+                                      <span class="filledStar"></span>
+                                      <#else>
+                                          <span class="emptyStar"></span>
+                                  </#if>
+                                  <#if comment.rating gte 3>
+                                      <span class="filledStar"></span>
+                                      <#else>
+                                          <span class="emptyStar"></span>
+                                  </#if>
+                                  <#if comment.rating gte 4>
+                                      <span class="filledStar"></span>
+                                      <#else>
+                                          <span class="emptyStar"></span>
+                                  </#if>
+                                  <#if comment.rating gte 5>
+                                      <span class="filledStar"></span>
+                                      <#else>
+                                          <span class="emptyStar"></span>
+                                  </#if>
+                              </div>
+                              <span  class="pull-right">${comment.createTime}</span>
+                          </header>
+                          <div class="commentContent" style="">
+                              ${comment.content}
+                              <div class="commentImgs">
+                                  <#list comment.commentImgList as commentImg>
+                                      <img src="${commentImg}"  />
+                                  </#list>
+                              </div>
+                          </div>
+                          <footer class="commentFooter">
+                              <span class="btnReply pull-right" data-id="${comment.commentId}">回复</span>
+                              <span class="btnUpVote pull-right" data-id="${comment.commentId}">赞</span>
+                          </footer>
+                          <div class="replyArea">
+                              <span class="replyTitle">作者回复</span>
+                              <div class="replyContent">
+
+                              </div>
+                          </div>
+                      </#list>
+                  </section>
+              </div>
+              </div>
+          </div>
+      </div>
+  </div>
+    <script type='text/javascript' src='http://g.alicdn.com/sj/lib/zepto/zepto.min.js' charset='utf-8'></script>
+    <script type='text/javascript' src='http://g.alicdn.com/msui/sm/0.6.2/js/sm.min.js' charset='utf-8'></script>
+    <script type='text/javascript' src='http://g.alicdn.com/msui/sm/0.6.2/js/sm-extend.min.js' charset='utf-8'></script>
+    <script type='text/javascript' src='${request.contextPath}/js/assembly/main.js' charset='utf-8'></script>
+  <script type='text/javascript' src='https://res.wx.qq.com/open/js/jweixin-1.0.0.js'></script>
+  <script>
+        wx.config({
+            appId: "${parmsMap['appId']}", // 必填，公众号的唯一标识
+            timestamp:${parmsMap['timestamp']} , // 必填，生成签名的时间戳
+            nonceStr: "${parmsMap['nonceStr']}", // 必填，生成签名的随机串
+            signature: "${parmsMap['signature']}",// 必填，签名，见附录1
+            jsApiList: [
+                'checkJsApi',
+                'onMenuShareTimeline',
+                'onMenuShareAppMessage',
+                'onMenuShareQQ'
+            ] // 必填，需要使用的JS接口列表，所有JS接口列表见附录2
+        });
+        wx.ready(function(){
+            wx.onMenuShareAppMessage({
+                title: '邂逅活动',
+                desc: $('.title').text(),
+                link: window.location.href,
+                imgUrl: shareImgUrl,
+                trigger: function (res) {
+                    //alert('用户点击发送给朋友');
+                },
+                success: function (res) {
+                    //$.toast('已分享');
+                },
+                cancel: function (res) {
+                    //$.toast('已取消分享');
+                },
+                fail: function (res) {
+                    console.log('失败');
+                }
+            });
+            wx.onMenuShareTimeline({
+                title: $('.title').text(), // 分享标题
+                link: window.location.href, // 分享链接
+                imgUrl: shareImgUrl, // 分享图标
+                success: function () {
+                    // 用户确认分享后执行的回调函数
+                },
+                cancel: function () {
+                    // 用户取消分享后执行的回调函数
+                }
+            });
+
+        });
+        $(function(){
+
+            //初始化"显示更多详情"按钮，1.初始时显示或隐藏本按钮, 2.绑定点击事件
+            (function initMoreDetail(){
+                var $detailWrap = $('.activityDetailWrap');
+                var $showMoreDetail = $('.showMoreDetail');
+                var detailHeight =$('.activityDetail').height();
+                //显示或隐藏本按钮
+                if(detailHeight>$detailWrap.height()){
+                    $showMoreDetail.show();
+                }else{
+                    $showMoreDetail.hide();
+                }
+
+                //绑定点击事件
+                $showMoreDetail.click(function(){
+                    $detailWrap.css({overflow:'visible',height:'auto'})
+                    $(this).hide();
+                })
+            }());
+
+            $(document).on('click','.closeModal',function(){
+                $.closeModal();
+            });
+            $(document).on('click','.btnUpVote',function(){
+                var commentId=$(this).attr("data-id");
+                $.post("${request.contextPath}/assembly/saveZan",{"commentId":commentId},function (data) {
+                    if (data!="error"){
+                        location='${request.contextPath}/assembly/to-detail?assemblyId=${assembly.assemblyId}';
+                    }
+                });
+            });
+            $(document).on('click', '.btnReply', function(){
+                var commentId=$(this).attr("data-id");
+                var $commentSection = $(this).parents('.commentSection');
+                showReplyForm($commentSection,commentId);
+            })
+
+            //回复
+            function showReplyForm($commentSection,commentId){
+                $.modal({
+                    extraClass:'activityBottom activitySecondStep',
+                    title:  '<div class="buttons-row">'+
+                    '   <h4 class="title"></h4>'+
+                    '   <span class="closeModal"><img src="${request.contextPath}/images/assembly/close.png" /></span>'+
+                    '</div>',
+                    text: ''+
+                    '<div class="list-block"><ul>' +
+                    '   <li>' +
+                    '       <div class="item-content">'+
+                    '           <textarea placeholder="填写回复" id="replyText"></textarea>'+
+                    '       </div>'+
+                    '   </li>' +
+                    '</ul></div>',
+                    buttons: [
+                        {
+                            text: '提交',
+                            bold: true,
+                            onClick:function(){
+                                var replyText = $('#replyText').val();
+                                $commentSection.find('.replyContent').text(replyText);
+                                $.post("${request.contextPath}/assembly/saveZan",{"commentId":commentId,"replyContent":replyText},function (data) {
+                                    if (data!="error"){
+                                        location='${request.contextPath}/assembly/to-detail?assemblyId=${assembly.assemblyId}';
+                                    }
+                                });
+                            }
+                        },
+                    ]
+                })
+            }
+            //显示报名表单第一页
+            $(document).on('click', '.item-me', showEnrollForm);
+
+            function showEnrollForm() {
+                var text="";
+                //<#list assembly.feeList as fee>
+              //  <#if fee.quota==-1>
+                text+= '<li>' +
+                        '   <div class="item-content">'+
+                        '       <div class="item-inner">' +
+                        '           <i class="circle"></i>'+
+                        '           <div class="item-title label">${fee.feeTitle}<br />' +
+                        '           <span class="smallTitle">${fee.quotaTitle}</span>' +
+                        '           </div>'+
+                        '           <div class="item-input">'+
+                        '               <label class="normalPrice">${fee.fee}</label>'+
+                        '           </div>'+
+                        '       </div>'+
+                        '   </div>'+
+                        '</li>' ;
+                //<#else>
+                    text+= '<li>' +
+                            '   <div class="item-content">'+
+                            '       <div class="item-inner">' +
+                            '           <i class="circle"></i>'+
+                            '           <div class="item-title label">${fee.feeTitle}<br />' +
+                            '           <span class="smallTitle">${fee.quotaTitle}</span>' +
+                            '           </div>'+
+                            '           <div class="item-input">'+
+                            '               <label class="normalPrice">${fee.fee}</label>'+
+                            '               <label radioName="priceType" class="radioLabel" id="priceType${fee.feeId}" /><input for="priceType${fee.feeId}" name="priceType" type="radio" value="${fee.feeId}">'+
+                            '           </div>'+
+                            '       </div>'+
+                            '   </div>'+
+                            '</li>' ;
+                //</#if>
+                //</#list>
+                $.modal({
+                    extraClass:'activityBottom activityFirstStep',
+                    title:  '<div class="buttons-row">'+
+                    '<h4 class="title">请在以下收费项目中选择</h4>'+
+                    '<span class="closeModal"><img src="${request.contextPath}/images/assembly/close.png" /></span>'+
+                    '</div>',
+                    text: ''+
+                    '  <div class="list-block"><ul>' +
+                    text+
+                    '<li>' +
+                    '   <div class="item-content">'+
+                    '       <div class="item-media"></div>'+
+                    '       <div class="item-inner agree">'+
+                    '       我同意XXX协议'+
+                    '       </div>'+
+                    '   </div>'+
+                    '</li>' +
+                    '</ul></div>',
+                    buttons: [
+                        {
+                            text: '下一步',
+                            bold: true,
+                            onClick:function(){
+                                var feeId=$("input[name='priceType']:checked").val();
+                                if(feeId==undefined || feeId==""){
+                                    $.alert("请选择一项报名费用!");
+                                    return false;
+                                }
+                                $("input[name='feeId']").val($("input[name='priceType']:checked").val())
+                                showNextStep();
+                            }
+                        },
+                    ]
+                })
+            }
+            //报名表单下一页
+            function showNextStep(){
+                var text="";
+                //  <#if assembly.showApplyProblem?contains("userName")>
+                text+= '   <li>' +
+                        '       <div class="item-content">'+
+                        '           <div class="item-media"><i class="icon icon-form-name"></i></div>'+
+                        '           <div class="item-inner">'+
+                        '              <div class="item-title label">姓名</div>'+
+                        '               <div class="item-input">'+
+                        '                   <input type="text" placeholder="" name="userName">'+
+                        '               </div>'+
+                        '           </div>'+
+                        '       </div>'+
+                        '   </li>' ;
+                //</#if>
+                //  <#if assembly.showApplyProblem?contains("phone")>
+                text+= '   <li>' +
+                        '       <div class="item-content">'+
+                        '           <div class="item-media"><i class="icon icon-form-name"></i></div>'+
+                        '           <div class="item-inner">'+
+                        '              <div class="item-title label">手机</div>'+
+                        '               <div class="item-input">'+
+                        '                   <input type="text" placeholder="" name="phone">'+
+                        '               </div>'+
+                        '           </div>'+
+                        '       </div>'+
+                        '   </li>' ;
+                //</#if>
+
+                //  <#if assembly.showApplyProblem?contains("wx")>
+                text+= '   <li>' +
+                        '       <div class="item-content">'+
+                        '           <div class="item-media"><i class="icon icon-form-name"></i></div>'+
+                        '           <div class="item-inner">'+
+                        '              <div class="item-title label">微信号</div>'+
+                        '               <div class="item-input">'+
+                        '                   <input type="text" placeholder="" name="wxName">'+
+                        '               </div>'+
+                        '           </div>'+
+                        '       </div>'+
+                        '   </li>' ;
+                //</#if>
+                //  <#if assembly.showApplyProblem?contains("email")>
+                text+= '   <li>' +
+                        '       <div class="item-content">'+
+                        '           <div class="item-media"><i class="icon icon-form-name"></i></div>'+
+                        '           <div class="item-inner">'+
+                        '              <div class="item-title label">邮箱</div>'+
+                        '               <div class="item-input">'+
+                        '                   <input type="text" placeholder="" name="email">'+
+                        '               </div>'+
+                        '           </div>'+
+                        '       </div>'+
+                        '   </li>' ;
+                //</#if>
+                //  <#if assembly.showApplyProblem?contains("company")>
+                text+= '   <li>' +
+                        '       <div class="item-content">'+
+                        '           <div class="item-media"><i class="icon icon-form-name"></i></div>'+
+                        '           <div class="item-inner">'+
+                        '              <div class="item-title label">所在企业</div>'+
+                        '               <div class="item-input">'+
+                        '                   <input type="text" placeholder="" name="companyName">'+
+                        '               </div>'+
+                        '           </div>'+
+                        '       </div>'+
+                        '   </li>' ;
+                //</#if>
+                $.modal({
+                    extraClass:'activityBottom activitySecondStep',
+                    title:  '<div class="buttons-row">'+
+                    '   <h4 class="title">请填写报名信息</h4>'+
+                    '   <span class="closeModal"><img src="${request.contextPath}/images/assembly/close.png" /></span>'+
+                    '</div>',
+                    text: ''+
+                    '<div class="list-block"><ul>' +
+                    text+
+                    '</ul></div>',
+                    buttons: [
+                        {
+                            text: '报名',
+                            bold: true,
+                            onClick:function(){
+                                var feeId=$("input[name='feeId']").val();
+                                var userName=$("input[name='userName']").val();
+                                var phone=$("input[name='phone']").val();
+                                var wxName=$("input[name='wxName']").val();
+                                var email=$("input[name='email']").val();
+                                var companyName=$("input[name='companyName']").val();
+                                var questionAnswer="";
+                                if(userName!=""){
+                                    questionAnswer=questionAnswer+","+userName;
+                                }
+                                if(phone!=""){
+                                    questionAnswer=questionAnswer+","+phone;
+                                } if(wxName!=""){
+                                    questionAnswer=questionAnswer+","+wxName;
+                                }
+                                if(email!=""){
+                                    questionAnswer=questionAnswer+","+email;
+                                }
+                                if(companyName!=""){
+                                    questionAnswer=questionAnswer+","+companyName;
+                                }
+                                $.post("${request.contextPath}/assembly/saveAttender",{"assemblyId":"${assembly.assemblyId}","feeId":feeId,"questionAnswer":questionAnswer},function (data) {
+                                    if (data!="error"){
+                                        location='${request.contextPath}/assembly/to-attendersuccess?assemblyId=${assembly.assemblyId}&feeId='+feeId;
+                                    }
+                                });
+                            }
+                        },
+                    ]
+                })
+            }
+        })
+        $.init();
+  </script>
+  </body>
+</html>

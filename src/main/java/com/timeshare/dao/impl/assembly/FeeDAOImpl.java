@@ -56,7 +56,7 @@ public class FeeDAOImpl extends BaseDAO implements FeeDAO {
             sql.append(" fee = "+Fee.getFee()+",");
         }
         if(StringUtils.isNotEmpty(Fee.getFeeTitle())){
-            sql.append(" fee_title = '"+Fee.getFee()+"',");
+            sql.append(" fee_title = '"+Fee.getFeeTitle()+"',");
         }
         if(Fee.getQuota()>0){
             sql.append(" quota = "+Fee.getQuota()+",");
@@ -105,6 +105,17 @@ public class FeeDAOImpl extends BaseDAO implements FeeDAO {
         StringBuilder countSql = new StringBuilder(
                 "select count(*) from t_fee where 1=1 ");
         return getJdbcTemplate().queryForObject(countSql.toString(), Integer.class);
+    }
+
+    @Override
+    public List<Fee> findFeeByAssemblyId(String assemblyId) {
+        StringBuilder sql = new StringBuilder("select * from t_fee where assembly_id=?");
+        return getJdbcTemplate().query(sql.toString(),new Object[]{assemblyId},new FeeRowMapper());
+    }
+
+    @Override
+    public void delete(String feeId) {
+        int result = getJdbcTemplate().update("delete from t_fee where fee_id=?",feeId);
     }
 
     class FeeRowMapper implements RowMapper<Fee>{

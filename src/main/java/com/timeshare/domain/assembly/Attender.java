@@ -14,6 +14,42 @@ public class Attender extends BaseDomain {
     //所属费用项
     private String feedId;
     private String assemblyId;
+    private String createTime;
+    private String userImg;
+    private String userName;
+    private String questionAnswer;
+
+    public void setQuestionAnswer(String questionAnswer) {
+        this.questionAnswer = questionAnswer;
+    }
+
+    public String getQuestionAnswer() {
+        return questionAnswer;
+    }
+
+    public void setUserName(String userName) {
+        this.userName = userName;
+    }
+
+    public String getUserName() {
+        return userName;
+    }
+
+    public void setUserImg(String userImg) {
+        this.userImg = userImg;
+    }
+
+    public String getUserImg() {
+        return userImg;
+    }
+
+    public void setCreateTime(String createTime) {
+        this.createTime = createTime;
+    }
+
+    public String getCreateTime() {
+        return createTime;
+    }
 
     public void setAttenderId(String attenderId) {
         this.attenderId = attenderId;

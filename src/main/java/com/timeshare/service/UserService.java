@@ -23,7 +23,7 @@ public interface UserService {
 
     ImageObj findUserImg(String userId,String imgType);
 
-    void saveOrUpdateImg(ImageObj obj);
+    String saveOrUpdateImg(ImageObj obj);
 
     String deleteById(String userId);
 
@@ -36,5 +36,6 @@ public interface UserService {
     int findUserCount(UserInfo userInfo);
 
     int findUserHasMobileCount();
+    ImageObj findById(String imageId);
 
 }

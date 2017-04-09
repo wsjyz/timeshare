@@ -1,13 +1,16 @@
-package com.timeshare.dao.assembly;
+package com.timeshare.service.assembly;
 
 import com.timeshare.domain.assembly.Fee;
 
 import java.util.List;
 
+/**
+ * Created by user on 2016/9/23.
+ */
+public interface FeeService {
 
-public interface FeeDAO {
 
-     String saveFee(Fee Fee);
+    String saveFee(Fee Fee);
 
     String modifyFee(Fee Fee);
 
@@ -17,6 +20,5 @@ public interface FeeDAO {
 
     int findFeeCount(Fee Fee);
     List<Fee> findFeeByAssemblyId(String assemblyId);
-
     void delete(String feeId);
 }

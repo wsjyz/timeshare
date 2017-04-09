@@ -15,6 +15,7 @@ import org.springframework.stereotype.Repository;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -30,7 +31,7 @@ public class AssemblyDAOImpl extends BaseDAO implements AssemblyDAO {
 
     @Override
     public String saveAssembly(Assembly Assembly) {
-        StringBuilder sql = new StringBuilder("INSERT INTO t_assembly (assembly_id, title, start_time, end_time, rendezvous, description, type, phone_number, attent_count, comment_count, is_on_index) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);");
+        StringBuilder sql = new StringBuilder("INSERT INTO t_assembly (assembly_id, title, start_time, end_time, rendezvous, description,user_id, type, phone_number, attent_count, comment_count, is_on_index,is_on_apply,show_apply_problem) VALUES (?,?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?,?,?);");
         final String id = CommonStringUtils.genPK();
         int result = getJdbcTemplate().update(sql.toString(), new PreparedStatementSetter() {
             @Override
@@ -41,11 +42,14 @@ public class AssemblyDAOImpl extends BaseDAO implements AssemblyDAO {
                 ps.setString(4,Assembly.getEndTime());
                 ps.setString(5,Assembly.getRendezvous());
                 ps.setString(6,Assembly.getDescription());
-                ps.setString(7,Assembly.getType());
-                ps.setString(8,Assembly.getPhoneNumber());
-                ps.setInt(9,Assembly.getAttentCount());
-                ps.setInt(10,Assembly.getCommentCount());
-                ps.setString(11,Assembly.getIsOnIndex());
+                ps.setString(7,Assembly.getUserId());
+                ps.setString(8,Assembly.getType());
+                ps.setString(9,Assembly.getPhoneNumber());
+                ps.setInt(10,Assembly.getAttentCount());
+                ps.setInt(11,Assembly.getCommentCount());
+                ps.setString(12,Assembly.getIsOnIndex());
+                ps.setString(13,Assembly.getIsOnApply());
+                ps.setString(14,Assembly.getShowApplyProblem());
             }
         });
         if(result > 0){
@@ -76,6 +80,9 @@ public class AssemblyDAOImpl extends BaseDAO implements AssemblyDAO {
         if(StringUtils.isNotBlank(Assembly.getDescription())){
             sql.append(" description = '"+Assembly.getDescription()+"',");
         }
+        if(StringUtils.isNotBlank(Assembly.getUserId())){
+            sql.append(" user_id = '"+Assembly.getUserId()+"',");
+        }
         if(StringUtils.isNotBlank(Assembly.getType())){
             sql.append(" type = '"+Assembly.getType()+"',");
         }
@@ -89,6 +96,16 @@ public class AssemblyDAOImpl extends BaseDAO implements AssemblyDAO {
         }if(StringUtils.isNotBlank(Assembly.getIsOnIndex())){
             sql.append(" is_on_index = '"+Assembly.getIsOnIndex()+"',");
         }
+        if(StringUtils.isNotBlank(Assembly.getIsOnApply())){
+        sql.append(" is_on_apply = '"+Assembly.getIsOnApply()+"',");
+        }
+        if(StringUtils.isNotBlank(Assembly.getShowApplyProblem())){
+            sql.append(" show_apply_problem = '"+Assembly.getShowApplyProblem()+"',");
+        }
+        if(Assembly.getBrowseTimes()>0){
+            sql.append(" browse_times = "+Assembly.getBrowseTimes()+",");
+        }
+
         if (sql.lastIndexOf(",") + 1 == sql.length()) {
             sql.delete(sql.lastIndexOf(","), sql.length());
         }
@@ -118,17 +135,40 @@ public class AssemblyDAOImpl extends BaseDAO implements AssemblyDAO {
 
     @Override
     public List<Assembly> findAssemblyList(Assembly Assembly, int startIndex, int loadSize) {
-        StringBuilder sql = new StringBuilder("select * from t_assembly where 1=1");
-
-        sql.append("   limit ?,?");
-        return getJdbcTemplate().query(sql.toString(),new Object[]{startIndex,loadSize},new AssemblyRowMapper());
+        StringBuilder sql = new StringBuilder("select * from t_assembly ass  where 1=1");
+        List<Object> list=new ArrayList<Object>();
+        if (StringUtils.isNotEmpty(Assembly.getType())){
+            sql.append(" and ass.type=?");
+            list.add(Assembly.getType());
+        }
+        if (StringUtils.isNotEmpty(Assembly.getTitle())){
+            sql.append(" and ass.title like ?");
+            list.add("%"+Assembly.getTitle()+"%");
+        }
+        if (StringUtils.isNotEmpty(Assembly.getRendezvous())){
+            sql.append(" and ass.rendezvous like ?");
+            list.add("%"+Assembly.getRendezvous()+"%");
+        }
+        sql.append(" limit ?,?");
+        list.add(startIndex);
+        list.add(loadSize);
+        return getJdbcTemplate().query(sql.toString(),list.toArray(),new AssemblyRowMapper());
     }
 
     @Override
     public int findAssemblyCount(Assembly Assembly) {
         StringBuilder countSql = new StringBuilder(
                 "select count(*) from t_assembly where 1=1 ");
-        return getJdbcTemplate().queryForObject(countSql.toString(), Integer.class);
+        List<Object> list=new ArrayList<Object>();
+        if (StringUtils.isNotEmpty(Assembly.getType())){
+            countSql.append(" and ass.type=?");
+            list.add(Assembly.getType());
+        }
+        if (StringUtils.isNotEmpty(Assembly.getTitle())){
+            countSql.append(" and ass.title like ?");
+            list.add("%"+Assembly.getTitle()+"%");
+        }
+        return getJdbcTemplate().queryForObject(countSql.toString(),list.toArray(), Integer.class);
     }
 
     class AssemblyRowMapper implements RowMapper<Assembly>{
@@ -142,11 +182,14 @@ public class AssemblyDAOImpl extends BaseDAO implements AssemblyDAO {
             assembly.setEndTime(rs.getString("end_time"));
             assembly.setRendezvous(rs.getString("rendezvous"));
             assembly.setDescription(rs.getString("description"));
+            assembly.setUserId(rs.getString("user_id"));
             assembly.setType(rs.getString("type"));
             assembly.setPhoneNumber(rs.getString("phone_number"));
             assembly.setAttentCount(rs.getInt("attent_count"));
             assembly.setCommentCount(rs.getInt("comment_count"));
             assembly.setIsOnIndex(rs.getString("is_on_index"));
+            assembly.setIsOnApply(rs.getString("is_on_apply"));
+            assembly.setShowApplyProblem(rs.getString("show_apply_problem"));
             return assembly;
         }
     }
