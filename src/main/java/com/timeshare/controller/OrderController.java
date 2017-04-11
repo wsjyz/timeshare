@@ -49,7 +49,8 @@ public class OrderController extends BaseController{
         return "appointment/begin";
     }
     @RequestMapping(value = "/fix-buyer-order/{orderId}")
-    public String toFixBuyerOrder(@PathVariable String orderId,Model model,@CookieValue(value="time_sid", defaultValue="") String userId) {
+    public String toFixBuyerOrder(@PathVariable String orderId,Model model,
+                                  @CookieValue(value="time_sid", defaultValue="admin") String userId) {
 
         ItemOrder order = orderService.findOrderByOrderId(orderId);
         remindService.deleteRemindByObjIdAndUserId(orderId,userId);
