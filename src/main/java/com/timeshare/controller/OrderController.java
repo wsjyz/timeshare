@@ -194,8 +194,8 @@ public class OrderController extends BaseController{
         String jsApiParams = WxPayUtils.userPayToCorp(code,payMessageTitle,order.getPrice());
         attr.addAttribute("jsApiParams",jsApiParams);
         attr.addAttribute("payTip","你确定要支付"+order.getPrice()+"元吗");
-        attr.addAttribute("okUrl",request.getContextPath()+"/to-buyer-confirm/"+orderId);
-        attr.addAttribute("backUrl",request.getContextPath()+"/modify-order-status?orderId="+orderId+"&bidStatus=SELLER_APPLY");
+        attr.addAttribute("okUrl",request.getContextPath()+"/order/fix-buyer-order/"+orderId);
+        attr.addAttribute("backUrl",request.getContextPath()+"/order/modify-order-status?orderId="+orderId+"&bidStatus=SELLER_APPLY");
 
         return "redirect:/wxPay/to-pay/";
     }
