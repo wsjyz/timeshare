@@ -190,6 +190,8 @@ public class AssemblyDAOImpl extends BaseDAO implements AssemblyDAO {
             assembly.setIsOnIndex(rs.getString("is_on_index"));
             assembly.setIsOnApply(rs.getString("is_on_apply"));
             assembly.setShowApplyProblem(rs.getString("show_apply_problem"));
+            assembly.setBrowseTimes(rs.getInt("browse_times"));
+
             return assembly;
         }
     }

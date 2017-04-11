@@ -83,7 +83,6 @@
 
                   <div class="activityDetailWrap" style="height: 18.8rem;z-index:2;position:relative;overflow: hidden;">
                       <div class="activityDetail">
-                          <img src="${request.contextPath}/images/assembly/sample/img2.png" class="fullWidth" />
                           <#list assembly.contentImgList as contentImg>
                               <img src="${contentImg}" class="fullWidth"  />
                           </#list>
@@ -113,7 +112,7 @@
                   <section class="commentSection" style="">
                       <header>
                           <span class="pull-left">点评</span>
-                          <#if userInfo.autoType=="">
+                          <#if userInfo.acountType=="VIP">
                           <a class="pull-right external" href="${request.contextPath}/assembly/to-comment?assemblyId=${assembly.assemblyId}">
                               我要点评
                               <span class="icon icon-right"></span>
@@ -173,7 +172,9 @@
                           <div class="replyArea">
                               <span class="replyTitle">作者回复</span>
                               <div class="replyContent">
-
+                                  <#list comment.replyContentList as replyContent>
+                                      ${replyContent}
+                                  </#list>
                               </div>
                           </div>
                       </#list>
@@ -294,7 +295,7 @@
                             onClick:function(){
                                 var replyText = $('#replyText').val();
                                 $commentSection.find('.replyContent').text(replyText);
-                                $.post("${request.contextPath}/assembly/saveZan",{"commentId":commentId,"replyContent":replyText},function (data) {
+                                $.post("${request.contextPath}/assembly/saveReply",{"commentId":commentId,"replyContent":replyText},function (data) {
                                     if (data!="error"){
                                         location='${request.contextPath}/assembly/to-detail?assemblyId=${assembly.assemblyId}';
                                     }
@@ -334,7 +335,7 @@
                             '           </div>'+
                             '           <div class="item-input">'+
                             '               <label class="normalPrice">${fee.fee}</label>'+
-                            '               <label radioName="priceType" class="radioLabel" id="priceType${fee.feeId}" /><input for="priceType${fee.feeId}" name="priceType" type="radio" value="${fee.feeId}">'+
+                            '               <label radioName="priceType" class="radioLabel" id="priceType${fee.feeId}" data-id="${fee.feeId}" /><input for="priceType${fee.feeId}" name="priceType" type="radio" value="${fee.feeId}">'+
                             '           </div>'+
                             '       </div>'+
                             '   </div>'+
@@ -364,7 +365,7 @@
                             text: '下一步',
                             bold: true,
                             onClick:function(){
-                                var feeId=$("input[name='priceType']:checked").val();
+                                var feeId=$('label[radioname="priceType"].checked').attr('data-id');
                                 if(feeId==undefined || feeId==""){
                                     $.alert("请选择一项报名费用!");
                                     return false;

@@ -24,7 +24,7 @@ import java.util.List;
 public class CommentDAOImpl extends BaseDAO implements CommentDAO {
     @Override
     public String saveComment(Comment Comment) {
-        StringBuilder sql = new StringBuilder("INSERT INTO t_comment (comment_id, content, rating, zan_content, replyContent, obj_type, obj_id, user_id,create_time) VALUES (?, ?, ?, ?, ?, ?, ?, ?,?);");
+        StringBuilder sql = new StringBuilder("INSERT INTO t_comment (comment_id, content, rating, zan_content, reply_content, obj_type, obj_id, user_id,create_time) VALUES (?, ?, ?, ?, ?, ?, ?, ?,?);");
         final String id = CommonStringUtils.genPK();
         int result = getJdbcTemplate().update(sql.toString(), new PreparedStatementSetter() {
             @Override
@@ -110,7 +110,7 @@ public class CommentDAOImpl extends BaseDAO implements CommentDAO {
             comment.setContent(rs.getString("content"));
             comment.setRating(rs.getInt("rating"));
             comment.setZanContent(rs.getString("zan_content"));
-            comment.setReplyContent(rs.getString("replyContent"));
+            comment.setReplyContent(rs.getString("reply_content"));
             comment.setObjType(rs.getString("obj_type"));
             comment.setObjId(rs.getString("obj_id"));
             comment.setUserId(rs.getString("user_id"));

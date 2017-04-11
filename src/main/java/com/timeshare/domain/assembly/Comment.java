@@ -30,6 +30,15 @@ public class Comment extends BaseDomain {
     private String userName;
     private String acountType;
     private List<String> commentImgList;
+    private List<String> replyContentList;
+
+    public void setReplyContentList(List<String> replyContentList) {
+        this.replyContentList = replyContentList;
+    }
+
+    public List<String> getReplyContentList() {
+        return replyContentList;
+    }
 
     public void setCommentImgList(List<String> commentImgList) {
         this.commentImgList = commentImgList;

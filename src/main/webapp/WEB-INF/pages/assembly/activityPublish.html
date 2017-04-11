@@ -55,7 +55,7 @@
                             <div class="item-inner">
                                 <div class="item-title label">活动开始时间</div>
                                 <div class="item-input">
-                                    <input type="date" class="datetimePicker" name="startTime" placeholder="">
+                                    <input  class="datetimePicker" name="startTime" placeholder="">
                                 </div>
                             </div>
                         </div>
@@ -65,7 +65,7 @@
                             <div class="item-inner">
                                 <div class="item-title label">活动结束时间</div>
                                 <div class="item-input">
-                                    <input type="date" class="datetimePicker" name="endTime" placeholder="">
+                                    <input class="datetimePicker" name="endTime" placeholder="">
                                 </div>
                             </div>
                         </div>
@@ -474,6 +474,11 @@
     }
     function updateType(type) {
         $("#imageType").val(type);
+        $("#imageId").val("");
+        $("#imageUrl").attr("src","");
+        $("#imageUrl").css("display","none");
+        $('#filePicker').show();
+
     }
     function  saveAssembly() {
         $("input[name='rendezvous']").val($(".citySelect").val()+$("input[name='rendezvous']").val());
@@ -481,6 +486,7 @@
         var startTime=$("input[name='startTime']").val();
         var endTime=$("input[name='endTime']").val();
         var description=$("textarea[name='description']").val();
+        var imageIdStrDesc=$("input[name='imageIdStrDesc']").val();
         var assemblyType=$("input[name='assemblyType']").val();
         var feeId=$("input[name='feeId']").val();
         var applyId=$("input[name='applyId']").val();
@@ -496,7 +502,7 @@
             $.alert("结束时间不能为空!");
             return false;
         }
-        if(description==""){
+        if(description=="" && imageIdStrDesc==""){
             $.alert("活动描述不能为空!");
             return false;
         }

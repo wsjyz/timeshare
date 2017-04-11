@@ -190,11 +190,18 @@ public class AssemblyController extends  BaseController{
         assemblyBrowers.setAssemblyId(assemblyId);
         assemblyBrowers.setBrowseTimes(assembly.getBrowseTimes()+1);
         assemblyService.modifyAssembly(assemblyBrowers);
+        assembly.setBrowseTimes(assemblyBrowers.getBrowseTimes());
         List<Attender> attenderList = attenderService.getListByAssemblyId(assemblyId);
         BigDecimal minMoney=new BigDecimal(0);
         BigDecimal maxMoney=new BigDecimal(0);
         if (!CollectionUtils.isEmpty(assembly.getFeeList())){
             for (Fee fee :assembly.getFeeList()){
+                if(minMoney.compareTo(new BigDecimal(0))==0){
+                    minMoney=fee.getFee();
+                }
+                if(maxMoney.compareTo(new BigDecimal(0))==0){
+                    maxMoney=fee.getFee();
+                }
                 if (fee.getFee().compareTo(minMoney)<0){
                     minMoney=fee.getFee();
                 }
@@ -322,7 +329,7 @@ public class AssemblyController extends  BaseController{
             UserInfo userInfo=getCurrentUser(userId);
             Comment comment=commentService.findCommentById(commentId);
             if (StringUtils.isEmpty(comment.getZanContent())){
-                comment.setZanContent(comment.getZanContent());
+                comment.setZanContent(userInfo.getNickName());
             }else{
                 comment.setZanContent(comment.getZanContent()+"&"+userInfo.getUserName());
             }
@@ -342,9 +349,9 @@ public class AssemblyController extends  BaseController{
             UserInfo userInfo=getCurrentUser(userId);
             Comment comment=commentService.findCommentById(commentId);
             if (StringUtils.isEmpty(comment.getReplyContent())){
-                comment.setReplyContent(userInfo.getUserName()+":"+replyContent);
+                comment.setReplyContent(userInfo.getNickName()+":"+replyContent);
             }else{
-                comment.setReplyContent(comment.getReplyContent()+"&#"+userInfo.getUserName()+":"+replyContent);
+                comment.setReplyContent(comment.getReplyContent()+"&#"+userInfo.getNickName()+":"+replyContent);
             }
             resultId= commentService.modifyComment(comment);
         }catch (Exception e){

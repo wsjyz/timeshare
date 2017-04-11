@@ -37,9 +37,19 @@ public class ImageObjDAOImpl extends BaseDAO implements ImageObjDAO {
 
     @Override
     public void updateImg(ImageObj obj) {
-        StringBuilder reviewSql = new StringBuilder("");
-        reviewSql.append("update t_img_obj set image_url = ? where image_id = ? ");
-        getJdbcTemplate().update(reviewSql.toString(),new Object[]{obj.getImageUrl(),obj.getImageId()});
+        StringBuilder reviewSql = new StringBuilder("update t_img_obj set ");
+
+        if(StringUtils.isNotBlank(obj.getImageUrl())){
+            reviewSql.append(" image_url = '"+obj.getImageUrl()+"',");
+        }
+        if(StringUtils.isNotBlank(obj.getObjId())){
+            reviewSql.append(" obj_id = '"+obj.getObjId()+"',");
+        }
+        if (reviewSql.lastIndexOf(",") + 1 == reviewSql.length()) {
+            reviewSql.delete(reviewSql.lastIndexOf(","), reviewSql.length());
+        }
+        reviewSql.append(" where image_id = ?");
+        getJdbcTemplate().update(reviewSql.toString(),new Object[]{obj.getImageId()});
     }
 
     @Override
