@@ -185,6 +185,7 @@ public class AssemblyController extends  BaseController{
     @RequestMapping(value = "/to-detail")
     public String detail(@RequestParam(value = "assemblyId",defaultValue = "") String assemblyId,Model model,HttpServletRequest request,@CookieValue(value="time_sid", defaultValue="admin") String userId){
         Assembly assembly=assemblyService.findAssemblyById(assemblyId);
+        UserInfo userInfo=getCurrentUser(userId);
         //浏览次数加1
         Assembly assemblyBrowers=new Assembly();
         assemblyBrowers.setAssemblyId(assemblyId);
@@ -194,6 +195,7 @@ public class AssemblyController extends  BaseController{
         List<Attender> attenderList = attenderService.getListByAssemblyId(assemblyId);
         BigDecimal minMoney=new BigDecimal(0);
         BigDecimal maxMoney=new BigDecimal(0);
+        String attenderTouser="farse";
         if (!CollectionUtils.isEmpty(assembly.getFeeList())){
             for (Fee fee :assembly.getFeeList()){
                 if(minMoney.compareTo(new BigDecimal(0))==0){
@@ -213,6 +215,9 @@ public class AssemblyController extends  BaseController{
                     if (attender.getFeedId().equals(fee.getFeeId())){
                         count++;
                     }
+                    if (attender.getUserId().equals(userInfo.getUserId())){
+                        attenderTouser="true";
+                    }
                 }
                 if (fee.getQuota()==0){
                     fee.setQuotaTitle("不限制人数");
@@ -226,7 +231,7 @@ public class AssemblyController extends  BaseController{
             }
         }
         List<Comment> commentList = commentService.findCommentByObjId(assemblyId);
-        UserInfo userInfo=getCurrentUser(userId);
+        model.addAttribute("attenderTouser",attenderTouser);
         model.addAttribute("userInfo",userInfo);
         model.addAttribute("assembly",assembly);
         model.addAttribute("minMoney",minMoney);

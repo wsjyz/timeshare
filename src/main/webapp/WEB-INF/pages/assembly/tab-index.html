@@ -1,4 +1,4 @@
-<div class="pull-to-refresh-content" >
+
     <div class="swiper-container">
         <div class="swiper-wrapper">
             <div class="swiper-slide">
@@ -15,14 +15,12 @@
     <div class="content-block card-container">
     </div>
     <!-- 默认的下拉刷新层 -->
-    <div class="pull-to-refresh-layer" style="margin-top:-2.2rem;">
+    <div class="infinite-scroll-preloader">
         <div class="preloader"></div>
         <div class="no-record" style="display: none;text-align: center">
             没有更多记录了
         </div>
     </div>
-</div>
-
 <script>
     $.init();
     //banner图轮播
@@ -36,14 +34,13 @@
             loop: true
         });
     }, 0);
-    $('.pull-to-refresh-layer').hide();
-
+    $.showIndicator();
     var loading = false;
     // 最多可加载的条目
-    var maxItems = 100;
+    var maxassemblys = 100;
 
     // 每次加载添加多少条目
-    var assemblysPerLoad = 10;
+    var assemblysPerLoad = 1;
 
     function addassemblys(number, lastIndex,data) {
         // 生成新条目的HTML
@@ -85,11 +82,11 @@
         });
         if(dataLength == 0){
             $('.no-record').show();
-            $('.pull-to-refresh-layer').remove();
+            $('.infinite-scroll-preloader').remove();
         }else{
             $('.no-record').hide();
             // 添加新条目
-            $('.pull-to-refresh-content .content-block').append(html);
+            $('.infinite-scroll-bottom .card-container').append(html);
         }
         $.hideIndicator();
 
@@ -102,10 +99,10 @@
 
     // 上次加载的序号
 
-    var lastIndex = 10;
+    var lastIndex = 1;
 
     // 注册'infinite'事件处理函数
-    $(document).on('refresh', '.pull-to-refresh-content',function(e) {
+    $(document).on('infinite', '.infinite-scroll-bottom',function(e) {
         // 如果正在加载，则退出
         if (loading) return;
 
@@ -119,17 +116,16 @@
                 loading = false;
 
                 if (lastIndex >= maxassemblys) {
-                    // 加载完毕，则注销无限加载事件，以防不必要的加载
                     $.detachInfiniteScroll($('.infinite-scroll'));
                     // 删除加载提示符
-                    $('.pull-to-refresh-layer').remove();
+                    $('.infinite-scroll-preloader').remove();
                     return;
                 }
 
                 // 添加新条目
                 addassemblys(assemblysPerLoad, lastIndex,response);
                 // 更新最后加载的序号
-                lastIndex = $('.content-block .card').length;
+                lastIndex = $('.card-container .card').length;
                 //容器发生改变,如果是js滚动，需要刷新滚动
                 $.refreshScroller();
             }, 1000);

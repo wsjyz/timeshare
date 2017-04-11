@@ -64,6 +64,7 @@ public class CommentServiceImpl implements CommentService {
             for (Comment comment:commentList){
                 UserInfo userInfo=userService.findUserByUserId(comment.getUserId());
                 comment.setUserName(userInfo.getNickName());
+                comment.setAcountType(userInfo.getAcountType());
                 ImageObj userImg = userService.findUserImg(comment.getUserId(), Contants.IMAGE_TYPE.USER_HEAD.toString());
                 if(userImg!=null && StringUtils.isNotEmpty(userImg.getImageId())){
                     if(userImg!=null && StringUtils.isNotEmpty(userImg.getImageId())){

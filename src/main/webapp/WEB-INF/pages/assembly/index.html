@@ -13,7 +13,11 @@
     <link rel="stylesheet" href="http://g.alicdn.com/msui/sm/0.6.2/css/sm-extend.min.css">
     <link rel="stylesheet" href="${request.contextPath}/css/assembly/swiper.min.css">
     <link rel="stylesheet" href="${request.contextPath}/css/assembly/main.css">
-
+    <style>
+        .infinite-scroll-preloader {
+            margin-top:-20px;
+        }
+    </style>
   </head>
   <body>
 
@@ -57,7 +61,7 @@
                   <img class="addActivityImg" src="${request.contextPath}/images/assembly/addActivity.png" />
               </a>
           </nav>
-              <div class="content indexContent">
+              <div class="indexContent content infinite-scroll  infinite-scroll-bottom " data-ptr-distance="100">
                   <div class="buttons-tab">
                       <a href="#tab1" onclick="checkTab('online')" class="tab-link active button">线上活动</a>
                       <a href="#tab2" onclick="checkTab('face')"   class="tab-link  button">线下活动</a>
@@ -100,7 +104,7 @@
                     var searchName=$("#search").val();
                     var type=$("#searchType").val();
                     var citySelect=$(".citySelect").val();
-                    $('.pull-to-refresh-content .content-block').html('');
+                    $('.infinite-scroll-bottom.content-block').html('');
                     if(type=="online"){
                         $("#tab1").load("${request.contextPath}/assembly/searchAssembly?type=online&searchName="+searchName+"&citySelect="+citySelect);
                     }
