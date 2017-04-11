@@ -51,6 +51,7 @@ public class OrderServiceImpl implements OrderService {
         UserInfo buyer = userService.findUserByUserId(order.getUserId());
         UserInfo seller = userService.findUserByUserId(item.getUserId());
         ItemOrder dbOrder = orderDAO.findOrderByOrderId(order.getOrderId());
+        order.setUserId(dbOrder.getUserId());
         switch (order.getOrderStatus()){
             case "BEGIN":
 

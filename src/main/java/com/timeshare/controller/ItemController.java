@@ -212,7 +212,8 @@ public class ItemController extends BaseController{
     }
 
     @RequestMapping(value = "/preview")
-    public String preview(Item item, ModelMap modelMap,@CookieValue(value="time_sid", defaultValue="") String userId) {
+    public String preview(Item item, ModelMap modelMap,
+                          @CookieValue(value="time_sid", defaultValue="admin") String userId) {
         modelMap.addAttribute("item",item);
         UserInfo userInfo = getCurrentUser(userId);
         modelMap.addAttribute("user",userInfo);

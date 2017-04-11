@@ -253,6 +253,26 @@
         }
         return true;
     }
+    function serializeForm(){
+        var serializeObj={}; // 目标对象
+
+        var array = $('form').serializeArray(); // 转换数组格式
+
+        $(array).each(function(){ // 遍历数组的每个元素 {name : xx , value : xxx}
+
+            if(serializeObj[this.name]){ // 判断对象中是否已经存在 name，如果存在name
+                // 将元素变为 数组
+                serializeObj[this.name]=serializeObj[this.name]+','+this.value;
+
+            }else{
+
+                serializeObj[this.name]=this.value; // 如果元素name不存在，添加一个属性 name:value
+
+            }
+
+        });
+        return serializeObj;
+    }
     $("#saveOrderBtn").on('click', function () {
 
         var vali = checkForm();
