@@ -31,7 +31,7 @@ public class AssemblyDAOImpl extends BaseDAO implements AssemblyDAO {
 
     @Override
     public String saveAssembly(Assembly Assembly) {
-        StringBuilder sql = new StringBuilder("INSERT INTO t_assembly (assembly_id, title, start_time, end_time, rendezvous, description,user_id, type, phone_number, attent_count, comment_count, is_on_index,is_on_apply,show_apply_problem) VALUES (?,?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?,?,?);");
+        StringBuilder sql = new StringBuilder("INSERT INTO t_assembly (assembly_id, title, start_time, end_time, rendezvous, description,user_id, type, phone_number, attent_count, comment_count, is_on_index,is_on_apply,show_apply_problem,create_time) VALUES (?,?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?,?,?,?);");
         final String id = CommonStringUtils.genPK();
         int result = getJdbcTemplate().update(sql.toString(), new PreparedStatementSetter() {
             @Override
@@ -50,6 +50,7 @@ public class AssemblyDAOImpl extends BaseDAO implements AssemblyDAO {
                 ps.setString(12,Assembly.getIsOnIndex());
                 ps.setString(13,Assembly.getIsOnApply());
                 ps.setString(14,Assembly.getShowApplyProblem());
+                ps.setString(15,Assembly.getCreateTime());
             }
         });
         if(result > 0){
@@ -191,7 +192,7 @@ public class AssemblyDAOImpl extends BaseDAO implements AssemblyDAO {
             assembly.setIsOnApply(rs.getString("is_on_apply"));
             assembly.setShowApplyProblem(rs.getString("show_apply_problem"));
             assembly.setBrowseTimes(rs.getInt("browse_times"));
-
+            assembly.setCreateTime(rs.getString("create_time"));
             return assembly;
         }
     }

@@ -60,15 +60,14 @@
             if(assembly.type=="company"){
                 type="企业参考";
             }
-            html +=' <div class="card">' +
+            html +=' <div class="card" data-id="'+assembly.assemblyId+'">' +
                     ' <div class="userRow">'+
-                    '  <a class="external" href="${request.contextPath}/assembly/to-detail?assemblyId='+assembly.assemblyId+'"><img class="userPhoto" src="'+assembly.userImg+'" align="left" />'+
+                    ' <img class="userPhoto" src="'+assembly.userImg+'" align="left" style="border-radius:25px" />'+
                     ' <span class="userName">'+assembly.userName+'</span>'+
                     '</div>'+
                     ' <div>'+
-                    ' <img src="'+assembly.titleImg+'" class="fullWidth" />'+
+                    ' <img src="'+assembly.titleImg+'" class="fullWidth" height="256px"  />'+
                     ' </div>'+
-
                     ' <h4 class="activityTitle">'+assembly.title+'</h4>'+
                     ' <div class="activityDesc">'+
                     ' <div class="startTime">'+assembly.startTime+' 开始</div>'+
@@ -76,7 +75,7 @@
                     ' <div class="activityPrice">'+
                     '￥<span class="priceNum">'+assembly.cost+'</span>起'+
                     '</div>'+
-                    '</a></div>'+
+                    '</div>'+
                     '</div>';
             dataLength += 1;
         });
@@ -133,4 +132,10 @@
 
 
     });
+    $(function () {
+        $(document).on("click",".card",function () {
+            var assemblyId=$(this).attr("data-id");
+           window.location.href="${request.contextPath}/assembly/to-detail?assemblyId="+assemblyId;
+        });
+    })
 </script>

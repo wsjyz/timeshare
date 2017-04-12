@@ -129,6 +129,9 @@ public class AssemblyController extends  BaseController{
             assembly.setUserId(userId);
             assembly.setIsOnApply(onApply);
             assembly.setPhoneNumber(phoneNumber);
+            Calendar cal=Calendar.getInstance();
+            SimpleDateFormat sdf=new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+            assembly.setCreateTime(sdf.format(cal.getTime()));
             String assemblyId=assemblyService.saveAssembly(assembly);
             if(StringUtils.isNotEmpty(imageIdStr)){
                ImageObj imageObj= userService.findById(imageIdStr);
