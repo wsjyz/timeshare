@@ -14,8 +14,7 @@ public class MoneyAccount extends BaseDomain {
     private BigDecimal cashRaisedAmount;
     //'月提现次数'
     private Integer monthWithdrawalNumber;
-    //'用户ID'
-    private String userId;
+
 
     public String getMoneyAccountId() {
         return moneyAccountId;
@@ -49,13 +48,4 @@ public class MoneyAccount extends BaseDomain {
         this.monthWithdrawalNumber = monthWithdrawalNumber;
     }
 
-    @Override
-    public String getUserId() {
-        return userId;
-    }
-
-    @Override
-    public void setUserId(String userId) {
-        this.userId = userId;
-    }
 }

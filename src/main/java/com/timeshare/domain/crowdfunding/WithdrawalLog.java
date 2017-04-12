@@ -14,11 +14,10 @@ public class WithdrawalLog extends BaseDomain {
     //'提现状态'
     private String withdrawal_status;
     //'提现时间'
-    private Date withdrawal_time;
+    private String withdrawal_time;
     //'失败原因'
     private String fail_msg;
-    //'提现者'
-    private String user_id;
+
 
     public String getWithdrawal_log_id() {
         return withdrawal_log_id;
@@ -44,11 +43,11 @@ public class WithdrawalLog extends BaseDomain {
         this.withdrawal_status = withdrawal_status;
     }
 
-    public Date getWithdrawal_time() {
+    public String getWithdrawal_time() {
         return withdrawal_time;
     }
 
-    public void setWithdrawal_time(Date withdrawal_time) {
+    public void setWithdrawal_time(String withdrawal_time) {
         this.withdrawal_time = withdrawal_time;
     }
 
@@ -60,11 +59,4 @@ public class WithdrawalLog extends BaseDomain {
         this.fail_msg = fail_msg;
     }
 
-    public String getUser_id() {
-        return user_id;
-    }
-
-    public void setUser_id(String user_id) {
-        this.user_id = user_id;
-    }
 }

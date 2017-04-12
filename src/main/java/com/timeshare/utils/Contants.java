@@ -77,4 +77,20 @@ public interface Contants {
     enum ACOUNT_TYPE {
         VIP
     }
+    //众筹 费用类型
+    enum COST_TYPE {
+        AA,//费用均摊
+        FIXED_PRICE//一口价
+    }
+    //众筹 是否在轮播图展示
+    enum CROWD_FUNDING_IS_SHOW {
+        YES,
+        NO
+    }
+    //众筹 是否在轮播图展示
+    enum CROWD_FUNDING_STATUS {
+        SKETCH,//草稿
+        RELEASED,//已发布
+        OFF_SHELVE,//已下架
+    }
 }

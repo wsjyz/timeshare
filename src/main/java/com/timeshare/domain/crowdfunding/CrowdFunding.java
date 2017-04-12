@@ -17,9 +17,9 @@ public class CrowdFunding extends BaseDomain {
     //项目名称
     private String projectName;
     //项目开始时间
-    private Date curriculumStartTime;
+    private String curriculumStartTime;
     //项目结束时间
-    private Date curriculumEndTime;
+    private String curriculumEndTime;
     //主办城市
     private String sponsorCity;
     //详细描述
@@ -29,9 +29,9 @@ public class CrowdFunding extends BaseDomain {
     //总费用
     private BigDecimal costTotal;
     //最少人数
-    private Integer minPeoples;
+    private int minPeoples;
     //最多人数
-    private Integer maxPeoples;
+    private int maxPeoples;
     //预约费用
     private BigDecimal reservationCost;
     //众筹封面
@@ -43,7 +43,7 @@ public class CrowdFunding extends BaseDomain {
     //下架原因
     private String offShelveReason;
     //创建时间
-     private Date createTime;
+    private String createTime;
 
     public String getCrowdfundingId() {
         return crowdfundingId;
@@ -61,19 +61,19 @@ public class CrowdFunding extends BaseDomain {
         this.projectName = projectName;
     }
 
-    public Date getCurriculumStartTime() {
+    public String getCurriculumStartTime() {
         return curriculumStartTime;
     }
 
-    public void setCurriculumStartTime(Date curriculumStartTime) {
+    public void setCurriculumStartTime(String curriculumStartTime) {
         this.curriculumStartTime = curriculumStartTime;
     }
 
-    public Date getCurriculumEndTime() {
+    public String getCurriculumEndTime() {
         return curriculumEndTime;
     }
 
-    public void setCurriculumEndTime(Date curriculumEndTime) {
+    public void setCurriculumEndTime(String curriculumEndTime) {
         this.curriculumEndTime = curriculumEndTime;
     }
 
@@ -109,19 +109,19 @@ public class CrowdFunding extends BaseDomain {
         this.costTotal = costTotal;
     }
 
-    public Integer getMinPeoples() {
+    public int getMinPeoples() {
         return minPeoples;
     }
 
-    public void setMinPeoples(Integer minPeoples) {
+    public void setMinPeoples(int minPeoples) {
         this.minPeoples = minPeoples;
     }
 
-    public Integer getMaxPeoples() {
+    public int getMaxPeoples() {
         return maxPeoples;
     }
 
-    public void setMaxPeoples(Integer maxPeoples) {
+    public void setMaxPeoples(int maxPeoples) {
         this.maxPeoples = maxPeoples;
     }
 
@@ -165,11 +165,11 @@ public class CrowdFunding extends BaseDomain {
         this.offShelveReason = offShelveReason;
     }
 
-    public Date getCreateTime() {
+    public String getCreateTime() {
         return createTime;
     }
 
-    public void setCreateTime(Date createTime) {
+    public void setCreateTime(String createTime) {
         this.createTime = createTime;
     }
 }
