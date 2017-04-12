@@ -44,4 +44,132 @@ public class CrowdFunding extends BaseDomain {
     private String offShelveReason;
     //创建时间
      private Date createTime;
+
+    public String getCrowdfundingId() {
+        return crowdfundingId;
+    }
+
+    public void setCrowdfundingId(String crowdfundingId) {
+        this.crowdfundingId = crowdfundingId;
+    }
+
+    public String getProjectName() {
+        return projectName;
+    }
+
+    public void setProjectName(String projectName) {
+        this.projectName = projectName;
+    }
+
+    public Date getCurriculumStartTime() {
+        return curriculumStartTime;
+    }
+
+    public void setCurriculumStartTime(Date curriculumStartTime) {
+        this.curriculumStartTime = curriculumStartTime;
+    }
+
+    public Date getCurriculumEndTime() {
+        return curriculumEndTime;
+    }
+
+    public void setCurriculumEndTime(Date curriculumEndTime) {
+        this.curriculumEndTime = curriculumEndTime;
+    }
+
+    public String getSponsorCity() {
+        return sponsorCity;
+    }
+
+    public void setSponsorCity(String sponsorCity) {
+        this.sponsorCity = sponsorCity;
+    }
+
+    public String getDetail() {
+        return detail;
+    }
+
+    public void setDetail(String detail) {
+        this.detail = detail;
+    }
+
+    public String getCostType() {
+        return costType;
+    }
+
+    public void setCostType(String costType) {
+        this.costType = costType;
+    }
+
+    public BigDecimal getCostTotal() {
+        return costTotal;
+    }
+
+    public void setCostTotal(BigDecimal costTotal) {
+        this.costTotal = costTotal;
+    }
+
+    public Integer getMinPeoples() {
+        return minPeoples;
+    }
+
+    public void setMinPeoples(Integer minPeoples) {
+        this.minPeoples = minPeoples;
+    }
+
+    public Integer getMaxPeoples() {
+        return maxPeoples;
+    }
+
+    public void setMaxPeoples(Integer maxPeoples) {
+        this.maxPeoples = maxPeoples;
+    }
+
+    public BigDecimal getReservationCost() {
+        return reservationCost;
+    }
+
+    public void setReservationCost(BigDecimal reservationCost) {
+        this.reservationCost = reservationCost;
+    }
+
+    public String getCrowdfundingIndexImgPath() {
+        return crowdfundingIndexImgPath;
+    }
+
+    public void setCrowdfundingIndexImgPath(String crowdfundingIndexImgPath) {
+        this.crowdfundingIndexImgPath = crowdfundingIndexImgPath;
+    }
+
+    public String getIsShow() {
+        return isShow;
+    }
+
+    public void setIsShow(String isShow) {
+        this.isShow = isShow;
+    }
+
+    public String getCrowdfundingStatus() {
+        return crowdfundingStatus;
+    }
+
+    public void setCrowdfundingStatus(String crowdfundingStatus) {
+        this.crowdfundingStatus = crowdfundingStatus;
+    }
+
+    public String getOffShelveReason() {
+        return offShelveReason;
+    }
+
+    public void setOffShelveReason(String offShelveReason) {
+        this.offShelveReason = offShelveReason;
+    }
+
+    public Date getCreateTime() {
+        return createTime;
+    }
+
+    public void setCreateTime(Date createTime) {
+        this.createTime = createTime;
+    }
 }
