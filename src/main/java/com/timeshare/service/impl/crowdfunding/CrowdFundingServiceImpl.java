@@ -27,8 +27,6 @@ public class CrowdFundingServiceImpl implements CrowdFundingService {
 
     @Autowired
     CrowdFundingDAO crowdFundingDAO;
-    @Autowired
-    UserService userService;
 
     @Override
     public String saveCrowdFunding(CrowdFunding crowdFunding) {

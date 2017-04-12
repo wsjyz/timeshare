@@ -59,7 +59,7 @@ public class CrowdFundingDAOImpl extends BaseDAO implements CrowdFundingDAO {
 
     @Override
     public List<CrowdFunding> findCrowdFundingByOwner(String userId,int startIndex, int loadSize) {
-        StringBuilder sql = new StringBuilder("select * from t_crowdfunding where user_id="+userId+" limit startIndex,"+loadSize);
+        StringBuilder sql = new StringBuilder("select * from t_crowdfunding where user_id='"+userId+"' limit "+startIndex+","+loadSize);
         return getJdbcTemplate().query(sql.toString(),new Object[]{},new CrowdFundingRowMapper());
     }
 
@@ -77,24 +77,24 @@ public class CrowdFundingDAOImpl extends BaseDAO implements CrowdFundingDAO {
         public CrowdFunding mapRow(ResultSet rs, int i) throws SQLException {
             CrowdFunding crowdFunding = new CrowdFunding();
             crowdFunding.setCrowdfundingId(rs.getString("crowdfunding_id"));
-            crowdFunding.setCrowdfundingId(rs.getString("project_name"));
-            crowdFunding.setCrowdfundingId(rs.getString("curriculum_start_time"));
-            crowdFunding.setCrowdfundingId(rs.getString("curriculum_end_time"));
-            crowdFunding.setCrowdfundingId(rs.getString("sponsor_city"));
-            crowdFunding.setCrowdfundingId(rs.getString("detail"));
-            crowdFunding.setCrowdfundingId(rs.getString("cost_type"));
-            crowdFunding.setCrowdfundingId(rs.getString("cost_total"));
-            crowdFunding.setCrowdfundingId(rs.getString("min_peoples"));
-            crowdFunding.setCrowdfundingId(rs.getString("max_peoples"));
-            crowdFunding.setCrowdfundingId(rs.getString("reservation_cost"));
-            crowdFunding.setCrowdfundingId(rs.getString("crowdfunding_index_img_path"));
-            crowdFunding.setCrowdfundingId(rs.getString("is_show"));
-            crowdFunding.setCrowdfundingId(rs.getString("crowdfunding_status"));
-            crowdFunding.setCrowdfundingId(rs.getString("off_shelve_reason"));
-            crowdFunding.setCrowdfundingId(rs.getString("user_id"));
-            crowdFunding.setCrowdfundingId(rs.getString("create_user_name"));
-            crowdFunding.setCrowdfundingId(rs.getString("create_time"));
-            crowdFunding.setCrowdfundingId(rs.getString("opt_time"));
+            crowdFunding.setProjectName(rs.getString("project_name"));
+            crowdFunding.setCurriculumStartTime(rs.getString("curriculum_start_time"));
+            crowdFunding.setCurriculumEndTime(rs.getString("curriculum_end_time"));
+            crowdFunding.setSponsorCity(rs.getString("sponsor_city"));
+            crowdFunding.setDetail(rs.getString("detail"));
+            crowdFunding.setCostType(rs.getString("cost_type"));
+            crowdFunding.setCostTotal(rs.getBigDecimal("cost_total"));
+            crowdFunding.setMinPeoples(rs.getInt("min_peoples"));
+            crowdFunding.setMaxPeoples(rs.getInt("max_peoples"));
+            crowdFunding.setReservationCost(rs.getBigDecimal("reservation_cost"));
+            crowdFunding.setCrowdfundingIndexImgPath(rs.getString("crowdfunding_index_img_path"));
+            crowdFunding.setIsShow(rs.getString("is_show"));
+            crowdFunding.setCrowdfundingStatus(rs.getString("crowdfunding_status"));
+            crowdFunding.setOffShelveReason(rs.getString("off_shelve_reason"));
+            crowdFunding.setUserId(rs.getString("user_id"));
+            crowdFunding.setCreateUserName(rs.getString("create_user_name"));
+            crowdFunding.setCreateTime(rs.getString("create_time"));
+            crowdFunding.setOptTime(rs.getString("opt_time"));
             return crowdFunding;
         }
     }

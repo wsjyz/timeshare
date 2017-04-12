@@ -12,7 +12,7 @@ public class Enroll extends BaseDomain {
     //'报名项目'
     private String crowdfundingId;
     //'报名者ID'
-    private String enroll_userId;
+    private String enrollUserId;
     //'姓名'
     private String userName;
     //'手机'
@@ -44,12 +44,12 @@ public class Enroll extends BaseDomain {
         this.crowdfundingId = crowdfundingId;
     }
 
-    public String getEnroll_userId() {
-        return enroll_userId;
+    public String getEnrollUserId() {
+        return enrollUserId;
     }
 
-    public void setEnroll_userId(String enroll_userId) {
-        this.enroll_userId = enroll_userId;
+    public void setEnrollUserId(String enrollUserId) {
+        this.enrollUserId = enrollUserId;
     }
 
     public String getUserName() {

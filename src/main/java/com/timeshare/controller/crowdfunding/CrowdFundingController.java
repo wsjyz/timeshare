@@ -67,7 +67,7 @@ public class CrowdFundingController extends  BaseController{
         crowdFunding.setMinPeoples(3);
         crowdFunding.setMaxPeoples(10);
         crowdFunding.setReservationCost(new BigDecimal(20));
-        crowdFunding.setCrowdfundingIndexImgPath("D:/Githubxiaopengyou.jpg");
+        crowdFunding.setCrowdfundingIndexImgPath("D:/Github/xiaopengyou.jpg");
         crowdFunding.setIsShow(Contants.CROWD_FUNDING_IS_SHOW.YES.name());
         crowdFunding.setCrowdfundingStatus(Contants.CROWD_FUNDING_STATUS.SKETCH.name());
         crowdFunding.setOffShelveReason("课程太好，人太多了，不下架就把系统挤爆了...");

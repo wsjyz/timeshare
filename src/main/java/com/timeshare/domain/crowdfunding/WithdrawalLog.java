@@ -8,55 +8,53 @@ import java.util.Date;
 
 public class WithdrawalLog extends BaseDomain {
     //'主键'
-    private String withdrawal_log_id;
+    private String withdrawalLogId;
     //'提现金额'
-    private BigDecimal withdrawal_cash;
+    private BigDecimal withdrawalCash;
     //'提现状态'
-    private String withdrawal_status;
+    private String withdrawalStatus;
     //'提现时间'
-    private String withdrawal_time;
-    //'失败原因'
-    private String fail_msg;
+    private String withdrawalTime;
+    //'支付平台返回原因'
+    private String replyMsg;
 
-
-    public String getWithdrawal_log_id() {
-        return withdrawal_log_id;
+    public String getWithdrawalLogId() {
+        return withdrawalLogId;
     }
 
-    public void setWithdrawal_log_id(String withdrawal_log_id) {
-        this.withdrawal_log_id = withdrawal_log_id;
+    public void setWithdrawalLogId(String withdrawalLogId) {
+        this.withdrawalLogId = withdrawalLogId;
     }
 
-    public BigDecimal getWithdrawal_cash() {
-        return withdrawal_cash;
+    public BigDecimal getWithdrawalCash() {
+        return withdrawalCash;
     }
 
-    public void setWithdrawal_cash(BigDecimal withdrawal_cash) {
-        this.withdrawal_cash = withdrawal_cash;
+    public void setWithdrawalCash(BigDecimal withdrawalCash) {
+        this.withdrawalCash = withdrawalCash;
     }
 
-    public String getWithdrawal_status() {
-        return withdrawal_status;
+    public String getWithdrawalStatus() {
+        return withdrawalStatus;
     }
 
-    public void setWithdrawal_status(String withdrawal_status) {
-        this.withdrawal_status = withdrawal_status;
+    public void setWithdrawalStatus(String withdrawalStatus) {
+        this.withdrawalStatus = withdrawalStatus;
     }
 
-    public String getWithdrawal_time() {
-        return withdrawal_time;
+    public String getWithdrawalTime() {
+        return withdrawalTime;
     }
 
-    public void setWithdrawal_time(String withdrawal_time) {
-        this.withdrawal_time = withdrawal_time;
+    public void setWithdrawalTime(String withdrawalTime) {
+        this.withdrawalTime = withdrawalTime;
     }
 
-    public String getFail_msg() {
-        return fail_msg;
+    public String getReplyMsg() {
+        return replyMsg;
     }
 
-    public void setFail_msg(String fail_msg) {
-        this.fail_msg = fail_msg;
+    public void setReplyMsg(String replyMsg) {
+        this.replyMsg = replyMsg;
     }
-
 }

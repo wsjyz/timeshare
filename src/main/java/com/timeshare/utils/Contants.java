@@ -26,6 +26,9 @@ public interface Contants {
 
     String FILE_SAVE_PATH = "/work/appfile";
 
+    //月最大提现次数
+    int MONTH_WITHDRAWAL_MAX_NUMBER=4;
+
     enum ITEM_STATUS {
         draft,for_sale,
         undercarriage,//下架
@@ -92,5 +95,22 @@ public interface Contants {
         SKETCH,//草稿
         RELEASED,//已发布
         OFF_SHELVE,//已下架
+    }
+    //预约 发票类型
+    enum ENROLL_INVOICE_TYPE {
+        VAT_INVOICE,//增税普票
+        VAT_SPECIAL_INVOICE//增税专票
+    }
+    //预约 支付状态
+    enum ENROLL_PAY_STATUS {
+        WAIT_PAY,//未支付
+        PAYED,//已支付
+        REFUND//已退款
+    }
+    //现金提现 状态
+    enum WITHDRAWAL_STATUS {
+        PENDING,//审批中
+        SUCCESS,//已发放
+        REJECT//已拒绝
     }
 }
