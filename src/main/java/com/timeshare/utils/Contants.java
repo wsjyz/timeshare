@@ -51,6 +51,7 @@ public interface Contants {
         ASSEMBLY_SHOW_IMG,//活动封面
         ASSEMBLY_CONTENT_IMG,//活动内容图片
         ASSEMBLY_COMMENT_IMG,
+        ASSEMBLY_CONSULTATION_IMG,
     }
     enum ORDER_TYPE {
         ONLINE,OFFLINE
