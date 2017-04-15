@@ -30,10 +30,10 @@
                 <!--预览-->
             <!--</a>-->
         </div>
-        <input type="hidden" id="imageType" value=""/>
         <div class="content activityPublishContent">
             <form id="saveAssemblyForm" name="saveAssemblyForm" type="post">
-            <div class="list-block">
+                <input type="hidden" id="imageType" name="imageType" value=""/>
+                <div class="list-block">
                 <ul>
                     <li class="activitySubject">
                         <div class="item-content">
@@ -44,6 +44,7 @@
                                 </div>
                                 <a class="subjectPicture" href="#routerAddWallpaper" onclick="updateType('ASSEMBLY_SHOW_IMG')"> | <span class="icon icon-picture choosePicture" ></span></a>
                                 <input type="hidden"  name="imageIdStr" value="">
+                                <input type="hidden"  name="imageUrlStr" value="">
                             </div>
                         </div>
 
@@ -100,6 +101,8 @@
                                 <div class="item-title label">活动详细描述</div>
                                 <div class="item-input activityDescImgs">
                                     <input type="hidden"  name="imageIdStrDesc" value="">
+                                    <input type="hidden"  name="imageUrlStrDesc" value="">
+
                                     <a class="subjectPicture" href="#routerAddWallpaper" onclick="updateType('ASSEMBLY_CONTENT_IMG')">   <img src="${request.contextPath}/images/assembly/icon/publishImg.png" /></a>
                                     <!--<img src="${request.contextPath}/images/assembly/icon/publishCamera.png" />-->
                                     <!--<img src="${request.contextPath}/images/assembly/icon/publishCamera2.png" />-->
@@ -126,6 +129,13 @@
                         <input type="hidden" name="phoneNumber"  value=""/>
                         <input type="hidden" name="applyId"  value=""/>
                         <a style="color:black" href="#routerEnrollSetting"> 报名设置
+                            <span class="icon icon-right pull-right"></span></a>
+                    </li>
+                    <li>
+                        <input type="hidden"  name="imageIdStrCon" value="">
+                        <input type="hidden"  name="imageUrlStrCon" value="">
+
+                        <a style="color:black" href="#routerAddWallpaper" onclick="updateType('ASSEMBLY_CONSULTATION_IMG')">咨询二维码
                             <span class="icon icon-right pull-right"></span></a>
                     </li>
                 </ul>
@@ -383,21 +393,54 @@
 
 <script>
     $(function(){
-        var mydate=new Date();
-        $(".datetimePickerStartTime").datetimePicker({
-            value: [ mydate.getFullYear(), mydate.getMonth()+1, mydate.getDate(), mydate.getHours(), mydate.getMinutes()]
-        });
-        $(".datetimePickerEndTime").datetimePicker({
-            value: [mydate.getFullYear(), mydate.getMonth()+1, mydate.getDate()+2, mydate.getHours(), mydate.getMinutes()]
-        });
-
+        $(".datetimePickerStartTime").click(function(){
+            var dt = new Date();
+            var year =dt.getFullYear();
+            var month =dt.getMonth()+1;
+            if(month<10) month='0'+month;
+            var day = dt.getDate();
+            if(day<10) day='0'+day;
+            var hour =dt.getHours();
+            if(hour<10) hour='0'+hour;
+            var minute= dt.getMinutes();
+            if(minute<10)minute='0'+minute;
+            if($(this).val()==''){
+                $(this).datetimePicker({
+                    value: [year, month, day, hour, minute]
+                });
+            }
+        })
+        $(".datetimePickerEndTime").click(function(){
+            var dt = new Date();
+            var year =dt.getFullYear();
+            var month =dt.getMonth()+1;
+            if(month<10) month='0'+month;
+            var day = dt.getDate();
+            day=day+2;
+            if(day<10) day='0'+day;
+            var hour =dt.getHours();
+            if(hour<10) hour='0'+hour;
+            var minute= dt.getMinutes();
+            if(minute<10)minute='0'+minute;
+            if($(this).val()==''){
+                $(this).datetimePicker({
+                    value: [year, month, day, hour, minute]
+                });
+            }
+        })
         $(document).on('beforePageSwitch', '#routerAddWallpaper', function(){
             var imageId = $('#imageId').val();
             var imageType= $('#imageType').val();
+            var imageUrl=$('#imageUrl')[0].src;
             if(imageType=="ASSEMBLY_SHOW_IMG"){
                 $("input[name='imageIdStr']").val(imageId);
-            }else{
+                $("input[name='imageUrlStr']").val(imageUrl);
+            }else if(imageType=="ASSEMBLY_CONTENT_IMG") {
                 $("input[name='imageIdStrDesc']").val($("input[name='imageIdStrDesc']").val()+","+imageId);
+            }else if(imageType=="ASSEMBLY_CONSULTATION_IMG"){
+                $("input[name='imageIdStrCon']").val(imageId);
+                $("input[name='imageUrlStrCon']").val(imageUrl);
+
             }
 
         });
@@ -478,11 +521,34 @@
     }
     function updateType(type) {
         $("#imageType").val(type);
-        $("#imageId").val("");
-        $("#imageUrl").attr("src","");
-        $("#imageUrl").css("display","none");
-        $('#filePicker').show();
+        var imageIdStr=$("input[name='imageIdStr']").val();
+        var imageIdStrDesc= $("input[name='imageIdStrDesc']").val();
+        var imageIdStrCon=$("input[name='imageIdStrCon']").val();
+        if (imageType== "ASSEMBLY_SHOW_IMG" ){
+            $("#imageUrl").attr("src", imageIdStr);
+        }
 
+        if (imageType== "ASSEMBLY_CONSULTATION_IMG") {
+            $("#imageUrl").attr("src",imageUrlStrCon );
+        }
+        if (type== "ASSEMBLY_SHOW_IMG" && imageIdStr=="") {
+            $("#imageId").val("");
+            $("#imageUrl").attr("src", "");
+            $("#imageUrl").css("display", "none");
+            $('#filePicker').show();
+        }
+        if (type== "ASSEMBLY_CONTENT_IMG" ) {
+            $("#imageId").val("");
+            $("#imageUrl").attr("src", "");
+            $("#imageUrl").css("display", "none");
+            $('#filePicker').show();
+        }
+        if (type== "ASSEMBLY_CONSULTATION_IMG" && imageIdStrCon=="") {
+            $("#imageId").val("");
+            $("#imageUrl").attr("src", "");
+            $("#imageUrl").css("display", "none");
+            $('#filePicker').show();
+        }
     }
     function  saveAssembly() {
         $("input[name='rendezvous']").val($(".citySelect").val()+$("input[name='rendezvous']").val());
@@ -510,6 +576,10 @@
             $.alert("活动描述不能为空!");
             return false;
         }
+        if(imageIdStrDesc.length<10){
+            $.alert("活动描述图片不能少于1张!");
+            return false;
+        }
         if(assemblyType==""){
             $.alert("活动类型不能为空!");
             return false;
@@ -531,12 +601,15 @@
             }
         })
     }
-    Zepto(function($) {
-        var imageId = $('#imageId').val();
-        if(imageId != ''){
-            $('#imageUrl').css('display','block');
-        }
-    });
+    var imageType = $('#imageType').val();
+    if(imageType==""){
+        Zepto(function($) {
+            var imageId = $('#imageId').val();
+            if(imageId != ''){
+                $('#imageUrl').css('display','block');
+            }
+        });
+    }
     $("#saveImgBtn").on('click', function () {
         var imageId = $('#imageId').val();
         var imageType= $('#imageType').val();

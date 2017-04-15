@@ -44,6 +44,15 @@ public class Assembly extends BaseDomain{
     private List<Comment> commentList;
     private List<String> contentImgList;
     private String createTime;
+    private String consultationImg;
+
+    public String getConsultationImg() {
+        return consultationImg;
+    }
+
+    public void setConsultationImg(String consultationImg) {
+        this.consultationImg = consultationImg;
+    }
 
     public String getCreateTime() {
         if(createTime!=null){

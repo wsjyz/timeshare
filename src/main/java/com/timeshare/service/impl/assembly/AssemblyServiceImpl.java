@@ -67,6 +67,8 @@ public class AssemblyServiceImpl implements AssemblyService {
                     assembly.setTitleImg("/time"+imageObj.getImageUrl()+"_320x240.jpg");
                 }else  if (imageObj.getImageType().equals(Contants.IMAGE_TYPE.ASSEMBLY_CONTENT_IMG.toString())){
                     contentImageList.add("/time"+imageObj.getImageUrl()+".jpg");
+                }else  if (imageObj.getImageType().equals(Contants.IMAGE_TYPE.ASSEMBLY_CONSULTATION_IMG.toString())){
+                    assembly.setConsultationImg("/time"+imageObj.getImageUrl()+"_320x240.jpg");
                 }
             }
             assembly.setContentImgList(contentImageList);

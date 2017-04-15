@@ -25,15 +25,22 @@
           </div>
 
           <nav class="bar bar-tab activityFooter">
-              <a class="tab-item external" href="#">
+              <a class="tab-item external item-message" href="#">
                   <span class="icon icon-message"></span>
                   <span class="tab-label">在线咨询</span>
               </a>
 
-              <a class="tab-item external" href="#">
-                  <span class="icon icon-star"></span>
-                  <span class="tab-label">收藏(30)</span>
-              </a>
+              <#if collectionStr=="false">
+                  <a class="tab-item external" href="javaScript:void(0)" onclick="saveCollection()">
+                      <span class="icon icon-star"></span>
+                      <span class="tab-label">收藏(${collectionCount})</span>
+                  </a>
+              <#else>
+                  <a class="tab-item external" disabled="disabled" href="javaScript:void(0)" >
+                      <span class="icon icon-star"></span>
+                      <span class="tab-label">已收藏(${collectionCount})</span>
+                  </a>
+              </#if>
               <a class="tab-item external item-me" href="#">
                   <span class="icon icon-me"></span>
                   <#if attenderTouser=="true">
@@ -172,7 +179,7 @@
                           </div>
                           <footer class="commentFooter">
                               <span class="btnReply pull-right" data-id="${comment.commentId}">回复</span>
-                              <span class="btnUpVote pull-right" data-id="${comment.commentId}">赞</span>
+                              <span class="btnUpVote pull-right" data-id="${comment.commentId}"><span class="voteNum">0</span> 赞</span>
                           </footer>
                           <div class="replyArea">
                               <span class="replyTitle">作者回复</span>
@@ -267,6 +274,7 @@
                 var commentId=$(this).attr("data-id");
                 $.post("${request.contextPath}/assembly/saveZan",{"commentId":commentId},function (data) {
                     if (data!="error"){
+                        $('.voteNum').text(data)
                         location='${request.contextPath}/assembly/to-detail?assemblyId=${assembly.assemblyId}';
                     }
                 });
@@ -276,6 +284,25 @@
                 var $commentSection = $(this).parents('.commentSection');
                 showReplyForm($commentSection,commentId);
             })
+            $(document).on('click', '.item-message', function(e){
+                e.preventDefault();
+                $.modal({
+                    extraClass:'vcodeModal',
+                    title:  '<div class="buttons-row">'+
+                    '   <h4 class="title">加好友咨询</h4>'+
+                    '   <span class="closeModal"><img src="${request.contextPath}/images/assembly/close.png" /></span>'+
+                    '</div>',
+                    text: ''+
+                    '<div class="list-block"><ul>' +
+                    '   <li>' +
+                    '       <div class="item-content vcodeImg">'+
+                    '           <img src="${assembly.consultationImg}" />'+
+                    '       </div>'+
+                    '   </li>' +
+                    '</ul></div>',
+                    buttons: []
+                })
+            });
 
             //回复
             function showReplyForm($commentSection,commentId){
@@ -514,6 +541,13 @@
                 })
             }
         })
+        function saveCollection() {
+            $.post("${request.contextPath}/assembly/saveCollection?assemblyId=${assembly.assemblyId}",function (data) {
+                if (data!="error") {
+                    location = '${request.contextPath}/assembly/to-detail?assemblyId=${assembly.assemblyId}';
+                }
+            })
+        }
         $.init();
   </script>
   </body>

@@ -1,4 +1,4 @@
-    <div class="content-block card-container">
+<div class="content-block card-container">
     </div>
     <!-- 默认的下拉刷新层 -->
     <div class="infinite-scroll-preloader">
@@ -8,7 +8,19 @@
         </div>
     </div>
 <script>
-    $.init();
+    //banner图轮播
+    if(typeof(window.swiperTimeout)=='undefined'){
+        window.swiperTimeout=setTimeout(function () {
+            var swiper = new Swiper('.swiper-container', {
+                direction: 'horizontal',
+                spaceBetween: 30,
+                centeredSlides: true,
+                autoplay: 2000,
+                autoplayDisableOnInteraction: false,
+                loop: true
+            });
+        }, 0);
+    }
     $.showIndicator();
     var loading = false;
     // 最多可加载的条目
@@ -16,7 +28,7 @@
 
     // 每次加载添加多少条目
     var assemblysPerLoad = 1;
-
+    $("#searchType").val("${type}");
     function addassemblys(number, lastIndex,data) {
         // 生成新条目的HTML
         var html = '';
@@ -39,7 +51,7 @@
             html +=' <div class="card" data-id="'+assembly.assemblyId+'">' +
                     ' <div class="userRow" >'+
                     ' <img class="userPhoto" src="'+assembly.userImg+'" align="left" style="border-radius:25px;margin-top: 0.2rem" />'+
-                    ' <span class="userName" style="margin-top: 0.2rem;margin-left:0.2rem">'+assembly.userName+'</span>'+
+                    ' <span class="userName" style="margin-top: 0.2rem;margin-left:0.5rem">'+assembly.userName+'</span>'+
                     '</div>'+
                     ' <div style="margin-top: 0.5rem">'+
                     ' <img src="'+assembly.titleImg+'" class="fullWidth" height="256px"  />'+
@@ -80,10 +92,10 @@
     $(document).on('infinite', '.infinite-scroll-bottom',function(e) {
         // 如果正在加载，则退出
         if (loading) return;
-
         // 设置flag
         loading = true;
-        $.post('${request.contextPath}/assembly/list', {type:"${type}",searchName:"${searchName}",citySelect:"${citySelect}",startIndex: lastIndex,loadSize:assemblysPerLoad}, function (response) {
+        var type=$("#searchType").val();
+        $.post('${request.contextPath}/assembly/list', {type:type,searchName:"${searchName}",citySelect:"${citySelect}",startIndex: lastIndex,loadSize:assemblysPerLoad}, function (response) {
 
             // 模拟1s的加载过程
             setTimeout(function() {

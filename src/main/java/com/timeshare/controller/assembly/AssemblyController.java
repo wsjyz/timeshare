@@ -6,18 +6,13 @@ import com.thoughtworks.xstream.io.xml.DomDriver;
 import com.thoughtworks.xstream.io.xml.XmlFriendlyNameCoder;
 import com.timeshare.controller.BaseController;
 import com.timeshare.domain.*;
-import com.timeshare.domain.assembly.Assembly;
-import com.timeshare.domain.assembly.Attender;
-import com.timeshare.domain.assembly.Comment;
-import com.timeshare.domain.assembly.Fee;
+import com.timeshare.domain.assembly.*;
+import com.timeshare.domain.assembly.Collection;
 import com.timeshare.service.AuditorService;
 import com.timeshare.service.BidService;
 import com.timeshare.service.BidUserService;
 import com.timeshare.service.UserService;
-import com.timeshare.service.assembly.AssemblyService;
-import com.timeshare.service.assembly.AttenderService;
-import com.timeshare.service.assembly.CommentService;
-import com.timeshare.service.assembly.FeeService;
+import com.timeshare.service.assembly.*;
 import com.timeshare.utils.*;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
@@ -40,7 +35,7 @@ import java.util.*;
  */
 @Controller
 @RequestMapping(value = "/assembly")
-public class AssemblyController extends  BaseController{
+public class AssemblyController extends  BaseController {
 
     @Autowired
     FeeService feeService;
@@ -52,77 +47,85 @@ public class AssemblyController extends  BaseController{
     AttenderService attenderService;
     @Autowired
     CommentService commentService;
+    @Autowired
+    CollectionService collectionService;
     protected Logger logger = LoggerFactory.getLogger(AssemblyController.class);
 
     @RequestMapping(value = "/to-index")
-    public String index(@RequestParam(value = "searchName",defaultValue = "") String searchName,
-                        @RequestParam(value = "type",defaultValue = "online") String type,Model model){
-        model.addAttribute("type",type);
-        Assembly assembly=new Assembly();
+    public String index(@RequestParam(value = "searchName", defaultValue = "") String searchName,
+                        @RequestParam(value = "type", defaultValue = "online") String type, Model model) {
+        model.addAttribute("type", type);
+        Assembly assembly = new Assembly();
         List<Assembly> assemblyList = assemblyService.findAssemblyList(assembly, 0, 10);
-        model.addAttribute("assemblyList",assemblyList);
+        model.addAttribute("assemblyList", assemblyList);
         return "assembly/index";
     }
+
     @RequestMapping(value = "/searchAssembly")
-    public String  searchAssembly(@RequestParam(value = "searchName",defaultValue = "") String searchName,@RequestParam(value = "citySelect",defaultValue = "") String citySelect,@RequestParam(value = "type",defaultValue = "online") String type,Model model){
-        model.addAttribute("type",type);
-        model.addAttribute("citySelect",citySelect);
-        model.addAttribute("searchName",searchName);
+    public String searchAssembly(@RequestParam(value = "searchName", defaultValue = "") String searchName, @RequestParam(value = "citySelect", defaultValue = "") String citySelect, @RequestParam(value = "type", defaultValue = "online") String type, Model model) {
+        model.addAttribute("type", type);
+        model.addAttribute("citySelect", citySelect);
+        model.addAttribute("searchName", searchName);
 
         return "assembly/tab-index";
     }
+
     @RequestMapping("/list")
     @ResponseBody
-    public List<Assembly>  findList(@RequestParam(value = "searchName",defaultValue = "") String searchName,@RequestParam(value = "citySelect",defaultValue = "") String citySelect,@RequestParam(value = "type",defaultValue = "online") String type,
-                                  @RequestParam(value = "startIndex",defaultValue = "0") int startIndex, @RequestParam(value = "loadSize",defaultValue = "20") int loadSize,Model model){
-        Assembly assembly=new Assembly();
+    public List<Assembly> findList(@RequestParam(value = "searchName", defaultValue = "") String searchName, @RequestParam(value = "citySelect", defaultValue = "") String citySelect, @RequestParam(value = "type", defaultValue = "online") String type,
+                                   @RequestParam(value = "startIndex", defaultValue = "0") int startIndex, @RequestParam(value = "loadSize", defaultValue = "20") int loadSize, Model model) {
+        Assembly assembly = new Assembly();
         assembly.setType(type);
         assembly.setTitle(searchName);
         assembly.setRendezvous(citySelect);
         List<Assembly> assemblyList = assemblyService.findAssemblyList(assembly, startIndex, loadSize);
-       return assemblyList;
+        return assemblyList;
     }
+
     @RequestMapping(value = "/to-add")
-    public String add(){
+    public String add() {
         return "assembly/activityPublish";
     }
-    @RequestMapping(value="/saveFee")
+
+    @RequestMapping(value = "/saveFee")
     @ResponseBody
-    public String saveFee(@RequestParam String feeTitle,@RequestParam String feeStr ,@RequestParam String quota){
-        String resultId="";
-        try{
-            String[] feeTitles=feeTitle.split(",");
-            String[] fees=feeStr.split(",");
-            String[] quotas=quota.split(",");
-            for (int i=0;i<feeTitles.length;i++) {
-                Fee fee=new Fee();
+    public String saveFee(@RequestParam String feeTitle, @RequestParam String feeStr, @RequestParam String quota) {
+        String resultId = "";
+        try {
+            String[] feeTitles = feeTitle.split(",");
+            String[] fees = feeStr.split(",");
+            String[] quotas = quota.split(",");
+            for (int i = 0; i < feeTitles.length; i++) {
+                Fee fee = new Fee();
                 fee.setFeeTitle(feeTitles[i]);
                 fee.setFee(new BigDecimal(fees[i]));
                 fee.setQuota(Integer.parseInt(quotas[i]));
-               String feeId= feeService.saveFee(fee);
-                resultId+=feeId+",";
+                String feeId = feeService.saveFee(fee);
+                resultId += feeId + ",";
             }
             List<Fee> feeList = feeService.findFeeByAssemblyId(null);
-            if (!CollectionUtils.isEmpty(feeList)){
-                for (Fee fee:feeList){
+            if (!CollectionUtils.isEmpty(feeList)) {
+                for (Fee fee : feeList) {
                     feeService.delete(fee.getFeeId());
                 }
             }
 
-        }catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
-            resultId="ERROR";
+            resultId = "ERROR";
         }
 
         return resultId;
     }
-    @RequestMapping(value="/saveAssembly")
+
+    @RequestMapping(value = "/saveAssembly")
     @ResponseBody
-    public String saveAssembly(@RequestParam String assemblyTitle,@RequestParam String imageIdStr,@RequestParam String startTime ,@RequestParam String endTime,@RequestParam String rendezvous,
-                               String description,String assemblyType,String feeId,String onApply,String phoneNumber,String applyId,String imageIdStrDesc, @CookieValue(value="time_sid", defaultValue="admin") String userId){
-        String resultId="";
-        try{
-            Assembly assembly=new Assembly();
+    public String saveAssembly(@RequestParam String assemblyTitle, @RequestParam String imageIdStr, @RequestParam String startTime, @RequestParam String endTime, @RequestParam String rendezvous,
+                               @RequestParam String description,@RequestParam String assemblyType,@RequestParam String feeId,@RequestParam String onApply,@RequestParam String phoneNumber,
+                               @RequestParam String applyId,@RequestParam String imageIdStrDesc,@RequestParam String imageIdStrCon, @CookieValue(value = "time_sid", defaultValue = "admin") String userId) {
+        String resultId = "";
+        try {
+            Assembly assembly = new Assembly();
             assembly.setTitle(assemblyTitle);
             assembly.setStartTime(startTime);
             assembly.setEndTime(endTime);
@@ -133,48 +136,54 @@ public class AssemblyController extends  BaseController{
             assembly.setUserId(userId);
             assembly.setIsOnApply(onApply);
             assembly.setPhoneNumber(phoneNumber);
-            Calendar cal=Calendar.getInstance();
-            SimpleDateFormat sdf=new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+            Calendar cal = Calendar.getInstance();
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
             assembly.setCreateTime(sdf.format(cal.getTime()));
-            String assemblyId=assemblyService.saveAssembly(assembly);
-            if(StringUtils.isNotEmpty(imageIdStr)){
-               ImageObj imageObj= userService.findById(imageIdStr);
+            String assemblyId = assemblyService.saveAssembly(assembly);
+            if (StringUtils.isNotEmpty(imageIdStr)) {
+                ImageObj imageObj = userService.findById(imageIdStr);
                 imageObj.setObjId(assemblyId);
                 userService.saveOrUpdateImg(imageObj);
             }
-            if(StringUtils.isNotEmpty(imageIdStrDesc)){
-                String[] imageIdStrDescs=imageIdStrDesc.split(",");
-                for (String imageIdStrTemp:imageIdStrDescs){
-                  if (StringUtils.isNotEmpty(imageIdStrTemp)){
-                      ImageObj imageObj= userService.findById(imageIdStrTemp);
-                      if (imageObj!=null) {
-                          imageObj.setObjId(assemblyId);
-                          userService.saveOrUpdateImg(imageObj);
-                      }
-                  }
+            if (StringUtils.isNotEmpty(imageIdStrCon)) {
+                ImageObj imageObj = userService.findById(imageIdStrCon);
+                imageObj.setObjId(assemblyId);
+                userService.saveOrUpdateImg(imageObj);
+            }
+            if (StringUtils.isNotEmpty(imageIdStrDesc)) {
+                String[] imageIdStrDescs = imageIdStrDesc.split(",");
+                for (String imageIdStrTemp : imageIdStrDescs) {
+                    if (StringUtils.isNotEmpty(imageIdStrTemp)) {
+                        ImageObj imageObj = userService.findById(imageIdStrTemp);
+                        if (imageObj != null) {
+                            imageObj.setObjId(assemblyId);
+                            userService.saveOrUpdateImg(imageObj);
+                        }
+                    }
                 }
             }
-            if(StringUtils.isNotEmpty(feeId)){
-                String[] feeIds=feeId.split(",");
-                for (String feeTdTemp:feeIds){
-                    Fee fee=feeService.findFeeById(feeTdTemp);
-                    if (fee!=null) {
+            if (StringUtils.isNotEmpty(feeId)) {
+                String[] feeIds = feeId.split(",");
+                for (String feeTdTemp : feeIds) {
+                    Fee fee = feeService.findFeeById(feeTdTemp);
+                    if (fee != null) {
                         fee.setAssemblyId(assemblyId);
                         feeService.modifyFee(fee);
                     }
                 }
             }
-            resultId=assemblyId;
-        }catch (Exception e){
+            resultId = assemblyId;
+        } catch (Exception e) {
             e.printStackTrace();
-            resultId="ERROR";
+            resultId = "ERROR";
         }
 
         return resultId;
     }
+
     @ResponseBody
     @RequestMapping(value = "/save-img")
-    public String saveUserImg(@RequestParam String imageId,@RequestParam String imgUrl,@RequestParam String imageType){
+    public String saveUserImg(@RequestParam String imageId, @RequestParam String imgUrl, @RequestParam String imageType) {
         try {
             ImageObj obj = new ImageObj();
             obj.setImageId(imageId);
@@ -183,232 +192,280 @@ public class AssemblyController extends  BaseController{
             }
             obj.setImageUrl(imgUrl);
             obj.setImageType(imageType);
-            return  userService.saveOrUpdateImg(obj);
-        }catch (Exception e){
+            return userService.saveOrUpdateImg(obj);
+        } catch (Exception e) {
             e.printStackTrace();
             return "error";
         }
     }
+
     @RequestMapping(value = "/to-detail")
-    public String detail(@RequestParam(value = "assemblyId",defaultValue = "") String assemblyId,Model model,HttpServletRequest request,@CookieValue(value="time_sid", defaultValue="admin") String userId){
-        Assembly assembly=assemblyService.findAssemblyById(assemblyId);
-        UserInfo userInfo=getCurrentUser(userId);
+    public String detail(@RequestParam(value = "assemblyId", defaultValue = "") String assemblyId, Model model, HttpServletRequest request, @CookieValue(value = "time_sid", defaultValue = "admin") String userId) {
+        Assembly assembly = assemblyService.findAssemblyById(assemblyId);
+        UserInfo userInfo = getCurrentUser(userId);
         //浏览次数加1
-        Assembly assemblyBrowers=new Assembly();
+        Assembly assemblyBrowers = new Assembly();
         assemblyBrowers.setAssemblyId(assemblyId);
-        assemblyBrowers.setBrowseTimes(assembly.getBrowseTimes()+1);
+        assemblyBrowers.setBrowseTimes(assembly.getBrowseTimes() + 1);
         assemblyService.modifyAssembly(assemblyBrowers);
         assembly.setBrowseTimes(assemblyBrowers.getBrowseTimes());
         List<Attender> attenderList = attenderService.getListByAssemblyId(assemblyId);
-        BigDecimal minMoney=new BigDecimal(0);
-        BigDecimal maxMoney=new BigDecimal(0);
-        String attenderTouser="farse";
-        if (!CollectionUtils.isEmpty(assembly.getFeeList())){
-            for (Fee fee :assembly.getFeeList()){
-                if(minMoney.compareTo(new BigDecimal(0))==0){
-                    minMoney=fee.getFee();
+        BigDecimal minMoney = new BigDecimal(0);
+        BigDecimal maxMoney = new BigDecimal(0);
+        String attenderTouser = "farse";
+        List<Collection> list = collectionService.getCollectionByAssemblyId(assemblyId);
+        String collectionStr="false";
+        if (!CollectionUtils.isEmpty(list)) {
+            for (Collection collection : list) {
+                if (collection.getUserId().equals(userId)){
+                    collectionStr="true";
+                    break;
                 }
-                if(maxMoney.compareTo(new BigDecimal(0))==0){
-                    maxMoney=fee.getFee();
+            }
+        }
+            if (!CollectionUtils.isEmpty(assembly.getFeeList())) {
+            for (Fee fee : assembly.getFeeList()) {
+                if (minMoney.compareTo(new BigDecimal(0)) == 0) {
+                    minMoney = fee.getFee();
                 }
-                if (fee.getFee().compareTo(minMoney)<0){
-                    minMoney=fee.getFee();
+                if (maxMoney.compareTo(new BigDecimal(0)) == 0) {
+                    maxMoney = fee.getFee();
                 }
-                if (fee.getFee().compareTo(maxMoney)>0){
-                    maxMoney=fee.getFee();
+                if (fee.getFee().compareTo(minMoney) < 0) {
+                    minMoney = fee.getFee();
                 }
-                int count=0;
-                for (Attender attender:attenderList){
-                    if (attender.getFeedId().equals(fee.getFeeId())){
+                if (fee.getFee().compareTo(maxMoney) > 0) {
+                    maxMoney = fee.getFee();
+                }
+                int count = 0;
+                for (Attender attender : attenderList) {
+                    if (attender.getFeedId().equals(fee.getFeeId())) {
                         count++;
                     }
-                    if (attender.getUserId().equals(userInfo.getUserId())){
-                        attenderTouser="true";
+
+                    if (attender.getUserId().equals(userInfo.getUserId())) {
+                        attenderTouser = "true";
                     }
                 }
-                if (fee.getQuota()==0){
+                if (fee.getQuota() == 0) {
                     fee.setQuotaTitle("不限制人数");
-                }else{
-                    int userCount=fee.getQuota()-count;
-                    if (userCount<=0){
+                } else {
+                    int userCount = fee.getQuota() - count;
+                    if (userCount <= 0) {
                         fee.setQuota(-1);
                     }
-                    fee.setQuotaTitle("剩余："+userCount);
+                    fee.setQuotaTitle("剩余：" + userCount);
                 }
             }
         }
         List<Comment> commentList = commentService.findCommentByObjId(assemblyId);
-        model.addAttribute("attenderTouser",attenderTouser);
-        model.addAttribute("userInfo",userInfo);
-        model.addAttribute("assembly",assembly);
-        model.addAttribute("minMoney",minMoney);
-        model.addAttribute("maxMoney",maxMoney);
-        model.addAttribute("userCount",attenderList.size());
-        model.addAttribute("attenderList",attenderList);
-        model.addAttribute("commentList",commentList);
+        model.addAttribute("attenderTouser", attenderTouser);
+        model.addAttribute("userInfo", userInfo);
+        model.addAttribute("assembly", assembly);
+        model.addAttribute("minMoney", minMoney);
+        model.addAttribute("maxMoney", maxMoney);
+        model.addAttribute("userCount", attenderList.size());
+        model.addAttribute("attenderList", attenderList);
+        model.addAttribute("commentList", commentList);
+        model.addAttribute("collectionCount", list.size());
+        model.addAttribute("collectionStr", collectionStr);
+
         //微信jssdk相关代码
         String url = WxUtils.getUrl(request);
-        Map<String,String> parmsMap = WxUtils.sign(url);
-        model.addAttribute("parmsMap",parmsMap);
+        Map<String, String> parmsMap = WxUtils.sign(url);
+        model.addAttribute("parmsMap", parmsMap);
         return "assembly/detail";
     }
+
     @RequestMapping(value = "/showAttender")
-    public String showAttender(@RequestParam(value = "assemblyId",defaultValue = "") String assemblyId,Model model){
+    public String showAttender(@RequestParam(value = "assemblyId", defaultValue = "") String assemblyId, Model model) {
         List<Attender> attenderList = attenderService.getListByAssemblyId(assemblyId);
-        model.addAttribute("assemblyId",assemblyId);
-        model.addAttribute("userCount",attenderList.size());
-        model.addAttribute("attenderList",attenderList);
+        model.addAttribute("assemblyId", assemblyId);
+        model.addAttribute("userCount", attenderList.size());
+        model.addAttribute("attenderList", attenderList);
         return "assembly/attendUser";
     }
+
     @RequestMapping(value = "/to-success")
-    public String success(@RequestParam(value = "assemblyId",defaultValue = "") String assemblyId,Model model){
-        Assembly assembly=assemblyService.findAssemblyById(assemblyId);
-        model.addAttribute("assembly",assembly);
+    public String success(@RequestParam(value = "assemblyId", defaultValue = "") String assemblyId, Model model) {
+        Assembly assembly = assemblyService.findAssemblyById(assemblyId);
+        model.addAttribute("assembly", assembly);
 
         return "assembly/publishSuccess";
     }
-    @RequestMapping(value="/saveAttender")
-    public String saveAttender(@RequestParam String assemblyId,@RequestParam String feeId ,@RequestParam String questionAnswer,@CookieValue(value="time_sid", defaultValue="admin") String userId,Model model){
-        String resultId="";
-        try{
-            Attender attender=new Attender();
+
+    @RequestMapping(value = "/saveAttender")
+    public String saveAttender(@RequestParam String assemblyId, @RequestParam String feeId, @RequestParam String questionAnswer, @CookieValue(value = "time_sid", defaultValue = "admin") String userId, Model model) {
+        String resultId = "";
+        try {
+            Attender attender = new Attender();
             attender.setFeedId(feeId);
             attender.setAssemblyId(assemblyId);
             attender.setQuestionAnswer(questionAnswer);
             attender.setUserId(userId);
-            Calendar cal=Calendar.getInstance();
-            SimpleDateFormat sdf=new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+            Calendar cal = Calendar.getInstance();
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
             attender.setCreateTime(sdf.format(cal.getTime()));
-            if (StringUtils.isNotEmpty(questionAnswer)){
-                String[] questionAnswers=questionAnswer.split(",");
-                if (!questionAnswers[0].equals("undefined")){
+            if (StringUtils.isNotEmpty(questionAnswer)) {
+                String[] questionAnswers = questionAnswer.split(",");
+                if (!questionAnswers[0].equals("undefined")) {
                     attender.setUserName(questionAnswers[0]);
                 }
-                if (!questionAnswers[1].equals("undefined")){
+                if (!questionAnswers[1].equals("undefined")) {
                     attender.setPhone(questionAnswers[1]);
                 }
-                if (!questionAnswers[2].equals("undefined")){
+                if (!questionAnswers[2].equals("undefined")) {
                     attender.setWx(questionAnswers[2]);
                 }
-                if (!questionAnswers[3].equals("undefined")){
+                if (!questionAnswers[3].equals("undefined")) {
                     attender.setEmail(questionAnswers[3]);
                 }
-                if (!questionAnswers[4].equals("undefined")){
+                if (!questionAnswers[4].equals("undefined")) {
                     attender.setCompany(questionAnswers[4]);
                 }
             }
             attenderService.saveAttender(attender);
-        }catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
-        Assembly assembly=assemblyService.findAssemblyById(assemblyId);
-        Fee fee=feeService.findFeeById(feeId);
-        model.addAttribute("fee",fee);
-        model.addAttribute("assembly",assembly);
+        Assembly assembly = assemblyService.findAssemblyById(assemblyId);
+        Fee fee = feeService.findFeeById(feeId);
+        model.addAttribute("fee", fee);
+        model.addAttribute("assembly", assembly);
         return "assembly/attendSuccess";
     }
+
     @RequestMapping(value = "/to-attendersuccess")
-    public String attendersuccess(@RequestParam(value = "assemblyId",defaultValue = "") String assemblyId,@RequestParam(value = "feeId",defaultValue = "") String feeId,Model model,HttpServletRequest request){
+    public String attendersuccess(@RequestParam(value = "assemblyId", defaultValue = "") String assemblyId, @RequestParam(value = "feeId", defaultValue = "") String feeId, Model model, HttpServletRequest request) {
         return "";
     }
+
     @RequestMapping(value = "/to-comment")
-    public String commentAdd(@RequestParam(value = "assemblyId",defaultValue = "") String assemblyId,Model model){
-        Assembly assembly=assemblyService.findAssemblyById(assemblyId);
-        model.addAttribute("assembly",assembly);
+    public String commentAdd(@RequestParam(value = "assemblyId", defaultValue = "") String assemblyId, Model model) {
+        Assembly assembly = assemblyService.findAssemblyById(assemblyId);
+        model.addAttribute("assembly", assembly);
         return "assembly/commentPublish";
     }
-    @RequestMapping(value="/saveComment")
+
+    @RequestMapping(value = "/saveComment")
     @ResponseBody
-    public String saveComment(@RequestParam String assemblyId,@RequestParam String content,@RequestParam String imageIdStrComment ,@RequestParam int rating,@CookieValue(value="time_sid", defaultValue="admin") String userId){
-        String resultId="";
-        try{
-            Comment comment=new Comment();
+    public String saveComment(@RequestParam String assemblyId, @RequestParam String content, @RequestParam String imageIdStrComment, @RequestParam int rating, @CookieValue(value = "time_sid", defaultValue = "admin") String userId) {
+        String resultId = "";
+        try {
+            Comment comment = new Comment();
             comment.setUserId(userId);
             comment.setContent(content);
             comment.setObjId(assemblyId);
             comment.setRating(rating);
             comment.setObjType("ASSEMBLY");
-           resultId= commentService.saveComment(comment);
-            if(StringUtils.isNotEmpty(imageIdStrComment)){
-                String[] imageIdStrComments=imageIdStrComment.split(",");
-                for (String imageIdStrTemp:imageIdStrComments){
-                    if (StringUtils.isNotEmpty(imageIdStrTemp)){
-                        ImageObj imageObj= userService.findById(imageIdStrTemp);
-                        if (imageObj!=null) {
+            resultId = commentService.saveComment(comment);
+            if (StringUtils.isNotEmpty(imageIdStrComment)) {
+                String[] imageIdStrComments = imageIdStrComment.split(",");
+                for (String imageIdStrTemp : imageIdStrComments) {
+                    if (StringUtils.isNotEmpty(imageIdStrTemp)) {
+                        ImageObj imageObj = userService.findById(imageIdStrTemp);
+                        if (imageObj != null) {
                             imageObj.setObjId(resultId);
                             userService.saveOrUpdateImg(imageObj);
                         }
                     }
                 }
             }
-        }catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
-            resultId="ERROR";
+            resultId = "ERROR";
         }
 
         return resultId;
     }
-    @RequestMapping(value="/saveZan")
+
+    @RequestMapping(value = "/saveZan")
     @ResponseBody
-    public String saveZan(@RequestParam String commentId,@CookieValue(value="time_sid", defaultValue="admin") String userId){
-        String resultId="";
-        try{
-            UserInfo userInfo=getCurrentUser(userId);
-            Comment comment=commentService.findCommentById(commentId);
-            if (StringUtils.isEmpty(comment.getZanContent())){
+    public String saveZan(@RequestParam String commentId, @CookieValue(value = "time_sid", defaultValue = "admin") String userId) {
+        String resultId = "";
+        int count=0;
+        try {
+            UserInfo userInfo = getCurrentUser(userId);
+            Comment comment = commentService.findCommentById(commentId);
+            if (StringUtils.isEmpty(comment.getZanContent())) {
                 comment.setZanContent(userInfo.getNickName());
-            }else{
-                comment.setZanContent(comment.getZanContent()+"&"+userInfo.getUserName());
+                count=1;
+            } else {
+                comment.setZanContent(comment.getZanContent() + "&" + userInfo.getUserName());
+                String[] zanContent=comment.getZanContent().split("&");
+                count=zanContent.length;
             }
-            resultId= commentService.modifyComment(comment);
-        }catch (Exception e){
+            commentService.modifyComment(comment);
+        } catch (Exception e) {
             e.printStackTrace();
-            resultId="ERROR";
+            resultId = "ERROR";
         }
 
-        return resultId;
+        return count+"";
     }
-    @RequestMapping(value="/saveReply")
+
+    @RequestMapping(value = "/saveReply")
     @ResponseBody
-    public String saveReply(@RequestParam String commentId,@RequestParam String replyContent,@CookieValue(value="time_sid", defaultValue="admin") String userId){
-        String resultId="";
-        try{
-            UserInfo userInfo=getCurrentUser(userId);
-            Comment comment=commentService.findCommentById(commentId);
-            if (StringUtils.isEmpty(comment.getReplyContent())){
-                comment.setReplyContent(userInfo.getNickName()+":"+replyContent);
-            }else{
-                comment.setReplyContent(comment.getReplyContent()+"&#"+userInfo.getNickName()+":"+replyContent);
+    public String saveReply(@RequestParam String commentId, @RequestParam String replyContent, @CookieValue(value = "time_sid", defaultValue = "admin") String userId) {
+        String resultId = "";
+        try {
+            UserInfo userInfo = getCurrentUser(userId);
+            Comment comment = commentService.findCommentById(commentId);
+            if (StringUtils.isEmpty(comment.getReplyContent())) {
+                comment.setReplyContent(userInfo.getNickName() + ":" + replyContent);
+            } else {
+                comment.setReplyContent(comment.getReplyContent() + "&#" + userInfo.getNickName() + ":" + replyContent);
             }
-            resultId= commentService.modifyComment(comment);
-        }catch (Exception e){
+            resultId = commentService.modifyComment(comment);
+        } catch (Exception e) {
             e.printStackTrace();
-            resultId="ERROR";
+            resultId = "ERROR";
         }
 
         return resultId;
     }
+
     @RequestMapping(value = "/to-pay-for-confirm")
-    public String toPayForConfirm(HttpServletRequest request,RedirectAttributes attr) {
+    public String toPayForConfirm(HttpServletRequest request, RedirectAttributes attr) {
         String code = request.getParameter("code");
         String state = request.getParameter("state");
-        String[] states=state.split("_");
-        String feeId=states[0];
+        String[] states = state.split("_");
+        String feeId = states[0];
         String assemblyId = states[1];
         String questionAnswer = states[2];
-        System.out.println("feeId"+feeId);
-        System.out.println("questionAnswer"+questionAnswer);
-        System.out.println("assemblyId"+assemblyId);
+        System.out.println("feeId" + feeId);
+        System.out.println("questionAnswer" + questionAnswer);
+        System.out.println("assemblyId" + assemblyId);
 
         Fee fee = feeService.findFeeById(feeId);
 
-        String payMessageTitle = "您在邂逅活动的报名款项："+fee.getFeeTitle() ;
-        String jsApiParams = WxPayUtils.userPayToCorp(code,payMessageTitle,fee.getFee());
-        attr.addAttribute("jsApiParams",jsApiParams);
-        attr.addAttribute("payTip","你确定要支付"+fee.getFee()+"元吗");
-        attr.addAttribute("okUrl",request.getContextPath()+"/assembly/saveAttender?assemblyId="+assemblyId+"&feeId="+feeId+"&questionAnswer="+questionAnswer);
-        attr.addAttribute("backUrl",request.getContextPath()+"/assembly/to-detail?assemblyId="+assemblyId);
+        String payMessageTitle = "您在邂逅活动的报名款项：" + fee.getFeeTitle();
+        String jsApiParams = WxPayUtils.userPayToCorp(code, payMessageTitle, fee.getFee());
+        attr.addAttribute("jsApiParams", jsApiParams);
+        attr.addAttribute("payTip", "你确定要支付" + fee.getFee() + "元吗");
+        attr.addAttribute("okUrl", request.getContextPath() + "/assembly/saveAttender?assemblyId=" + assemblyId + "&feeId=" + feeId + "&questionAnswer=" + questionAnswer);
+        attr.addAttribute("backUrl", request.getContextPath() + "/assembly/to-detail?assemblyId=" + assemblyId);
 
         return "redirect:/wxPay/to-pay/";
+    }
+
+    @RequestMapping(value = "/saveCollection")
+    @ResponseBody
+    public String saveCollection(@RequestParam String assemblyId, @CookieValue(value = "time_sid", defaultValue = "admin") String userId) {
+        String resultId = "";
+        try {
+            UserInfo userInfo = getCurrentUser(userId);
+            Collection Collection = new Collection();
+            Collection.setAssemblyId(assemblyId);
+            Collection.setUserId(userId);
+            Calendar cal = Calendar.getInstance();
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+            Collection.setCreateTime(sdf.format(cal.getTime()));
+            resultId = collectionService.saveCollection(Collection);
+        } catch (Exception e) {
+            e.printStackTrace();
+            resultId = "ERROR";
+        }
+        return resultId;
     }
 }

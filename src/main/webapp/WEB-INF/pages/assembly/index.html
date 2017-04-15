@@ -37,6 +37,12 @@
       <!-- 你的html代码 -->
       <div class="page">
           <div class="indexHeader header">
+              <div class="buttons-tab">
+                  <a href="#tab1" onclick="checkTab('online')" class="tab-link active button">线上活动</a>
+                  <a href="#tab2" onclick="checkTab('face')"   class="tab-link  button">线下活动</a>
+                  <a href="#tab3"  onclick="checkTab('train')"  class="tab-link  button">培训分享</a>
+                  <a href="#tab4" onclick="checkTab('company')"  class="tab-link  button">企业参访</a>
+              </div>
           </div>
           <div class="bar bar-header-secondary">
               <div class="cities">
@@ -70,12 +76,6 @@
               </a>
           </nav>
               <div class="indexContent content infinite-scroll  infinite-scroll-bottom " data-ptr-distance="100">
-                  <div class="buttons-tab">
-                      <a href="#tab1" onclick="checkTab('online')" class="tab-link active button">线上活动</a>
-                      <a href="#tab2" onclick="checkTab('face')"   class="tab-link  button">线下活动</a>
-                      <a href="#tab3"  onclick="checkTab('train')"  class="tab-link  button">培训分享</a>
-                      <a href="#tab4" onclick="checkTab('company')"  class="tab-link  button">企业参考</a>
-                  </div>
                   <div class="content-block">
                       <div class="swiper-container">
                           <div class="swiper-wrapper">
@@ -109,17 +109,6 @@
     <script>
         $(function(){
             $("#tab1").load("${request.contextPath}/assembly/searchAssembly?type=online");
-            //banner图轮播
-            setTimeout(function () {
-                var swiper = new Swiper('.swiper-container', {
-                    direction: 'horizontal',
-                    spaceBetween: 30,
-                    centeredSlides: true,
-                    autoplay: 2000,
-                    autoplayDisableOnInteraction: false,
-                    loop: true
-                });
-            }, 0);
             //调整搜索框长度
             (function(){
                 var barWidth = $('.bar-header-secondary').width();
@@ -145,7 +134,7 @@
                         $("#tab4").load("${request.contextPath}/assembly/searchAssembly?type=company&searchName="+searchName+"&citySelect="+citySelect);
                     }
                 })
-                $(document).on("click",".citySelect option",function () {
+                $(document).on("change",".citySelect",function () {
                     var type=$("#searchType").val();
                     var citySelect=$(".citySelect").val();
                     $('.pull-to-refresh-content .content-block').html('');
