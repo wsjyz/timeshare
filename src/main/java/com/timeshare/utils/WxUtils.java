@@ -28,7 +28,9 @@ public class WxUtils {
             Map.Entry entry = (Map.Entry)it.next();
             if(entry != null){
                 String k = (String)entry.getKey();
+                System.out.println("createSign... k:"+k);
                 String v = entry.getValue().toString();
+                System.out.println("createSign... v:"+v);
                 if(null != v && !"".equals(v)
                         && !"sign".equals(k) && !"key".equals(k)) {
                     sb.append(k + "=" + v + "&");

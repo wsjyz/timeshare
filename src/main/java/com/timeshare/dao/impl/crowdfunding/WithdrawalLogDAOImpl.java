@@ -21,7 +21,7 @@ import java.util.List;
 public class WithdrawalLogDAOImpl extends BaseDAO implements WithdrawalLogDAO {
     @Override
     public String saveWithdrawalLog(WithdrawalLog withdrawalLog) {
-        StringBuilder sql = new StringBuilder("INSERT INTO t_withdrawal_log (withdrawal_log_id, withdrawal_cash, withdrawal_status, withdrawal_time, reply_msg, user_id) VALUES (?, ?, ?, ?, ?, ?);");
+        StringBuilder sql = new StringBuilder("INSERT INTO t_withdrawal_log (withdrawal_log_id, withdrawal_cash, withdrawal_status, withdrawal_time, reply_msg, user_id,withdrawal_trade_no) VALUES (?, ?, ?, ?, ?, ?,?);");
         final String id = CommonStringUtils.genPK();
         int result = getJdbcTemplate().update(sql.toString(), new PreparedStatementSetter() {
             @Override
@@ -32,6 +32,7 @@ public class WithdrawalLogDAOImpl extends BaseDAO implements WithdrawalLogDAO {
                 ps.setString(4,withdrawalLog.getWithdrawalTime());
                 ps.setString(5,withdrawalLog.getReplyMsg());
                 ps.setString(6,withdrawalLog.getUserId());
+                ps.setString(7,withdrawalLog.getWithdrawalTradeNo());
             }
         });
         if(result > 0){
@@ -66,6 +67,7 @@ public class WithdrawalLogDAOImpl extends BaseDAO implements WithdrawalLogDAO {
             WithdrawalLog.setWithdrawalTime(rs.getString("withdrawal_time"));
             WithdrawalLog.setReplyMsg(rs.getString("reply_msg"));
             WithdrawalLog.setUserId(rs.getString("user_id"));
+            WithdrawalLog.setWithdrawalTradeNo(rs.getString("withdrawal_trade_no"));
             return WithdrawalLog;
         }
     }

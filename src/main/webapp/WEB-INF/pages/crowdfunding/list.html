@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>众筹列表</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">      
+    <meta name="format-detection" content="telephone=no">
+    <meta name="format-detection" content="email=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta name="apple-mobile-web-app-title" content="众筹">
+    <meta name="Keywords" content="众筹">
+    <meta name="Description" content="众筹">
+    <link rel="stylesheet" type="text/css" href="${request.contextPath}/css/crowdFunding/sm.min.css">
+    <link rel="stylesheet" type="text/css" href="${request.contextPath}/css/crowdFunding/sm-extend.min.css">
+    <link rel="stylesheet" type="text/css" href="${request.contextPath}/css/crowdFunding/style.css">
+    <link rel="stylesheet" type="text/css" href="${request.contextPath}/css/crowdFunding/swiper.min.css">
+    <script type="text/javascript" src="${request.contextPath}/js/zepto.min.js"></script>
+  </head>
+  <body>
+    <div class="page-group">
+        <div class="page page-current">
+        	<!--header start-->            
+            <header class="bar bar-nav bar-list">
+              <!--<a href="#" class="button button-link pull-left back">-->
+                <!--<span class="icon icon-left"></span>返回-->
+              <!--</a>-->
+              <a href="${request.contextPath}/crowdFunding/createCrowdFunding" class="icon i-edit pull-right"></a>
+              <h1 class="title">众筹</h1>
+            </header>
+            <!--header end-->
+            <!--页面内容区域 start-->
+            <div class="content infinite-scroll  infinite-scroll-bottom"  data-distance="100">
+                <div class="banner swiper-container">
+                    <div class="swiper-wrapper">
+
+                    </div>
+                    <div class="swiper-pagination"></div>
+                </div>
+                  <div class="list-block">
+                     <div class="zc-list">
+
+                    </div>
+                  </div>
+                  <!-- 加载提示符 -->
+                  <div class="infinite-scroll-preloader">
+                      <div class="preloader"></div>
+                  </div>
+      
+            </div>
+            <!-- 页面内容区域 end -->
+        </div>
+    </div>
+
+	<script type="text/javascript" src="${request.contextPath}/js/crowdFunding/sm.min.js"></script>
+    <script type="text/javascript" src="${request.contextPath}/js/crowdFunding/sm-extend.min.js"></script>
+	<script type="text/javascript" src="${request.contextPath}/js/crowdFunding/sm-city-picker.min.js"></script>
+	<script type="text/javascript" src="${request.contextPath}/js/crowdFunding/my-js.js"></script>
+    <script type="text/javascript" src="${request.contextPath}/js/crowdFunding/swiper.min.js"></script>
+  </body>
+<script>
+    // 众筹列表下拉无限加载
+    var loading = false;
+    // 最多可加载的条目
+    var maxItems = 999;
+    // 每次加载添加多少条目
+    var itemsPerLoad = 1;
+    function addItems(data) {
+        // 生成新条目的HTML
+        var html = '';
+        $.each(data, function(i, crowdFunding){
+            var enrollTitleStatus = "报名中";
+
+
+            if(crowdFunding.enrollCount>=crowdFunding.maxPeoples){
+                enrollTitleStatus = "已爆仓";
+            }
+            var enrollProgressBar=(crowdFunding.enrollCount/crowdFunding.maxPeoples)*100;
+
+            //最低学费
+            var price=0;
+            //一口价
+            if(crowdFunding.costType=='AA'){
+                price=crowdFunding.costTotal;
+            }
+            else{
+                //费用分摊 默认显示最低价 即除以最大人数
+                price=crowdFunding.costTotal/crowdFunding.maxPeoples;
+            }
+
+            var imageUrlSrc='';
+            if(crowdFunding.imageUrl!=null && crowdFunding.imageUrl!='null'){
+                var imageUrlSrc='${request.contextPath}/'+crowdFunding.imageUrl+'_320x240.jpg';
+            }
+
+            html += '<div class="item"><div class="item-title">'+crowdFunding.createUserName+'</div>'+
+                '<div class="item-box">'+
+                '<div class="zc-img"><a href="details.html"><img src="'+imageUrlSrc+'"/></a></div>'+
+                '<div class="zc-text">'+
+                '<div class="zc-name"><a href="details.html"><em class="tag">'+enrollTitleStatus+'</em>'+crowdFunding.projectName+'</a></div>'+
+                '<div class="zc-info"><span class="time"><i class="i-time"></i>上课时间:'+crowdFunding.curriculumEndTime+'</span><span class="address"><i class="i-address"></i>'+crowdFunding.sponsorCity+'</span></div>'+
+                '<div class="zc-progress"><div class="progress"><div class="progress-bar" style="width:'+enrollProgressBar+'%"></div></div></div>'+
+                '<div class="zc-info"><span class="price">众筹最低学费:'+price+'元</span><span class="num">学员人数:'+crowdFunding.enrollCount+'/'+crowdFunding.maxPeoples+'人</span></div>'+
+                '<div class="zc-abstract">'+crowdFunding.detail+'</div>'+
+                '<div class="zc-link"><a href="details.html">查看详情</a></div></div></div></div>';
+        });
+        // 添加新条目
+        $('.infinite-scroll-bottom .zc-list').append(html);
+    }
+
+    //设置前五轮播图
+    function setSwiperSlide(data) {
+        // 生成新条目的HTML
+        var html = '';
+        $.each(data, function(i, crowdFunding){
+            if(i<5){
+                var imageUrlSrc='';
+                if(crowdFunding.imageUrl!=null && crowdFunding.imageUrl!='null'){
+                    var imageUrlSrc='${request.contextPath}/'+crowdFunding.imageUrl+'_320x240.jpg';
+                }
+                html += '<div class="swiper-slide"><a href="details.html"><img src="'+imageUrlSrc+'"/></a></div>';
+            }
+        });
+        // 添加新条目
+        $('.infinite-scroll-bottom .swiper-wrapper').append(html);
+    }
+
+
+    //预先加载
+    $.post('${request.contextPath}/crowdFunding/listCrowdFundingToIndex', {startIndex: 0,loadSize:itemsPerLoad}, function (response) {
+        //轮播图
+        setSwiperSlide(response);
+        //预先加载
+        addItems(response);
+
+    });
+
+
+    // 上次加载的序号
+    var lastIndex = itemsPerLoad;
+    // 注册'infinite'事件处理函数
+    $(document).on('infinite', '.infinite-scroll-bottom',function() {
+        // 如果正在加载，则退出
+        if (loading) return;
+        // 设置flag
+        loading = true;
+        // 模拟1s的加载过程
+        setTimeout(function() {
+            // 重置加载flag
+            loading = false;
+            if (lastIndex >= maxItems) {
+                // 加载完毕，则注销无限加载事件，以防不必要的加载
+                $.detachInfiniteScroll($('.infinite-scroll'));
+                // 删除加载提示符
+                $('.infinite-scroll-preloader').remove();
+                return;
+            }
+            // 添加新条目
+            $.post('${request.contextPath}/crowdFunding/listCrowdFundingToIndex', {startIndex: lastIndex,loadSize:itemsPerLoad}, function (response) {
+                if(response==null || response==undefined ||  response==''){
+                    // 加载完毕，则注销无限加载事件，以防不必要的加载
+                    $.detachInfiniteScroll($('.infinite-scroll'));
+                    // 删除加载提示符
+                    $('.infinite-scroll-preloader').remove();
+
+
+                    var html = '<div class="item"><div class="item-title">没有数据了</div></div>';
+                    // 添加新条目
+                    $('.infinite-scroll-bottom .swiper-wrapper').append(html);
+
+                    return;
+                }
+                else{
+                    addItems(response);
+                }
+
+            });
+            // 更新最后加载的序号
+            //lastIndex = $('.zc-list .item').length;
+            lastIndex = lastIndex+itemsPerLoad;
+            //容器发生改变,如果是js滚动，需要刷新滚动
+            $.refreshScroller();
+        }, 1);
+    });
+
+</script>
+</html>
