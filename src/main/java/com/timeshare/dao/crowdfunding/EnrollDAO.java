@@ -28,4 +28,6 @@ public interface EnrollDAO {
     public List<Enroll> findNeedAotuRefundEnroll() ;
     //自动退款完成后更新支付状态及退款交易号
     public String autoRefundAfterUpdate(String enrollId,String refundTradeNo) ;
+    //自动更新现金账户可提现金额后更新已转移标志
+    public String autoMoneyTransferAfterUpdate(String enrollId) ;
 }

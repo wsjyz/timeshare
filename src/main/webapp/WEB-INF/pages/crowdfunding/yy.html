@@ -107,12 +107,7 @@
     $("#saveEnrollBtn").on('click', function () {
         //支付
         $.post('${request.contextPath}/enroll/save', $("#enrollForm").serialize(), function (result) {
-            if (result=="success") {
-                window.location.href = "https://open.weixin.qq.com/connect/oauth2/authorize?appid=wxcd8903dd6a9552eb" +
-                    "&redirect_uri=http%3A%2F%2Fjk.zhangqidong.cn%2Ftime%2Fenroll%2FtoEnroolPayConfirm%2F&response_type=code&scope=snsapi_base" +
-                    "&state=" + ${enrollId} + "#wechat_redirect";
-            }
-            else if(result=="NOT_RELEASED"){
+            if(result=="NOT_RELEASED"){
                 $.toast("该项目已下架或未发布");
             }
             else if(result=="MAX_PEOPLES_OUT"){
@@ -121,8 +116,13 @@
             else if(result=="TIME_OUT"){
                 $.toast("该项目结束已经已到");
             }
-            else{
+            else if(result=="FAILED"){
                 $.toast("该项目目前不可报名");
+            }
+            else{
+                window.location.href = "https://open.weixin.qq.com/connect/oauth2/authorize?appid=wxcd8903dd6a9552eb" +
+                    "&redirect_uri=http%3A%2F%2Fjk.zhangqidong.cn%2Ftime%2Fenroll%2FtoEnroolPayConfirm%2F&response_type=code&scope=snsapi_base" +
+                    "&state=" + result + "#wechat_redirect";
             }
         });
         //提现

@@ -44,8 +44,7 @@ public class EnrollDAOImpl extends BaseDAO implements EnrollDAO {
                 ps.setString(12,enroll.getOptTime());
                 ps.setString(13,enroll.getPayTradeNo());
                 ps.setString(14,enroll.getRefundTradeNo());
-                ps.setString(14,enroll.getIsTransferCashAccount());
-
+                ps.setString(15,enroll.getIsTransferCashAccount());
             }
         });
         if(result > 0){
@@ -148,6 +147,8 @@ public class EnrollDAOImpl extends BaseDAO implements EnrollDAO {
         sql.append("on c.crowdfunding_id=e.crowdfunding_id ");
         sql.append("where SYSDATE()>=c.curriculum_end_time ");
         sql.append("and e.pay_status='PAYED' ");
+        sql.append("and e.is_transfer_cash_account!='YES' ");
+
         return getJdbcTemplate().query(sql.toString(),new Object[]{},new EnrollDAOImpl.EnrollRowMapper());
     }
     public String autoRefundAfterUpdate(String enrollId,String refundTradeNo) {
@@ -155,6 +156,17 @@ public class EnrollDAOImpl extends BaseDAO implements EnrollDAO {
         sql.append(" pay_status ='REFUND',");
         sql.append(" refund_trade_no = 'refundTradeNo'");
 
+        sql.append(" where enroll_id='" + enrollId + "'");
+        int result = getJdbcTemplate().update(sql.toString());
+        if(result > 0){
+            return Contants.SUCCESS;
+        }else{
+            return "FAILED";
+        }
+    }
+    public String autoMoneyTransferAfterUpdate(String enrollId) {
+        StringBuilder sql = new StringBuilder("update t_enroll set ");
+        sql.append(" is_transfer_cash_account ='YES'");
         sql.append(" where enroll_id='" + enrollId + "'");
         int result = getJdbcTemplate().update(sql.toString());
         if(result > 0){
@@ -220,7 +232,7 @@ public class EnrollDAOImpl extends BaseDAO implements EnrollDAO {
             }
             try {
                 if (rs.findColumn("owner_user_id") > 0 ) {
-                    enroll.setMinPeoples(rs.getString("owner_user_id"));
+                    enroll.setOwnerUserId(rs.getString("owner_user_id"));
                 }
             }
             catch (SQLException e) {

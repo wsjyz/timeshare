@@ -90,8 +90,7 @@ public class EnrollController extends  BaseController{
                                 enroll.setEnrollUserId(userId);
                                 enroll.setOptTime(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date()));
                                 String pk= enrollService.saveEnroll(enroll);
-                                model.addAttribute("enrollId",pk);
-                                return Contants.SUCCESS;
+                                return pk;
                             }
                             else{
                                 return "NOT_RELEASED";

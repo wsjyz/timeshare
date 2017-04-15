@@ -164,4 +164,8 @@ public class EnrollServiceImpl implements EnrollService {
     public String autoRefundAfterUpdate(String enrollId,String refundTradeNo) {
         return enrollDAO.autoRefundAfterUpdate(enrollId,refundTradeNo);
     }
+    //自动更新现金账户可提现金额后更新已转移标志
+    public String autoMoneyTransferAfterUpdate(String enrollId) {
+        return enrollDAO.autoMoneyTransferAfterUpdate(enrollId);
+    }
 }

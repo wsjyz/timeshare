@@ -93,7 +93,7 @@ public class MoneyAccountServiceImpl implements MoneyAccountService {
                 //报名人数小于 项目最小人数 进行自动退款
                 if(enrollNum!=null && enrollNum<Integer.parseInt(enroll.getMinPeoples())){
                     //交易号不为空 并且资金没有被转移过
-                    if(StringUtils.isNotBlank(enroll.getPayTradeNo()) && Contants.IS_TRANSFER_CASH_ACCOUNT.NO.name().equals(enroll.getIsTransferCashAccount())){
+                    if(StringUtils.isNotBlank(enroll.getPayTradeNo()) && !Contants.IS_TRANSFER_CASH_ACCOUNT.YES.name().equals(enroll.getIsTransferCashAccount())){
                         String outRefundNo = CommonStringUtils.genPK();
                         int payAmountFee=(enroll.getPayAmount().multiply(new BigDecimal(100))).intValueExact();
                         //发起退款
@@ -105,11 +105,16 @@ public class MoneyAccountServiceImpl implements MoneyAccountService {
                     }
                 }
                 else{
-                    //项目时间到 报名人数大于等于 项目最小人数 进行可提现金额转移
-                    MoneyAccount moneyAccount=new MoneyAccount();
-                    moneyAccount.setUserId(enroll.getOwnerUserId());
-                    moneyAccount.setCashWithdrawalAmount(enroll.getPayAmount());
-                    saveOrUpdateMoneyAccount(moneyAccount);
+                    //没有被转移过的资金
+                    if(!Contants.IS_TRANSFER_CASH_ACCOUNT.YES.name().equals(enroll.getIsTransferCashAccount())){
+                        //项目时间到 报名人数大于等于 项目最小人数 进行可提现金额转移
+                        MoneyAccount moneyAccount=new MoneyAccount();
+                        moneyAccount.setUserId(enroll.getOwnerUserId());
+                        moneyAccount.setCashWithdrawalAmount(enroll.getPayAmount());
+                        saveOrUpdateMoneyAccount(moneyAccount);
+                        //更新资金转移标志位
+                        enrollService.autoMoneyTransferAfterUpdate(enroll.getEnrollId());
+                    }
                 }
             }
             return Contants.SUCCESS;
