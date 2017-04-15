@@ -37,10 +37,6 @@
       <!-- 你的html代码 -->
       <div class="page">
           <div class="indexHeader header">
-              <a class="button button-link button-nav pull-left back">
-                  <span class="icon icon-left"></span>
-              </a>
-              <h1 class="title">邂逅活动</h1>
           </div>
           <div class="bar bar-header-secondary">
               <div class="cities">
@@ -81,6 +77,15 @@
                       <a href="#tab4" onclick="checkTab('company')"  class="tab-link  button">企业参考</a>
                   </div>
                   <div class="content-block">
+                      <div class="swiper-container">
+                          <div class="swiper-wrapper">
+                              <#list assemblyList as assembly>
+                                  <div class="swiper-slide">
+                                      <a class="external" href="${request.contextPath}/assembly/to-detail?assemblyId=${assembly.assemblyId}"><img src="${assembly.titleImg}" /></a>
+                                  </div>
+                              </#list>
+                          </div>
+                      </div>
                       <div class="tabs">
                           <div id="tab1" class="tab active">
                           </div>
@@ -104,7 +109,17 @@
     <script>
         $(function(){
             $("#tab1").load("${request.contextPath}/assembly/searchAssembly?type=online");
-
+            //banner图轮播
+            setTimeout(function () {
+                var swiper = new Swiper('.swiper-container', {
+                    direction: 'horizontal',
+                    spaceBetween: 30,
+                    centeredSlides: true,
+                    autoplay: 2000,
+                    autoplayDisableOnInteraction: false,
+                    loop: true
+                });
+            }, 0);
             //调整搜索框长度
             (function(){
                 var barWidth = $('.bar-header-secondary').width();

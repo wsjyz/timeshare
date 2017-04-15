@@ -58,6 +58,9 @@ public class AssemblyController extends  BaseController{
     public String index(@RequestParam(value = "searchName",defaultValue = "") String searchName,
                         @RequestParam(value = "type",defaultValue = "online") String type,Model model){
         model.addAttribute("type",type);
+        Assembly assembly=new Assembly();
+        List<Assembly> assemblyList = assemblyService.findAssemblyList(assembly, 0, 10);
+        model.addAttribute("assemblyList",assemblyList);
         return "assembly/index";
     }
     @RequestMapping(value = "/searchAssembly")
@@ -65,6 +68,7 @@ public class AssemblyController extends  BaseController{
         model.addAttribute("type",type);
         model.addAttribute("citySelect",citySelect);
         model.addAttribute("searchName",searchName);
+
         return "assembly/tab-index";
     }
     @RequestMapping("/list")
@@ -264,8 +268,7 @@ public class AssemblyController extends  BaseController{
         return "assembly/publishSuccess";
     }
     @RequestMapping(value="/saveAttender")
-    @ResponseBody
-    public String saveAttender(@RequestParam String assemblyId,@RequestParam String feeId ,@RequestParam String questionAnswer,@CookieValue(value="time_sid", defaultValue="admin") String userId){
+    public String saveAttender(@RequestParam String assemblyId,@RequestParam String feeId ,@RequestParam String questionAnswer,@CookieValue(value="time_sid", defaultValue="admin") String userId,Model model){
         String resultId="";
         try{
             Attender attender=new Attender();
@@ -276,21 +279,37 @@ public class AssemblyController extends  BaseController{
             Calendar cal=Calendar.getInstance();
             SimpleDateFormat sdf=new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
             attender.setCreateTime(sdf.format(cal.getTime()));
-            resultId = attenderService.saveAttender(attender);
+            if (StringUtils.isNotEmpty(questionAnswer)){
+                String[] questionAnswers=questionAnswer.split(",");
+                if (!questionAnswers[0].equals("undefined")){
+                    attender.setUserName(questionAnswers[0]);
+                }
+                if (!questionAnswers[1].equals("undefined")){
+                    attender.setPhone(questionAnswers[1]);
+                }
+                if (!questionAnswers[2].equals("undefined")){
+                    attender.setWx(questionAnswers[2]);
+                }
+                if (!questionAnswers[3].equals("undefined")){
+                    attender.setEmail(questionAnswers[3]);
+                }
+                if (!questionAnswers[4].equals("undefined")){
+                    attender.setCompany(questionAnswers[4]);
+                }
+            }
+            attenderService.saveAttender(attender);
         }catch (Exception e){
             e.printStackTrace();
-            resultId="ERROR";
         }
-
-        return resultId;
-    }
-    @RequestMapping(value = "/to-attendersuccess")
-    public String attendersuccess(@RequestParam(value = "assemblyId",defaultValue = "") String assemblyId,@RequestParam(value = "feeId",defaultValue = "") String feeId,Model model,HttpServletRequest request){
         Assembly assembly=assemblyService.findAssemblyById(assemblyId);
         Fee fee=feeService.findFeeById(feeId);
         model.addAttribute("fee",fee);
         model.addAttribute("assembly",assembly);
         return "assembly/attendSuccess";
+    }
+    @RequestMapping(value = "/to-attendersuccess")
+    public String attendersuccess(@RequestParam(value = "assemblyId",defaultValue = "") String assemblyId,@RequestParam(value = "feeId",defaultValue = "") String feeId,Model model,HttpServletRequest request){
+        return "";
     }
     @RequestMapping(value = "/to-comment")
     public String commentAdd(@RequestParam(value = "assemblyId",defaultValue = "") String assemblyId,Model model){
@@ -368,5 +387,28 @@ public class AssemblyController extends  BaseController{
         }
 
         return resultId;
+    }
+    @RequestMapping(value = "/to-pay-for-confirm")
+    public String toPayForConfirm(HttpServletRequest request,RedirectAttributes attr) {
+        String code = request.getParameter("code");
+        String state = request.getParameter("state");
+        String[] states=state.split("_");
+        String feeId=states[0];
+        String assemblyId = states[1];
+        String questionAnswer = states[2];
+        System.out.println("feeId"+feeId);
+        System.out.println("questionAnswer"+questionAnswer);
+        System.out.println("assemblyId"+assemblyId);
+
+        Fee fee = feeService.findFeeById(feeId);
+
+        String payMessageTitle = "您在邂逅活动的报名款项："+fee.getFeeTitle() ;
+        String jsApiParams = WxPayUtils.userPayToCorp(code,payMessageTitle,fee.getFee());
+        attr.addAttribute("jsApiParams",jsApiParams);
+        attr.addAttribute("payTip","你确定要支付"+fee.getFee()+"元吗");
+        attr.addAttribute("okUrl",request.getContextPath()+"/assembly/saveAttender?assemblyId="+assemblyId+"&feeId="+feeId+"&questionAnswer="+questionAnswer);
+        attr.addAttribute("backUrl",request.getContextPath()+"/assembly/to-detail?assemblyId="+assemblyId);
+
+        return "redirect:/wxPay/to-pay/";
     }
 }

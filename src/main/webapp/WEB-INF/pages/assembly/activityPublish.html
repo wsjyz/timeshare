@@ -55,7 +55,7 @@
                             <div class="item-inner">
                                 <div class="item-title label">活动开始时间</div>
                                 <div class="item-input">
-                                    <input  class="datetimePicker" name="startTime" placeholder="">
+                                    <input  type="text" class="datetimePickerStartTime" name="startTime" placeholder="">
                                 </div>
                             </div>
                         </div>
@@ -65,7 +65,7 @@
                             <div class="item-inner">
                                 <div class="item-title label">活动结束时间</div>
                                 <div class="item-input">
-                                    <input class="datetimePicker" name="endTime" placeholder="">
+                                    <input type="text" class="datetimePickerEndTime" name="endTime" placeholder="">
                                 </div>
                             </div>
                         </div>
@@ -113,20 +113,20 @@
                 <ul class="activitySettings">
                     <li>
                         <input type="hidden" name="assemblyType"  value="online"/>
-                        活动类型
-                        <a class="icon icon-right pull-right" href="#routerActivityType"></a>
+                        <a style="color:black" href="#routerActivityType"> 活动类型
+                        <span class="icon icon-right pull-right"></span></a>
                     </li>
                     <li>
                         <input type="hidden" name="feeId"  value=""/>
-                        报名费用
-                        <a class="icon icon-right pull-right" href="#routerActivityFee"></a>
+                        <a style="color:black" href="#routerActivityFee">报名费用
+                            <span class="icon icon-right pull-right"></span></a>
                     </li>
                     <li>
                         <input type="hidden" name="onApply"  value=""/>
                         <input type="hidden" name="phoneNumber"  value=""/>
                         <input type="hidden" name="applyId"  value=""/>
-                        报名设置
-                        <a class="icon icon-right pull-right" href="#routerEnrollSetting"></a>
+                        <a style="color:black" href="#routerEnrollSetting"> 报名设置
+                            <span class="icon icon-right pull-right"></span></a>
                     </li>
                 </ul>
             </div>
@@ -247,9 +247,9 @@
                     <li class="feeItemDefault">
                         <div class="item-content">
                             <div class="item-inner">
-                                <div class="item-title label">金额</div>
+                                <div class="item-title label">金额(元)</div>
                                 <div class="item-input">
-                                    <input type="text" placeholder="" name="feeStr">
+                                    <input type="text" placeholder="金额不能少于2元" onkeyup="if(/\D/.test(this.value)){$.alert('只能输入数字');this.value='';} if(this.value!='' && this.value<2){$.alert('金额不能少于2元');this.value='';}" name="feeStr">
                                 </div>
                             </div>
                         </div>
@@ -257,9 +257,9 @@
                     <li class="feeItemDefault">
                         <div class="item-content">
                             <div class="item-inner">
-                                <div class="item-title label">名额限制</div>
+                                <div class="item-title label">名额限制(人)</div>
                                 <div class="item-input">
-                                    <input type="text" placeholder="" name="quota">
+                                    <input type="text" placeholder="" onkeyup="if(/\D/.test(this.value)){$.alert('只能输入数字');this.value='';}" name="quota">
                                 </div>
                             </div>
                         </div>
@@ -383,8 +383,12 @@
 
 <script>
     $(function(){
-        $(".datetimePicker").datetimePicker({
-            value: ['2017', '03', '31', '9', '34']
+        var mydate=new Date();
+        $(".datetimePickerStartTime").datetimePicker({
+            value: [ mydate.getFullYear(), mydate.getMonth()+1, mydate.getDate(), mydate.getHours(), mydate.getMinutes()]
+        });
+        $(".datetimePickerEndTime").datetimePicker({
+            value: [mydate.getFullYear(), mydate.getMonth()+1, mydate.getDate()+2, mydate.getHours(), mydate.getMinutes()]
         });
 
         $(document).on('beforePageSwitch', '#routerAddWallpaper', function(){

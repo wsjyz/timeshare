@@ -63,7 +63,10 @@
     vertical-align: top;
     font-size: .75rem;
 }
-
+.bar-header-secondary .cities{
+    padding-left: .5rem;
+    width:3rem;
+}
 .searchIcon {
     width: 1.5rem;
     height: 1.5rem;
@@ -74,6 +77,8 @@
 }
 
 select {
+    height: 2.2rem;
+    line-height: 2.2rem;
     /*Chrome和Firefox里面的边框是不一样的，所以复写了一下*/
     border: solid 1px #000;
     /*很关键：将默认的select选择框样式清除*/
@@ -505,14 +510,14 @@ header.commentUser .userPhoto{
     height:8rem;
     line-height: 8rem;
     color:#333;
-    font-size:1rem;
+    font-size:.8rem;
+    font-weight: bold;
 }
 .gongxi img{
-    width:1rem;
+    width:1.4rem;
     position:relative;
-    top:.2rem;
+    top:.4rem;
 }
-
 .share{
     text-align: center;
 }
@@ -627,12 +632,12 @@ header.commentUser .userPhoto{
     border-bottom:1px solid #ccc;
 }
 /*.activityRow{*/
-    /*padding-left:0;*/
-    /*padding-top:.1rem;*/
-    /*padding-bottom:.2rem;*/
-    /*margin-right:.2rem;*/
-    /*margin-bottom:0;*/
-    /*border-bottom:1px solid #ccc;*/
+/*padding-left:0;*/
+/*padding-top:.1rem;*/
+/*padding-bottom:.2rem;*/
+/*margin-right:.2rem;*/
+/*margin-bottom:0;*/
+/*border-bottom:1px solid #ccc;*/
 /*}*/
 .activityPublishHeader a.button-link{
 
@@ -878,4 +883,26 @@ a.pull-right{
 .commentDescImgs img{
     height:1.2rem;
     margin-right:1rem;
+}
+
+.attendSuccessHeader{
+    background-color: #fff;
+}
+
+.attendSuccessContent .pull-left img{
+    height:3.9rem;
+    margin-bottom:.6rem;
+}
+.attendSuccessContent .activityRow{
+    height:1.2rem;
+    line-height: 1.2rem;
+    font-size:.7rem;
+    color:#b2b8e9;
+}
+
+.activityPublishContent input[type="text"],.activityPublishContent input.datetimePicker{
+    border:none;
+    border-bottom:1px solid #ccc;
+    padding-bottom:0;
+    height:1.5rem;
 }

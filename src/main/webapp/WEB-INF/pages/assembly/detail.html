@@ -47,16 +47,17 @@
           <div class="content activityContent">
               <div class="content-block">
                   <input type="hidden" name="feeId" value="">
+                  <input type="hidden" name="price" value="">
                   <img class="fullWidth" src="${assembly.titleImg}"  />
                   <h4 class="activityTitle">${assembly.title}</h4>
                   <div class="activityDesc">
                       <span>${assembly.createTime}</span>
                       <img class="eyeImg" src="${request.contextPath}/images/assembly/icon/eye.svg" />
-                      <span class="viewNum">${assembly.browseTimes}</span>
+                      <span class="viewNum">${assembly.browseTimes}</span>${assembly.browseTimes}
                   </div>
                   <div class="activityRow">
                       <img class="clockImg" src="${request.contextPath}/images/assembly/icon/clock.png"/>
-                      <span>${assembly.startTime}至  ${assembly.endTime}</span>
+                      <span>${assembly.startTime} 至  ${assembly.endTime}</span>
                   </div>
                   <div class="activityRow">
                       <img src="${request.contextPath}/images/assembly/icon/type.png" />
@@ -342,7 +343,7 @@
                             '           </div>'+
                             '           <div class="item-input">'+
                             '               <label class="normalPrice">${fee.fee}</label>'+
-                            '               <label radioName="priceType" class="radioLabel" id="priceType${fee.feeId}" data-id="${fee.feeId}" /><input for="priceType${fee.feeId}" name="priceType" type="radio" value="${fee.feeId}">'+
+                            '               <label radioName="priceType" class="radioLabel" id="priceType${fee.feeId}" data-id="${fee.feeId}" data-price="${fee.fee}" /><input for="priceType${fee.feeId}" name="priceType" type="radio" value="${fee.feeId}">'+
                             '           </div>'+
                             '       </div>'+
                             '   </div>'+
@@ -377,7 +378,9 @@
                                     $.alert("请选择一项报名费用!");
                                     return false;
                                 }
-                                $("input[name='feeId']").val($("input[name='priceType']:checked").val())
+                                var price=$('label[radioname="priceType"].checked').attr('data-price');
+                                $("input[name='price']").val(price);
+                                $("input[name='feeId']").val(feeId);
                                 showNextStep();
                             }
                         },
@@ -469,6 +472,8 @@
                             bold: true,
                             onClick:function(){
                                 var feeId=$("input[name='feeId']").val();
+                                var price=$("input[name='price']").val();
+
                                 var userName=$("input[name='userName']").val();
                                 var phone=$("input[name='phone']").val();
                                 var wxName=$("input[name='wxName']").val();
@@ -500,11 +505,9 @@
                                 if(companyName!="" && companyName!=undefined){
                                     questionAnswer=questionAnswer+","+companyName;
                                 }
-                                $.post("${request.contextPath}/assembly/saveAttender",{"assemblyId":"${assembly.assemblyId}","feeId":feeId,"questionAnswer":questionAnswer},function (data) {
-                                    if (data!="error"){
-                                        location='${request.contextPath}/assembly/to-attendersuccess?assemblyId=${assembly.assemblyId}&feeId='+feeId;
-                                    }
-                                });
+                                    window.location.href = "https://open.weixin.qq.com/connect/oauth2/authorize?appid=wxcd8903dd6a9552eb" +
+                                            "&redirect_uri=http%3A%2F%2Fjk.zhangqidong.cn%2Ftime%2Fassembly%2Fto-pay-for-confirm%2F&response_type=code&scope=snsapi_base&state=" +feeId+"_${assembly.assemblyId}"+
+                                            "_questionAnswer="+questionAnswer+"#wechat_redirect";
                             }
                         },
                     ]

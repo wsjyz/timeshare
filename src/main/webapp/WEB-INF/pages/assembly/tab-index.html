@@ -1,17 +1,3 @@
-
-    <div class="swiper-container">
-        <div class="swiper-wrapper">
-            <div class="swiper-slide">
-                <a href="detail.html"><img src="${request.contextPath}/images/assembly/sample/img1.png" /></a>
-            </div>
-            <div class="swiper-slide">
-                <img src="${request.contextPath}/images/assembly/sample/img2.png" />
-            </div>
-            <div class="swiper-slide">
-                <img src="${request.contextPath}/images/assembly/sample/img1.png"/>
-            </div>
-        </div>
-    </div>
     <div class="content-block card-container">
     </div>
     <!-- 默认的下拉刷新层 -->
@@ -23,17 +9,6 @@
     </div>
 <script>
     $.init();
-    //banner图轮播
-    setTimeout(function () {
-        var swiper = new Swiper('.swiper-container', {
-            direction: 'horizontal',
-            spaceBetween: 30,
-            centeredSlides: true,
-            autoplay: 2000,
-            autoplayDisableOnInteraction: false,
-            loop: true
-        });
-    }, 0);
     $.showIndicator();
     var loading = false;
     // 最多可加载的条目
@@ -50,6 +25,7 @@
             var type="线上活动";
             if(assembly.type=="online"){
                 type="线上活动";
+
             }
             if(assembly.type=="face"){
                 type="线下活动";
@@ -61,11 +37,11 @@
                 type="企业参考";
             }
             html +=' <div class="card" data-id="'+assembly.assemblyId+'">' +
-                    ' <div class="userRow">'+
-                    ' <img class="userPhoto" src="'+assembly.userImg+'" align="left" style="border-radius:25px" />'+
-                    ' <span class="userName">'+assembly.userName+'</span>'+
+                    ' <div class="userRow" >'+
+                    ' <img class="userPhoto" src="'+assembly.userImg+'" align="left" style="border-radius:25px;margin-top: 0.2rem" />'+
+                    ' <span class="userName" style="margin-top: 0.2rem;margin-left:0.2rem">'+assembly.userName+'</span>'+
                     '</div>'+
-                    ' <div>'+
+                    ' <div style="margin-top: 0.5rem">'+
                     ' <img src="'+assembly.titleImg+'" class="fullWidth" height="256px"  />'+
                     ' </div>'+
                     ' <h4 class="activityTitle">'+assembly.title+'</h4>'+

@@ -84,7 +84,7 @@ public class CommentServiceImpl implements CommentService {
                     comment.setCommentImgList(commentImgList);
                 }
                 if (StringUtils.isNotEmpty(comment.getReplyContent())){
-                    String[] replyContent=comment.getReplyContent().split("$#");
+                    String[] replyContent=comment.getReplyContent().split("&#");
                     List<String> replyContentList=new ArrayList<String>();
                     for (int i=0;i<replyContent.length;i++){
                         replyContentList.add(replyContent[i]);

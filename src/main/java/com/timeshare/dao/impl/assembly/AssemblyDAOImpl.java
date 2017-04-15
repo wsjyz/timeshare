@@ -15,7 +15,9 @@ import org.springframework.stereotype.Repository;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 
 /**
@@ -150,7 +152,8 @@ public class AssemblyDAOImpl extends BaseDAO implements AssemblyDAO {
             sql.append(" and ass.rendezvous like ?");
             list.add("%"+Assembly.getRendezvous()+"%");
         }
-        sql.append(" limit ?,?");
+        ;
+        sql.append(" and ass.end_time>now() limit ?,?");
         list.add(startIndex);
         list.add(loadSize);
         return getJdbcTemplate().query(sql.toString(),list.toArray(),new AssemblyRowMapper());

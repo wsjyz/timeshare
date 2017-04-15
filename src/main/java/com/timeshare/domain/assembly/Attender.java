@@ -18,6 +18,51 @@ public class Attender extends BaseDomain {
     private String userImg;
     private String userName;
     private String questionAnswer;
+    private String userNameTitle;
+    private String phone;
+    private String email;
+    private String wx;
+    private String company;
+
+    public String getUserNameTitle() {
+        return userNameTitle;
+    }
+
+    public void setUserNameTitle(String userNameTitle) {
+        this.userNameTitle = userNameTitle;
+    }
+
+    public String getPhone() {
+        return phone;
+    }
+
+    public void setPhone(String phone) {
+        this.phone = phone;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public String getWx() {
+        return wx;
+    }
+
+    public void setWx(String wx) {
+        this.wx = wx;
+    }
+
+    public String getCompany() {
+        return company;
+    }
+
+    public void setCompany(String company) {
+        this.company = company;
+    }
 
     public void setQuestionAnswer(String questionAnswer) {
         this.questionAnswer = questionAnswer;
