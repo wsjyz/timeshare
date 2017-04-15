@@ -12,6 +12,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.CookieValue;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
@@ -45,13 +47,15 @@ public class WithdrawalLogController extends  BaseController{
         return "info";
     }
 
+    @RequestMapping(value = "/gotoWithdrawalLog")
+    public String gotoWithdrawalLog() {
+        return "crowdfunding/txjl";
+    }
+
+    @ResponseBody
     @RequestMapping(value = "/listByOwner")
-    public String listByOwner(WithdrawalLog WithdrawalLog, @CookieValue(value="time_sid", defaultValue="") String userId, Model model) {
+    public List<WithdrawalLog> listByOwner(@RequestParam int startIndex, @RequestParam int loadSize, @CookieValue(value="time_sid", defaultValue="") String userId) {
         userId="00359e8721c44d168aac7d501177e314";
-        List<WithdrawalLog> withdrawalLogList= withdrawalLogService.findWithdrawalLogByOwner(userId,0,10);
-        for (WithdrawalLog withdrawalLogItem: withdrawalLogList) {
-            System.out.println(withdrawalLogItem.getWithdrawalCash()+"---"+withdrawalLogItem.getWithdrawalStatus()+"----"+withdrawalLogItem.getWithdrawalTime()+"----"+withdrawalLogItem.getReplyMsg());
-        }
-        return "info";
+        return withdrawalLogService.findWithdrawalLogByOwner(userId,startIndex,loadSize);
     }
 }

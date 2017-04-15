@@ -46,6 +46,7 @@
             <list>
                 <value>classpath:c3p0.properties</value>
                 <value>classpath:jdbc.properties</value>
+                <value>classpath:quartz.properties</value>
             </list>
         </property>
     </bean>
@@ -74,4 +75,6 @@
     </tx:advice>
     <tx:annotation-driven/>
 
+    <!--引入 job xml-->
+    <import resource="spring-config-quartz.xml" />
 </beans>

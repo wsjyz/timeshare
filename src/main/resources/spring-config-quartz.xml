@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	   xmlns:tx="http://www.springframework.org/schema/tx"
+	   xsi:schemaLocation="
+       http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+       http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx.xsd
+       ">
+
+	<!--每月1号重置一次现金账户提现次数 begin-->
+	<bean id="resetMonthWithdrawalNumberJob" class="com.timeshare.job.ResetMonthWithdrawalNumberJob" />
+	<bean id="resetMonthWithdrawalNumberJobFactory" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+		<property name="targetObject">
+			<ref bean="resetMonthWithdrawalNumberJob" />
+		</property>
+		<property name="targetMethod">
+			<value>run</value>
+		</property>
+		<property name="concurrent">
+			<value>false</value>
+		</property>
+	</bean>
+	<bean id="resetMonthWithdrawalNumberJobTimes" class="org.springframework.scheduling.quartz.CronTriggerBean">
+		<property name="jobDetail">
+			<ref bean="resetMonthWithdrawalNumberJobFactory" />
+		</property>
+		<property name="cronExpression">
+			<value>${RESET_MONTH_WITHDRAWAL_NUMBER_JOB.CRONEXPRESSION}</value>
+		</property>
+	</bean>
+	<!--每月1号重置一次现金账户提现次数 end-->
+
+	<!--#自动退款及处理现金账户JOB begin-->
+	<bean id="autoRefundAndMoneyAccountJob" class="com.timeshare.job.AutoRefundAndMoneyAccountJob" />
+	<bean id="autoRefundAndMoneyAccountJobFactory" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+		<property name="targetObject">
+			<ref bean="autoRefundAndMoneyAccountJob" />
+		</property>
+		<property name="targetMethod">
+			<value>run</value>
+		</property>
+		<property name="concurrent">
+			<value>false</value>
+		</property>
+	</bean>
+	<bean id="autoRefundAndMoneyAccountJobTimes" class="org.springframework.scheduling.quartz.CronTriggerBean">
+		<property name="jobDetail">
+			<ref bean="autoRefundAndMoneyAccountJobFactory" />
+		</property>
+		<property name="cronExpression">
+			<value>${AUTO_REFUND_AND_MONEY_ACCOUNT_JOB.CRONEXPRESSION}</value>
+		</property>
+	</bean>
+	<!--#自动退款及处理现金账户JOB end-->
+
+	<bean id="quartzTrigger" lazy-init="false" autowire="no"
+		class="org.springframework.scheduling.quartz.SchedulerFactoryBean">
+		<property name="triggers">
+			<list>
+				<ref bean="resetMonthWithdrawalNumberJobTimes"/>
+				<ref bean="autoRefundAndMoneyAccountJobTimes"/>
+			</list>
+		</property>
+	</bean>
+</beans>

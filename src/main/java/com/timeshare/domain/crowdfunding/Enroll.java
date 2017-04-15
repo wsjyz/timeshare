@@ -27,12 +27,24 @@ public class Enroll extends BaseDomain {
     private String payStatus;
     //'支付金额'
     private BigDecimal payAmount;
+    //是否已经转移到了现金账户
+    private String isTransferCashAccount;
     //'商户支付交易号'
     private String payTradeNo;
     //'商户退款交易号'
     private String refundTradeNo;
 
+    //预约的众筹项目名称
+    private String projectName;
+    //预约的众筹项目详情
+    private String detail;
+    //预约的众筹项目图片路径
+    private String imageUrl;
 
+    //所属项目最小人数 用于判断是否成团
+    private String minPeoples;
+    //所属项目发起人拥有者
+    private String ownerUserId;
 
     public String getPayTradeNo() {
         return payTradeNo;
@@ -128,5 +140,53 @@ public class Enroll extends BaseDomain {
 
     public void setPayAmount(BigDecimal payAmount) {
         this.payAmount = payAmount;
+    }
+
+    public String getProjectName() {
+        return projectName;
+    }
+
+    public void setProjectName(String projectName) {
+        this.projectName = projectName;
+    }
+
+    public String getDetail() {
+        return detail;
+    }
+
+    public void setDetail(String detail) {
+        this.detail = detail;
+    }
+
+    public String getImageUrl() {
+        return imageUrl;
+    }
+
+    public void setImageUrl(String imageUrl) {
+        this.imageUrl = imageUrl;
+    }
+
+    public String getIsTransferCashAccount() {
+        return isTransferCashAccount;
+    }
+
+    public void setIsTransferCashAccount(String isTransferCashAccount) {
+        this.isTransferCashAccount = isTransferCashAccount;
+    }
+
+    public String getMinPeoples() {
+        return minPeoples;
+    }
+
+    public void setMinPeoples(String minPeoples) {
+        this.minPeoples = minPeoples;
+    }
+
+    public String getOwnerUserId() {
+        return ownerUserId;
+    }
+
+    public void setOwnerUserId(String ownerUserId) {
+        this.ownerUserId = ownerUserId;
     }
 }

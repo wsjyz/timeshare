@@ -20,7 +20,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 
 import java.math.BigDecimal;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -59,8 +61,44 @@ public class CrowdFundingServiceImpl implements CrowdFundingService {
         }
         return null;
     }
+    //众筹详情页
+    public CrowdFunding findCrowdFundingDetailByCrowdfundingId(String crowdfundingId){
+        List<CrowdFunding> crowdFundingList=crowdFundingDAO.findCrowdFundingToIndex(0,1,crowdfundingId);
+        if(crowdFundingList!=null && crowdFundingList.size()>0){
+            return crowdFundingList.get(0);
+        }
+        return null;
+    }
     //众筹首页集合
     public List<CrowdFunding> findCrowdFundingToIndex(int startIndex, int loadSize){
-        return crowdFundingDAO.findCrowdFundingToIndex(startIndex,loadSize);
+        return crowdFundingDAO.findCrowdFundingToIndex(startIndex,loadSize,null);
     }
+    //我发起的众筹
+    public List<CrowdFunding> findCrowdFundingToMyCrowdFunding(int startIndex, int loadSize,String userId){
+        return crowdFundingDAO.findCrowdFundingToMyCrowdFunding(startIndex,loadSize,userId);
+    }
+    //下架
+    public String crowdFundingToShelve(CrowdFunding crowdFunding) {
+        return crowdFundingDAO.modifyEnroll(crowdFunding);
+    }
+    //用户自行下架
+    public String crowdFundingToShelveByCrowdfundingId(String crowdfundingId,String offShelveReason) {
+        if(StringUtils.isNotBlank(crowdfundingId)){
+            CrowdFunding crowdfunding=findCrowdFundingById(crowdfundingId);
+            crowdfunding.setCrowdfundingStatus(Contants.CROWD_FUNDING_STATUS.OFF_SHELVE.name());
+            crowdfunding.setOffShelveReason(offShelveReason);
+            crowdfunding.setOptTime(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date()));
+            return crowdFundingDAO.modifyEnroll(crowdfunding);
+        }
+        return Contants.FAILED;
+    }
+
+    public CrowdFunding findCrowdFundingToPay(String crowdfundingId) {
+        List<CrowdFunding> crowdFundingList=crowdFundingDAO.findCrowdFundingToPay(crowdfundingId);
+        if(crowdFundingList!=null && crowdFundingList.size()>0){
+            return crowdFundingList.get(0);
+        }
+        return null;
+    }
+
 }

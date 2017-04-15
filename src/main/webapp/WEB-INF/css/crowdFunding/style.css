@@ -9,21 +9,26 @@ html{-ms-touch-action:none; background:#eeeff4}
 body{color:#3f435e;font-size:0.7rem}
 textarea{resize:none}
 i,em{font-style:normal}
+ul,li{ list-style:none;margin:0;padding:0}
 a{color:#000;text-decoration:none}
 header .back{display:inline-block;width:2.2rem}
 header .back img{width:0.8rem;height:0.8rem;margin-top:0.7rem}
 header .back:active{background:#08af00;border-radius:0;-webkit-border-radius:0;-moz-border-radius:0}
-section{margin-top:0.7rem}
+section{margin:0.7rem 0}
 .module{padding:0.7rem;overflow:hidden;clear:both}
 .warp{margin:0 0.7rem}
 .clearfix:after,section:after{content:" ";display:block;height:0;clear:both;visibility:hidden}
 .cl{clear:both}
-.tl-r{text-align:right}
-.mt5{margin-top:0.7rem}
+.t-c{text-align:center}
+.t-r{text-align:right}
+.mt5{margin-top:0.6rem}
 .mt10{margin-top:1rem}
 .no-mt{margin-top:0 !important}
+.bar{ background:#fff}
 .list-block{margin:0}
+.content-block{margin:1rem 0}
 .content-block-title{color:#3f435e;margin:1rem 0.7rem 0.5rem}
+.list-block .item-title.label{width:25%}
 /*表单*/
 ::-webkit-input-placeholder{color:#d3d9e5}
 :-moz-placeholder{color:#d3d9e5}
@@ -32,19 +37,7 @@ section{margin-top:0.7rem}
 input:focus::-webkit-input-placeholder{color:#d3d9e5}
 input::-webkit-input-speech-button{display:none}
 .btn-dark{background:#3f435e;border-color:#3f435e;color:#fff;border-radius:1.25rem}
-.btn-light{background:#d3d9e5;border-color:#3f435e;color:#3f435e;border-radius:1.25rem}
-.list-block input[type="text"],
-.list-block input[type="password"],
-.list-block input[type="search"],
-.list-block input[type="email"],
-.list-block input[type="tel"],
-.list-block input[type="url"],
-.list-block input[type="date"],
-.list-block input[type="datetime-local"],
-.list-block input[type="time"],
-.list-block input[type="number"],
-.list-block select,
-.list-block textarea{padding:0 0 0 0.25rem;height:2.15rem;color:#000;font-size:0.8rem;font-family:inherit;resize:none}
+.btn-light{background:#d3d9e5;border-color:#d3d9e5;color:#3f435e;border-radius:1.25rem}
 /*发布表单*/
 .form-group{position:relative;display:block;padding:1px 15px;margin:10px 0}
 .form-group .input-label{display:block;font-size:0.7rem;color:#3f435e;padding:0}
@@ -68,6 +61,9 @@ textarea.form-control{height:auto;line-height:normal}
 .i-menu{display:inline-block;width:2.2rem;height:2.2rem;background:url(../../images/crowdFunding/icon-menu.png) no-repeat center center; background-size:50%}
 .i-search{display:inline-block;width:2.2rem;height:2.2rem;background:url(../../images/crowdFunding/icon-search.png) no-repeat center center; background-size:50%}
 .i-edit{display:inline-block;width:2.2rem;height:2.2rem;background:url(../../images/crowdFunding/icon-edit.png) no-repeat center center; background-size:50%}
+.i-prompt{display:inline-block;width:0.9rem; vertical-align:middle}
+.i-reply{float:left;margin-top:0.2rem;margin-right:5px;display:block;width:0.8rem;height:0.8rem;background:url(../../images/crowdFunding/icon-reply.png) no-repeat center center; background-size:100%}
+.i-praise{float:left;margin-top:0.2rem;margin-right:5px;display:block;width:0.8rem;height:0.8rem;background:url(../../images/crowdFunding/icon-praise.png) no-repeat center center; background-size:100%}
 /*我的*/
 .me-bg{height:15rem;background:url(../../images/crowdFunding/pic.jpg) no-repeat 0 -2.2rem;background-size:100%}
 .me-info{padding-top:2.5rem;font-size:0.8rem;text-align:center;color:#fff}
@@ -202,7 +198,91 @@ textarea.form-control{height:auto;line-height:normal}
     align-items: center;}
 .signup .button{top:inherit; display:inline-block; background:#40445f;margin-right:10px}
 .signup .cost{color:#f38f36;font-size:0.8rem}
+/*ÏêÇé ÒÑ±¨Ãû*/
+.details-apply ul{ background:none}
+.details-apply li{margin:0.5rem 0; background:#fff}
+.details-apply img{width:2rem;height:2rem}
+.details-apply .cop{color:#c7c7c7;font-size:0.6rem}
+.details-apply .yy-t{font-size:0.6rem}
+.details-apply .yy-price{color:#f38f36}
+/*ÏêÇé µãÆÀ*/
+.details-comment{padding:0}
+.details-comment ul{ background:none}
+.details-comment .item-content{-webkit-box-align:flex-start;
+    -webkit-align-items: flex-start;
+    align-items: flex-start;padding:0.6rem}
+.details-comment .item-media{ width:2.8rem; position:relative;width:2.8rem;height:2.8rem}
+.details-comment .item-media img{width:2.8rem;height:2.8rem}
+.details-comment .lv{position:absolute;bottom:0;right:0; background:#26a4d4;color:#fff;font-size:0.4rem;height:0.7rem;line-height:0.7rem;border-radius:0.35rem;padding:0 5px}
+.details-comment .flag{display:inline-block;background:#40445f;color:#fff;font-size:0.6rem;padding:0 5px}
+.details-comment .date,
+.details-comment .score{font-size:0.6rem;color:#747b95}
+.details-comment .browse{font-size:0.6rem;color:#b0b0b0}
+.details-comment .item-after .button{border-color:#b1b9ce;color:#21212d;margin-left:10px}
+.details-comment .star img{width:0.6rem;margin-right:5px}
+.details-comment .item-img{margin-top:0.6rem}
+.details-comment .item-img img{width:3.5rem;height:3.5rem;margin-right:10px}
+/*支付*/
+.pay-list{background:#fff;padding:0.7rem;display: -webkit-box;
+    display: -webkit-flex;
+    display: flex;
+    -webkit-box-pack:center;
+    -webkit-justify-content:center;
+    justify-content: center;
+    -webkit-box-align: center;
+    -webkit-align-items: center;
+    align-items: center;}
 
+.pay-list .txt{font-size:0.8rem; text-align:right}
+.pay-list .sum-price{color:#f38f36;font-size:1.5rem;text-align:left;margin-left:5px}
+/*提现*/
+.tx ul{margin:0.5rem 0}
+.tx-prompt{font-size:0.8rem;margin:1rem 0}
+.tx-price{color:#f38f36}
+.tx-btn{padding:0.7rem}
+.tx-btn .button{ background:#747b95;border-color:#747b95;color:#fff; float:right}
+/*提现记录*/
+.tx-record ul{margin:0.5rem 0}
+.tx-record .tag{display:inline-block;margin-top:4px;background:#40445f;color:#fff;font-size:0.65rem;padding:0 2px}
+.tx-record .date{color:#b1b9ce;margin-left:10px}
+.tx-record .item-content{padding:0 0.75rem}
+.tx-record ul li:last-child{font-size:0.65rem}
+.tx-record ul li:last-child a{color:#b1b9ce}
+.tx-record  .item-inner{padding-right:0}
+/*我发起的众筹*/
+.wfqdzc-list ul{ background:none}
+.wfqdzc-list li{margin:0.5rem 0; background:#fff}
+.wfqdzc-list .item-title-row{border-bottom:1px dashed #b1b9ce;padding-bottom:0.5rem}
+.wfqdzc-list .tag{display:inline-block;margin-top:4px;background:#40445f;color:#fff;font-size:0.65rem;padding:0 2px}
+.wfqdzc-list .date{color:#b1b9ce;margin-left:10px}
+.wfqdzc-list .item-text{ height:auto; line-height:none}
+.wfqdzc-list .item-subtitle{margin:0.5rem 0}
+/*我预约的众筹*/
+.wyydzc-list ul{ background:none}
+.wyydzc-list li{margin:0.5rem 0; background:#fff}
+.wyydzc-list img{width:5rem;height:3.75rem}
+/*±¨ÃûÃûµ¥*/
+.bmmd-list li{
+    display: -webkit-box;
+    display: -webkit-flex;
+    display: flex;
+    -webkit-box-pack: center;
+    -webkit-justify-content: center;
+    justify-content: center;
+    -webkit-box-align: center;
+    -webkit-align-items: center;
+    align-items: center; text-align:center; background:#fff;padding:0.7rem;border-bottom:1px solid #ddd}
+.bmmd-list li span{ width:50%}
+.table-head{display: -webkit-box;
+    display: -webkit-flex;
+    display: flex;
+    -webkit-box-pack: center;
+    -webkit-justify-content: center;
+    justify-content: center;
+    -webkit-box-align: center;
+    -webkit-align-items: center;
+    align-items: center; text-align:center}
+.table-head span{width:50%;font-size:0.8rem}
 
 
 

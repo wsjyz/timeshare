@@ -19,4 +19,14 @@ public interface CrowdFundingService {
     CrowdFunding findCrowdFundingById(String crowdFundingById);
     //众筹首页集合
     public List<CrowdFunding> findCrowdFundingToIndex(int startIndex, int loadSize) ;
+    //众筹详情页
+    public CrowdFunding findCrowdFundingDetailByCrowdfundingId(String crowdfundingId);
+    //我发起的众筹
+    public List<CrowdFunding> findCrowdFundingToMyCrowdFunding(int startIndex, int loadSize,String userId) ;
+    //下架
+    public String crowdFundingToShelve(CrowdFunding crowdFunding) ;
+    //强行下架
+    public String crowdFundingToShelveByCrowdfundingId(String crowdfundingId,String offShelveReason) ;
+    //获取众筹对象用于执行支付
+    public CrowdFunding findCrowdFundingToPay(String crowdfundingId);
 }

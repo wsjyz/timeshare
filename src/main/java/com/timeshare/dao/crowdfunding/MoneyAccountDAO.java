@@ -13,4 +13,6 @@ public interface MoneyAccountDAO {
     String updateMoneyAccount(MoneyAccount moneyAccount);
     //我的提现
     List<MoneyAccount> findMoneyAccountByOwner(String userId);
+    //重置可提现次数
+    public String resetMonthWithdrawalNumber() ;
 }

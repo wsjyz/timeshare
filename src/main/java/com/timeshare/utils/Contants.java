@@ -114,4 +114,10 @@ public interface Contants {
         SUCCESS,//已发放
         REJECT//已拒绝
     }
+    //是否已经转移到了现金账户
+    enum IS_TRANSFER_CASH_ACCOUNT {
+        YES,
+        NO
+    }
+
 }

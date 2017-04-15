@@ -44,7 +44,10 @@ public class WithdrawalLogDAOImpl extends BaseDAO implements WithdrawalLogDAO {
 
     @Override
     public List<WithdrawalLog> findWithdrawalLogByOwner(String userId,int startIndex, int loadSize) {
-        StringBuilder sql = new StringBuilder("select * from t_withdrawal_log where user_id='"+userId+"' limit "+startIndex+","+loadSize);
+        StringBuilder sql = new StringBuilder("select * from t_withdrawal_log where user_id='"+userId+"' ");
+        if(startIndex!=0 && loadSize!=0){
+            sql.append("limit "+startIndex+","+loadSize);
+        }
         return getJdbcTemplate().query(sql.toString(),new Object[]{},new WithdrawalLogRowMapper());
     }
 

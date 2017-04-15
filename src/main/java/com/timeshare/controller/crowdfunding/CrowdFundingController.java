@@ -1,43 +1,29 @@
 package com.timeshare.controller.crowdfunding;
 
-import com.alibaba.fastjson.JSON;
 import com.timeshare.controller.BaseController;
 import com.timeshare.domain.ImageObj;
-import com.timeshare.domain.Item;
-import com.timeshare.domain.SystemMessage;
 import com.timeshare.domain.UserInfo;
-import com.timeshare.domain.assembly.Assembly;
-import com.timeshare.domain.assembly.Attender;
-import com.timeshare.domain.assembly.Comment;
-import com.timeshare.domain.assembly.Fee;
 import com.timeshare.domain.crowdfunding.CrowdFunding;
+import com.timeshare.domain.crowdfunding.Enroll;
 import com.timeshare.service.UserService;
 import com.timeshare.service.crowdfunding.CrowdFundingService;
+import com.timeshare.service.crowdfunding.EnrollService;
 import com.timeshare.utils.Contants;
-import com.timeshare.utils.WxUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.env.SystemEnvironmentPropertySource;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.ui.ModelMap;
-import org.springframework.util.CollectionUtils;
 import org.springframework.web.bind.annotation.CookieValue;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpServletRequest;
-import java.io.UnsupportedEncodingException;
-import java.math.BigDecimal;
-import java.net.URLEncoder;
 import java.text.SimpleDateFormat;
-import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
-import java.util.Map;
 
 /**
  * Created by user on 2016/9/26.
@@ -52,15 +38,37 @@ public class CrowdFundingController extends  BaseController{
     @Autowired
     private CrowdFundingService crowdFundingService;
 
+    @Autowired
+    private EnrollService enrollService;
+
     protected Logger logger = LoggerFactory.getLogger(CrowdFundingController.class);
 
     @RequestMapping(value = "/createCrowdFunding")
     public String createCrowdFunding() {
-        return "crowdFunding/fbzc";
+        return "crowdfunding/fbzc";
     }
     @RequestMapping(value = "/toIndex")
     public String toIndex() {
-        return "crowdFunding/list";
+        return "crowdfunding/list";
+    }
+    @RequestMapping(value = "/toMyCrowdFunding")
+    public String toMyCrowdFunding() {
+        return "crowdfunding/wfqdzc";
+    }
+
+    @RequestMapping(value = "/toDetail")
+    public String toDetail(@RequestParam String crowdFundingId,Model model) {
+        //众筹详情页
+        CrowdFunding crowdFunding=crowdFundingService.findCrowdFundingDetailByCrowdfundingId(crowdFundingId);
+        model.addAttribute("crowdFunding",crowdFunding);
+
+        //已报名对象
+        if(crowdFunding!=null && StringUtils.isNotBlank(crowdFunding.getCrowdfundingId())){
+            List<Enroll> enrollList=enrollService.findCrowdfundingEnrollList(crowdFunding.getCrowdfundingId());
+            model.addAttribute("enrollList",enrollList);
+        }
+
+        return "crowdfunding/details";
     }
 
     @ResponseBody
@@ -105,25 +113,33 @@ public class CrowdFundingController extends  BaseController{
         return null;
     }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+    //我发起的众筹
+    @ResponseBody
+    @RequestMapping(value = "/findCrowdFundingByOwner")
+    List<CrowdFunding> findCrowdFundingByOwner(@CookieValue(value="time_sid", defaultValue="") String userId,@RequestParam int startIndex,@RequestParam int loadSize){
+        try{
+            //MOCK
+            userId="00359e8721c44d168aac7d501177e314";
+            return crowdFundingService.findCrowdFundingToMyCrowdFunding(startIndex,loadSize,userId);
+        }
+        catch (Exception e){
+            e.printStackTrace();
+        }
+        return null;
+    }
+    //下架
+    @ResponseBody
+    @RequestMapping(value = "/crowdFundingToShelve")
+    String crowdFundingToShelve(@RequestParam String crowdfundingId,@RequestParam String offShelveReason,@CookieValue(value="time_sid", defaultValue="") String userId){
+        try{
+            //下架
+            return crowdFundingService.crowdFundingToShelveByCrowdfundingId(crowdfundingId,offShelveReason) ;
+        }
+        catch (Exception e){
+            e.printStackTrace();
+        }
+        return null;
+    }
 
     @RequestMapping(value = "/to-upload-img")
     public String toUploadImg(String crowdFundingId,HttpServletRequest request,Model model,@CookieValue(value="time_sid", defaultValue="admin") String userId) {

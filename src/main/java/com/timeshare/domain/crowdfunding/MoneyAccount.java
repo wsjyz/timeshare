@@ -16,6 +16,7 @@ public class MoneyAccount extends BaseDomain {
     private Integer monthWithdrawalNumber;
 
 
+
     public String getMoneyAccountId() {
         return moneyAccountId;
     }

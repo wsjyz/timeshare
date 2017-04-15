@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>众筹详情</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">      
+    <meta name="format-detection" content="telephone=no">
+    <meta name="format-detection" content="email=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta name="apple-mobile-web-app-title" content="众筹">
+    <meta name="Keywords" content="众筹">
+    <meta name="Description" content="众筹">
+    <link rel="stylesheet" type="text/css" href="${request.contextPath}/css/crowdFunding/sm.min.css">
+    <link rel="stylesheet" type="text/css" href="${request.contextPath}/css/crowdFunding/sm-extend.min.css">
+    <link rel="stylesheet" type="text/css" href="${request.contextPath}/css/crowdFunding/style.css">
+    <link rel="stylesheet" type="text/css" href="${request.contextPath}/css/crowdFunding/swiper.min.css">
+    <script type="text/javascript" src="${request.contextPath}/js/crowdFunding/zepto.min.js"></script>
+    <script type="text/javascript" src="${request.contextPath}/js/crowdFunding/config.js"></script>  </head>
+  <body>
+    <div class="page-group">
+        <div class="page page-current">
+        	<!--header start-->            
+            <header class="bar bar-nav bar-list">
+              <a href="${request.contextPath}/crowdFunding/toIndex" class="button button-link pull-left back">
+                <span class="icon icon-left"></span>返回
+              </a>
+              <a href="${request.contextPath}/crowdFunding/createCrowdFunding" class="icon i-edit pull-right"></a>
+              <h1 class="title">详情</h1>
+            </header>
+            <!--header end-->
+            <nav class="bar bar-tab signup">
+                <#if (crowdFunding.enrollCount >= crowdFunding.maxPeoples)>
+                    <span class="cost">名额已满</span>
+                <#else>
+                    <a href="${request.contextPath}/enroll/yy?crowdFundingId=${crowdFunding.crowdfundingId}&enrollId=" class="button button-fill button-round">报名参加</a>
+                    <span class="cost">¥${crowdFunding.reservationCost!}</span>
+                </#if>
+            </nav>
+            <!--页面内容区域 start-->
+            <div class="content">
+               <div class="details">
+                  <div class="item-box">
+                      <div class="zc-img"><img src="${request.contextPath}/${crowdFunding.imageUrl}_320x240.jpg"></div>
+                      <div class="zc-text">
+                          <div class="zc-name">
+                              <em class="tag">
+                                  <#if (crowdFunding.enrollCount >= crowdFunding.maxPeoples)>
+                                    已爆仓
+                                  <#else>
+                                    报名中
+                                  </#if>
+                              </em>
+                              ${crowdFunding.projectName!}</div>
+                          <div class="zc-info">
+                              <span class="time"><i class="i-time"></i>上课时间:${crowdFunding.curriculumEndTime!}</span>
+                              <span class="address"><i class="i-address"></i>${crowdFunding.sponsorCity!}</span>
+                          </div>
+                          <div class="dashed-line"></div>
+                          <div class="zc-info">
+                              <span class="price">众筹最低学费:
+                                  <#if crowdFunding.costType=='AA'>
+                                      ${crowdFunding.costTotal!}
+                                  <#else>
+                                      ${crowdFunding.costTotal/crowdFunding.maxPeoples!}
+                                  </#if>
+                                  元</span>
+                              <span class="num">学员人数:${crowdFunding.enrollCount}/${crowdFunding.maxPeoples}人</span>
+                          </div>
+                          <div class="row cb">
+                          	<div class="col-50">课程总成本:${crowdFunding.costTotal}</div>
+                            <div class="col-50">目前人均价:
+                                <#if crowdFunding.costType=='AA'>
+                                    ${crowdFunding.costTotal!}
+                                    <#else>
+                                        <#if crowdFunding.enrollCount==0>
+                                            ${crowdFunding.costTotal!}
+                                        <#else>
+                                            ${crowdFunding.costTotal/crowdFunding.enrollCount!}
+                                        </#if>
+
+                                </#if>
+                            </div>
+                          </div>
+                           <div class="zc-progress">
+
+                              <div class="progress"><div class="progress-bar" style="width:${crowdFunding.enrollCount/crowdFunding.maxPeoples*100}%"></div></div>
+                          </div>
+                      </div>
+                  </div>
+              </div>
+              <div class="buttons-row fixed-tab details-tab" data-offset="44">
+                  <a href="#tab1" class="tab-link active button">详情</a>
+                  <a href="#tab2" class="tab-link button">评论</a>
+                  <a href="#tab3" class="tab-link button">已报名</a>
+              </div>
+              <div class="tabs">
+                  <!--详情 start-->
+                  <div id="tab1" class="tab active">
+                    <div class="content-block details-content">
+                      <p>${crowdFunding.detail!}</p>
+                    </div>
+                  </div>
+                  <!--详情 end-->
+                  <!--评论 start-->
+                  <div id="tab2" class="tab">
+                      <!--<div class="content-block details-comment">-->
+                          <!--<div class="list-block media-list">-->
+                              <!--<ul>-->
+                                  <!--<li class="item-content">-->
+                                      <!--<div class="item-media"><img src="img/example.png"><span class="lv">LV4</span></div>-->
+                                      <!--<div class="item-inner">-->
+                                          <!--<div class="item-title-row">-->
+                                              <!--<div class="item-title">张学友<span class="flag">vip</span></div>-->
+                                              <!--<div class="item-after"><span class="date">3月2日</span></div>-->
+                                          <!--</div>-->
+                                          <!--<div class="item-subtitle score">-->
+                                              <!--打分<span class="star">-->
+                                    <!--<img src="img/icon-star.png"><img src="img/icon-star.png">-->
+                                    <!--<img src="img/icon-star.png"><img src="img/icon-star-e.png">-->
+                                    <!--</span>-->
+                                          <!--</div>-->
+                                          <!--<div class="item-text">此处是文本内容此处是文本内容此处是文本内容此处是文本内容此处是文本内容此处是文本内容</div>-->
+                                          <!--<div class="item-img">-->
+                                              <!--<img src="img/pic.jpg"><img src="img/pic.jpg"><img src="img/pic.jpg">-->
+                                          <!--</div>-->
+                                          <!--<div class="item-title-row mt5">-->
+                                              <!--<div class="item-title"><span class="browse">浏览234</span></div>-->
+                                              <!--<div class="item-after">-->
+                                                  <!--<button class="button btn-praise"><i class="i-praise"></i> 赞</button>-->
+                                                  <!--<button class="button btn-reply"><i class="i-reply"></i> 回复</button>-->
+                                              <!--</div>-->
+                                          <!--</div>-->
+                                      <!--</div>-->
+                                  <!--</li>-->
+                                  <!--<li class="item-content">-->
+                                      <!--<div class="item-media"><img src="../img/example.png"><span class="lv">LV4</span></div>-->
+                                      <!--<div class="item-inner">-->
+                                          <!--<div class="item-title-row">-->
+                                              <!--<div class="item-title">张学友<span class="flag">vip</span></div>-->
+                                              <!--<div class="item-after"><span class="date">3月2日</span></div>-->
+                                          <!--</div>-->
+                                          <!--<div class="item-subtitle score">-->
+                                              <!--打分<span class="star">-->
+                                    <!--<img src="img/icon-star.png"><img src="img/icon-star.png">-->
+                                    <!--<img src="img/icon-star.png"><img src="img/icon-star-e.png">-->
+                                    <!--</span>-->
+                                          <!--</div>-->
+                                          <!--<div class="item-text">此处是文本内容此处是文本内容此处是文本内容此处是文本内容此处是文本内容此处是文本内容</div>-->
+                                          <!--<div class="item-img">-->
+                                              <!--<img src="img/pic.jpg"><img src="img/pic.jpg"><img src="img/pic.jpg">-->
+                                          <!--</div>-->
+                                          <!--<div class="item-title-row mt5">-->
+                                              <!--<div class="item-title"><span class="browse">浏览234</span></div>-->
+                                              <!--<div class="item-after">-->
+                                                  <!--<button class="button btn-praise"><i class="i-praise"></i> 赞</button>-->
+                                                  <!--<button class="button btn-reply"><i class="i-reply"></i> 回复</button>-->
+                                              <!--</div>-->
+                                          <!--</div>-->
+                                      <!--</div>-->
+                                  <!--</li>-->
+                              <!--</ul>-->
+                          <!--</div>-->
+                          <!--<div class="content-block t-c"><a href="#">加载更多</a></div>-->
+                      <!--</div>-->
+                  </div>
+                  <!--评论 end-->
+                  <!--报名 start-->
+                  <div id="tab3" class="tab">
+                      <div class="list-block media-list details-apply">
+                          <ul>
+                              <#list enrollList as enroll>
+                                  <li class="item-content">
+                                      <div class="item-media"><img src="${enroll.imageUrl}"></div>
+                                      <div class="item-inner">
+                                          <div class="item-title-row">
+                                              <div class="item-title">${enroll.userName}</div>
+                                              <div class="item-after"><span class="yy-t">成功预约</span></div>
+                                          </div>
+                                          <div class="item-title-row">
+                                              <div class="item-title"><span class="cop">${enroll.corpName}</span></div>
+                                              <div class="item-after"><span class="yy-price">¥${enroll.payAmount}</span></div>
+                                          </div>
+                                      </div>
+                                  </li>
+                              </#list>
+                          </ul>
+                      </div>
+                  </div>
+                  <!--报名 end-->
+
+              </div>
+            </div>
+            <!-- 页面内容区域 end -->
+            
+        </div>
+    </div>
+  
+	<script type="text/javascript" src="${request.contextPath}/js/crowdFunding/sm.min.js"></script>
+    <script type="text/javascript" src="${request.contextPath}/js/crowdFunding/sm-extend.min.js"></script>
+	<script type="text/javascript" src="${request.contextPath}/js/crowdFunding/sm-city-picker.min.js"></script>
+ 	<script type="text/javascript" src="${request.contextPath}/js/crowdFunding/my-js.js"></script>
+  </body>
+  <script>
+      $(document).on('click', '.btn-reply',function () {
+          $.prompt('回复',
+              function (value) {
+                  $.alert(value);
+              },
+              function (value) {
+                  $.alert("取消了" );
+              }
+          );
+      });
+  </script>
+
+</html>

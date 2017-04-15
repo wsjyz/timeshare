@@ -25,7 +25,7 @@ import java.util.List;
 public class EnrollDAOImpl extends BaseDAO implements EnrollDAO {
     @Override
     public String saveEnroll(Enroll enroll) {
-        StringBuilder sql = new StringBuilder("INSERT INTO t_enroll (enroll_id, crowdfunding_id, enroll_user_id, user_name, phone, corp_name, invoice_title, invoice_type,pay_status,pay_amount,user_id,opt_time,pay_trade_no,refund_trade_no) VALUES (?, ?, ?, ?, ?, ?, ?, ?,?,?, ?, ?,?,?);");
+        StringBuilder sql = new StringBuilder("INSERT INTO t_enroll (enroll_id, crowdfunding_id, enroll_user_id, user_name, phone, corp_name, invoice_title, invoice_type,pay_status,pay_amount,user_id,opt_time,pay_trade_no,refund_trade_no,is_transfer_cash_account) VALUES (?, ?, ?, ?, ?, ?, ?, ?,?,?, ?, ?,?,?,?);");
         final String id = CommonStringUtils.genPK();
         int result = getJdbcTemplate().update(sql.toString(), new PreparedStatementSetter() {
             @Override
@@ -44,6 +44,8 @@ public class EnrollDAOImpl extends BaseDAO implements EnrollDAO {
                 ps.setString(12,enroll.getOptTime());
                 ps.setString(13,enroll.getPayTradeNo());
                 ps.setString(14,enroll.getRefundTradeNo());
+                ps.setString(14,enroll.getIsTransferCashAccount());
+
             }
         });
         if(result > 0){
@@ -100,6 +102,75 @@ public class EnrollDAOImpl extends BaseDAO implements EnrollDAO {
         }
     }
 
+    public List<Enroll> findCrowdfundingByMyEnroll(int startIndex, int loadSize,String userId) {
+        StringBuilder sql = new StringBuilder("select c.project_name,c.detail,o.image_url,e.* ");
+        sql.append("from t_enroll e ");
+        sql.append("left join t_crowdfunding c ");
+        sql.append("on e.crowdfunding_id=c.crowdfunding_id ");
+        sql.append("left join t_img_obj o ");
+        sql.append("on o.obj_id=e.crowdfunding_id ");
+        sql.append("and o.image_type='CROWD_FUNDING_IMG' ");
+
+        sql.append("where e.enroll_user_id='"+userId +"'");
+        sql.append(" and e.pay_status='PAYED' ");
+        sql.append("group by e.crowdfunding_id ");
+        sql.append("order by e.opt_time desc ");
+
+        sql.append("limit "+startIndex+","+loadSize);
+
+        return getJdbcTemplate().query(sql.toString(),new Object[]{},new EnrollDAOImpl.EnrollRowMapper());
+    }
+
+    public List<Enroll> findCrowdfundingEnrollList(String crowdfundingId,int startIndex, int loadSize) {
+        StringBuilder sql = new StringBuilder("select o.image_url,e.* ");
+        sql.append("from t_enroll e ");
+        sql.append("left join t_crowdfunding c ");
+        sql.append("on e.crowdfunding_id=c.crowdfunding_id ");
+        sql.append("left join t_user_info u ");
+        sql.append("on e.user_id=u.user_id ");
+        sql.append("left join t_img_obj o  ");
+        sql.append("on u.user_id=o.obj_id ");
+        sql.append("and o.image_type='USER_HEAD' ");
+        sql.append("where e.crowdfunding_id='"+crowdfundingId+"' ");
+        sql.append("and e.pay_status='PAYED' ");
+
+        if(startIndex>0 || loadSize>0){
+            sql.append("limit "+startIndex+","+loadSize);
+        }
+
+        return getJdbcTemplate().query(sql.toString(),new Object[]{},new EnrollDAOImpl.EnrollRowMapper());
+    }
+
+    public List<Enroll> findNeedAotuRefundEnroll() {
+        StringBuilder sql = new StringBuilder("select c.min_peoples,c.user_id owner_user_id,e.* ");
+        sql.append("from t_crowdfunding c ");
+        sql.append("left join t_enroll e ");
+        sql.append("on c.crowdfunding_id=e.crowdfunding_id ");
+        sql.append("where SYSDATE()>=c.curriculum_end_time ");
+        sql.append("and e.pay_status='PAYED' ");
+        return getJdbcTemplate().query(sql.toString(),new Object[]{},new EnrollDAOImpl.EnrollRowMapper());
+    }
+    public String autoRefundAfterUpdate(String enrollId,String refundTradeNo) {
+        StringBuilder sql = new StringBuilder("update t_enroll set ");
+        sql.append(" pay_status ='REFUND',");
+        sql.append(" refund_trade_no = 'refundTradeNo'");
+
+        sql.append(" where enroll_id='" + enrollId + "'");
+        int result = getJdbcTemplate().update(sql.toString());
+        if(result > 0){
+            return Contants.SUCCESS;
+        }else{
+            return "FAILED";
+        }
+    }
+
+
+
+
+
+
+
+
     class EnrollRowMapper implements RowMapper<Enroll>{
         @Override
         public Enroll mapRow(ResultSet rs, int i) throws SQLException {
@@ -118,7 +189,46 @@ public class EnrollDAOImpl extends BaseDAO implements EnrollDAO {
             enroll.setOptTime(rs.getString("opt_time"));
             enroll.setPayTradeNo(rs.getString("pay_trade_no"));
             enroll.setRefundTradeNo(rs.getString("refund_trade_no"));
+            enroll.setIsTransferCashAccount(rs.getString("is_transfer_cash_account"));
+            try {
+                if (rs.findColumn("project_name") > 0 ) {
+                    enroll.setProjectName(rs.getString("project_name"));
+                }
+            }
+            catch (SQLException e) {
+            }
+            try {
+                if (rs.findColumn("detail") > 0 ) {
+                    enroll.setDetail(rs.getString("detail"));
+                }
+            }
+            catch (SQLException e) {
+            }
+            try {
+                if (rs.findColumn("image_url") > 0 ) {
+                    enroll.setImageUrl(rs.getString("image_url"));
+                }
+            }
+            catch (SQLException e) {
+            }
+            try {
+                if (rs.findColumn("min_peoples") > 0 ) {
+                    enroll.setMinPeoples(rs.getString("min_peoples"));
+                }
+            }
+            catch (SQLException e) {
+            }
+            try {
+                if (rs.findColumn("owner_user_id") > 0 ) {
+                    enroll.setMinPeoples(rs.getString("owner_user_id"));
+                }
+            }
+            catch (SQLException e) {
+            }
+
+
             return enroll;
         }
     }
+
 }

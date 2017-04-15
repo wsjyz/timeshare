@@ -25,7 +25,7 @@ public class WithdrawalLogServiceImpl implements WithdrawalLogService {
     MoneyAccountService moneyAccountService;
 
     @Override
-    public String saveWithdrawalLog(WithdrawalLog withdrawalLog) {
+    public String saveWithdrawalLogAndUpdateMoneyAccount(WithdrawalLog withdrawalLog) {
         //保存提现记录
         String pk=withdrawalLogDAO.saveWithdrawalLog(withdrawalLog);
         MoneyAccount moneyAccount=new MoneyAccount();
@@ -37,6 +37,11 @@ public class WithdrawalLogServiceImpl implements WithdrawalLogService {
         //更新现金账户
         moneyAccountService.saveOrUpdateMoneyAccount(moneyAccount);
         return pk;
+    }
+
+    public String saveWithdrawalLog(WithdrawalLog withdrawalLog) {
+        //保存提现记录
+        return withdrawalLogDAO.saveWithdrawalLog(withdrawalLog);
     }
 
     @Override

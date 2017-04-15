@@ -65,6 +65,13 @@ public class MoneyAccountDAOImpl extends BaseDAO implements MoneyAccountDAO {
         }
     }
 
+    public String resetMonthWithdrawalNumber() {
+        StringBuilder sql = new StringBuilder("update t_money_account set month_withdrawal_number=0 ");
+        int result = getJdbcTemplate().update(sql.toString());
+        return Contants.SUCCESS;
+    }
+
+
     @Override
     public List<MoneyAccount> findMoneyAccountByOwner(String userId) {
         StringBuilder sql = new StringBuilder("select * from t_money_account where user_id='"+userId+"'");

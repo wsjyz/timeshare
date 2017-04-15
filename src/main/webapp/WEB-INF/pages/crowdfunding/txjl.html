@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>提现记录</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">      
+    <meta name="format-detection" content="telephone=no">
+    <meta name="format-detection" content="email=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta name="apple-mobile-web-app-title" content="众筹">
+    <meta name="Keywords" content="众筹">
+    <meta name="Description" content="众筹">
+    <link rel="stylesheet" type="text/css" href="${request.contextPath}/css/crowdFunding/sm.min.css">
+    <link rel="stylesheet" type="text/css" href="${request.contextPath}/css/crowdFunding/sm-extend.min.css">
+    <link rel="stylesheet" type="text/css" href="${request.contextPath}/css/crowdFunding/style.css">
+    <script type="text/javascript" src="${request.contextPath}/js/zepto.min.js"></script>
+    <script type="text/javascript" src="${request.contextPath}/js/crowdFunding/config.js"></script>
+  </head>
+  <body>
+    <div class="page-group">
+        <div class="page page-current">
+        	<!--header start-->
+            <header class="bar bar-nav"><h1 class="title">提现记录</h1></header>
+            <!--header end-->
+            <!--页面内容区域 start-->
+            <div class="content  infinite-scroll txjl-scroll">
+                  <div class="list-block tx-record txjl-list">
+                      <!--<ul>-->
+                        <!--<li>-->
+                          <!--<div class="item-content">-->
+                            <!--<div class="item-inner">-->
+                              <!--<div class="item-title"><span>¥199</span></div>-->
+                            <!--</div>-->
+                          <!--</div>-->
+                        <!--</li>-->
+                        <!--<li>-->
+                          <!--<div class="item-content">-->
+                            <!--<div class="item-inner">-->
+                              <!--<div class="item-title"><span class="tag">审批中</span><span class="date">2017-2-2 14:11</span></div>-->
+                            <!--</div>-->
+                          <!--</div>-->
+                        <!--</li>-->
+                      <!--</ul>-->
+                      <!--<ul>-->
+                        <!--<li>-->
+                          <!--<div class="item-content">-->
+                            <!--<div class="item-inner">-->
+                              <!--<div class="item-title"><span>¥199</span></div>-->
+                            <!--</div>-->
+                          <!--</div>-->
+                        <!--</li>-->
+                        <!--<li>-->
+                          <!--<div class="item-content">-->
+                            <!--<div class="item-inner">-->
+                              <!--<div class="item-title"><span class="tag">已拒绝</span><span class="date">2017-2-2 14:11</span></div>-->
+                              <!--<div class="item-after"><a href="#">查看原因</a></div>-->
+                            <!--</div>-->
+                          <!--</div>-->
+                        <!--</li>-->
+                      <!--</ul>-->
+                  </div>
+                  <div class="infinite-scroll-preloader">
+                      <div class="preloader"></div>
+                  </div>
+             </div>
+            <!-- 页面内容区域 end -->
+       </div>    
+    </div>
+
+    <script type="text/javascript" src="${request.contextPath}/js/crowdFunding/sm.min.js"></script>
+    <script type="text/javascript" src="${request.contextPath}/js/crowdFunding/sm-extend.min.js"></script>
+    <script type="text/javascript" src="${request.contextPath}/js/crowdFunding/sm-city-picker.min.js"></script>
+    <script type="text/javascript" src="${request.contextPath}/js/crowdFunding/my-js.js"></script>
+  </body>
+<script>
+    // 下拉无限加载
+    var loading = false;
+    // 最多可加载的条目
+    var maxItems = 999;
+    // 每次加载添加多少条目
+    var itemsPerLoad = 20;
+    function addItems(data) {
+        // 生成新条目的HTML
+        var html = '';
+        $.each(data, function(i, withdrawalLog){
+            var withdrawalStatusZH='已发放';
+            if(withdrawalLog.withdrawalStatus=='PENDING'){
+                withdrawalStatusZH='审批中';
+            }
+            else if(withdrawalLog.withdrawalStatus=='PENDING'){
+                withdrawalStatusZH='已拒绝';
+            }
+            var replyMsgZH='';
+            if(withdrawalLog.withdrawalStatus=='REJECT'){
+                replyMsgZH='查看原因';
+            }
+
+            html += '<ul>' +
+                '<li>' +
+                '<div class="item-content">' +
+                '<div class="item-inner">' +
+                '<div class="item-title"><span>¥'+withdrawalLog.withdrawalCash+'</span>' +
+                '</div>' +
+                '</div>' +
+                '</div>' +
+                '</li>' +
+                '<li>' +
+                '<div class="item-content">' +
+                '<div class="item-inner">' +
+                '<div class="item-title">' +
+                '<span class="tag">'+withdrawalStatusZH+'</span>' +
+                '<span class="date">'+withdrawalLog.withdrawalTime+'</span>' +
+                '</div>' +
+                '<div class="item-after"><a href="javascript:errorMsg('+'\''+withdrawalLog.replyMsg+'\''+');">'+replyMsgZH+'</a></div>' +
+                '</div>' +
+                '</div>' +
+                '</li>' +
+                '</ul>';
+
+        });
+        // 添加新条目
+        $('.txjl-scroll .txjl-list').append(html);
+    }
+
+    //预先加载
+    $.post('${request.contextPath}/withdrawalLog/listByOwner', {startIndex: 0,loadSize:itemsPerLoad}, function (response) {
+        //预先加载
+        addItems(response);
+    });
+
+
+    // 上次加载的序号
+    var lastIndex = itemsPerLoad;
+    // 注册'infinite'事件处理函数
+    $(document).on('infinite', '.txjl-scroll',function() {
+        // 如果正在加载，则退出
+        if (loading) return;
+        // 设置flag
+        loading = true;
+        // 模拟1s的加载过程
+        setTimeout(function() {
+            // 重置加载flag
+            loading = false;
+            if (lastIndex >= maxItems) {
+                // 加载完毕，则注销无限加载事件，以防不必要的加载
+                $.detachInfiniteScroll($('.infinite-scroll'));
+                // 删除加载提示符
+                $('.infinite-scroll-preloader').remove();
+                return;
+            }
+            // 添加新条目
+            $.post('${request.contextPath}/withdrawalLog/listByOwner', {startIndex: lastIndex,loadSize:itemsPerLoad}, function (response) {
+                if(response==null || response==undefined ||  response==''){
+                    // 加载完毕，则注销无限加载事件，以防不必要的加载
+                    $.detachInfiniteScroll($('.infinite-scroll'));
+                    // 删除加载提示符
+                    $('.infinite-scroll-preloader').remove();
+                    return;
+                }
+                else{
+                    addItems(response);
+                }
+            });
+
+            // 更新最后加载的序号
+            lastIndex = lastIndex+itemsPerLoad;
+            //容器发生改变,如果是js滚动，需要刷新滚动
+            $.refreshScroller();
+        }, 1);
+    });
+    function errorMsg(msg){
+        $.alert(msg,'提现失败原因');
+    }
+</script>
+</html>

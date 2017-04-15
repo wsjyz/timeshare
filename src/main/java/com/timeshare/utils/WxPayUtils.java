@@ -24,7 +24,7 @@ public class WxPayUtils {
 
     public static String payToSeller(String tradeNo,BigDecimal price ,String openId){
 
-        payLogger.info("处理订单:,"+tradeNo+",付款价格为,"+price);
+        payLogger.info("处理订单:,"+tradeNo+",提现金额为,"+price);
         WxPayParamsBean xmlParams = new WxPayParamsBean();
         SortedMap parameters = new TreeMap<>();
         xmlParams.setMch_appid(Contants.APPID);
@@ -80,11 +80,12 @@ public class WxPayUtils {
         if(bean != null){
             if(bean.getReturn_code().equals("SUCCESS") && bean.getResult_code().equals("SUCCESS")){
                 //更新数据库
-                payLogger.info(tradeNo+"付款成功");
+                payLogger.info(tradeNo+"提现成功");
                 return Contants.SUCCESS.toString();
             }else{
                 //打印错误日志
-                payLogger.info(tradeNo+"付款失败："+bean.getErr_code_des());
+                payLogger.info(tradeNo+"提现失败："+bean.getErr_code_des());
+                return bean.getErr_code_des();
             }
         }
         return null;

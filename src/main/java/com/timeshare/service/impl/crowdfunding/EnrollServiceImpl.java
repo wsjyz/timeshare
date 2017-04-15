@@ -10,6 +10,7 @@ import com.timeshare.service.crowdfunding.CrowdFundingService;
 import com.timeshare.service.crowdfunding.EnrollService;
 import com.timeshare.utils.SimpleMailSender;
 import org.apache.commons.lang3.ArrayUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.poi.hssf.usermodel.HSSFCellStyle;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.hssf.util.HSSFColor;
@@ -58,7 +59,7 @@ public class EnrollServiceImpl implements EnrollService {
     }
 
     public Boolean exportEnrollListToEmail(String crowdfundingId,String toEmailAddress) throws IOException {
-        List<Enroll> enrollList=enrollDAO.findEnrollByCrowdfundingId(crowdfundingId,0,0);
+        List<Enroll> enrollList=enrollDAO.findCrowdfundingEnrollList(crowdfundingId,0,0);
 
         //创建excel
         HSSFWorkbook hssfWorkbook=createSheetFormat(enrollList);
@@ -127,5 +128,40 @@ public class EnrollServiceImpl implements EnrollService {
     //修改报名对象
     public String modifyEnroll(Enroll enroll){
         return enrollDAO.modifyEnroll(enroll);
+    }
+    //我预约的众筹
+    public List<Enroll> findCrowdfundingByMyEnroll(int startIndex, int loadSize,String userId) {
+        if(StringUtils.isNotBlank(userId)){
+            return enrollDAO.findCrowdfundingByMyEnroll(startIndex,loadSize,userId);
+        }
+        else{
+            return null;
+        }
+    }
+    //获取已报名对象
+    public List<Enroll> findCrowdfundingEnrollList(String crowdfundingId){
+        if(StringUtils.isNotBlank(crowdfundingId)){
+            return enrollDAO.findCrowdfundingEnrollList(crowdfundingId,0,0);
+        }
+        else{
+            return null;
+        }
+    }
+    //获取已报名名单
+    public List<Enroll> findCrowdfundingEnrollListToPaging(String crowdfundingId,int startIndex, int loadSize){
+        if(StringUtils.isNotBlank(crowdfundingId)){
+            return enrollDAO.findCrowdfundingEnrollList(crowdfundingId,startIndex,loadSize);
+        }
+        else{
+            return null;
+        }
+    }
+    //查询出需要自动退款的报名记录
+    public List<Enroll> findNeedAotuRefundEnroll() {
+        return enrollDAO.findNeedAotuRefundEnroll();
+    }
+    //自动退款完成后更新支付状态及退款交易号
+    public String autoRefundAfterUpdate(String enrollId,String refundTradeNo) {
+        return enrollDAO.autoRefundAfterUpdate(enrollId,refundTradeNo);
     }
 }
