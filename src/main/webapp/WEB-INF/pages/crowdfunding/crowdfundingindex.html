@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<form action="${request.contextPath}/enroll/save" method="post" id="enrollForm">
+    <input type="hidden" value="dbbc8b43a3764dd4afae8d5b16228124" id="crowdfundingId" name="crowdfundingId"/>
+    <input type="hidden" value="00359e8721c44d168aac7d501177e314" name="enrollUserId">
+    <input type="text" id="userName" value="张三" name="userName">
+    <input type="text" id="phone" value="13400001111" name="phone">
+    <input type="text" id="corpName" value="启东教育" name="corpName">
+    <input type="text" id="invoiceTitle" value="启东教育有限公司" name="invoiceTitle">
+    <input type="text" id="invoiceType" value="VAT_INVOICE" name="invoiceType">
+    <input type="text" id="payStatus" value="WAIT_PAY" name="payStatus">
+    <input type="text" id="payAmount" value="0.01" name="payAmount">
+    <input type="text" id="userId" value="00359e8721c44d168aac7d501177e314" name="userId">
+
+
+    <input type="text" id="wxTradeNo" value="H20170413224728843" name="wxTradeNo">
+
+    <!--<a href="${request.contextPath}/crowdFunding/to-upload-img?crowdFundingId=dbbc8b43a3764dd4afae8d5b16228124">-->
+        <!--<div style="position: relative;margin-top: 0.5rem;" >-->
+            <!--<div class="crowdFundingDiv" style="position: absolute;top: 30%;">-->
+                <!--<img class="crowdFundingImage" src="${request.contextPath}/images/default_head.jpg">-->
+            <!--</div>-->
+        <!--</div>-->
+        <!--选择文件-->
+    <!--</a>-->
+
+</form>
+<!--<input type="button" value="确定" id="saveEnrollBtn"/>-->
+<!--<input type="button" value="付款" id="saveEnrollBtn"/>-->
+<input type="button" value="退款" id="saveEnrollBtn"/>
+<input type="button" value="取消" id="cancelEnrollBtn"/>
+</body>
+<script type='text/javascript' src='//g.alicdn.com/sj/lib/zepto/zepto.min.js' charset='utf-8'></script>
+<script type='text/javascript' src='//g.alicdn.com/msui/sm/0.6.2/js/sm.min.js' charset='utf-8'></script>
+<script type='text/javascript' src='//g.alicdn.com/msui/sm/0.6.2/js/sm-extend.min.js' charset='utf-8'></script>
+<script>
+    $("#saveEnrollBtn").on('click', function () {
+//        $.post('${request.contextPath}/enroll/save', $("#enrollForm").serialize(), function (enrollId) {
+//            if (enrollId != "") {
+//                window.location.href = "https://open.weixin.qq.com/connect/oauth2/authorize?appid=wxcd8903dd6a9552eb" +
+//                    "&redirect_uri=http%3A%2F%2Fjk.zhangqidong.cn%2Ftime%2Fenroll%2FtoEnroolPayConfirm%2F&response_type=code&scope=snsapi_base" +
+//                    "&state=" + enrollId + "#wechat_redirect";
+//            }
+//        });
+//        $.post('${request.contextPath}/enroll/save', $("#enrollForm").serialize(), function (enrollId) {
+//            if (enrollId != "") {
+//                window.location.href = "https://open.weixin.qq.com/connect/oauth2/authorize?appid=wxcd8903dd6a9552eb" +
+//                    "&redirect_uri=http%3A%2F%2Fjk.zhangqidong.cn%2Ftime%2Fenroll%2FpayToSeller%2F&response_type=code&scope=snsapi_base" +
+//                    "&state=" + enrollId + "#wechat_redirect";
+//            }
+//        });
+        $.post('${request.contextPath}/enroll/save', $("#enrollForm").serialize(), function (enrollId) {
+            if (enrollId != "") {
+                window.location.href = "https://open.weixin.qq.com/connect/oauth2/authorize?appid=wxcd8903dd6a9552eb" +
+                    "&redirect_uri=http%3A%2F%2Fjk.zhangqidong.cn%2Ftime%2Fenroll%2Frefund%2F&response_type=code&scope=snsapi_base" +
+                    "&state=" + enrollId + "#wechat_redirect";
+            }
+        });
+    });
+</script>
+
+</html>

@@ -3,10 +3,12 @@ package com.timeshare.dao.impl.crowdfunding;
 import com.timeshare.dao.BaseDAO;
 import com.timeshare.dao.crowdfunding.CrowdFundingDAO;
 import com.timeshare.dao.crowdfunding.EnrollDAO;
+import com.timeshare.domain.ItemOrder;
 import com.timeshare.domain.crowdfunding.CrowdFunding;
 import com.timeshare.domain.crowdfunding.Enroll;
 import com.timeshare.utils.CommonStringUtils;
 import com.timeshare.utils.Contants;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.jdbc.core.PreparedStatementSetter;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Repository;
@@ -23,7 +25,7 @@ import java.util.List;
 public class EnrollDAOImpl extends BaseDAO implements EnrollDAO {
     @Override
     public String saveEnroll(Enroll enroll) {
-        StringBuilder sql = new StringBuilder("INSERT INTO t_enroll (enroll_id, crowdfunding_id, enroll_user_id, user_name, phone, corp_name, invoice_title, invoice_type,pay_status,pay_amount,user_id,opt_time) VALUES (?, ?, ?, ?, ?, ?, ?, ?,?,?, ?, ?);");
+        StringBuilder sql = new StringBuilder("INSERT INTO t_enroll (enroll_id, crowdfunding_id, enroll_user_id, user_name, phone, corp_name, invoice_title, invoice_type,pay_status,pay_amount,user_id,opt_time,pay_trade_no,refund_trade_no) VALUES (?, ?, ?, ?, ?, ?, ?, ?,?,?, ?, ?,?,?);");
         final String id = CommonStringUtils.genPK();
         int result = getJdbcTemplate().update(sql.toString(), new PreparedStatementSetter() {
             @Override
@@ -40,6 +42,8 @@ public class EnrollDAOImpl extends BaseDAO implements EnrollDAO {
                 ps.setBigDecimal(10,enroll.getPayAmount());
                 ps.setString(11,enroll.getUserId());
                 ps.setString(12,enroll.getOptTime());
+                ps.setString(13,enroll.getPayTradeNo());
+                ps.setString(14,enroll.getRefundTradeNo());
             }
         });
         if(result > 0){
@@ -55,6 +59,10 @@ public class EnrollDAOImpl extends BaseDAO implements EnrollDAO {
         return getJdbcTemplate().query(sql.toString(),new Object[]{},new EnrollRowMapper());
     }
 
+    public List<Enroll> findEnrollById(String enrollId) {
+        StringBuilder sql = new StringBuilder("select * from t_enroll where enroll_id='"+enrollId+"'");
+        return getJdbcTemplate().query(sql.toString(),new Object[]{},new EnrollRowMapper());
+    }
 
     public int findEnrollByOwnerCount(String userId) {
         StringBuilder countSql = new StringBuilder(
@@ -62,7 +70,35 @@ public class EnrollDAOImpl extends BaseDAO implements EnrollDAO {
         return getJdbcTemplate().queryForObject(countSql.toString(), Integer.class);
     }
 
+    public List<Enroll> findEnrollByCrowdfundingId(String crowdfundingId,int startIndex, int loadSize) {
+        StringBuilder sql = new StringBuilder("select * from t_enroll where crowdfunding_id='"+crowdfundingId+"'");
+        if(startIndex!=0 || loadSize!=0){
+            sql.append("limit "+startIndex+","+loadSize);
+        }
+        return getJdbcTemplate().query(sql.toString(),new Object[]{},new EnrollRowMapper());
+    }
 
+
+    public String modifyEnroll(Enroll enroll) {
+        StringBuilder sql = new StringBuilder("update t_enroll set ");
+
+        if(StringUtils.isNotBlank(enroll.getPayStatus())){
+            sql.append(" pay_status = '"+enroll.getPayStatus()+"',");
+        }
+        if(StringUtils.isNotBlank(enroll.getPayTradeNo())){
+            sql.append(" pay_trade_no = '"+enroll.getPayTradeNo()+"',");
+        }
+        if (sql.lastIndexOf(",") + 1 == sql.length()) {
+            sql.delete(sql.lastIndexOf(","), sql.length());
+        }
+        sql.append(" where enroll_id='" + enroll.getEnrollId() + "'");
+        int result = getJdbcTemplate().update(sql.toString());
+        if(result > 0){
+            return Contants.SUCCESS;
+        }else{
+            return "FAILED";
+        }
+    }
 
     class EnrollRowMapper implements RowMapper<Enroll>{
         @Override
@@ -80,6 +116,8 @@ public class EnrollDAOImpl extends BaseDAO implements EnrollDAO {
             enroll.setPayAmount(rs.getBigDecimal("pay_amount"));
             enroll.setUserId(rs.getString("user_id"));
             enroll.setOptTime(rs.getString("opt_time"));
+            enroll.setPayTradeNo(rs.getString("pay_trade_no"));
+            enroll.setRefundTradeNo(rs.getString("refund_trade_no"));
             return enroll;
         }
     }

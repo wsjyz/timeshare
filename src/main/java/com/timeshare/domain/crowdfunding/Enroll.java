@@ -27,6 +27,28 @@ public class Enroll extends BaseDomain {
     private String payStatus;
     //'支付金额'
     private BigDecimal payAmount;
+    //'商户支付交易号'
+    private String payTradeNo;
+    //'商户退款交易号'
+    private String refundTradeNo;
+
+
+
+    public String getPayTradeNo() {
+        return payTradeNo;
+    }
+
+    public void setPayTradeNo(String payTradeNo) {
+        this.payTradeNo = payTradeNo;
+    }
+
+    public String getRefundTradeNo() {
+        return refundTradeNo;
+    }
+
+    public void setRefundTradeNo(String refundTradeNo) {
+        this.refundTradeNo = refundTradeNo;
+    }
 
     public String getEnrollId() {
         return enrollId;

@@ -52,6 +52,7 @@ public interface Contants {
         ASSEMBLY_CONTENT_IMG,//活动内容图片
         ASSEMBLY_COMMENT_IMG,
         ASSEMBLY_CONSULTATION_IMG,
+        CROWD_FUNDING_IMG//众筹项目 众筹封面
     }
     enum ORDER_TYPE {
         ONLINE,OFFLINE
@@ -91,7 +92,7 @@ public interface Contants {
         YES,
         NO
     }
-    //众筹 是否在轮播图展示
+    //众筹项目 状态
     enum CROWD_FUNDING_STATUS {
         SKETCH,//草稿
         RELEASED,//已发布

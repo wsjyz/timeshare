@@ -15,4 +15,8 @@ public interface CrowdFundingService {
     List<CrowdFunding> findCrowdFundingByOwner(String userId,int startIndex, int loadSize);
     //我发起的众筹-总计数
     int findCrowdFundingByOwnerCount(String userId);
+    //获取某个众筹项目
+    CrowdFunding findCrowdFundingById(String crowdFundingById);
+    //众筹首页集合
+    public List<CrowdFunding> findCrowdFundingToIndex(int startIndex, int loadSize) ;
 }

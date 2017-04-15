@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>发起众筹</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+    <meta name="format-detection" content="telephone=no">
+    <meta name="format-detection" content="email=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta name="apple-mobile-web-app-title" content="众筹">
+    <meta name="Keywords" content="众筹">
+    <meta name="Description" content="众筹">
+    <link rel="stylesheet" type="text/css" href="${request.contextPath}/css/crowdFunding/sm-extend.min.css">
+    <link rel="stylesheet" type="text/css" href="${request.contextPath}/css/crowdFunding/style.css">
+    <link rel="stylesheet" href="${request.contextPath}/css/upload.css">
+    <link rel="stylesheet" href="//g.alicdn.com/msui/sm/0.6.2/css/sm.min.css">
+    <script type='text/javascript' src='${request.contextPath}/js/zepto.min.js' charset='utf-8'></script>
+</head>
+<body>
+<div class="page-group">
+    <div class="page page-current">
+        <!--header start-->
+        <header class="bar bar-nav"><h1 class="title">发起</h1></header>
+        <!--header end-->
+        <!--页面内容区域 start-->
+        <div class="content">
+            <section class="from-list">
+                <form action="${request.contextPath}/crowdFunding/save" method="post" id="publishCrowdFunding">
+                    <label class="form-group">
+                        <span class="input-label">项目名称</span>
+                        <input type="text" name="projectName" class="form-control" placeholder="项目名称">
+                    </label>
+                    <label class="form-group">
+                        <span class="input-label">课程开始时间</span>
+                        <input type="text" name="curriculumStartTime" class="form-control" placeholder="课程开始时间" readonly id="startTime">
+                    </label>
+                    <label class="form-group">
+                        <span class="input-label">课程结束时间</span>
+                        <input type="text" name="curriculumEndTime" class="form-control" placeholder="课程结束时间" readonly id="endTime">
+                    </label>
+                    <label class="form-group">
+                        <span class="input-label">主办地址</span>
+                        <input type="text" name="sponsorCity" class="form-control" placeholder="主办地址" id="address" value="">
+                    </label>
+                    <label class="form-group">
+                        <span class="input-label">详情描述</span>
+                        <textarea rows="5" name="detail" class="form-control" placeholder="详情描述"></textarea>
+                    </label>
+                    <div class="radio-group">
+                        <label><input type="radio" name="costType" value="AA" id="costBetween" checked>费用均摊</label>
+                        <label><input type="radio" name="costType" value="FIXED_PRICE" id="price"> 一口价</label>
+                    </div>
+                    <label class="form-group">
+                        <span class="input-label" id="costSpan">总费用</span>
+                        <input type="text" name="costTotal" id="costTotal" class="form-control" placeholder="总费用">
+                    </label>
+                    <label class="form-group">
+                        <span class="input-label">最少人数</span>
+                        <input type="text" name="minPeoples" class="form-control" placeholder="最少人数">
+                    </label>
+                    <label class="form-group">
+                        <span class="input-label">最多人数</span>
+                        <input type="text" name="maxPeoples" class="form-control" placeholder="单行输入">
+                    </label>
+                    <label class="form-group">
+                        <span class="input-label">预约费用</span>
+                        <input type="text" name="reservationCost" class="form-control" placeholder="预约费用">
+                    </label>
+                    <label class="form-group">
+                        <span class="input-label">众筹封面</span>
+                        <!--<input type="file" class="form-file">-->
+
+                        <img src="" id="imageUrl" name="imageUrl" style="display: none;margin: 0 auto;height: 9rem;width: 16rem;"/>
+                        <div class="main-wrap">
+                            <div id="uploader">
+                                <div class="queueList fix">
+                                    <div class="filelist"></div>
+                                    <div id="filePicker">
+                                        <label class="trigger">+</label>
+                                        <input type="file" name="file" class="webuploader-element-invisible" accept="image/*">
+                                    </div>
+                                </div>
+                                <div class="progress-box">
+                                    <div class="progress">
+                                        <span class="text">0%</span>
+                                        <span class="percentage"></span>
+                                    </div><div class="info"></div>
+                                </div>
+                            </div>
+                        </div>
+
+
+
+
+                    </label>
+                    <div class="radio-group">
+                        <span class="input-label">是否在轮播图显示:</span>
+                        <label><input type="radio" name="isShow" value="YES" id="isShowYes" checked>是</label>
+                        <label><input type="radio" name="isShow" value="NO" id="isShowNo">否</label>
+                    </div>
+                    <div class="content-block">
+                        <div class="row">
+                            <div class="col-33"><input type="button" id="sketch" class="button button-big btn-dark" value="保存草稿"></div>
+                            <div class="col-33"><input type="button" id="publish" class="button button-big btn-dark" value="发 布"></div>
+                            <div class="col-33"><a href="#" class="button button-big btn-light">预 览</a></div>
+                        </div>
+                    </div>
+                    <input type="hidden" name="crowdfundingStatus" id="crowdfundingStatus" value="RELEASED">
+                    <input type="hidden" name="imgUrl" id="imgUrl" value="">
+                </form>
+            </section>
+        </div>
+        <!-- 页面内容区域 end -->
+    </div>
+</div>
+<script type="text/javascript" src="${request.contextPath}/js/crowdFunding/sm.min.js"></script>
+<script type="text/javascript" src="${request.contextPath}/js/crowdFunding/sm-extend.min.js"></script>
+<script type="text/javascript" src="${request.contextPath}/js/crowdFunding/sm-city-picker.min.js"></script>
+<script type="text/javascript" src="${request.contextPath}/js/crowdFunding/my-js.js"></script>
+<script type='text/javascript' src='${request.contextPath}/js/upload.js?v=20160720-2' charset='utf-8'></script>
+</body>
+<script>
+    $(function() {
+
+        /*发布众筹页面时间选择*/
+        $(document).on("pageInit", function() {
+            //初始化开始时间
+            $("#startTime").datetimePicker({
+
+            });
+        });
+        $(document).on("pageInit", function() {
+            //初始化结束时间
+            $("#endTime").datetimePicker({
+
+            });
+        });
+        $(document).on("pageInit", function() {
+
+
+            //初始化主办地址
+            $("#address").cityPicker({
+                toolbarTemplate: '<header class="bar bar-nav"><button class="button button-link pull-right close-picker">确定</button><h1 class="title">选择主办地址</h1></header>'
+            });
+
+            //费用均摊单击事件
+            $("#costBetween").click(function() {
+                $("#costSpan").text("总费用");
+                $("#costTotal").attr("placeholder","总费用");
+
+            });
+            //一口价单击事件
+            $("#price").click(function() {
+                $("#costSpan").text("单价");
+                $("#costTotal").attr("placeholder","单价");
+            });
+
+
+            //发布
+            $("#publish").click(function() {
+                var imageUrl = $('#imageUrl')[0].src;
+                $("#imgUrl").val(imageUrl);
+                $.post('${request.contextPath}/crowdFunding/save', $("#publishCrowdFunding").serialize(), function (result) {
+                    if (result == "success") {
+                        $.toast("发布成功");
+                    }
+                    else{
+                        $.toast("发布失败");
+                    }
+                });
+            });
+            //保存草稿
+            $("#sketch").click(function() {
+                $("#crowdfundingStatus").val("SKETCH");
+                $.post('${request.contextPath}/crowdFunding/save', $("#publishCrowdFunding").serialize(), function (result) {
+                    if (result == "success") {
+                        $.toast("草稿保存成功");
+                    }
+                    else{
+                        $.toast("草稿保存失败");
+                    }
+                });
+            });
+        });
+
+
+
+
+
+
+        // 默认必须要执行$.init()
+        $.init();
+    });
+
+
+</script>
+</html>

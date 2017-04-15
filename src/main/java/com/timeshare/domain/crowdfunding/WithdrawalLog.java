@@ -17,6 +17,19 @@ public class WithdrawalLog extends BaseDomain {
     private String withdrawalTime;
     //'支付平台返回原因'
     private String replyMsg;
+    //商户提现交易号
+    private String withdrawalTradeNo;
+
+
+
+
+    public String getWithdrawalTradeNo() {
+        return withdrawalTradeNo;
+    }
+
+    public void setWithdrawalTradeNo(String withdrawalTradeNo) {
+        this.withdrawalTradeNo = withdrawalTradeNo;
+    }
 
     public String getWithdrawalLogId() {
         return withdrawalLogId;

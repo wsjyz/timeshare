@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>上传图片</title>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="initial-scale=1, maximum-scale=1">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <link rel="stylesheet" href="${request.contextPath}/css/upload.css">
+    <link rel="stylesheet" href="//g.alicdn.com/msui/sm/0.6.2/css/sm.min.css">
+    <script type='text/javascript' src='${request.contextPath}/js/zepto.min.js' charset='utf-8'></script>
+</head>
+<body>
+<!-- ▼头部 -->
+<div class="nav">
+    上传众筹封面
+</div>
+<!-- ▲头部 -->
+<!-- ▼主体 -->
+
+<input type="hidden" id="objType" value="${imageType}"/>
+<input type="hidden" id="imageId" value="${imageId}"/>
+<input type="hidden" id="objId" value="${objId}"/>
+<img src="${imgPath}" id="imageUrl" style="display: none;margin: 0 auto;height: 9rem;width: 16rem;"/>
+<div class="main-wrap">
+    <div id="uploader">
+        <div class="queueList fix">
+            <div class="filelist"></div>
+            <div id="filePicker">
+                <label class="trigger">+</label>
+                <input type="file" name="file" class="webuploader-element-invisible" accept="image/*">
+            </div>
+        </div>
+        <div class="progress-box">
+            <div class="progress">
+                <span class="text">0%</span>
+                <span class="percentage"></span>
+            </div><div class="info"></div>
+        </div>
+    </div>
+</div>
+<input type="button" value="确定" id="saveImgBtn" class="button button-fill button-danger button-big" style="margin: 1rem;width: 90%"/>
+<script type='text/javascript' src='${request.contextPath}/js/upload.js?v=20160720-2' charset='utf-8'></script>
+<script>
+
+    Zepto(function($) {
+        var imageId = $('#imageId').val();
+        if(imageId != ''){
+            $('#imageUrl').css('display','block');
+        }
+    });
+    $("#saveImgBtn").on('click', function () {
+        var imageId = $('#imageId').val();
+        var objId = $('#objId').val();
+        var imageUrl = $('#imageUrl')[0].src;
+        $.post('${request.contextPath}/crowdFunding/save-img', { imageId: imageId, imgUrl:imageUrl,objId:objId}, function(response){
+                if(response == 'success'){
+                    alert('上传成功');
+                }
+        })
+    });
+</script>
+</body>
+</html>

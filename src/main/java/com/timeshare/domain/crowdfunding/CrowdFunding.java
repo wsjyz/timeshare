@@ -1,14 +1,8 @@
 package com.timeshare.domain.crowdfunding;
 
 import com.timeshare.domain.BaseDomain;
-import com.timeshare.domain.ImageObj;
-import com.timeshare.domain.Item;
-import com.timeshare.domain.annotation.Column;
-import com.timeshare.domain.annotation.Table;
 
 import java.math.BigDecimal;
-import java.util.Date;
-import java.util.List;
 
 
 public class CrowdFunding extends BaseDomain {
@@ -34,8 +28,6 @@ public class CrowdFunding extends BaseDomain {
     private int maxPeoples;
     //预约费用
     private BigDecimal reservationCost;
-    //众筹封面
-    private String crowdfundingIndexImgPath;
     //是否在轮播图展示
     private String isShow;
     //众筹状态 （草稿、已发布、已下架）
@@ -44,6 +36,19 @@ public class CrowdFunding extends BaseDomain {
     private String offShelveReason;
     //创建时间
     private String createTime;
+
+    //已报名人数
+    private int  enrollCount;
+    //众筹封面
+    private String imageUrl;
+
+    public int getEnrollCount() {
+        return enrollCount;
+    }
+
+    public void setEnrollCount(int enrollCount) {
+        this.enrollCount = enrollCount;
+    }
 
     public String getCrowdfundingId() {
         return crowdfundingId;
@@ -133,12 +138,12 @@ public class CrowdFunding extends BaseDomain {
         this.reservationCost = reservationCost;
     }
 
-    public String getCrowdfundingIndexImgPath() {
-        return crowdfundingIndexImgPath;
+    public String getImageUrl() {
+        return imageUrl;
     }
 
-    public void setCrowdfundingIndexImgPath(String crowdfundingIndexImgPath) {
-        this.crowdfundingIndexImgPath = crowdfundingIndexImgPath;
+    public void setImageUrl(String imageUrl) {
+        this.imageUrl = imageUrl;
     }
 
     public String getIsShow() {
@@ -172,4 +177,5 @@ public class CrowdFunding extends BaseDomain {
     public void setCreateTime(String createTime) {
         this.createTime = createTime;
     }
+
 }

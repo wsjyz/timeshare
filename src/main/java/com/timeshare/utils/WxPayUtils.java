@@ -20,6 +20,7 @@ public class WxPayUtils {
     protected static Logger payLogger = LoggerFactory.getLogger("payLogger");
 
     public static final String UNIFIEDORDER_URL = "https://api.mch.weixin.qq.com/pay/";
+    public static final String REFUND_URL="https://api.mch.weixin.qq.com/secapi/pay/refund";
 
     public static String payToSeller(String tradeNo,BigDecimal price ,String openId){
 
@@ -89,7 +90,84 @@ public class WxPayUtils {
         return null;
     }
 
-    public static String userPayToCorp(String code,String bodyStr,BigDecimal price){
+    public static String payRefund(String outRefundNo,String tradeNo,int totalFee,int refundFee){
+
+        payLogger.info("处理订单退款:,"+tradeNo+",退款金额为,"+refundFee);
+        WxRefundParamsBean xmlParams = new WxRefundParamsBean();
+        SortedMap parameters = new TreeMap<>();
+        xmlParams.setAppid(Contants.APPID);
+        parameters.put("appid",Contants.APPID);
+
+        xmlParams.setMch_id(Contants.MCHID);
+        parameters.put("mch_id",Contants.MCHID);
+
+        String noceStr = CommonStringUtils.genPK();
+        xmlParams.setNonce_str(noceStr);
+        parameters.put("nonce_str",noceStr);
+
+        xmlParams.setOut_trade_no(tradeNo);
+        parameters.put("out_trade_no",tradeNo);
+
+        xmlParams.setOut_refund_no(outRefundNo);
+        parameters.put("out_refund_no",outRefundNo);
+
+//        xmlParams.setTransaction_id(tradeNo);
+//        parameters.put("transaction_id",tradeNo);
+
+
+        xmlParams.setTotal_fee(totalFee);
+        parameters.put("total_fee",totalFee);
+
+        xmlParams.setRefund_fee(refundFee);
+        parameters.put("refund_fee",refundFee);
+
+        xmlParams.setOp_user_id(Contants.MCHID);
+        parameters.put("op_user_id",Contants.MCHID);
+
+
+
+
+
+
+
+
+
+        String sign = WxUtils.createSign(parameters,Contants.KEY);
+        xmlParams.setSign(sign);
+        XStream xs = new XStream(new DomDriver("UTF-8", new XmlFriendlyNameCoder("-_", "_")));
+        xs.processAnnotations(xmlParams.getClass());
+        String xml = xs.toXML(xmlParams);
+        //System.out.println("payRefund... xml:"+xml);
+        //xml="<xml><appid>wxcd8903dd6a9552eb</appid><mch_id>1358876502</mch_id><nonce_str>89236d64e46d4c6d8e0e3528d34bb07f</nonce_str><op_user_id>1358876502</op_user_id><out_refund_no>ae90401853b444259cbf2f0afebb47d2</out_refund_no><out_trade_no>V20170414110528740</out_trade_no><refund_fee>1</refund_fee><total_fee>1</total_fee><transaction_id></transaction_id><sign>DF3AC725D8606EF2BC636C65F5E16478</sign></xml>";
+        //System.out.println("payRefund2... xml:"+xml);
+        HTTPSClient client = new HTTPSClient();
+        try {
+            client.setBodyParams(new String(xml.getBytes("UTF-8"),"ISO-8859-1"));//狗日的微信，神经病
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
+        String p12FilePath = "/work/cert/apiclient_cert.p12";
+        //String postUri = "https://api.mch.weixin.qq.com/mmpaymkttransfers/promotion/transfers";
+        String postUri = REFUND_URL;
+
+        String response = client.httpsRequest(p12FilePath,Contants.MCHID,postUri);
+        //需要替换成WxPayResponseBean
+        WxRefundResponseBean bean = new WxRefundResponseBean();
+        xs.processAnnotations(bean.getClass());
+        bean = (WxRefundResponseBean)xs.fromXML(response);
+        if(bean != null){
+            if(bean.getReturn_code().equals("SUCCESS") && bean.getResult_code().equals("SUCCESS")){
+                //更新数据库
+                payLogger.info(tradeNo+"退款成功");
+                return Contants.SUCCESS.toString();
+            }else{
+                //打印错误日志
+                payLogger.info(tradeNo+"退款失败："+bean.getResult_code()+"|"+bean.getErr_code()+"|"+bean.getErr_code_des());
+            }
+        }
+        return null;
+    }
+    public static String userPayToCorp(String code,String bodyStr,BigDecimal price,String outTradeNo){
 
 
         WeixinOauth weixinOauth = new WeixinOauth();
@@ -111,7 +189,7 @@ public class WxPayUtils {
         config.setBody(bodyStr);
         parameters.put("body",bodyStr);
 
-        String outTradeNo = CommonStringUtils.gen18RandomNumber();
+
         config.setOut_trade_no(outTradeNo);
         parameters.put("out_trade_no",outTradeNo);
 
@@ -189,5 +267,10 @@ public class WxPayUtils {
 
         }
         return jsApiParams;
+    }
+
+    public static String userPayToCorp(String code,String bodyStr,BigDecimal price){
+        String outTradeNo = CommonStringUtils.gen18RandomNumber();
+        return userPayToCorp(code,bodyStr,price,outTradeNo);
     }
 }
