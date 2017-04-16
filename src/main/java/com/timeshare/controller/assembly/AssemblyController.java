@@ -209,6 +209,33 @@ public class AssemblyController extends  BaseController {
         assemblyBrowers.setBrowseTimes(assembly.getBrowseTimes() + 1);
         assemblyService.modifyAssembly(assemblyBrowers);
         assembly.setBrowseTimes(assemblyBrowers.getBrowseTimes());
+        if(assembly.getCreateTime()!=null){
+            try {
+                SimpleDateFormat format1 = new SimpleDateFormat("yyyy-MM-dd HH:mm");
+                SimpleDateFormat format2 = new SimpleDateFormat("MM月dd日");
+                assembly.setCreateTime(format2.format(format1.parse(assembly.getCreateTime())));
+            }catch (Exception e){
+                e.printStackTrace();
+            }
+        }
+        if(assembly.getStartTime()!=null){
+            try {
+                SimpleDateFormat format1 = new SimpleDateFormat("yyyy-MM-dd HH:mm");
+                SimpleDateFormat format2 = new SimpleDateFormat("MM月dd日 HH:mm");
+                assembly.setStartTime(format2.format(format1.parse(assembly.getStartTime())));
+            }catch (Exception e){
+                e.printStackTrace();
+            }
+        }
+        if(assembly.getEndTime()!=null){
+            try {
+                SimpleDateFormat format1 = new SimpleDateFormat("yyyy-MM-dd HH:mm");
+                SimpleDateFormat format2 = new SimpleDateFormat("MM月dd日 HH:mm");
+                assembly.setEndTime(format2.format(format1.parse(assembly.getEndTime())));
+            }catch (Exception e){
+                e.printStackTrace();
+            }
+        }
         List<Attender> attenderList = attenderService.getListByAssemblyId(assemblyId);
         BigDecimal minMoney = new BigDecimal(0);
         BigDecimal maxMoney = new BigDecimal(0);
@@ -391,9 +418,12 @@ public class AssemblyController extends  BaseController {
                 comment.setZanContent(userInfo.getNickName());
                 count=1;
             } else {
-                comment.setZanContent(comment.getZanContent() + "&" + userInfo.getUserName());
-                String[] zanContent=comment.getZanContent().split("&");
-                count=zanContent.length;
+                String[] zanContent = comment.getZanContent().split("&");
+                count = zanContent.length;
+                if (!comment.getZanContent().contains(userInfo.getNickName())) {
+                    comment.setZanContent(comment.getZanContent() + "&" + userInfo.getNickName());
+                    count = count+1;
+                }
             }
             commentService.modifyComment(comment);
         } catch (Exception e) {
