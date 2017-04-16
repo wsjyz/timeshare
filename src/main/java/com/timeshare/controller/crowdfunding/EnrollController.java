@@ -43,7 +43,7 @@ public class EnrollController extends  BaseController{
 
     protected Logger logger = LoggerFactory.getLogger(EnrollController.class);
 
-    //报名名单页面
+    //我预约的众筹页面
     @RequestMapping(value = "/toCrowdfundingByMyEnroll")
     public String toCrowdfundingByMyEnroll() {
         return "crowdfunding/wyydzc";
@@ -148,7 +148,8 @@ public class EnrollController extends  BaseController{
         enroll.setPayStatus(Contants.ENROLL_PAY_STATUS.PAYED.name());
         //更新支付状态为已支付
         enrollService.modifyEnroll(enroll);
-        return "info";
+        //支付成功跳转至我预约的众筹
+        return "crowdfunding/wyydzc";
     }
 
     //导出报名名单
