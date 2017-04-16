@@ -36,8 +36,7 @@ public class WithdrawalLogController extends  BaseController{
     protected Logger logger = LoggerFactory.getLogger(WithdrawalLogController.class);
 
     @RequestMapping(value = "/save")
-    public String save(WithdrawalLog withdrawalLog, @CookieValue(value="time_sid", defaultValue="") String userId, Model model) {
-        userId="00359e8721c44d168aac7d501177e314";
+    public String save(WithdrawalLog withdrawalLog, @CookieValue(value="time_sid", defaultValue="00359e8721c44d168aac7d501177e314") String userId, Model model) {
         withdrawalLog.setWithdrawalCash(new BigDecimal(10));
         withdrawalLog.setWithdrawalStatus(Contants.WITHDRAWAL_STATUS.PENDING.name());
         withdrawalLog.setWithdrawalTime(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date()));
@@ -53,8 +52,7 @@ public class WithdrawalLogController extends  BaseController{
 
     @ResponseBody
     @RequestMapping(value = "/listByOwner")
-    public List<WithdrawalLog> listByOwner(@RequestParam int startIndex, @RequestParam int loadSize, @CookieValue(value="time_sid", defaultValue="") String userId) {
-        userId="00359e8721c44d168aac7d501177e314";
+    public List<WithdrawalLog> listByOwner(@RequestParam int startIndex, @RequestParam int loadSize, @CookieValue(value="time_sid", defaultValue="00359e8721c44d168aac7d501177e314") String userId) {
         return withdrawalLogService.findWithdrawalLogByOwner(userId,startIndex,loadSize);
     }
 }

@@ -71,7 +71,7 @@ public class EnrollController extends  BaseController{
 
     @ResponseBody
     @RequestMapping(value = "/save")
-    public String save(Enroll enroll, @CookieValue(value="time_sid", defaultValue="") String userId, Model model) {
+    public String save(Enroll enroll, @CookieValue(value="time_sid", defaultValue="00359e8721c44d168aac7d501177e314") String userId, Model model) {
         try{
 
             if(enroll!=null && StringUtils.isNotBlank(enroll.getCrowdfundingId())){
@@ -84,8 +84,6 @@ public class EnrollController extends  BaseController{
                     if(curriculumEndTimeDate.compareTo(new Date())>=0){
                         if(crowdFunding.getEnrollCount()<crowdFunding.getMaxPeoples()){
                             if(Contants.CROWD_FUNDING_STATUS.RELEASED.name().equals(crowdFunding.getCrowdfundingStatus())){
-                                //MOCK
-                                userId="00359e8721c44d168aac7d501177e314";
                                 enroll.setUserId(userId);
                                 enroll.setEnrollUserId(userId);
                                 enroll.setOptTime(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date()));
@@ -144,7 +142,7 @@ public class EnrollController extends  BaseController{
     //支付成功返回
     @RequestMapping(value = "/payComplete/{enrollId}")
     public String payComplete(@PathVariable String enrollId, Model model,
-                                  @CookieValue(value="time_sid", defaultValue="admin") String userId,HttpServletRequest request) {
+                                  @CookieValue(value="time_sid", defaultValue="00359e8721c44d168aac7d501177e314") String userId,HttpServletRequest request) {
         Enroll enroll=new Enroll();
         enroll.setEnrollId(enrollId);
         enroll.setPayStatus(Contants.ENROLL_PAY_STATUS.PAYED.name());
@@ -170,10 +168,8 @@ public class EnrollController extends  BaseController{
     //我预约的众筹
     @ResponseBody
     @RequestMapping(value = "/crowdfundingByMyEnroll")
-    public List<Enroll> findCrowdfundingByMyEnroll(@RequestParam int startIndex,@RequestParam int loadSize,@CookieValue(value="time_sid", defaultValue="") String userId) {
+    public List<Enroll> findCrowdfundingByMyEnroll(@RequestParam int startIndex,@RequestParam int loadSize,@CookieValue(value="time_sid", defaultValue="00359e8721c44d168aac7d501177e314") String userId) {
         try{
-            //MOCK
-            userId="00359e8721c44d168aac7d501177e314";
             //下架
             return enrollService.findCrowdfundingByMyEnroll(startIndex,loadSize,userId);
         }

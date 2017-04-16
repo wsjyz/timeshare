@@ -43,16 +43,14 @@ public class MoneyAccountController extends  BaseController{
 
 
     @RequestMapping(value = "/listByOwner")
-    public String listByOwner(@CookieValue(value="time_sid", defaultValue="admin") String userId, Model model) {
-        userId="00359e8721c44d168aac7d501177e314";
+    public String listByOwner(@CookieValue(value="time_sid", defaultValue="00359e8721c44d168aac7d501177e314") String userId, Model model) {
         MoneyAccount moneyAccountDB= moneyAccountService.findMoneyAccountByOwner(userId);
         model.addAttribute("moneyAccount",moneyAccountDB);
         return "crowdfunding/tx";
     }
     //goto提现申请页面
     @RequestMapping(value = "/gotoWithdrawal")
-    public String gotoWithdrawal(@CookieValue(value="time_sid", defaultValue="admin") String userId, Model model) {
-        userId="00359e8721c44d168aac7d501177e314";
+    public String gotoWithdrawal(@CookieValue(value="time_sid", defaultValue="00359e8721c44d168aac7d501177e314") String userId, Model model) {
         MoneyAccount moneyAccountDB= moneyAccountService.findMoneyAccountByOwner(userId);
         model.addAttribute("moneyAccount",moneyAccountDB);
         model.addAttribute("monthWithdrawalMaxNumber",Contants.MONTH_WITHDRAWAL_MAX_NUMBER);
@@ -61,9 +59,7 @@ public class MoneyAccountController extends  BaseController{
     //提现检查
     @ResponseBody
     @RequestMapping(value = "/payToSellerCheck")
-    public String payToSellerCheck(@RequestParam BigDecimal cashWithdrawalAmountInput,@CookieValue(value="time_sid", defaultValue="admin") String userId) {
-        //MOCK
-        userId="00359e8721c44d168aac7d501177e314";
+    public String payToSellerCheck(@RequestParam BigDecimal cashWithdrawalAmountInput,@CookieValue(value="time_sid", defaultValue="00359e8721c44d168aac7d501177e314") String userId) {
         long cashWithdrawalAmount=(cashWithdrawalAmountInput.multiply(new BigDecimal(100))).longValueExact();
         if(cashWithdrawalAmount>=101 && cashWithdrawalAmount<=200000){
             MoneyAccount moneyAccount=moneyAccountService.findMoneyAccountByOwner(userId);
@@ -93,10 +89,7 @@ public class MoneyAccountController extends  BaseController{
 
     //提现
     @RequestMapping(value = "/payToSeller")
-    public String payToSeller(HttpServletRequest request,@CookieValue(value="time_sid", defaultValue="admin") String userId,Model model) {
-        //MOCK
-        userId="00359e8721c44d168aac7d501177e314";
-
+    public String payToSeller(HttpServletRequest request,@CookieValue(value="time_sid", defaultValue="00359e8721c44d168aac7d501177e314") String userId,Model model) {
         String code = request.getParameter("code");
         String cashWithdrawalAmountInput = request.getParameter("state");
 

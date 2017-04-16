@@ -60,9 +60,7 @@ public class CrowdFundingController extends  BaseController{
     }
     //我的
     @RequestMapping(value = "/toMe")
-    public String toMe(@CookieValue(value="time_sid", defaultValue="") String userId,Model model) {
-        //MOCK
-        userId="00359e8721c44d168aac7d501177e314";
+    public String toMe(@CookieValue(value="time_sid", defaultValue="00359e8721c44d168aac7d501177e314") String userId,Model model) {
         ImageObj imageObj=new ImageObj();
         imageObj.setImageType(Contants.IMAGE_TYPE.USER_HEAD.name());
         UserInfo userInfo=userService.findUserByUserId(userId,imageObj);
@@ -86,10 +84,8 @@ public class CrowdFundingController extends  BaseController{
     //保存众筹
     @ResponseBody
     @RequestMapping(value = "/save")
-    public String save(CrowdFunding crowdFunding, @RequestParam String imgUrl,@CookieValue(value="time_sid", defaultValue="") String userId, Model model) {
+    public String save(CrowdFunding crowdFunding, @RequestParam String imgUrl,@CookieValue(value="time_sid", defaultValue="00359e8721c44d168aac7d501177e314") String userId, Model model) {
         try{
-            //MOCK
-            userId="00359e8721c44d168aac7d501177e314";
             crowdFunding.setUserId(userId);
             UserInfo userinfo=getCurrentUser(userId);
             crowdFunding.setCreateUserName(userinfo.getNickName());
@@ -130,10 +126,12 @@ public class CrowdFundingController extends  BaseController{
     //我发起的众筹
     @ResponseBody
     @RequestMapping(value = "/findCrowdFundingByOwner")
-    List<CrowdFunding> findCrowdFundingByOwner(@CookieValue(value="time_sid", defaultValue="") String userId,@RequestParam int startIndex,@RequestParam int loadSize){
+    List<CrowdFunding> findCrowdFundingByOwner(@CookieValue(value="time_sid", defaultValue="00359e8721c44d168aac7d501177e314") String userId,@RequestParam int startIndex,@RequestParam int loadSize){
         try{
-            //MOCK
-            userId="00359e8721c44d168aac7d501177e314";
+            //如果是管理员请求则默认将userId置空 让其可以查询所有众筹项目
+            if("admin".equals(userId)){
+                userId="";
+            }
             return crowdFundingService.findCrowdFundingToMyCrowdFunding(startIndex,loadSize,userId);
         }
         catch (Exception e){
