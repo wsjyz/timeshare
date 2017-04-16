@@ -55,6 +55,16 @@ public class CrowdFundingController extends  BaseController{
     public String toMyCrowdFunding() {
         return "crowdfunding/wfqdzc";
     }
+    @RequestMapping(value = "/toMe")
+    public String toMe(@CookieValue(value="time_sid", defaultValue="") String userId,Model model) {
+        //MOCK
+        userId="00359e8721c44d168aac7d501177e314";
+        ImageObj imageObj=new ImageObj();
+        imageObj.setImageType(Contants.IMAGE_TYPE.USER_HEAD.name());
+        UserInfo userInfo=userService.findUserByUserId(userId,imageObj);
+        model.addAttribute("userInfo",userInfo);
+        return "crowdfunding/me";
+    }
 
     @RequestMapping(value = "/toDetail")
     public String toDetail(@RequestParam String crowdFundingId,Model model) {

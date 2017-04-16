@@ -13,11 +13,11 @@
     <meta name="apple-mobile-web-app-title" content="众筹">
     <meta name="Keywords" content="众筹">
     <meta name="Description" content="众筹">
-    <link rel="stylesheet" type="text/css" href="css/sm.min.css">
-    <link rel="stylesheet" type="text/css" href="css/sm-extend.min.css">
-    <link rel="stylesheet" type="text/css" href="css/style.css">
-    <script type="text/javascript" src="js/zepto.min.js"></script>
-    <script type="text/javascript" src="js/config.js"></script>
+    <link rel="stylesheet" type="text/css" href="${request.contextPath}/css/crowdFunding/sm.min.css">
+    <link rel="stylesheet" type="text/css" href="${request.contextPath}/css/crowdFunding/sm-extend.min.css">
+    <link rel="stylesheet" type="text/css" href="${request.contextPath}/css/crowdFunding/style.css">
+    <script type="text/javascript" src="${request.contextPath}/js/zepto.min.js"></script>
+    <script type="text/javascript" src="${request.contextPath}/js/crowdFunding/config.js"></script>
   </head>
   <body>
     <div class="page-group">
@@ -33,9 +33,9 @@
             <div class="content">
             	<div class="me-bg">
                 	<div class="me-info">
-                    	<div class="head"><img src="img/example.png"><i class="flag">VIP</i></div>
-                        <div class="name">刘德华</div>
-                        <div class="tel"><i class="i-left"><img src="img/icon-left.png"></i>13565454545<i class="i-right"><img src="img/icon-right.png"></i></div>
+                    	<div class="head"><img src="${userInfo.imageObj.imageUrl!}"><i class="flag">VIP</i></div>
+                        <div class="name">${userInfo.nickName!}</div>
+                        <div class="tel"><i class="i-left"><img src="${request.contextPath}/images/crowdFunding/icon-left.png"></i>${userInfo.mobile!}<i class="i-right"><img src="${request.contextPath}/images/crowdFunding/icon-right.png"></i></div>
                     </div>
                 </div>
                 
@@ -63,7 +63,7 @@
                 <div class="list-block me-list">
                   <ul>
                     <li>
-                      <a href="wyydzc.html" class="item-content item-link">
+                      <a href="${request.contextPath}/enroll/toCrowdfundingByMyEnroll" class="item-content item-link">
                       <div class="item-inner">
                         <div class="item-title">我预约的</div>
                       </div>
@@ -97,14 +97,14 @@
                       </a>
                     </li>
                     <li>
-                      <a href="fbzc.html" class="item-content item-link">
+                      <a href="${request.contextPath}/crowdFunding/createCrowdFunding" class="item-content item-link">
                       <div class="item-inner">
                         <div class="item-title">发布众筹</div>
                       </div>
                       </a>
                     </li>
                     <li>
-                      <a href="wfqdzc.html" class="item-content item-link">
+                      <a href="${request.contextPath}/crowdFunding/toMyCrowdFunding" class="item-content item-link">
                       <div class="item-inner">
                         <div class="item-title">我发布的众筹</div>
                       </div>
@@ -116,9 +116,9 @@
             <!-- 页面内容区域 end -->
         </div>
     </div>
-	<script type="text/javascript" src="js/sm.min.js"></script>
-    <script type="text/javascript" src="js/sm-extend.min.js"></script>
-	<script type="text/javascript" src="js/sm-city-picker.min.js"></script>
- 	<script type="text/javascript" src="js/my-js.js"></script>
+    <script type="text/javascript" src="${request.contextPath}/js/crowdFunding/sm.min.js"></script>
+    <script type="text/javascript" src="${request.contextPath}/js/crowdFunding/sm-extend.min.js"></script>
+    <script type="text/javascript" src="${request.contextPath}/js/crowdFunding/sm-city-picker.min.js"></script>
+    <script type="text/javascript" src="${request.contextPath}/js/crowdFunding/my-js.js"></script>
   </body>
 </html>
