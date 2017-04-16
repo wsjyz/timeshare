@@ -92,8 +92,8 @@
                   </div>
               </div>
               <div class="buttons-row fixed-tab details-tab" data-offset="44">
-                  <a href="#tab1" class="tab-link active button">详情</a>
-                  <a href="#tab2" class="tab-link button">评论</a>
+                  <a href="#tab1" class="tab-link button" id="detailTab">详情</a>
+                  <a href="#tab2" class="tab-link button" id="commentTab">评论</a>
                   <a href="#tab3" class="tab-link button">已报名</a>
               </div>
               <div class="tabs">
@@ -219,7 +219,15 @@
               }
           );
       });
-
+      //根据评论标志选择显示的tab
+      if("${commentFlag}"=='true'){
+          $("#commentTab").trigger("click");
+          $("#commentTab").addClass("active");
+      }
+      else{
+          $("#detailTab").trigger("click");
+          $("#detailTab").addClass("active");
+      }
 
       // 下拉无限加载
       var loading = false;

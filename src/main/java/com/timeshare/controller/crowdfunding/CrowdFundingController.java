@@ -74,7 +74,9 @@ public class CrowdFundingController extends  BaseController{
     }
     //众筹详情页
     @RequestMapping(value = "/toDetail")
-    public String toDetail(@RequestParam String crowdFundingId,Model model) {
+    public String toDetail(@RequestParam String crowdFundingId,Model model,@RequestParam(defaultValue = "false" ,required = false) String commentFlag) {
+        //是否默认显示评论tab
+        model.addAttribute("commentFlag",commentFlag);
         //众筹详情页
         CrowdFunding crowdFunding=crowdFundingService.findCrowdFundingDetailByCrowdfundingId(crowdFundingId);
         model.addAttribute("crowdFunding",crowdFunding);
