@@ -7,10 +7,12 @@ import com.timeshare.domain.Bid;
 import com.timeshare.domain.ImageObj;
 import com.timeshare.domain.UserInfo;
 import com.timeshare.domain.assembly.Assembly;
+import com.timeshare.domain.assembly.Attender;
 import com.timeshare.domain.assembly.Fee;
 import com.timeshare.service.BidService;
 import com.timeshare.service.UserService;
 import com.timeshare.service.assembly.AssemblyService;
+import com.timeshare.service.assembly.AttenderService;
 import com.timeshare.service.assembly.FeeService;
 import com.timeshare.utils.Contants;
 import org.apache.commons.lang3.StringUtils;
@@ -36,6 +38,8 @@ public class AssemblyServiceImpl implements AssemblyService {
     FeeService feeService;
     @Autowired
     ImageObjDAO imageObjDAO;
+    @Autowired
+    AttenderService attenderService;
     @Override
     public String saveAssembly(Assembly Assembly) {
         return assemblyDAO.saveAssembly(Assembly);
@@ -113,6 +117,7 @@ public class AssemblyServiceImpl implements AssemblyService {
                 }
                 List<Fee> feeList=feeService.findFeeByAssemblyId(assembly.getAssemblyId());
                 if (!CollectionUtils.isEmpty(feeList)){
+                    int quota=0;
                     BigDecimal cost=new BigDecimal(0);
                     for (int i=0;i<feeList.size();i++){
                         Fee fee=feeList.get(i);
@@ -123,9 +128,22 @@ public class AssemblyServiceImpl implements AssemblyService {
                                 cost=fee.getFee();
                             }
                         }
+                        if (fee.getQuota()==0){
+                            quota=-1;
+                        }
+                        if (quota!=-1){
+                            quota=quota+fee.getQuota();
+                        }
                     }
                     assembly.setCost(cost.toString());
+                    if (quota==-1){
+                        assembly.setQuota("不限制");
+                    }else{
+                        assembly.setQuota(quota+"");
+                    }
                 }
+                List<Attender> attenderList = attenderService.getListByAssemblyId(assembly.getAssemblyId());
+                assembly.setAttentCount(attenderList.size());
             }
         }
         return list;

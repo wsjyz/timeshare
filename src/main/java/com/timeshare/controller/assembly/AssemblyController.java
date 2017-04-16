@@ -78,6 +78,7 @@ public class AssemblyController extends  BaseController {
         assembly.setType(type);
         assembly.setTitle(searchName);
         assembly.setRendezvous(citySelect);
+        assembly.setStatus("PUBLISHED");
         List<Assembly> assemblyList = assemblyService.findAssemblyList(assembly, startIndex, loadSize);
         return assemblyList;
     }
@@ -136,6 +137,7 @@ public class AssemblyController extends  BaseController {
             assembly.setUserId(userId);
             assembly.setIsOnApply(onApply);
             assembly.setPhoneNumber(phoneNumber);
+            assembly.setStatus("PUBLISHED");
             Calendar cal = Calendar.getInstance();
             SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
             assembly.setCreateTime(sdf.format(cal.getTime()));
@@ -497,5 +499,48 @@ public class AssemblyController extends  BaseController {
             resultId = "ERROR";
         }
         return resultId;
+    }
+    @RequestMapping(value = "/myAssembly")
+    public String myAssembly( Model model) {
+        return "assembly/myAssembly";
+    }
+
+    @RequestMapping("/myAssemblylist")
+    @ResponseBody
+    public List<Assembly> myAssemblylist(
+                                   @RequestParam(value = "startIndex", defaultValue = "0") int startIndex, @RequestParam(value = "loadSize", defaultValue = "20") int loadSize, Model model, @CookieValue(value = "time_sid", defaultValue = "admin") String userId) {
+        Assembly assembly = new Assembly();
+        assembly.setUserId(userId);
+        List<Assembly> assemblyList = assemblyService.findAssemblyList(assembly, startIndex, loadSize);
+        return assemblyList;
+    }
+    @RequestMapping("/updateAssembly")
+    @ResponseBody
+    public String  updateAssembly(@RequestParam String assemblyId,
+            @RequestParam String resultContent,Model model, @CookieValue(value = "time_sid", defaultValue = "admin") String userId) {
+        String type="";
+        try{
+            Assembly assembly = assemblyService.findAssemblyById(assemblyId);
+            if (assembly!=null){
+                assembly=new Assembly();
+                assembly.setAssemblyId(assemblyId);
+                assembly.setStatus("DISABLED");
+                assembly.setResultContent(resultContent);
+                assemblyService.modifyAssembly(assembly);
+                type="SUCCESS";
+            }
+        }catch (Exception e){
+            e.printStackTrace();
+            type="ERROR";
+        }
+        return type;
+    }
+
+    @RequestMapping(value = "/to-result")
+    public String result(@RequestParam(value = "assemblyId", defaultValue = "") String assemblyId, Model model) {
+        Assembly assembly = assemblyService.findAssemblyById(assemblyId);
+        model.addAttribute("assembly", assembly);
+
+        return "assembly/resultContent";
     }
 }

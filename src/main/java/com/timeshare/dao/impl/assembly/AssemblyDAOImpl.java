@@ -108,6 +108,12 @@ public class AssemblyDAOImpl extends BaseDAO implements AssemblyDAO {
         if(Assembly.getBrowseTimes()>0){
             sql.append(" browse_times = "+Assembly.getBrowseTimes()+",");
         }
+        if(StringUtils.isNotBlank(Assembly.getStatus())){
+            sql.append(" status = '"+Assembly.getStatus()+"',");
+        }
+        if(StringUtils.isNotBlank(Assembly.getResultContent())){
+            sql.append(" result_content = '"+Assembly.getResultContent()+"',");
+        }
 
         if (sql.lastIndexOf(",") + 1 == sql.length()) {
             sql.delete(sql.lastIndexOf(","), sql.length());
@@ -144,6 +150,10 @@ public class AssemblyDAOImpl extends BaseDAO implements AssemblyDAO {
             sql.append(" and ass.type=?");
             list.add(Assembly.getType());
         }
+        if (StringUtils.isNotEmpty(Assembly.getStatus())){
+            sql.append(" and ass.status=?");
+            list.add(Assembly.getStatus());
+        }
         if (StringUtils.isNotEmpty(Assembly.getTitle())){
             sql.append(" and ass.title like ?");
             list.add("%"+Assembly.getTitle()+"%");
@@ -152,8 +162,13 @@ public class AssemblyDAOImpl extends BaseDAO implements AssemblyDAO {
             sql.append(" and ass.rendezvous like ?");
             list.add("%"+Assembly.getRendezvous()+"%");
         }
-        ;
-        sql.append(" and ass.end_time>now() limit ?,?");
+        ;if (StringUtils.isNotEmpty(Assembly.getUserId())){
+            sql.append(" and ass.user_id=?");
+            list.add(Assembly.getUserId());
+        }else{
+            sql.append(" and ass.end_time>now()");
+        }
+        sql.append(" limit ?,?");
         list.add(startIndex);
         list.add(loadSize);
         return getJdbcTemplate().query(sql.toString(),list.toArray(),new AssemblyRowMapper());
@@ -196,6 +211,8 @@ public class AssemblyDAOImpl extends BaseDAO implements AssemblyDAO {
             assembly.setShowApplyProblem(rs.getString("show_apply_problem"));
             assembly.setBrowseTimes(rs.getInt("browse_times"));
             assembly.setCreateTime(rs.getString("create_time"));
+            assembly.setStatus(rs.getString("status"));
+            assembly.setResultContent(rs.getString("result_content"));
             return assembly;
         }
     }

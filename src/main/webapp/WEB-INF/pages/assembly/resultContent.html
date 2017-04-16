@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>强制下架</title>
+    <meta name="viewport" content="initial-scale=1, maximum-scale=1">
+    <link rel="shortcut icon" href="/favicon.ico">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+
+    <link rel="stylesheet" href="http://g.alicdn.com/msui/sm/0.6.2/css/sm.min.css">
+    <link rel="stylesheet" href="http://g.alicdn.com/msui/sm/0.6.2/css/sm-extend.min.css">
+      <link rel="stylesheet" href="${request.contextPath}/css/assembly/main.css">
+  </head>
+  <body>
+  <div class="page-group">
+      <div class="page" id="routerresultContent">
+          <div class="resultContentHeader successHeader header" style="background-color: #fff;">
+              <h1 class="title">强制下架</h1>
+              <a class="button button-link button-nav back pull-left" external href="${request.contextPath}/assembly/myAssembly">
+                  <span class="icon icon-left"></span>
+                  返回
+              </a>
+              <a class="button button-link button-nav back pull-right publish"  external href="javaScript:void(0)" onclick="saveResult()">
+                  提交
+              </a>
+          </div>
+          <div >
+              <span> 下架理由：</span> <textarea style="vertical-align:bottom;width: 60%;border: 1px solid #eee;margin-top: 4%; height: 5rem;" name="description" placeholder="多行输入"></textarea>
+          </div>
+      </div>
+  </div>
+
+    <script type='text/javascript' src='http://g.alicdn.com/sj/lib/zepto/zepto.min.js' charset='utf-8'></script>
+    <script type='text/javascript' src='http://g.alicdn.com/msui/sm/0.6.2/js/sm.min.js' charset='utf-8'></script>
+    <script type='text/javascript' src='http://g.alicdn.com/msui/sm/0.6.2/js/sm-extend.min.js' charset='utf-8'></script>
+  <script type='text/javascript' src='https://res.wx.qq.com/open/js/jweixin-1.0.0.js'></script>
+  <script>
+        $(function(){
+
+        })
+        function  saveResult() {
+            var description=$("textarea[name='description']").val();
+            if(description==""){
+                $.alert("下架理由不能为空!");
+                return false;
+            }
+            $.post("${request.contextPath}/assembly/updateAssembly",{"assemblyId":"${assembly.assemblyId}","resultContent":description},function (data) {
+                if(data=="ERROR"){
+                    $.alert("保存失败，请稍后再试!");
+                }else{
+                    location.href="${request.contextPath}/assembly/myAssembly";
+                }
+            })
+        }
+        $.init();
+    </script>
+  </body>
+</html>

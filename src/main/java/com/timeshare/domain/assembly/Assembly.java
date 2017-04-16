@@ -45,7 +45,30 @@ public class Assembly extends BaseDomain{
     private List<String> contentImgList;
     private String createTime;
     private String consultationImg;
+    private String resultContent;
+    private String status;
+    private String quota;
 
+    public void setQuota(String quota) {
+        this.quota = quota;
+    }
+
+    public String getQuota() {
+        return quota;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
+    }
+    public String getStatus() {
+        return status;
+    }
+    public void setResultContent(String resultContent) {
+        this.resultContent = resultContent;
+    }
+    public String getResultContent() {
+        return resultContent;
+    }
     public String getConsultationImg() {
         return consultationImg;
     }
