@@ -43,18 +43,22 @@ public class CrowdFundingController extends  BaseController{
 
     protected Logger logger = LoggerFactory.getLogger(CrowdFundingController.class);
 
+    //发布众筹页面
     @RequestMapping(value = "/createCrowdFunding")
     public String createCrowdFunding() {
         return "crowdfunding/fbzc";
     }
+    //众筹首页
     @RequestMapping(value = "/toIndex")
     public String toIndex() {
         return "crowdfunding/list";
     }
+    //我发起的众筹
     @RequestMapping(value = "/toMyCrowdFunding")
     public String toMyCrowdFunding() {
         return "crowdfunding/wfqdzc";
     }
+    //我的
     @RequestMapping(value = "/toMe")
     public String toMe(@CookieValue(value="time_sid", defaultValue="") String userId,Model model) {
         //MOCK
@@ -65,7 +69,7 @@ public class CrowdFundingController extends  BaseController{
         model.addAttribute("userInfo",userInfo);
         return "crowdfunding/me";
     }
-
+    //众筹详情页
     @RequestMapping(value = "/toDetail")
     public String toDetail(@RequestParam String crowdFundingId,Model model) {
         //众筹详情页
@@ -77,10 +81,9 @@ public class CrowdFundingController extends  BaseController{
             List<Enroll> enrollList=enrollService.findCrowdfundingEnrollList(crowdFunding.getCrowdfundingId());
             model.addAttribute("enrollList",enrollList);
         }
-
         return "crowdfunding/details";
     }
-
+    //保存众筹
     @ResponseBody
     @RequestMapping(value = "/save")
     public String save(CrowdFunding crowdFunding, @RequestParam String imgUrl,@CookieValue(value="time_sid", defaultValue="") String userId, Model model) {
@@ -92,9 +95,8 @@ public class CrowdFundingController extends  BaseController{
             crowdFunding.setCreateUserName(userinfo.getNickName());
             crowdFunding.setCreateTime(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date()));
             crowdFunding.setOptTime(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date()));
-
+            //保存众筹
             String pk= crowdFundingService.saveCrowdFunding(crowdFunding);
-
 
             ImageObj obj = new ImageObj();
             obj.setObjId(pk);
@@ -103,6 +105,7 @@ public class CrowdFundingController extends  BaseController{
             }
             obj.setImageUrl(imgUrl);
             obj.setImageType(Contants.IMAGE_TYPE.CROWD_FUNDING_IMG.name());
+            //保存众筹图片
             userService.saveOrUpdateImg(obj);
             return Contants.SUCCESS;
         }
@@ -111,6 +114,7 @@ public class CrowdFundingController extends  BaseController{
         }
         return Contants.FAILED;
     }
+    //获取众筹列表
     @ResponseBody
     @RequestMapping(value = "/listCrowdFundingToIndex")
     public List<CrowdFunding> listCrowdFundingToIndex(@RequestParam int startIndex, @RequestParam int loadSize) {
@@ -150,46 +154,4 @@ public class CrowdFundingController extends  BaseController{
         }
         return null;
     }
-
-    @RequestMapping(value = "/to-upload-img")
-    public String toUploadImg(String crowdFundingId,HttpServletRequest request,Model model,@CookieValue(value="time_sid", defaultValue="admin") String userId) {
-        ImageObj imageObj = userService.findUserImg(crowdFundingId, Contants.IMAGE_TYPE.CROWD_FUNDING_IMG.name());
-        String objId = "";
-        String imgType = "";
-        String imageId = "";
-        if(imageObj == null){
-            objId = crowdFundingId;
-            imgType = Contants.IMAGE_TYPE.CROWD_FUNDING_IMG.toString();
-        }else{
-            objId = imageObj.getObjId();
-            imgType = imageObj.getImageType();
-            imageId = imageObj.getImageId();
-            model.addAttribute("imgPath",imageObj.getImageUrl());
-        }
-        model.addAttribute("objId",objId);
-        model.addAttribute("imageType",imgType);
-        model.addAttribute("imageId",imageId);
-
-        return "crowdfunding/uploadimg";
-    }
-    @ResponseBody
-    @RequestMapping(value = "/save-img")
-    public String saveUserImg(@RequestParam String imageId,@RequestParam String imgUrl,
-                              @RequestParam(defaultValue = "",required = false) String objId,
-                              @CookieValue(value="time_sid", defaultValue="") String userId){
-        ImageObj obj = new ImageObj();
-        obj.setImageId(imageId);
-        if(StringUtils.isBlank(objId)){
-            objId = objId;
-        }
-        obj.setObjId(objId);
-        if(imgUrl.indexOf("images") != -1){
-            imgUrl = imgUrl.substring(imgUrl.indexOf("images") - 1,imgUrl.indexOf("_"));
-        }
-        obj.setImageUrl(imgUrl);
-        obj.setImageType(Contants.IMAGE_TYPE.CROWD_FUNDING_IMG.toString());
-        userService.saveOrUpdateImg(obj);
-        return Contants.SUCCESS;
-    }
-
 }

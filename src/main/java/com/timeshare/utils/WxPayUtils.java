@@ -112,10 +112,6 @@ public class WxPayUtils {
         xmlParams.setOut_refund_no(outRefundNo);
         parameters.put("out_refund_no",outRefundNo);
 
-//        xmlParams.setTransaction_id(tradeNo);
-//        parameters.put("transaction_id",tradeNo);
-
-
         xmlParams.setTotal_fee(totalFee);
         parameters.put("total_fee",totalFee);
 
@@ -126,21 +122,12 @@ public class WxPayUtils {
         parameters.put("op_user_id",Contants.MCHID);
 
 
-
-
-
-
-
-
-
         String sign = WxUtils.createSign(parameters,Contants.KEY);
         xmlParams.setSign(sign);
         XStream xs = new XStream(new DomDriver("UTF-8", new XmlFriendlyNameCoder("-_", "_")));
         xs.processAnnotations(xmlParams.getClass());
         String xml = xs.toXML(xmlParams);
-        //System.out.println("payRefund... xml:"+xml);
-        //xml="<xml><appid>wxcd8903dd6a9552eb</appid><mch_id>1358876502</mch_id><nonce_str>89236d64e46d4c6d8e0e3528d34bb07f</nonce_str><op_user_id>1358876502</op_user_id><out_refund_no>ae90401853b444259cbf2f0afebb47d2</out_refund_no><out_trade_no>V20170414110528740</out_trade_no><refund_fee>1</refund_fee><total_fee>1</total_fee><transaction_id></transaction_id><sign>DF3AC725D8606EF2BC636C65F5E16478</sign></xml>";
-        //System.out.println("payRefund2... xml:"+xml);
+
         HTTPSClient client = new HTTPSClient();
         try {
             client.setBodyParams(new String(xml.getBytes("UTF-8"),"ISO-8859-1"));//狗日的微信，神经病
@@ -148,11 +135,10 @@ public class WxPayUtils {
             e.printStackTrace();
         }
         String p12FilePath = "/work/cert/apiclient_cert.p12";
-        //String postUri = "https://api.mch.weixin.qq.com/mmpaymkttransfers/promotion/transfers";
         String postUri = REFUND_URL;
 
         String response = client.httpsRequest(p12FilePath,Contants.MCHID,postUri);
-        //需要替换成WxPayResponseBean
+
         WxRefundResponseBean bean = new WxRefundResponseBean();
         xs.processAnnotations(bean.getClass());
         bean = (WxRefundResponseBean)xs.fromXML(response);

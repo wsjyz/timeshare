@@ -43,7 +43,6 @@ public class WithdrawalLogController extends  BaseController{
         withdrawalLog.setWithdrawalTime(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date()));
         withdrawalLog.setUserId(userId);
         String pk= withdrawalLogService.saveWithdrawalLog(withdrawalLog);
-        System.out.println(pk);
         return "info";
     }
 

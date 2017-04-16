@@ -7,6 +7,7 @@ import com.thoughtworks.xstream.annotations.XStreamAlias;
  */
 @XStreamAlias("xml")
 public class WxRefundResponseBean {
+    //微信退款返回Bean接收domain
 
 //    以下字段在return_code为SUCCESS的时候有返回
 //

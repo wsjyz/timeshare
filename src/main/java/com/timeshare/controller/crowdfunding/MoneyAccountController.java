@@ -41,17 +41,6 @@ public class MoneyAccountController extends  BaseController{
 
     protected Logger logger = LoggerFactory.getLogger(MoneyAccountController.class);
 
-    @RequestMapping(value = "/save")
-    public String save(MoneyAccount moneyAccount, @CookieValue(value="time_sid", defaultValue="") String userId, Model model) {
-        userId="00359e8721c44d168aac7d501177e314";
-        moneyAccount.setCashWithdrawalAmount(new BigDecimal(-100));
-        moneyAccount.setCashRaisedAmount(new BigDecimal(100));
-        moneyAccount.setMonthWithdrawalNumber(1);
-        moneyAccount.setUserId("00359e8721c44d168aac7d501177e314");
-        String pk= moneyAccountService.saveOrUpdateMoneyAccount(moneyAccount);
-        System.out.println(pk);
-        return "info";
-    }
 
     @RequestMapping(value = "/listByOwner")
     public String listByOwner(@CookieValue(value="time_sid", defaultValue="admin") String userId, Model model) {
@@ -60,7 +49,7 @@ public class MoneyAccountController extends  BaseController{
         model.addAttribute("moneyAccount",moneyAccountDB);
         return "crowdfunding/tx";
     }
-
+    //goto提现申请页面
     @RequestMapping(value = "/gotoWithdrawal")
     public String gotoWithdrawal(@CookieValue(value="time_sid", defaultValue="admin") String userId, Model model) {
         userId="00359e8721c44d168aac7d501177e314";
@@ -69,7 +58,7 @@ public class MoneyAccountController extends  BaseController{
         model.addAttribute("monthWithdrawalMaxNumber",Contants.MONTH_WITHDRAWAL_MAX_NUMBER);
         return "crowdfunding/txsq";
     }
-
+    //提现检查
     @ResponseBody
     @RequestMapping(value = "/payToSellerCheck")
     public String payToSellerCheck(@RequestParam BigDecimal cashWithdrawalAmountInput,@CookieValue(value="time_sid", defaultValue="admin") String userId) {
@@ -114,9 +103,10 @@ public class MoneyAccountController extends  BaseController{
         WeixinOauth weixinOauth = new WeixinOauth();
         String openId = weixinOauth.obtainOpenId(code);
         String cashWithdrawalTradeNo = CommonStringUtils.gen18RandomNumber();
-
+        //发起提现操作
         String result= WxPayUtils.payToSeller(cashWithdrawalTradeNo,new BigDecimal(cashWithdrawalAmountInput),openId);
         if(Contants.SUCCESS.equals(result)){
+            //提现成功
             WithdrawalLog withdrawalLog=new WithdrawalLog();
             withdrawalLog.setWithdrawalCash(new BigDecimal(cashWithdrawalAmountInput));
             withdrawalLog.setWithdrawalStatus(Contants.WITHDRAWAL_STATUS.SUCCESS.name());
@@ -126,16 +116,17 @@ public class MoneyAccountController extends  BaseController{
             withdrawalLogService.saveWithdrawalLogAndUpdateMoneyAccount(withdrawalLog);
         }
         else{
+            //提现失败
             WithdrawalLog withdrawalLog=new WithdrawalLog();
             withdrawalLog.setWithdrawalCash(new BigDecimal(cashWithdrawalAmountInput));
             withdrawalLog.setWithdrawalStatus(Contants.WITHDRAWAL_STATUS.REJECT.name());
             withdrawalLog.setWithdrawalTradeNo(cashWithdrawalTradeNo);
             withdrawalLog.setWithdrawalTime(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date()));
+            //记录失败原因
             withdrawalLog.setReplyMsg(result);
             withdrawalLog.setUserId(userId);
             withdrawalLogService.saveWithdrawalLog(withdrawalLog);
         }
-
         return "crowdfunding/txjl";
     }
 }

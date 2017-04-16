@@ -43,7 +43,7 @@ public class EnrollController extends  BaseController{
 
     protected Logger logger = LoggerFactory.getLogger(EnrollController.class);
 
-
+    //报名名单页面
     @RequestMapping(value = "/toCrowdfundingByMyEnroll")
     public String toCrowdfundingByMyEnroll() {
         return "crowdfunding/wyydzc";
@@ -54,11 +54,11 @@ public class EnrollController extends  BaseController{
         return "crowdfunding/bmmd";
     }
 
-
+    //预约页面
     @RequestMapping(value = "/yy")
     public String yy(@RequestParam String crowdFundingId,@RequestParam String enrollId, Model model)  {
         String crowdFundingIdTemp=crowdFundingId;
-        //从支付返回 回来的需要获取一次预约信息展示到页面
+        //从支付返回回来的需要获取一次预约信息展示到页面
         if(StringUtils.isNotBlank(enrollId)){
             Enroll enroll=enrollService.findEnrollById(enrollId);
             model.addAttribute("enroll",enroll);
@@ -89,18 +89,22 @@ public class EnrollController extends  BaseController{
                                 enroll.setUserId(userId);
                                 enroll.setEnrollUserId(userId);
                                 enroll.setOptTime(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date()));
+                                //保存报名信息
                                 String pk= enrollService.saveEnroll(enroll);
                                 return pk;
                             }
                             else{
+                                //众筹项目未发布
                                 return "NOT_RELEASED";
                             }
                         }
                         else{
+                            //报名人数已满
                             return "MAX_PEOPLES_OUT";
                         }
                     }
                     else{
+                        //众筹项目已到期
                         return "TIME_OUT";
                     }
                 }
@@ -111,7 +115,7 @@ public class EnrollController extends  BaseController{
         }
         return Contants.FAILED;
     }
-
+    //支付确认页面
     @RequestMapping(value = "/toEnroolPayConfirm")
     public String toPayForConfirm(HttpServletRequest request, RedirectAttributes attr) {
 
@@ -127,8 +131,8 @@ public class EnrollController extends  BaseController{
 
 
         String payMessageTitle = "金额："+crowdFunding.getReservationCost();
+        //封装支付参数
         String jsApiParams = WxPayUtils.userPayToCorp(code,payMessageTitle,crowdFunding.getReservationCost(),outTradeNo);
-        System.out.println("crowdFunding.getReservationCost():"+crowdFunding.getReservationCost());
 
         attr.addAttribute("jsApiParams",jsApiParams);
         attr.addAttribute("payTip","你确定要支付"+crowdFunding.getReservationCost()+"元吗");
@@ -137,67 +141,19 @@ public class EnrollController extends  BaseController{
 
         return "redirect:/wxPay/to-pay/";
     }
+    //支付成功返回
     @RequestMapping(value = "/payComplete/{enrollId}")
     public String payComplete(@PathVariable String enrollId, Model model,
                                   @CookieValue(value="time_sid", defaultValue="admin") String userId,HttpServletRequest request) {
-        String bidId = request.getParameter("bidId");
-        String wxTradeNo = request.getParameter("wxTradeNo");
-        System.out.println("payComplete ....   enrollId:"+enrollId+"           wxTradeNo:"+wxTradeNo);
-
         Enroll enroll=new Enroll();
         enroll.setEnrollId(enrollId);
         enroll.setPayStatus(Contants.ENROLL_PAY_STATUS.PAYED.name());
         //更新支付状态为已支付
         enrollService.modifyEnroll(enroll);
-
-        return "info";
-    }
-    @RequestMapping(value = "/payCallback")
-    public String payCallback(String crowdfundingId,HttpServletRequest request) {
-        System.out.println("payCallback....   crowdfundingId:"+crowdfundingId);
-        return "error";
-
-//        ItemOrder order = orderService.findOrderByOrderId(orderId);
-//        order.setOrderStatus(bidStatus);
-//        orderService.saveOrder(order);
-        //return "redirect:"+request.getContextPath()+"/to-buyer-confirm/"+orderId;
-    }
-
-
-    @RequestMapping(value = "/refund")
-    public String refund(String wxTradeNo,HttpServletRequest request) {
-        String code = request.getParameter("code");
-        String enrollId = request.getParameter("state");
-        System.out.println("payToSeller... code:"+code);
-        WeixinOauth weixinOauth = new WeixinOauth();
-        String openId = weixinOauth.obtainOpenId(code);
-        System.out.println("payToSeller... openId:"+openId);
-
-
-        String outRefundNo = CommonStringUtils.genPK();
-        String result=WxPayUtils.payRefund(outRefundNo,"S20170413231658734",1,1);
-
-        System.out.println("refund....   result:"+result);
-        return "info";
-
-//        ItemOrder order = orderService.findOrderByOrderId(orderId);
-//        order.setOrderStatus(bidStatus);
-//        orderService.saveOrder(order);
-        //return "redirect:"+request.getContextPath()+"/to-buyer-confirm/"+orderId;
-    }
-
-
-
-    @RequestMapping(value = "/listByOwner")
-    public String listByOwner(Enroll enroll, @CookieValue(value="time_sid", defaultValue="") String userId, Model model) {
-        userId="00359e8721c44d168aac7d501177e314";
-        List<Enroll> enrollList= enrollService.findEnrollByOwner(userId,0,10);
-        for (Enroll enrollItem: enrollList) {
-            System.out.println(enrollItem.getUserName()+"---"+enrollItem.getPhone()+"---"+enrollItem.getCorpName());
-        }
         return "info";
     }
 
+    //导出报名名单
     @ResponseBody
     @RequestMapping(value = "/exportEnrollListToEmail")
     public String exportEnrollListToEmail(@RequestParam String crowdfundingId,@RequestParam String toEmailAddress) throws IOException {

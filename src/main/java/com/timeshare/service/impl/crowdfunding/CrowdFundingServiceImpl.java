@@ -81,7 +81,7 @@ public class CrowdFundingServiceImpl implements CrowdFundingService {
     public String crowdFundingToShelve(CrowdFunding crowdFunding) {
         return crowdFundingDAO.modifyEnroll(crowdFunding);
     }
-    //用户自行下架
+    //用户下架
     public String crowdFundingToShelveByCrowdfundingId(String crowdfundingId,String offShelveReason) {
         if(StringUtils.isNotBlank(crowdfundingId)){
             CrowdFunding crowdfunding=findCrowdFundingById(crowdfundingId);
