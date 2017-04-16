@@ -22,8 +22,14 @@
   <body>
     <div class="page-group">
         <div class="page page-current">
+
         	<!--header start-->
-            <header class="bar bar-nav"><h1 class="title">我发起的众筹</h1></header>
+            <header class="bar bar-nav">
+                <a href="javascript:history.go(-1);" class="button button-link pull-left back">
+                    <span class="icon icon-left"></span>返回
+                </a>
+                <h1 class="title">我发起的众筹</h1>
+            </header>
             <!--header end-->
             <!--页面内容区域 start-->
             <div class="content infinite-scroll  wfqdzc-scroll"  data-distance="100">
@@ -36,7 +42,9 @@
                   <div class="infinite-scroll-preloader">
                       <div class="preloader"></div>
                   </div>
-                  
+                <div class="no-record" style="display: none;text-align: center">
+                    没有更多记录了
+                </div>
              </div>
             <!-- 页面内容区域 end -->
        </div>    
@@ -57,7 +65,9 @@
       function addItems(data) {
           // 生成新条目的HTML
           var html = '';
+          var count=0;
           $.each(data, function(i, crowdFunding){
+              count=i;
 
               var crowdfundingStatusName="已发布";
               if(crowdFunding.crowdfundingStatus=='SKETCH'){
@@ -68,7 +78,7 @@
               }
 
 
-              html += '<li><a href="#" class="item-link item-content create-actions" param="'+crowdFunding.crowdfundingId+'" rowNumber='+i+'>'+
+              html += '<li><a href="#" class="item-link item-content create-actions" param="'+crowdFunding.crowdfundingId+'" param1="'+crowdFunding.crowdfundingStatus+'" rowNumber='+i+'>'+
                   '<div class="item-inner"><div class="item-title-row">'+
                   '<div class="item-title">'+crowdFunding.projectName+'</div></div>'+
                   '<div class="item-subtitle"><span class="tag" id="crowdfundingStatusName'+i+'">'+crowdfundingStatusName+'</span><span class="date">'+crowdFunding.curriculumEndTime+'</span></div>'+
@@ -77,6 +87,14 @@
           });
           // 添加新条目
           $('.wfqdzc-scroll .wfqdzc-list ul').append(html);
+
+          if(count+1 < itemsPerLoad){
+              // 加载完毕，则注销无限加载事件，以防不必要的加载
+              $.detachInfiniteScroll($('.infinite-scroll'));
+              // 删除加载提示符
+              $('.infinite-scroll-preloader').remove();
+              $('.no-record').show();
+          }
       }
       //预先加载众筹项目
       $.post('${request.contextPath}/crowdFunding/findCrowdFundingByOwner', {startIndex: 0,loadSize:itemsPerLoad}, function (response) {
@@ -113,6 +131,7 @@
                       $.detachInfiniteScroll($('.infinite-scroll'));
                       // 删除加载提示符
                       $('.infinite-scroll-preloader').remove();
+                      $('.no-record').show();
                       return;
                   }
                   else{
@@ -130,33 +149,59 @@
       $(document).on("pageInit", ".page", function(e, id, page) {
           $(page).on('click','.create-actions', function () {
               var crowdfundingId=$(this).attr("param");
+              var thiObj=$(this);
+              var crowdfundingStatus=$(this).attr("param1");
+              var showText="强制下架";
+              if(crowdfundingStatus=='SKETCH' || crowdfundingStatus=='OFF_SHELVE'){
+                  showText="发布";
+              }
               var rowNumber=$(this).attr("rowNumber");
               var buttons1 = [
                   {
-                      text: '强制下架',
+                      text: showText,
                       onClick: function() {
-
-                          $.prompt('请填写下架理由', '强制下架',
-                              function (value) {
-                                  $.post('${request.contextPath}/crowdFunding/crowdFundingToShelve', {crowdfundingId: crowdfundingId,offShelveReason:value}, function (response) {
-                                      if(response=='success'){
-                                          $("#crowdfundingStatusName"+rowNumber).text("已下架");
-                                          $.toast("下架成功");
-                                      }
-                                      else{
-                                          $.toast("下架失败");
-                                      }
-                                  });
-                              },
-                              function (value) {
-                                  //$.alert('取消');
-                              }
-                          );
+                          if(crowdfundingStatus=='SKETCH' || crowdfundingStatus=='OFF_SHELVE'){
+                              $.post('${request.contextPath}/crowdFunding/updateSketchAndOffShelveToReleased', {crowdfundingId: crowdfundingId}, function (response) {
+                                  if(response=='success'){
+                                      $("#crowdfundingStatusName"+rowNumber).text("已发布");
+                                      thiObj.attr("param1","RELEASED");
+                                      $.toast("发布成功");
+                                  }
+                                  else{
+                                      $.toast("发布失败");
+                                  }
+                              });
+                          }
+                          else{
+                              $.prompt('请填写下架理由', '强制下架',
+                                  function (value) {
+                                      $.post('${request.contextPath}/crowdFunding/crowdFundingToShelve', {crowdfundingId: crowdfundingId,offShelveReason:value}, function (response) {
+                                          if(response=='success'){
+                                              $("#crowdfundingStatusName"+rowNumber).text("已下架");
+                                              thiObj.attr("param1","OFF_SHELVE");
+                                              $.toast("下架成功");
+                                          }
+                                          else{
+                                              $.toast("下架失败");
+                                          }
+                                      });
+                                  },
+                                  function (value) {
+                                      //$.alert('取消');
+                                  }
+                              );
+                          }
                       }
                   },
                   {
                       text: '讨论管理',
                       onClick: function() {
+                      }
+                  },
+                  {
+                      text: '报名名单',
+                      onClick: function() {
+                          window.location.href="${request.contextPath}/enroll/toCrowdfundingByMyEnrollToPaging?crowdFundingId="+crowdfundingId;
                       }
                   }
               ];

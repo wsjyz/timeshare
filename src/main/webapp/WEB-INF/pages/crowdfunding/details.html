@@ -24,9 +24,9 @@
         <div class="page page-current">
         	<!--header start-->            
             <header class="bar bar-nav bar-list">
-              <a href="${request.contextPath}/crowdFunding/toIndex" class="button button-link pull-left back">
-                <span class="icon icon-left"></span>返回
-              </a>
+                <a href="javascript:history.go(-1);" class="button button-link pull-left back">
+                    <span class="icon icon-left"></span>返回
+                </a>
               <a href="${request.contextPath}/crowdFunding/createCrowdFunding" class="icon i-edit pull-right"></a>
               <h1 class="title">详情</h1>
             </header>
@@ -43,7 +43,7 @@
             <div class="content">
                <div class="details">
                   <div class="item-box">
-                      <div class="zc-img"><img src="${request.contextPath}/${crowdFunding.imageUrl}_320x240.jpg"></div>
+                      <div class="zc-img"><img src="${crowdFunding.imageUrl}_320x240.jpg" onerror="this.src='${request.contextPath}/images/crowdFunding/pic.jpg'"></div>
                       <div class="zc-text">
                           <div class="zc-name">
                               <em class="tag">
@@ -106,9 +106,9 @@
                   <!--详情 end-->
                   <!--评论 start-->
                   <div id="tab2" class="tab">
-                      <!--<div class="content-block details-comment">-->
-                          <!--<div class="list-block media-list">-->
-                              <!--<ul>-->
+                      <div class="content-block details-comment infinite-scroll media-scroll">
+                          <div class="list-block media-list">
+                              <ul>
                                   <!--<li class="item-content">-->
                                       <!--<div class="item-media"><img src="img/example.png"><span class="lv">LV4</span></div>-->
                                       <!--<div class="item-inner">-->
@@ -118,9 +118,9 @@
                                           <!--</div>-->
                                           <!--<div class="item-subtitle score">-->
                                               <!--打分<span class="star">-->
-                                    <!--<img src="img/icon-star.png"><img src="img/icon-star.png">-->
-                                    <!--<img src="img/icon-star.png"><img src="img/icon-star-e.png">-->
-                                    <!--</span>-->
+                                                    <!--<img src="img/icon-star.png"><img src="img/icon-star.png">-->
+                                                    <!--<img src="img/icon-star.png"><img src="img/icon-star-e.png">-->
+                                                <!--</span>-->
                                           <!--</div>-->
                                           <!--<div class="item-text">此处是文本内容此处是文本内容此处是文本内容此处是文本内容此处是文本内容此处是文本内容</div>-->
                                           <!--<div class="item-img">-->
@@ -161,10 +161,15 @@
                                           <!--</div>-->
                                       <!--</div>-->
                                   <!--</li>-->
-                              <!--</ul>-->
-                          <!--</div>-->
-                          <!--<div class="content-block t-c"><a href="#">加载更多</a></div>-->
-                      <!--</div>-->
+                              </ul>
+                          </div>
+                          <div class="infinite-scroll-preloader">
+                              <div class="preloader"></div>
+                          </div>
+                          <div class="no-record" style="display: none;text-align: center">
+                              没有更多记录了
+                          </div>
+                      </div>
                   </div>
                   <!--评论 end-->
                   <!--报名 start-->
@@ -214,6 +219,111 @@
               }
           );
       });
+
+
+      // 下拉无限加载
+      var loading = false;
+      // 最多可加载的条目
+      var maxItems = 999;
+      // 每次加载添加多少条目
+      var itemsPerLoad = 20;
+      function addItems(data) {
+          // 生成新条目的HTML
+          var html = '';
+          var count=0;
+          $.each(data, function(i, comment){
+              html += '<li class="item-content">' +
+                          '<div class="item-media">' +
+                              '<img src="'+comment.userImg+'">' +
+                          '</div>' +
+                          '<div class="item-inner">' +
+                                '<div class="item-title-row"> ' +
+                                    '<div class="item-title">'+comment.userName+'<span class="flag">vip</span>' + '</div>' +
+                                    '<div class="item-after">' + '<span class="date">'+comment.createTime+'</span>' + '</div> ' +
+                                '</div>' +
+                                '<div class="item-subtitle score">打分<span class="star">' +
+                                      '<img src="${request.contextPath}/images/crowdFunding/icon-star.png">' +
+                                      '<img src="${request.contextPath}/images/crowdFunding/icon-star.png">' +
+                                      '<img src="${request.contextPath}/images/crowdFunding/icon-star.png">' +
+                                      '<img src="${request.contextPath}/images/crowdFunding/icon-star-e.png">' +
+                                      '</span>' +
+                                '</div>' +
+                                '<div class="item-text">'+comment.content+'</div>' +
+                                '<div class="item-title-row mt5">' +
+                                      '<div class="item-title"><span class="browse"></span></div>'+
+                                      '<div class="item-after">' +
+                                            '<button class="button btn-praise"><i class="i-praise"></i> 赞</button>' +
+                                            '<button class="button btn-reply"><i class="i-reply"></i> 回复</button>' +
+                                      '</div>' +
+                                '</div>' +
+                          '</div>' +
+                        '</li>';
+              count=i;
+          });
+          // 添加新条目
+          $('.media-scroll .media-list ul').append(html);
+
+
+          if(count+1 < itemsPerLoad){
+              // 加载完毕，则注销无限加载事件，以防不必要的加载
+              $.detachInfiniteScroll($('.infinite-scroll'));
+              // 删除加载提示符
+              $('.infinite-scroll-preloader').remove();
+              $('.no-record').show();
+          }
+      }
+
+      //预先加载
+      var crowdFundingIdTemp="${crowdFunding.crowdfundingId!}";
+      $.post('${request.contextPath}/crowdFunding/commentList', {crowdfundingId:crowdFundingIdTemp,startIndex: 0,loadSize:itemsPerLoad}, function (response) {
+          //预先加载
+          addItems(response);
+      });
+
+
+      // 上次加载的序号
+      var lastIndex = itemsPerLoad;
+      // 注册'infinite'事件处理函数
+      $(document).on('infinite', '.media-scroll',function() {
+          // 如果正在加载，则退出
+          if (loading) return;
+          // 设置flag
+          loading = true;
+          // 模拟1s的加载过程
+          setTimeout(function() {
+              // 重置加载flag
+              loading = false;
+              if (lastIndex >= maxItems) {
+                  // 加载完毕，则注销无限加载事件，以防不必要的加载
+                  $.detachInfiniteScroll($('.infinite-scroll'));
+                  // 删除加载提示符
+                  $('.infinite-scroll-preloader').remove();
+                  // 提示没有更多数据
+                  $('.no-record').show();
+              }
+              // 添加新条目
+              var crowdFundingIdTemp="${crowdFunding.crowdfundingId!}";
+              $.post('${request.contextPath}/crowdFunding/commentList', {crowdfundingId:crowdFundingIdTemp,startIndex: lastIndex,loadSize:itemsPerLoad}, function (response) {
+                  if(response==null || response==undefined ||  response==''){
+                      // 加载完毕，则注销无限加载事件，以防不必要的加载
+                      $.detachInfiniteScroll($('.infinite-scroll'));
+                      // 删除加载提示符
+                      $('.infinite-scroll-preloader').remove();
+                      // 提示没有更多数据
+                      $('.no-record').show();
+                  }
+                  else{
+                      addItems(response);
+                  }
+              });
+
+              // 更新最后加载的序号
+              lastIndex = lastIndex+itemsPerLoad;
+              //容器发生改变,如果是js滚动，需要刷新滚动
+              $.refreshScroller();
+          }, 1);
+      });
+
   </script>
 
 </html>

@@ -23,7 +23,12 @@
     <div class="page-group">
         <div class="page page-current">
         	<!--header start-->
-            <header class="bar bar-nav"><h1 class="title">提现记录</h1></header>
+            <header class="bar bar-nav">
+                <a href="javascript:history.go(-1);" class="button button-link pull-left back">
+                    <span class="icon icon-left"></span>返回
+                </a>
+                <h1 class="title">提现记录</h1>
+            </header>
             <!--header end-->
             <!--页面内容区域 start-->
             <div class="content  infinite-scroll txjl-scroll">
@@ -32,6 +37,9 @@
                   <div class="infinite-scroll-preloader">
                       <div class="preloader"></div>
                   </div>
+                <div class="no-record" style="display: none;text-align: center">
+                    没有更多记录了
+                </div>
              </div>
             <!-- 页面内容区域 end -->
        </div>    
@@ -52,7 +60,10 @@
     function addItems(data) {
         // 生成新条目的HTML
         var html = '';
+        var count=0;
         $.each(data, function(i, withdrawalLog){
+            count=i;
+
             var withdrawalStatusZH='已发放';
             if(withdrawalLog.withdrawalStatus=='PENDING'){
                 withdrawalStatusZH='审批中';
@@ -90,6 +101,14 @@
         });
         // 添加新条目
         $('.txjl-scroll .txjl-list').append(html);
+
+        if(count+1 < itemsPerLoad){
+            // 加载完毕，则注销无限加载事件，以防不必要的加载
+            $.detachInfiniteScroll($('.infinite-scroll'));
+            // 删除加载提示符
+            $('.infinite-scroll-preloader').remove();
+            $('.no-record').show();
+        }
     }
 
     //预先加载
@@ -125,6 +144,7 @@
                     $.detachInfiniteScroll($('.infinite-scroll'));
                     // 删除加载提示符
                     $('.infinite-scroll-preloader').remove();
+                    $('.no-record').show();
                     return;
                 }
                 else{

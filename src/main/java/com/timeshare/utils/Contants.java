@@ -120,5 +120,11 @@ public interface Contants {
         YES,
         NO
     }
+    //评论对象类型
+    enum COMMENT_OBJ_TYPE {
+        ASSEMBLY,
+        CROWDFUNDING
+    }
+
 
 }

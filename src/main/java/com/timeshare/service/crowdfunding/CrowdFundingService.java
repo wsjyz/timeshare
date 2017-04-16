@@ -23,10 +23,12 @@ public interface CrowdFundingService {
     public CrowdFunding findCrowdFundingDetailByCrowdfundingId(String crowdfundingId);
     //我发起的众筹
     public List<CrowdFunding> findCrowdFundingToMyCrowdFunding(int startIndex, int loadSize,String userId) ;
-    //下架
-    public String crowdFundingToShelve(CrowdFunding crowdFunding) ;
+    //修改
+    public String modifyEnroll(CrowdFunding crowdFunding) ;
     //强行下架
     public String crowdFundingToShelveByCrowdfundingId(String crowdfundingId,String offShelveReason) ;
     //获取众筹对象用于执行支付
     public CrowdFunding findCrowdFundingToPay(String crowdfundingId);
+    //项目名称是否存在
+    public Boolean crowdFundingPrjectNameIsExisting(String crowdFundingPrjectName) ;
 }

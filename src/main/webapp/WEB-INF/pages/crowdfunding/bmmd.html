@@ -23,7 +23,13 @@
     <div class="page-group">
         <div class="page page-current">
         	<!--header start-->
-            <header class="bar bar-nav"><a href="#" class="pull-right button export">导出</a><h1 class="title">报名名单</h1></header>
+            <header class="bar bar-nav">
+                <a href="javascript:history.go(-1);" class="button button-link pull-left back">
+                    <span class="icon icon-left"></span>返回
+                </a>
+                <a href="#" class="pull-right button export">导出</a>
+                <h1 class="title">报名名单</h1>
+            </header>
             <!--header end-->
             <div class="bar bar-header-secondary table-head">
                 <span>姓名</span>
@@ -40,7 +46,9 @@
                 <div class="infinite-scroll-preloader">
                     <div class="preloader"></div>
                 </div>
-                  
+                <div class="no-record" style="display: none;text-align: center">
+                    没有更多记录了
+                </div>
              </div>
             <!-- 页面内容区域 end -->
        </div>    
@@ -82,11 +90,23 @@
       function addItems(data) {
           // 生成新条目的HTML
           var html = '';
+          var count=0;
           $.each(data, function(i, enroll){
+              //alert(enroll2.userName);
               html += '<li><span>'+enroll.userName+'</span><span>'+enroll.phone+'</span></li>';
+              count=i;
           });
           // 添加新条目
           $('.bmmd-scroll .bmmd-list ul').append(html);
+
+
+          if(count+1 < itemsPerLoad){
+              // 加载完毕，则注销无限加载事件，以防不必要的加载
+              $.detachInfiniteScroll($('.infinite-scroll'));
+              // 删除加载提示符
+              $('.infinite-scroll-preloader').remove();
+              $('.no-record').show();
+          }
       }
 
       //预先加载
@@ -114,7 +134,8 @@
                   $.detachInfiniteScroll($('.infinite-scroll'));
                   // 删除加载提示符
                   $('.infinite-scroll-preloader').remove();
-                  return;
+                  // 提示没有更多数据
+                  $('.no-record').show();
               }
               // 添加新条目
               var crowdFundingIdTemp="${crowdFundingId!}";
@@ -124,7 +145,8 @@
                       $.detachInfiniteScroll($('.infinite-scroll'));
                       // 删除加载提示符
                       $('.infinite-scroll-preloader').remove();
-                      return;
+                      // 提示没有更多数据
+                      $('.no-record').show();
                   }
                   else{
                       addItems(response);

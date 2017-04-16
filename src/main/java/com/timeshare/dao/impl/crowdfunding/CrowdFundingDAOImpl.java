@@ -78,6 +78,14 @@ public class CrowdFundingDAOImpl extends BaseDAO implements CrowdFundingDAO {
         return getJdbcTemplate().query(sql.toString(),new Object[]{},new CrowdFundingRowMapper());
     }
 
+    public List<CrowdFunding> findCrowdFundingByPrjectName(String crowdFundingPrjectName) {
+        StringBuilder sql = new StringBuilder("select * from t_crowdfunding ");
+        if(StringUtils.isNotBlank(crowdFundingPrjectName)){
+            sql.append("where project_name='"+crowdFundingPrjectName+"'");
+        }
+        return getJdbcTemplate().query(sql.toString(),new Object[]{},new CrowdFundingRowMapper());
+    }
+
 
     public int findCrowdFundingByOwnerCount(String userId) {
         StringBuilder countSql = new StringBuilder(
@@ -134,6 +142,7 @@ public class CrowdFundingDAOImpl extends BaseDAO implements CrowdFundingDAO {
         sql.append("from t_crowdfunding c ");
         sql.append("left join t_enroll e ");
         sql.append("on c.crowdfunding_id=e.crowdfunding_id ");
+        sql.append("and e.pay_status='PAYED' ");
         sql.append("left join t_img_obj o ");
         sql.append("on c.crowdfunding_id=o.obj_id ");
         sql.append("and o.image_type='CROWD_FUNDING_IMG' ");
@@ -141,7 +150,7 @@ public class CrowdFundingDAOImpl extends BaseDAO implements CrowdFundingDAO {
         sql.append("where 1=1 ");
 
         if(StringUtils.isNotBlank(userId)){
-            sql.append("and c.user_id='"+userId+"'");
+            sql.append("and c.user_id='"+userId+"' ");
         }
         sql.append("group by c.crowdfunding_id ");
         sql.append("order by c.create_time desc ");

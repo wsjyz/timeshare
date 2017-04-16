@@ -59,7 +59,11 @@ public class CommentServiceImpl implements CommentService {
 
     @Override
     public List<Comment> findCommentByObjId(String objId) {
-        List<Comment> commentList= commentDAO.findCommentByObjId(objId);
+       return findCommentByObjId(objId,0,0);
+    }
+
+    public List<Comment> findCommentByObjId(String objId ,int startIndex,  int loadSize) {
+        List<Comment> commentList= commentDAO.findCommentByObjId(objId,startIndex,loadSize);
         if (!CollectionUtils.isEmpty(commentList)){
             for (Comment comment:commentList){
                 UserInfo userInfo=userService.findUserByUserId(comment.getUserId());
@@ -79,7 +83,7 @@ public class CommentServiceImpl implements CommentService {
                 if(!CollectionUtils.isEmpty(imageObjList)){
                     List<String> commentImgList=new ArrayList<String>();
                     for (ImageObj imageObj:imageObjList){
-                         commentImgList.add("/time"+imageObj.getImageUrl()+".jpg");
+                        commentImgList.add("/time"+imageObj.getImageUrl()+".jpg");
                     }
                     comment.setCommentImgList(commentImgList);
                 }

@@ -37,8 +37,6 @@
 
                     </div>
                     <div class="swiper-pagination"></div>
-                    <div class="swiper-button-next"></div>
-                    <div class="swiper-button-prev"></div>
                 </div>
                   <div class="list-block">
                      <div class="zc-list">
@@ -49,7 +47,9 @@
                   <div class="infinite-scroll-preloader">
                       <div class="preloader"></div>
                   </div>
-      
+                  <div class="no-record" style="display: none;text-align: center">
+                    没有更多记录了
+                  </div>
             </div>
             <!-- 页面内容区域 end -->
         </div>
@@ -72,6 +72,7 @@
         // 每次加载添加多少条目
         var itemsPerLoad = 20;
         function addItems(data) {
+            var count=0;
             // 生成新条目的HTML
             var html = '';
             $.each(data, function(i, crowdFunding){
@@ -93,17 +94,12 @@
                     price=crowdFunding.costTotal/crowdFunding.maxPeoples;
                 }
 
-                var imageUrlSrc='';
-                if(crowdFunding.imageUrl!=null && crowdFunding.imageUrl!='null' && crowdFunding.imageUrl.indexOf('/time/crowdFunding/createCrowdFunding')==-1){
-                    var imageUrlSrc='${request.contextPath}/'+crowdFunding.imageUrl+'_320x240.jpg';
-                }
-                else{
-                    var imageUrlSrc='${request.contextPath}/images/crowdFunding/pic.jpg';
-                }
+
+                var imageUrlSrc='${request.contextPath}/'+crowdFunding.imageUrl+'_320x240.jpg';
 
                 html += '<div class="item"><div class="item-title">'+crowdFunding.createUserName+'</div>'+
                     '<div class="item-box">'+
-                    '<div class="zc-img"><a href="${request.contextPath}/crowdFunding/toDetail?crowdFundingId='+crowdFunding.crowdfundingId+'"><img src="'+imageUrlSrc+'"/></a></div>'+
+                    '<div class="zc-img"><a href="${request.contextPath}/crowdFunding/toDetail?crowdFundingId='+crowdFunding.crowdfundingId+'"><img src="'+imageUrlSrc+'" onerror="this.src=\'${request.contextPath}/images/crowdFunding/pic.jpg\'"/></a></div>'+
                     '<div class="zc-text">'+
                     '<div class="zc-name"><a href="${request.contextPath}/crowdFunding/toDetail?crowdFundingId='+crowdFunding.crowdfundingId+'"><em class="tag">'+enrollTitleStatus+'</em>'+crowdFunding.projectName+'</a></div>'+
                     '<div class="zc-info"><span class="time"><i class="i-time"></i>上课时间:'+crowdFunding.curriculumEndTime+'</span><span class="address"><i class="i-address"></i>'+crowdFunding.sponsorCity+'</span></div>'+
@@ -111,9 +107,18 @@
                     '<div class="zc-info"><span class="price">众筹最低学费:'+price+'元</span><span class="num">学员人数:'+crowdFunding.enrollCount+'/'+crowdFunding.maxPeoples+'人</span></div>'+
                     '<div class="zc-abstract">'+crowdFunding.detail+'</div>'+
                     '<div class="zc-link"><a href="${request.contextPath}/crowdFunding/toDetail?crowdFundingId='+crowdFunding.crowdfundingId+'">查看详情</a></div></div></div></div>';
+
+                count=i;
             });
             // 添加新条目
             $('.infinite-scroll-bottom .zc-list').append(html);
+            if(count+1 < itemsPerLoad){
+                // 加载完毕，则注销无限加载事件，以防不必要的加载
+                $.detachInfiniteScroll($('.infinite-scroll'));
+                // 删除加载提示符
+                $('.infinite-scroll-preloader').remove();
+                $('.no-record').show();
+            }
         }
 
         //设置前五轮播图
@@ -121,14 +126,8 @@
             // 生成新条目的HTML
             var html = '';
             $.each(data, function(i, crowdFunding){
-                var imageUrlSrc='';
-                if(crowdFunding.imageUrl!=null && crowdFunding.imageUrl!='null' && crowdFunding.imageUrl.indexOf('/time/crowdFunding/createCrowdFunding')==-1){
-                    var imageUrlSrc='${request.contextPath}/'+crowdFunding.imageUrl+'_320x240.jpg';
-                }
-                else{
-                    var imageUrlSrc='${request.contextPath}/images/crowdFunding/pic.jpg';
-                }
-                html += '<div class="swiper-slide"><a href="${request.contextPath}/crowdFunding/toDetail?crowdFundingId='+crowdFunding.crowdfundingId+'"><img src="'+imageUrlSrc+'"/></a></div>';
+                var imageUrlSrc='${request.contextPath}/'+crowdFunding.imageUrl+'_320x240.jpg';
+                html += '<div class="swiper-slide"><a href="${request.contextPath}/crowdFunding/toDetail?crowdFundingId='+crowdFunding.crowdfundingId+'"><img src="'+imageUrlSrc+'" onerror="this.src=\'${request.contextPath}/images/crowdFunding/pic.jpg\'"/></a></div>';
             });
             // 添加新条目
             $('.infinite-scroll-bottom .swiper-wrapper').append(html);
@@ -184,6 +183,8 @@
                         $.detachInfiniteScroll($('.infinite-scroll'));
                         // 删除加载提示符
                         $('.infinite-scroll-preloader').remove();
+
+                        $('.no-record').show();
                         return;
                     }
                     else{

@@ -25,7 +25,12 @@
 <div class="page-group">
     <div class="page page-current">
         <!--header start-->
-        <header class="bar bar-nav"><h1 class="title">发起</h1></header>
+        <header class="bar bar-nav">
+            <a href="javascript:history.go(-1);" class="button button-link pull-left back">
+                <span class="icon icon-left"></span>返回
+            </a>
+            <h1 class="title">发起</h1>
+        </header>
         <!--header end-->
         <!--页面内容区域 start-->
         <div class="content">
@@ -203,6 +208,12 @@
                         $.toast("发布成功");
                         window.location.href = "${request.contextPath}/crowdFunding/toMyCrowdFunding";
                     }
+                    else if(result == "PROJECT_NAME_IS_EXISTING"){
+                        $.toast("项目名称已存在，请重新输入");
+                    }
+                    else if(result == "PROJECT_NAME_IS_NULL"){
+                        $.toast("项目名称不能为空，请重新输入");
+                    }
                     else{
                         $.toast("发布失败");
                     }
@@ -214,6 +225,13 @@
                 $.post('${request.contextPath}/crowdFunding/save', $("#publishCrowdFunding").serialize(), function (result) {
                     if (result == "success") {
                         $.toast("草稿保存成功");
+                        window.location.href = "${request.contextPath}/crowdFunding/toMyCrowdFunding";
+                    }
+                    else if(result == "PROJECT_NAME_IS_EXISTING"){
+                        $.toast("项目名称已存在，请重新输入");
+                    }
+                    else if(result == "PROJECT_NAME_IS_NULL"){
+                        $.toast("项目名称不能为空，请重新输入");
                     }
                     else{
                         $.toast("草稿保存失败");

@@ -3,9 +3,11 @@ package com.timeshare.controller.crowdfunding;
 import com.timeshare.controller.BaseController;
 import com.timeshare.domain.ImageObj;
 import com.timeshare.domain.UserInfo;
+import com.timeshare.domain.assembly.Comment;
 import com.timeshare.domain.crowdfunding.CrowdFunding;
 import com.timeshare.domain.crowdfunding.Enroll;
 import com.timeshare.service.UserService;
+import com.timeshare.service.assembly.CommentService;
 import com.timeshare.service.crowdfunding.CrowdFundingService;
 import com.timeshare.service.crowdfunding.EnrollService;
 import com.timeshare.utils.Contants;
@@ -40,6 +42,9 @@ public class CrowdFundingController extends  BaseController{
 
     @Autowired
     private EnrollService enrollService;
+
+    @Autowired
+    private CommentService commentService;
 
     protected Logger logger = LoggerFactory.getLogger(CrowdFundingController.class);
 
@@ -86,30 +91,60 @@ public class CrowdFundingController extends  BaseController{
     @RequestMapping(value = "/save")
     public String save(CrowdFunding crowdFunding, @RequestParam String imgUrl,@CookieValue(value="time_sid", defaultValue="00359e8721c44d168aac7d501177e314") String userId, Model model) {
         try{
-            crowdFunding.setUserId(userId);
-            UserInfo userinfo=getCurrentUser(userId);
-            crowdFunding.setCreateUserName(userinfo.getNickName());
-            crowdFunding.setCreateTime(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date()));
-            crowdFunding.setOptTime(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date()));
-            //保存众筹
-            String pk= crowdFundingService.saveCrowdFunding(crowdFunding);
+            if(crowdFunding!=null && StringUtils.isNotBlank(crowdFunding.getProjectName())){
+                boolean isExisting=crowdFundingService.crowdFundingPrjectNameIsExisting(crowdFunding.getProjectName());
+                if(!isExisting){
+                    crowdFunding.setUserId(userId);
+                    UserInfo userinfo=getCurrentUser(userId);
+                    crowdFunding.setCreateUserName(userinfo.getNickName());
+                    crowdFunding.setCreateTime(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date()));
+                    crowdFunding.setOptTime(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date()));
+                    //保存众筹
+                    String pk= crowdFundingService.saveCrowdFunding(crowdFunding);
 
-            ImageObj obj = new ImageObj();
-            obj.setObjId(pk);
-            if(imgUrl.indexOf("images") != -1){
-                imgUrl = imgUrl.substring(imgUrl.indexOf("images") - 1,imgUrl.indexOf("_"));
+                    ImageObj obj = new ImageObj();
+                    obj.setObjId(pk);
+                    if(imgUrl.indexOf("images") != -1){
+                        imgUrl = imgUrl.substring(imgUrl.indexOf("images") - 1,imgUrl.indexOf("_"));
+                    }
+                    obj.setImageUrl(imgUrl);
+                    obj.setImageType(Contants.IMAGE_TYPE.CROWD_FUNDING_IMG.name());
+                    //保存众筹图片
+                    userService.saveOrUpdateImg(obj);
+                    return Contants.SUCCESS;
+                }
+                else{
+                    return "PROJECT_NAME_IS_EXISTING";
+                }
             }
-            obj.setImageUrl(imgUrl);
-            obj.setImageType(Contants.IMAGE_TYPE.CROWD_FUNDING_IMG.name());
-            //保存众筹图片
-            userService.saveOrUpdateImg(obj);
-            return Contants.SUCCESS;
+            else{
+                return "PROJECT_NAME_IS_NULL";
+            }
+
         }
         catch (Exception e){
             e.printStackTrace();
         }
         return Contants.FAILED;
     }
+    //修改项目草稿、已下架为已发布状态
+    @ResponseBody
+    @RequestMapping(value = "/updateSketchAndOffShelveToReleased")
+    public String updateSketchAndOffShelveToReleased(@RequestParam String crowdfundingId) {
+        try{
+            if(StringUtils.isNotBlank(crowdfundingId)){
+                CrowdFunding crowdFunding=new CrowdFunding();
+                crowdFunding.setCrowdfundingId(crowdfundingId);
+                crowdFunding.setCrowdfundingStatus(Contants.CROWD_FUNDING_STATUS.RELEASED.name());
+                return crowdFundingService.modifyEnroll(crowdFunding);
+            }
+        }
+        catch (Exception e){
+            e.printStackTrace();
+        }
+        return Contants.FAILED;
+    }
+
     //获取众筹列表
     @ResponseBody
     @RequestMapping(value = "/listCrowdFundingToIndex")
@@ -152,4 +187,37 @@ public class CrowdFundingController extends  BaseController{
         }
         return null;
     }
+
+
+    @RequestMapping(value = "/saveComment")
+    @ResponseBody
+    public String saveComment(@RequestParam String crowdfundingId, @RequestParam String content, @RequestParam int rating, @CookieValue(value = "time_sid", defaultValue = "00359e8721c44d168aac7d501177e314") String userId) {
+        try {
+            Comment comment = new Comment();
+            comment.setUserId(userId);
+            comment.setContent(content);
+            comment.setObjId(crowdfundingId);
+            comment.setRating(rating);
+            comment.setObjType(Contants.COMMENT_OBJ_TYPE.CROWDFUNDING.name());
+            comment.setCreateTime(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date()));
+            String resultId = commentService.saveComment(comment);
+            return resultId;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return Contants.FAILED;
+    }
+
+    @ResponseBody
+    @RequestMapping(value = "/commentList")
+    List<Comment> commentList(@RequestParam String crowdfundingId, @RequestParam int startIndex, @RequestParam int loadSize){
+        try{
+            return commentService.findCommentByObjId(crowdfundingId,startIndex,loadSize);
+        }
+        catch (Exception e){
+            e.printStackTrace();
+        }
+        return null;
+    }
+
 }

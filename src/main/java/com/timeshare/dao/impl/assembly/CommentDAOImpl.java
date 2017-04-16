@@ -96,9 +96,12 @@ public class CommentDAOImpl extends BaseDAO implements CommentDAO {
         return getJdbcTemplate().queryForObject(countSql.toString(), Integer.class);
     }
 
-    @Override
-    public List<Comment> findCommentByObjId(String assemblyId) {
-        StringBuilder sql = new StringBuilder("select * from t_comment where obj_id=?");
+
+    public List<Comment> findCommentByObjId(String assemblyId,int startIndex,  int loadSize) {
+        StringBuilder sql = new StringBuilder("select * from t_comment where obj_id=? ");
+        if(startIndex!=0 || loadSize!=0){
+            sql.append("limit "+startIndex+","+loadSize);
+        }
         return getJdbcTemplate().query(sql.toString(),new Object[]{assemblyId},new CommentRowMapper());
     }
 

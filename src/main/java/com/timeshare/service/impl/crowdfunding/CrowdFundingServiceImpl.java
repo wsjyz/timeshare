@@ -77,8 +77,8 @@ public class CrowdFundingServiceImpl implements CrowdFundingService {
     public List<CrowdFunding> findCrowdFundingToMyCrowdFunding(int startIndex, int loadSize,String userId){
         return crowdFundingDAO.findCrowdFundingToMyCrowdFunding(startIndex,loadSize,userId);
     }
-    //下架
-    public String crowdFundingToShelve(CrowdFunding crowdFunding) {
+
+    public String modifyEnroll(CrowdFunding crowdFunding) {
         return crowdFundingDAO.modifyEnroll(crowdFunding);
     }
     //用户下架
@@ -99,6 +99,18 @@ public class CrowdFundingServiceImpl implements CrowdFundingService {
             return crowdFundingList.get(0);
         }
         return null;
+    }
+    public Boolean crowdFundingPrjectNameIsExisting(String crowdFundingPrjectName) {
+        List<CrowdFunding> crowdFundingList=findCrowdFundingByPrjectName(crowdFundingPrjectName);
+        if(crowdFundingList!=null && crowdFundingList.size()>0){
+            return true;
+        }
+        else{
+            return false;
+        }
+    }
+    public List<CrowdFunding> findCrowdFundingByPrjectName(String crowdFundingPrjectName) {
+        return crowdFundingDAO.findCrowdFundingByPrjectName(crowdFundingPrjectName);
     }
 
 }

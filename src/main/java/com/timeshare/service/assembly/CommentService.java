@@ -20,5 +20,5 @@ public interface CommentService {
     List<Comment> findCommentList(Comment Comment);
     int findCommentCount(Comment Comment);
     List<Comment> findCommentByObjId(String objId);
-
+    public List<Comment> findCommentByObjId(String objId ,int startIndex,  int loadSize) ;
 }

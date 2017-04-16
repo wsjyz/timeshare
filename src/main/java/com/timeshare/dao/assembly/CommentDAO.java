@@ -15,6 +15,6 @@ public interface CommentDAO {
 
     List<Comment> findCommentList(Comment Comment);
     int findCommentCount(Comment Comment);
-    List<Comment> findCommentByObjId(String objId);
+    List<Comment> findCommentByObjId(String objId,int startIndex,  int loadSize);
 
 }
