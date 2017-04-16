@@ -147,7 +147,7 @@ public class EnrollDAOImpl extends BaseDAO implements EnrollDAO {
         sql.append("on c.crowdfunding_id=e.crowdfunding_id ");
         sql.append("where SYSDATE()>=c.curriculum_end_time ");
         sql.append("and e.pay_status='PAYED' ");
-        sql.append("and e.is_transfer_cash_account!='YES' ");
+        sql.append("and (e.is_transfer_cash_account!='YES' or e.is_transfer_cash_account is null) ");
 
         return getJdbcTemplate().query(sql.toString(),new Object[]{},new EnrollDAOImpl.EnrollRowMapper());
     }
