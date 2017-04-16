@@ -31,6 +31,15 @@ public class Comment extends BaseDomain {
     private String acountType;
     private List<String> commentImgList;
     private List<String> replyContentList;
+    private String zanSum;
+
+    public void setZanSum(String zanSum) {
+        this.zanSum = zanSum;
+    }
+
+    public String getZanSum() {
+        return zanSum;
+    }
 
     public void setReplyContentList(List<String> replyContentList) {
         this.replyContentList = replyContentList;

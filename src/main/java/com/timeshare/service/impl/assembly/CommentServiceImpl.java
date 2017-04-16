@@ -91,6 +91,12 @@ public class CommentServiceImpl implements CommentService {
                     }
                     comment.setReplyContentList(replyContentList);
                 }
+                if (StringUtils.isNotEmpty(comment.getZanContent())){
+                    comment.setZanSum(comment.getZanContent().split("&").length+"");
+                }else{
+                    comment.setZanSum("0");
+
+                }
             }
         }
         return commentList;

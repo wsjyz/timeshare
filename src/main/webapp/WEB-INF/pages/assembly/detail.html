@@ -60,7 +60,7 @@
                   <div class="activityDesc">
                       <span>${assembly.createTime}</span>
                       <img class="eyeImg" src="${request.contextPath}/images/assembly/icon/eye.svg" />
-                      <span class="viewNum">${assembly.browseTimes}</span>${assembly.browseTimes}
+                      <span class="viewNum">${assembly.browseTimes}</span>
                   </div>
                   <div class="activityRow">
                       <img class="clockImg" src="${request.contextPath}/images/assembly/icon/clock.png"/>
@@ -179,15 +179,15 @@
                           </div>
                           <footer class="commentFooter">
                               <span class="btnReply pull-right" data-id="${comment.commentId}">回复</span>
-                              <span class="btnUpVote pull-right" data-id="${comment.commentId}"><span class="voteNum">0</span> 赞</span>
+                              <span class="btnUpVote pull-right" data-id="${comment.commentId}"><span class="voteNum">${comment.zanSum}</span> 赞</span>
                           </footer>
                           <div class="replyArea">
                               <span class="replyTitle">作者回复</span>
+                              <#list comment.replyContentList as replyContent>
                               <div class="replyContent">
-                                  <#list comment.replyContentList as replyContent>
                                       ${replyContent}
-                                  </#list>
                               </div>
+                              </#list>
                           </div>
                       </#list>
                   </section>

@@ -55,15 +55,6 @@ public class Assembly extends BaseDomain{
     }
 
     public String getCreateTime() {
-        if(createTime!=null){
-            try {
-                SimpleDateFormat format1 = new SimpleDateFormat("yyyy-MM-dd HH:mm");
-                SimpleDateFormat format2 = new SimpleDateFormat("MM月dd日");
-                return format2.format(format1.parse(createTime));
-            }catch (Exception e){
-                e.printStackTrace();
-            }
-        }
         return createTime;
     }
 
@@ -179,15 +170,7 @@ public class Assembly extends BaseDomain{
 
     public String getStartTime()
     {
-        if(startTime!=null){
-            try {
-                SimpleDateFormat format1 = new SimpleDateFormat("yyyy-MM-dd HH:mm");
-                SimpleDateFormat format2 = new SimpleDateFormat("MM月dd日 HH:mm");
-                return format2.format(format1.parse(startTime));
-            }catch (Exception e){
-                e.printStackTrace();
-            }
-        }
+
         return startTime;
     }
 
@@ -196,15 +179,6 @@ public class Assembly extends BaseDomain{
     }
 
     public String getEndTime() {
-        if(endTime!=null){
-            try {
-                SimpleDateFormat format1 = new SimpleDateFormat("yyyy-MM-dd HH:mm");
-                SimpleDateFormat format2 = new SimpleDateFormat("MM月dd日 HH:mm");
-                return format2.format(format1.parse(endTime));
-            }catch (Exception e){
-                e.printStackTrace();
-            }
-        }
         return endTime;
     }
 

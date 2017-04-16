@@ -193,6 +193,7 @@ select::-ms-expand {
 
 .userPhoto {
     width: 1.8rem;
+    height: 1.8rem;
 }
 
 .fullWidth {
