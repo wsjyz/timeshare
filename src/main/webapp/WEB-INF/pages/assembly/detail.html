@@ -96,7 +96,7 @@
                   <div class="activityDetailWrap" style="height: 18.8rem;z-index:2;position:relative;overflow: hidden;">
                       <div class="activityDetail">
                           <#list assembly.contentImgList as contentImg>
-                              <img src="${contentImg}" class="fullWidth userPhoto"  />
+                              <img src="${contentImg}" class="fullWidth"  />
                           </#list>
                           <div>${assembly.description}</div>
                       </div>
@@ -179,7 +179,11 @@
                           </div>
                           <footer class="commentFooter">
                               <span class="btnReply pull-right" data-id="${comment.commentId}">回复</span>
+                              <#if comment.zanContent?contains(userInfo.nickName)>
+                                  <span class="btnUpVote pull-right" data-id="${comment.commentId}"><span class="voteNum">${comment.zanSum}</span> 已赞</span>
+                                  <#else>
                               <span class="btnUpVote pull-right" data-id="${comment.commentId}"><span class="voteNum">${comment.zanSum}</span> 赞</span>
+                              </#if>
                           </footer>
                           <div class="replyArea">
                               <span class="replyTitle"></span>
@@ -326,12 +330,10 @@
                             bold: true,
                             onClick:function(){
                                 var replyText = $('#replyText').val();
-                                $commentSection.find('.replyContent').text(replyText);
                                 $.post("${request.contextPath}/assembly/saveReply",{"commentId":commentId,"replyContent":replyText},function (data) {
                                     if (data!="error"){
-                                        $(".replyArea").append(' <div class="replyContent">'+data+ '</div>');
-                                     //location='${request.contextPath}/assembly/to-detail?assemblyId=${assembly.assemblyId}';
-
+                                        $commentSection.find('.replyArea').append("${userInfo.nickName}:"+replyText);
+                                      // location='${request.contextPath}/assembly/to-detail?assemblyId=${assembly.assemblyId}';
                                     }
                                 });
                             }
