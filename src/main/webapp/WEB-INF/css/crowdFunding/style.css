@@ -1,15 +1,14 @@
-﻿@charset "UTF-8";
-html{font-size:17.78px}
+﻿@charset "UTF-8";html{font-size:17.78px}
 @media only screen and (min-width:360px){html{font-size:20px !important}}
 @media only screen and (min-width:375px){html{font-size:20.84px !important}}
 @media only screen and (min-width:414px){html{font-size:23px !important}}
 @media only screen and (min-width:480px){html{font-size:26.66px !important}}
 /*禁止winphone默认触摸事件*/
-html{-ms-touch-action:none; background:#eeeff4}
+html{-ms-touch-action:none;background:#eeeff4}
 body{color:#3f435e;font-size:0.7rem}
 textarea{resize:none}
 i,em{font-style:normal}
-ul,li{ list-style:none;margin:0;padding:0}
+ul,li{list-style:none;margin:0;padding:0}
 a{color:#000;text-decoration:none}
 header .back{display:inline-block;width:2.2rem}
 header .back img{width:0.8rem;height:0.8rem;margin-top:0.7rem}
@@ -24,8 +23,8 @@ section{margin:0.7rem 0}
 .mt5{margin-top:0.6rem}
 .mt10{margin-top:1rem}
 .no-mt{margin-top:0 !important}
-.bar{ background:#fff}
-.list-block{margin:0}
+.bar{background:#fff}
+.list-block{margin:0;font-size:0.7rem}
 .content-block{margin:1rem 0}
 .content-block-title{color:#3f435e;margin:1rem 0.7rem 0.5rem}
 .list-block .item-title.label{width:25%}
@@ -48,91 +47,63 @@ textarea.form-control{height:auto;line-height:normal}
 .radio-group label{font-size:0.7rem;margin-right:20px}
 .radio-group label input{margin-right:5px}
 /*标题栏*/
-.bar .title{color:#21212d;}
-.bar.bar-me{background:url(../../images/crowdFunding/pic.jpg) no-repeat 0 0; background-size:100%}
+.bar .title{color:#21212d}
+.bar.bar-me{background:url(../../images/crowdFunding/pic.jpg) no-repeat 0 0;background-size:100%}
 .bar.bar-me:after{background:none}
 .bar.bar-me .title{color:#fff}
-.bar.bar-list{background-image:-moz-linear-gradient( -14deg, rgb(62,67,96) 0%, rgb(177,185,206) 100%);
-  background-image:-webkit-linear-gradient( -14deg, rgb(62,67,96) 0%, rgb(177,185,206) 100%);
-  background-image:-ms-linear-gradient( -14deg, rgb(62,67,96) 0%, rgb(177,185,206) 100%)}
+.bar.bar-list{background-image:-moz-linear-gradient( -14deg, rgb(62,67,96) 0%, rgb(177,185,206) 100%);background-image:-webkit-linear-gradient( -14deg, rgb(62,67,96) 0%, rgb(177,185,206) 100%);background-image:-ms-linear-gradient( -14deg, rgb(62,67,96) 0%, rgb(177,185,206) 100%)}
 .bar.bar-list:after{background:none}
 .bar.bar-list .title{color:#fff}
 .bar.bar-list .pull-left{color:#fff}
-.i-menu{display:inline-block;width:2.2rem;height:2.2rem;background:url(../../images/crowdFunding/icon-menu.png) no-repeat center center; background-size:50%}
-.i-search{display:inline-block;width:2.2rem;height:2.2rem;background:url(../../images/crowdFunding/icon-search.png) no-repeat center center; background-size:50%}
-.i-edit{display:inline-block;width:2.2rem;height:2.2rem;background:url(../../images/crowdFunding/icon-edit.png) no-repeat center center; background-size:50%}
-.i-prompt{display:inline-block;width:0.9rem; vertical-align:middle}
-.i-reply{float:left;margin-top:0.2rem;margin-right:5px;display:block;width:0.8rem;height:0.8rem;background:url(../../images/crowdFunding/icon-reply.png) no-repeat center center; background-size:100%}
-.i-praise{float:left;margin-top:0.2rem;margin-right:5px;display:block;width:0.8rem;height:0.8rem;background:url(../../images/crowdFunding/icon-praise.png) no-repeat center center; background-size:100%}
+.i-menu{display:inline-block;width:2.2rem;height:2.2rem;background:url(../../images/crowdFunding/icon-menu.png) no-repeat center center;background-size:50%}
+.i-search{display:inline-block;width:2.2rem;height:2.2rem;background:url(../../images/crowdFunding/icon-search.png) no-repeat center center;background-size:50%}
+.i-edit{display:inline-block;width:2.2rem;height:2.2rem;background:url(../../images/crowdFunding/icon-edit.png) no-repeat center center;background-size:50%}
+.i-prompt{display:inline-block;width:0.9rem;vertical-align:middle}
+.i-reply{float:left;margin-top:0.2rem;margin-right:5px;display:block;width:0.8rem;height:0.8rem;background:url(../../images/crowdFunding/icon-reply.png) no-repeat center center;background-size:100%}
+.i-praise{float:left;margin-top:0.2rem;margin-right:5px;display:block;width:0.8rem;height:0.8rem;background:url(../../images/crowdFunding/icon-praise.png) no-repeat center center;background-size:100%}
 /*我的*/
 .me-bg{height:15rem;background:url(../../images/crowdFunding/pic.jpg) no-repeat 0 -2.2rem;background-size:100%}
 .me-info{padding-top:2.5rem;font-size:0.8rem;text-align:center;color:#fff}
-.me-info .head{width:5.5rem;height:5.5rem; border-radius:5.5rem;margin:0 auto;position:relative}
+.me-info .head{width:5.5rem;height:5.5rem;border-radius:5.5rem;margin:0 auto;position:relative}
 .me-info .head img{width:100%}
-.me-info .head .flag{ position:absolute;top:0px;right:0;width:1.5rem;height:1.5rem;line-height:1.5rem;border-radius:50%; background:#3f435e;color:#fff;font-size:0.4rem}
+.me-info .head .flag{position:absolute;top:0px;right:0;width:1.5rem;height:1.5rem;line-height:1.5rem;border-radius:50%;background:#3f435e;color:#fff;font-size:0.4rem}
 .me-info .name{margin-top:0.7rem}
-.me-info .tel{display: -webkit-box;
-    display: -webkit-flex;
-    display: flex;
-    -webkit-box-pack: justify;
-    -webkit-justify-content: space-between;
-    justify-content: space-between;
-    -webkit-box-align: center;
-    -webkit-align-items: center;
-    align-items: center;margin:0.7rem 1rem}
+.me-info .tel{display:-webkit-box;display:-webkit-flex;display:flex;-webkit-box-pack:justify;-webkit-justify-content:space-between;justify-content:space-between;-webkit-box-align:center;-webkit-align-items:center;align-items:center;margin:0.7rem 1rem}
 .i-left,.i-right{display:inline-block;width:0.5rem}
 .i-left img,.i-right img{width:100%}
 .me-list .item-title{color:#a4a8b7;font-size:0.7rem}
 /*众筹list*/
-.banner{height:12rem; overflow:hidden}
+.banner{height:12rem;width:100%;overflow:hidden}
+.banner a{display:block;width:100%;height:100%}
 .banner img{width:100%}
+.swiper-slide{text-align:center;display:-webkit-box;display:-ms-flexbox;display:-webkit-flex;display:flex;-webkit-box-pack:center;-ms-flex-pack:center;-webkit-justify-content:center;justify-content:center;-webkit-box-align:center;-ms-flex-align:center;-webkit-align-items:center;align-items:center}
 .zc-list .item{margin:1rem 0.7rem}
+.zc-list .item a{color:#3f435e}
+.zc-list .item-title{margin-bottom:5px;height:1.2rem;line-height:1.2rem}
+.zc-list .item-title .user-head-image_div{float:left;margin-right:5px;width:1.2rem;height:1.2rem;overflow:hidden}
+.zc-list .item-title .user-head-image_div img{width:1.2rem;height:1.2rem;border-radius:0.5rem}
 .zc-list .item-box{background:#fff;border-radius:0.3rem;box-shadow:0 0 15px 3px rgba(0,0,0,0.2)}
-.zc-list .item-box .zc-img{height:10rem; overflow:hidden}
-.zc-list .item-box .zc-img img{width:100%;height:100%;border-radius:0.3rem 0.3rem 0 0;}
+.zc-list .item-box .zc-img{height:10rem;overflow:hidden}
+.zc-list .item-box .zc-img img{width:100%;height:100%;border-radius:0.3rem 0.3rem 0 0}
 .zc-list .item-box .zc-text{padding:0.8rem 0.7rem}
-.zc-list .item-box .zc-name{font-size:1rem}
+.zc-list .item-box .zc-name{font-size:0.9rem}
 .zc-list .item-box .zc-name .tag{float:left;display:block;margin-top:4px;background:#40445f;color:#fff;font-size:0.7rem;padding:0 2px}
-.zc-list .item-box .zc-info{
-	display: -webkit-box;
-    display: -webkit-flex;
-    display: flex;
-    -webkit-box-pack: justify;
-    -webkit-justify-content: space-between;
-    justify-content: space-between;
-    -webkit-box-align: center;
-    -webkit-align-items: center;
-    align-items: center;
-	margin:0.5rem 0
-	}
-.zc-list .item-box .i-time{ vertical-align:middle; display:inline-block;width:1rem;height:1rem;background:url(../../images/crowdFunding/icon-time.png) no-repeat center center;background-size:contain}
-.zc-list .item-box .i-address{vertical-align:middle;display:inline-block;width:1rem;height:1rem;background:url(../../images/crowdFunding/icon-address.png) no-repeat center center;background-size:contain}
+.zc-list .item-box .zc-info{display:-webkit-box;display:-webkit-flex;display:flex;-webkit-box-pack:justify;-webkit-justify-content:space-between;justify-content:space-between;-webkit-box-align:center;-webkit-align-items:center;align-items:center;margin:0.5rem 0;font-size:0.5rem}
+.zc-list .item-box .i-time{vertical-align:middle;display:inline-block;width:0.9rem;height:0.9rem;margin-right:5px;background:url(../../images/crowdFunding/icon-time.png) no-repeat center center;background-size:contain}
+.zc-list .item-box .i-address{vertical-align:middle;display:inline-block;width:0.9rem;height:0.9rem;margin-right:5px;background:url(../../images/crowdFunding/icon-address.png) no-repeat center center;background-size:contain}
 .zc-list .item-box .price,
 .zc-list .item-box .num{color:#c7c7c7;font-size:0.6rem}
 .zc-list .item-box .zc-link{text-align:right;margin-top:0.6rem}
-.zc-list .item-box .zc-link a{color:#747b95}
-.zc-list .item-box .zc-progress .progress{
-    height:14px;
-    overflow: hidden;
-    background-color: #d3d9e5;
-    border-radius:7px;
-    -webkit-box-shadow: inset 0 1px 2px rgba(0,0,0,.1);
-    box-shadow: inset 0 1px 2px rgba(0,0,0,.1);
+.zc-progress{margin-top:2rem}
+.zc-progress .progress{height:12px;overflow:visible;background-color:#d3d9e5;border-radius:6px;-webkit-box-shadow:inset 0 1px 2px rgba(0,0,0,.1);box-shadow:inset 0 1px 2px rgba(0,0,0,.1)}
+.zc-progress .progress-bar{float:left;width:0;height:100%;line-height:12px;color:#fff;text-align:center;background-color:#747b95;-webkit-box-shadow:inset 0 -1px 0 rgba(0,0,0,.15);box-shadow:inset 0 -1px 0 rgba(0,0,0,.15);-webkit-transition:width .6s ease;-o-transition:width .6s ease;transition:width .6s ease;border-radius:6px 0 0 6px;position:relative;animation:animate-positive 2s}
+.zc-progress .progress-bar .remain{position:absolute;bottom:20px;right:-20px;color:#fff;display:block;padding:5px;background:#747b95;border-radius:3px;font-size:0.5rem}
+.zc-progress .progress .progress-bar span:before{content:"";position:absolute;bottom:-14px;left:1.25rem;border:0.4rem solid transparent;border-top:0.4rem solid #747b95}
+@-webkit-keyframes animate-positive{0%{width:0%}
 }
-.zc-list .item-box .zc-progress .progress-bar{
-	float: left;
-    width: 0;
-    height: 100%;
-    line-height:14px;
-    color: #fff;
-    text-align: center;
-    background-color: #747b95;
-    -webkit-box-shadow: inset 0 -1px 0 rgba(0,0,0,.15);
-    box-shadow: inset 0 -1px 0 rgba(0,0,0,.15);
-    -webkit-transition: width .6s ease;
-    -o-transition: width .6s ease;
-    transition: width .6s ease;}
-
+@keyframes animate-positive{0%{width:0%}
+}
+.zc-abstract{overflow:hidden;height:3rem;text-overflow:ellipsis;word-wrap:break-word;overflow-wrap:break-word}
 /*众筹详情*/
 .details .item-box{background:#fff}
 .details .item-box .zc-img{height:10rem;overflow:hidden}
@@ -140,80 +111,38 @@ textarea.form-control{height:auto;line-height:normal}
 .details .item-box .zc-text{padding:0.8rem 0.7rem}
 .details .item-box .zc-name{font-size:1rem}
 .details .item-box .zc-name .tag{float:left;display:block;margin-top:4px;background:#40445f;color:#fff;font-size:0.7rem;padding:0 2px}
-.details .item-box .zc-info{
-	display: -webkit-box;
-    display: -webkit-flex;
-    display: flex;
-    -webkit-box-pack: justify;
-    -webkit-justify-content: space-between;
-    justify-content: space-between;
-    -webkit-box-align: center;
-    -webkit-align-items: center;
-    align-items: center;
-	margin:0.5rem 0
-	}
-.details .item-box .i-time{ vertical-align:middle; display:inline-block;width:1rem;height:1rem;background:url(../../images/crowdFunding/icon-time.png) no-repeat center center;background-size:contain}
+.details .item-box .zc-info{display:-webkit-box;display:-webkit-flex;display:flex;-webkit-box-pack:justify;-webkit-justify-content:space-between;justify-content:space-between;-webkit-box-align:center;-webkit-align-items:center;align-items:center;margin:0.5rem 0}
+.details .item-box .i-time{vertical-align:middle;display:inline-block;width:1rem;height:1rem;background:url(../../images/crowdFunding/icon-time.png) no-repeat center center;background-size:contain}
 .details .item-box .i-address{vertical-align:middle;display:inline-block;width:1rem;height:1rem;background:url(../../images/crowdFunding/icon-address.png) no-repeat center center;background-size:contain}
 .details .item-box .price,
 .details .item-box .num{color:#c7c7c7;font-size:0.6rem}
-.dashed-line{ border-bottom:1px dashed #3f435e}
+.dashed-line{border-bottom:1px dashed #3f435e}
 .details .item-box .zc-link{text-align:right;margin-top:0.6rem}
 .details .item-box .zc-link a{color:#747b95}
-.details .item-box .zc-progress .progress{
-    height:14px;
-    overflow: hidden;
-    background-color: #d3d9e5;
-    border-radius:7px;
-    -webkit-box-shadow: inset 0 1px 2px rgba(0,0,0,.1);
-    box-shadow: inset 0 1px 2px rgba(0,0,0,.1);
-}
 .details .cb{margin-bottom:0.7rem}
-.details .cb .col-50{background:#d3d9e5; text-align:center}
-.details .item-box .zc-progress .progress-bar{
-	float: left;
-    width: 0;
-    height: 100%;
-    line-height:14px;
-    color: #fff;
-    text-align: center;
-    background-color: #747b95;
-    -webkit-box-shadow: inset 0 -1px 0 rgba(0,0,0,.15);
-    box-shadow: inset 0 -1px 0 rgba(0,0,0,.15);
-    -webkit-transition: width .6s ease;
-    -o-transition: width .6s ease;
-    transition: width .6s ease;}
-.details-tab {padding:0 0.7rem; background:#ebecef}
+.details .cb .col-50{background:#d3d9e5;text-align:center}
+.details-tab{padding:0 0.7rem;background:#ebecef}
 .details-tab .button,.details-tab .button:first-child,.details-tab .button:last-child{margin:0.7rem 5px;border-radius:0;border:1px solid #3f435e;color:#3f435e;font-size:0.8rem}
 .details-tab .button.active{background:#747b95;color:#fff}
 .details-content img{max-width:100%}
-.details-content p{line-height:1.5;font-size:0.8rem}
-.signup{display: -webkit-box;
-    display: -webkit-flex;
-    display: flex;
-    -webkit-box-pack: center;
-    -webkit-justify-content:center;
-    justify-content:center;
-    -webkit-box-align: center;
-    -webkit-align-items: center;
-    align-items: center;}
-.signup .button{top:inherit; display:inline-block; background:#40445f;margin-right:10px}
+.details-content p{line-height:1.5;font-size:0.8rem;word-wrap:break-word;word-break:break-all}
+.signup{display:-webkit-box;display:-webkit-flex;display:flex;-webkit-box-pack:center;-webkit-justify-content:center;justify-content:center;-webkit-box-align:center;-webkit-align-items:center;align-items:center}
+.signup .button{top:inherit;display:inline-block;background:#40445f;margin-right:10px}
 .signup .cost{color:#f38f36;font-size:0.8rem}
-/*ÏêÇé ÒÑ±¨Ãû*/
-.details-apply ul{ background:none}
-.details-apply li{margin:0.5rem 0; background:#fff}
+/*详情 已报名*/
+.details-apply ul{background:none}
+.details-apply li{margin:0.5rem 0;background:#fff}
 .details-apply img{width:2rem;height:2rem}
 .details-apply .cop{color:#c7c7c7;font-size:0.6rem}
 .details-apply .yy-t{font-size:0.6rem}
 .details-apply .yy-price{color:#f38f36}
-/*ÏêÇé µãÆÀ*/
+/*详情 点评*/
 .details-comment{padding:0}
-.details-comment ul{ background:none}
-.details-comment .item-content{-webkit-box-align:flex-start;
-    -webkit-align-items: flex-start;
-    align-items: flex-start;padding:0.6rem}
-.details-comment .item-media{ width:2.8rem; position:relative;width:2.8rem;height:2.8rem}
+.details-comment ul{background:none}
+.details-comment .item-content{-webkit-box-align:flex-start;-webkit-align-items:flex-start;align-items:flex-start;padding:0.6rem}
+.details-comment .item-media{width:2.8rem;position:relative;width:2.8rem;height:2.8rem}
 .details-comment .item-media img{width:2.8rem;height:2.8rem}
-.details-comment .lv{position:absolute;bottom:0;right:0; background:#26a4d4;color:#fff;font-size:0.4rem;height:0.7rem;line-height:0.7rem;border-radius:0.35rem;padding:0 5px}
+.details-comment .lv{position:absolute;bottom:0;right:0;background:#26a4d4;color:#fff;font-size:0.4rem;height:0.7rem;line-height:0.7rem;border-radius:0.35rem;padding:0 5px}
 .details-comment .flag{display:inline-block;background:#40445f;color:#fff;font-size:0.6rem;padding:0 5px}
 .details-comment .date,
 .details-comment .score{font-size:0.6rem;color:#747b95}
@@ -223,24 +152,15 @@ textarea.form-control{height:auto;line-height:normal}
 .details-comment .item-img{margin-top:0.6rem}
 .details-comment .item-img img{width:3.5rem;height:3.5rem;margin-right:10px}
 /*支付*/
-.pay-list{background:#fff;padding:0.7rem;display: -webkit-box;
-    display: -webkit-flex;
-    display: flex;
-    -webkit-box-pack:center;
-    -webkit-justify-content:center;
-    justify-content: center;
-    -webkit-box-align: center;
-    -webkit-align-items: center;
-    align-items: center;}
-
-.pay-list .txt{font-size:0.8rem; text-align:right}
+.pay-list{background:#fff;padding:0.7rem;display:-webkit-box;display:-webkit-flex;display:flex;-webkit-box-pack:center;-webkit-justify-content:center;justify-content:center;-webkit-box-align:center;-webkit-align-items:center;align-items:center}
+.pay-list .txt{font-size:0.8rem;text-align:right}
 .pay-list .sum-price{color:#f38f36;font-size:1.5rem;text-align:left;margin-left:5px}
 /*提现*/
 .tx ul{margin:0.5rem 0}
 .tx-prompt{font-size:0.8rem;margin:1rem 0}
 .tx-price{color:#f38f36}
 .tx-btn{padding:0.7rem}
-.tx-btn .button{ background:#747b95;border-color:#747b95;color:#fff; float:right}
+.tx-btn .button{background:#747b95;border-color:#747b95;color:#fff;float:right}
 /*提现记录*/
 .tx-record ul{margin:0.5rem 0}
 .tx-record .tag{display:inline-block;margin-top:4px;background:#40445f;color:#fff;font-size:0.65rem;padding:0 2px}
@@ -248,40 +168,21 @@ textarea.form-control{height:auto;line-height:normal}
 .tx-record .item-content{padding:0 0.75rem}
 .tx-record ul li:last-child{font-size:0.65rem}
 .tx-record ul li:last-child a{color:#b1b9ce}
-.tx-record  .item-inner{padding-right:0}
+.tx-record .item-inner{padding-right:0}
 /*我发起的众筹*/
-.wfqdzc-list ul{ background:none}
-.wfqdzc-list li{margin:0.5rem 0; background:#fff}
+.wfqdzc-list ul{background:none}
+.wfqdzc-list li{margin:0.5rem 0;background:#fff}
 .wfqdzc-list .item-title-row{border-bottom:1px dashed #b1b9ce;padding-bottom:0.5rem}
 .wfqdzc-list .tag{display:inline-block;margin-top:4px;background:#40445f;color:#fff;font-size:0.65rem;padding:0 2px}
 .wfqdzc-list .date{color:#b1b9ce;margin-left:10px}
-.wfqdzc-list .item-text{ height:auto; line-height:none}
+.wfqdzc-list .item-text{height:auto;line-height:none}
 .wfqdzc-list .item-subtitle{margin:0.5rem 0}
 /*我预约的众筹*/
-.wyydzc-list ul{ background:none}
-.wyydzc-list li{margin:0.5rem 0; background:#fff}
+.wyydzc-list ul{background:none}
+.wyydzc-list li{margin:0.5rem 0;background:#fff}
 .wyydzc-list img{width:5rem;height:3.75rem}
 /*报名名单*/
-.bmmd-list li{
-    display: -webkit-box;
-    display: -webkit-flex;
-    display: flex;
-    -webkit-box-pack: center;
-    -webkit-justify-content: center;
-    justify-content: center;
-    -webkit-box-align: center;
-    -webkit-align-items: center;
-    align-items: center; text-align:center; background:#fff;padding:0.7rem;border-bottom:1px solid #ddd}
-.bmmd-list li span{ width:50%}
-.table-head{display: -webkit-box;
-    display: -webkit-flex;
-    display: flex;
-    -webkit-box-pack: center;
-    -webkit-justify-content: center;
-    justify-content: center;
-    -webkit-box-align: center;
-    -webkit-align-items: center;
-    align-items: center; text-align:center}
+.bmmd-list li{display:-webkit-box;display:-webkit-flex;display:flex;-webkit-box-pack:center;-webkit-justify-content:center;justify-content:center;-webkit-box-align:center;-webkit-align-items:center;align-items:center;text-align:center;background:#fff;padding:0.7rem;border-bottom:1px solid #ddd}
+.bmmd-list li span{width:50%}
+.table-head{display:-webkit-box;display:-webkit-flex;display:flex;-webkit-box-pack:center;-webkit-justify-content:center;justify-content:center;-webkit-box-align:center;-webkit-align-items:center;align-items:center;text-align:center}
 .table-head span{width:50%;font-size:0.8rem}
-/*用户头像*/
-.user-head-image_div img{border-radius:50%;width:32px;height: 32px}

@@ -16,6 +16,8 @@
     <link rel="stylesheet" type="text/css" href="${request.contextPath}/css/crowdFunding/sm.min.css">
     <link rel="stylesheet" type="text/css" href="${request.contextPath}/css/crowdFunding/sm-extend.min.css">
     <link rel="stylesheet" type="text/css" href="${request.contextPath}/css/crowdFunding/style.css">
+      <link rel="stylesheet" href="//g.alicdn.com/msui/sm/0.6.2/css/sm.min.css">
+      <link rel="stylesheet" href="//g.alicdn.com/msui/sm/0.6.2/css/sm-extend.min.css">
     <script type="text/javascript" src="${request.contextPath}/js/zepto.min.js"></script>
     <script type="text/javascript" src="${request.contextPath}/js/crowdFunding/config.js"></script>
   </head>
@@ -24,9 +26,8 @@
         <div class="page page-current">
         	<!--header start-->
             <header class="bar bar-nav">
-                <a href="javascript:history.go(-1);" class="button button-link pull-left back">
-                    <span class="icon icon-left"></span>
-                </a>
+                <!--<a class="icon icon-left pull-left back" href="javascript:history.go(-1);"></a>-->
+                <a class="icon icon-menu pull-left open-panel"></a>
                 <h1 class="title"></h1>
             </header>
             <!--header end-->
@@ -43,6 +44,60 @@
              </div>
             <!-- 页面内容区域 end -->
        </div>    
+    </div>
+
+
+    <!-- popup, panel 等放在这里 -->
+    <div class="panel-overlay"></div>
+    <!-- Left Panel with Reveal effect -->
+    <div class="panel panel-left panel-reveal">
+        <div class="content-block">
+            <p>菜单</p>
+            <div class="list-block">
+                <ul style="background: #1c1d1f;">
+                    <a href="${request.contextPath}/manager/item/to-yue-manage" data-no-cache="true" class="close-panel">
+                        <li class="item-content item-link">
+                            <div class="item-media"><i class="icon icon-f7"></i></div>
+                            <div class="item-inner">
+                                <div class="item-title">约管理</div>
+                            </div>
+                        </li>
+                    </a>
+                    <a href="${request.contextPath}/manager/bid/to-bid-manage" data-no-cache="true" class="close-panel">
+                        <li class="item-content item-link">
+                            <div class="item-media"><i class="icon icon-f7"></i></div>
+                            <div class="item-inner">
+                                <div class="item-title">飚管理</div>
+                            </div>
+                        </li>
+                    </a>
+                    <a href="${request.contextPath}/manager/user/to-user-manage" data-no-cache="true" class="close-panel">
+                        <li class="item-content item-link">
+                            <div class="item-media"><i class="icon icon-f7"></i></div>
+                            <div class="item-inner">
+                                <div class="item-title">用户管理</div>
+                            </div>
+                        </li>
+                    </a>
+                    <a href="${request.contextPath}/manager/crowdFunding/toCrowdFundingManager" data-no-cache="true" class="close-panel">
+                        <li class="item-content item-link">
+                            <div class="item-media"><i class="icon icon-f7"></i></div>
+                            <div class="item-inner">
+                                <div class="item-title">众筹管理</div>
+                            </div>
+                        </li>
+                    </a>
+                    <a href="${request.contextPath}/manager/withdrawalLog/gotoWithdrawalLog" data-no-cache="true" class="close-panel">
+                        <li class="item-content item-link">
+                            <div class="item-media"><i class="icon icon-f7"></i></div>
+                            <div class="item-inner">
+                                <div class="item-title">提现管理</div>
+                            </div>
+                        </li>
+                    </a>
+                </ul>
+            </div>
+        </div>
     </div>
 
     <script type="text/javascript" src="${request.contextPath}/js/crowdFunding/sm.min.js"></script>

@@ -24,9 +24,7 @@
         <div class="page page-current">
         	<!--header start-->            
             <header class="bar bar-nav bar-list">
-                <a href="javascript:history.go(-1);" class="button button-link pull-left back">
-                    <span class="icon icon-left"></span>
-                </a>
+                <a class="icon icon-left pull-left back" href="javascript:history.go(-1);"></a>
               <a href="${request.contextPath}/crowdFunding/createCrowdFunding" class="icon i-edit pull-right"></a>
               <h1 class="title"></h1>
             </header>
@@ -89,10 +87,15 @@
                             </div>
                           </div>
                            <div class="zc-progress">
+                               <div class="progress">
+                                   <div class="progress-bar" style="width:${crowdFunding.enrollCount/crowdFunding.maxPeoples*100}%">
+                                       <span class="remain">剩${crowdFunding.maxPeoples-crowdFunding.enrollCount}席</span>
+                                   </div>
+                               </div>
 
-                              <div class="progress">
-                                  <div class="progress-bar" style="width:${crowdFunding.enrollCount/crowdFunding.maxPeoples*100}%"></div>
-                              </div>
+                              <!--<div class="progress">-->
+                                  <!--<div class="progress-bar" style="width:${crowdFunding.enrollCount/crowdFunding.maxPeoples*100}%"></div>-->
+                              <!--</div>-->
                           </div>
                       </div>
                   </div>
