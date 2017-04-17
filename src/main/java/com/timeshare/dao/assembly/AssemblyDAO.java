@@ -16,6 +16,7 @@ public interface AssemblyDAO {
     List<Assembly> findAssemblyList(Assembly Assembly, int startIndex, int loadSize);
 
     int findAssemblyCount(Assembly Assembly);
+    List<Assembly> findSignAssemblyList(Assembly Assembly,String userId, int startIndex, int loadSize);
 
 
 }

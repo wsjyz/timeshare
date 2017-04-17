@@ -18,7 +18,7 @@
       <div class="page">
           <div class="detailHeader header">
               <h1 class="title">邂逅活动</h1>
-              <a class="button button-link button-nav back pull-left" style="" external href="${request.contextPath}/assembly/to-index">
+              <a class="button button-link button-nav back pull-left" style="" external href="${request.contextPath}/assembly/to-index?type=${assembly.type}">
                   <span class="icon icon-left"></span>
                   返回
               </a>
@@ -88,7 +88,7 @@
                   </div>
 
                   <div class="userRow">
-                      <img class="userPhoto" src="${assembly.userImg}" align="left" style="border-radius:25px"/>
+                      <img class="userPhoto" src="${assembly.userImg}" align="left" style="border-radius:35px"/>
                       <span class="userName">${assembly.userName}</span>
                       <span class="darkBg">主办方</span>
                   </div>
@@ -114,7 +114,7 @@
                       <ul class="userList">
                           <#list attenderList as attender>
                           <li>
-                              <img src="${attender.userImg}" class="userPhoto" style="border-radius:25px"/>
+                              <img src="${attender.userImg}" class="userPhoto" style="border-radius:35px"/>
                               <div>${attender.userName}</div>
                           </li>
                           </#list>
@@ -136,7 +136,7 @@
                       <hr />
                           <#list commentList as comment>
                               <header class="commentUser clearFix">
-                              <img class="pull-left userPhoto" src="${comment.userImg}" style="border-radius:25px"/>
+                              <img class="pull-left userPhoto" src="${comment.userImg}" style="border-radius:35px"/>
                               <div class="pull-left" style="padding-top: .3rem;">
                                   <span class="commentUserName">${comment.userName}</span>
                                   <span class="darkBg">${comment.acountType}</span> <br />
@@ -275,7 +275,7 @@
                 $.post("${request.contextPath}/assembly/saveZan",{"commentId":commentId},function (data) {
                     if (data!="error"){
                         $('.voteNum').text(data)
-                        location='${request.contextPath}/assembly/to-detail?assemblyId=${assembly.assemblyId}';
+                       // location='${request.contextPath}/assembly/to-detail?assemblyId=${assembly.assemblyId}';
                     }
                 });
             });
@@ -329,7 +329,9 @@
                                 $commentSection.find('.replyContent').text(replyText);
                                 $.post("${request.contextPath}/assembly/saveReply",{"commentId":commentId,"replyContent":replyText},function (data) {
                                     if (data!="error"){
-                                        location='${request.contextPath}/assembly/to-detail?assemblyId=${assembly.assemblyId}';
+                                        $(".replyArea").append(' <div class="replyContent">'+data+ '</div>');
+                                     //location='${request.contextPath}/assembly/to-detail?assemblyId=${assembly.assemblyId}';
+
                                     }
                                 });
                             }

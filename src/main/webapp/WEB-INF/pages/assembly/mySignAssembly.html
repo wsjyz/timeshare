@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>我的活动</title>
+    <meta name="viewport" content="initial-scale=1, maximum-scale=1">
+    <link rel="shortcut icon" href="/favicon.ico">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+
+    <link rel="stylesheet" href="http://g.alicdn.com/msui/sm/0.6.2/css/sm.min.css">
+    <link rel="stylesheet" href="http://g.alicdn.com/msui/sm/0.6.2/css/sm-extend.min.css">
+    <link rel="stylesheet" href="${request.contextPath}/css/assembly/main.css">
+    <style>
+    </style>
+</head>
+<body>
+<div class="page-group">
+    <div class="page page-current" id="routerCommentPublish">
+        <div class="activityPublishHeader myActivityHeader header">
+            <h1 class="title">我参与的活动</h1>
+            <a class="button button-link button-nav back pull-left" external href="index.html">
+                <span class="icon icon-left"></span>
+            </a>
+
+        </div>
+
+        <div class="content infinite-scroll infinite-scroll-bottom" data-distance="100">
+            <div class="list-block">
+                <ul class="myActivityList">
+                </ul>
+            </div>
+            <!-- 加载提示符 -->
+            <div class="infinite-scroll-preloader">
+                    <div class="preloader"></div>
+            </div>
+            <div class="no-record" style="display: none;text-align: center">
+                没有更多记录了
+            </div>
+        </div>
+    </div>
+
+</div>
+<style>
+    .myActivityHeader{
+        border-bottom:.05rem solid #cbcbcb;
+        height:2.2rem;
+    }
+    .rightArrow{
+        position: absolute;top:50%;right:1.4rem;margin-top:-.5rem;
+    }
+    .rightArrow .icon-right{
+        height: 1rem;font-weight:bold;
+    }
+    .myActivityList{
+        border-top:.05rem solid #cbcbcb;
+    }
+    .myActivityContent{
+        margin-top:1.1rem;
+    }
+
+    .myActivityList > li{
+        height:4.7rem;
+        background-color: #fff;
+        padding-left:1.8rem;
+        padding-top:.7rem;
+        position:relative;
+        border-bottom: .1rem solid #cbcbcb;
+    }
+    .myActivityList .myActivityTitle{
+        font-weight: bold;
+        color:#000;
+        font-size:.9rem;
+        height:1rem;
+        line-height: 1rem;
+        padding-right:2rem;
+        overflow: hidden;
+        text-overflow:ellipsis ;
+        white-space: nowrap;
+    }
+    .myActivityStatRow{
+        margin-top:.4rem;
+        font-size:.65rem;
+    }
+    .myActivityStat{
+        display: inline-block;
+        margin-right:2rem;
+        color:#000;
+    }
+    .myActivityEnrollNum{
+        margin-top:.2rem;
+        font-size:.65rem;
+        color:#000;
+    }
+
+</style>
+<script type='text/javascript' src='http://g.alicdn.com/sj/lib/zepto/zepto.min.js' charset='utf-8'></script>
+<script type='text/javascript' src='http://g.alicdn.com/msui/sm/0.6.2/js/sm.min.js' charset='utf-8'></script>
+<script type='text/javascript' src='http://g.alicdn.com/msui/sm/0.6.2/js/sm-extend.min.js' charset='utf-8'></script>
+<script type='text/javascript' src='${request.contextPath}/js/assembly/main.js' charset='utf-8'></script>
+<script>
+    $.init();
+    $.showIndicator();
+    $('.infinite-scroll-preloader').hide();
+    var loading = false;
+    // 最多可加载的条目
+    var maxItems = 100;
+
+    // 每次加载添加多少条目
+    var itemsPerLoad = 10;
+
+    function addItems(number, lastIndex,data) {
+        // 生成新条目的HTML
+        var html = '';
+        var dataLength = 0;
+        $.each(data, function(i, item) {
+            var itemStatus = "";
+            if (item.status == 'PUBLISHED') {
+                itemStatus = "已发布";
+            } else if (item.status == 'DISABLED') {
+                itemStatus = "已下架："+item.resultContent;
+            }
+            if(itemStatus=="已发布"){
+                html +=  '<li class="card updateResult" data-id="'+item.assemblyId+'" >'+
+                        '   <div class="myActivityTitle">'+item.title+'</div>'+
+                        '  <div class="myActivityStatRow">'+
+                        ' <span class="myActivityStat">'+itemStatus+'</span>'+
+                        '  <span class="myActivityTime">'+item.createTime+'</span>'+
+                        '</div>'+
+                        '  <div class="myActivityEnrollNum">'+
+                        '<span>报名人数：'+item.attentCount+'/'+item.quota+'</span>'+
+                        ' </div>'+
+                        ' <div class="rightArrow"><span class="icon icon-right"></span></div>'+
+                        ' </li>';
+            }else{
+                html +=  ' <li class="card">'+
+                        '   <div class="myActivityTitle">'+item.title+'</div>'+
+                        '  <div class="myActivityStatRow">'+
+                        ' <span class="myActivityStat">'+itemStatus+'</span></div>'+
+                        ' <div class="rightArrow"><span class="icon icon-right"></span></div>'+
+                        ' </li>';
+            }
+
+            dataLength += 1;
+        });
+        if (dataLength == 0) {
+            $('.no-record').show();
+            $('.infinite-scroll-preloader').remove();
+        } else {
+            $('.no-record').hide();
+            // 添加新条目
+            $('.infinite-scroll-bottom .myActivityList').append(html);
+            $('.item-title-row').each(function (index, ele, arr) {
+                var $item_title = $(ele).children('.item-title'),
+                        $item_after = $(ele).children('.item-after'),
+                        $siblings = $(ele).siblings('.item-text'),
+                        $height = $item_title.height();
+                if ($height > 30) {
+                    console.log($height);
+                    $siblings.css('padding-top', '1.25rem');
+                    $item_after.css('margin-top', '.475rem');
+                }
+            });
+        }
+        $.hideIndicator();
+
+    }
+    $.post('${request.contextPath}/assembly/mySignAssemblylist', {startIndex: 0,loadSize:itemsPerLoad}, function (response) {
+        //预先加载20条
+        addItems(itemsPerLoad, 0,response);
+    });
+
+
+    // 上次加载的序号
+
+    var lastIndex = 10;
+
+    // 注册'infinite'事件处理函数
+    $(document).on('infinite', '.infinite-scroll-bottom',function() {
+        // 如果正在加载，则退出
+        if (loading) return;
+
+        // 设置flag
+        loading = true;
+        $.post('${request.contextPath}/assembly/mySignAssemblylist', {startIndex: lastIndex,loadSize:itemsPerLoad}, function (response) {
+
+            // 模拟1s的加载过程
+            setTimeout(function() {
+                // 重置加载flag
+                loading = false;
+
+                if (lastIndex >= maxItems) {
+                    // 加载完毕，则注销无限加载事件，以防不必要的加载
+                    $.detachInfiniteScroll($('.infinite-scroll'));
+                    // 删除加载提示符
+                    $('.infinite-scroll-preloader').remove();
+                    return;
+                }
+
+                // 添加新条目
+                addItems(itemsPerLoad, lastIndex,response);
+                // 更新最后加载的序号
+                lastIndex = $('.list-block li').length;
+                //容器发生改变,如果是js滚动，需要刷新滚动
+                $.refreshScroller();
+            }, 1000);
+        });
+
+
+    });
+    $(function () {
+        $(document).on("click",".updateResult",function () {
+            var assemblyId=$(this).attr("data-id");
+            window.location.href="${request.contextPath}/assembly/to-result?assemblyId="+assemblyId;
+        });
+    })
+</script>
+</body>
+</html>

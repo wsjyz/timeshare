@@ -56,6 +56,7 @@ public class AssemblyController extends  BaseController {
                         @RequestParam(value = "type", defaultValue = "online") String type, Model model) {
         model.addAttribute("type", type);
         Assembly assembly = new Assembly();
+        assembly.setStatus("PUBLISHED");
         List<Assembly> assemblyList = assemblyService.findAssemblyList(assembly, 0, 10);
         model.addAttribute("assemblyList", assemblyList);
         return "assembly/index";
@@ -246,7 +247,7 @@ public class AssemblyController extends  BaseController {
         String collectionStr="false";
         if (!CollectionUtils.isEmpty(list)) {
             for (Collection collection : list) {
-                if (collection.getUserId().equals(userId)){
+                if (collection.getUserId().equals(userId) && collection.getAssemblyId().equals(assemblyId)){
                     collectionStr="true";
                     break;
                 }
@@ -443,12 +444,13 @@ public class AssemblyController extends  BaseController {
         try {
             UserInfo userInfo = getCurrentUser(userId);
             Comment comment = commentService.findCommentById(commentId);
+            resultId=userInfo.getNickName() + ":" + replyContent;
             if (StringUtils.isEmpty(comment.getReplyContent())) {
-                comment.setReplyContent(userInfo.getNickName() + ":" + replyContent);
+                comment.setReplyContent(resultId);
             } else {
-                comment.setReplyContent(comment.getReplyContent() + "&#" + userInfo.getNickName() + ":" + replyContent);
+                comment.setReplyContent(comment.getReplyContent() + "&#" +resultId);
             }
-            resultId = commentService.modifyComment(comment);
+            commentService.modifyComment(comment);
         } catch (Exception e) {
             e.printStackTrace();
             resultId = "ERROR";
@@ -542,5 +544,19 @@ public class AssemblyController extends  BaseController {
         model.addAttribute("assembly", assembly);
 
         return "assembly/resultContent";
+    }
+
+    @RequestMapping(value = "/mySignAssembly")
+    public String mySignAssembly( Model model) {
+        return "assembly/mySignAssembly";
+    }
+
+    @RequestMapping("/mySignAssemblylist")
+    @ResponseBody
+    public List<Assembly> mySignAssemblylist(
+            @RequestParam(value = "startIndex", defaultValue = "0") int startIndex, @RequestParam(value = "loadSize", defaultValue = "20") int loadSize, Model model, @CookieValue(value = "time_sid", defaultValue = "admin") String userId) {
+        Assembly assembly = new Assembly();
+        List<Assembly> assemblyList = assemblyService.findSignAssemblyList(assembly, userId,startIndex, loadSize);
+        return assemblyList;
     }
 }

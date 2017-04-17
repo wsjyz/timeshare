@@ -38,10 +38,10 @@
       <div class="page">
           <div class="indexHeader header">
               <div class="buttons-tab">
-                  <a href="#tab1" onclick="checkTab('online')" class="tab-link active button">线上活动</a>
-                  <a href="#tab2" onclick="checkTab('face')"   class="tab-link  button">线下活动</a>
-                  <a href="#tab3"  onclick="checkTab('train')"  class="tab-link  button">培训分享</a>
-                  <a href="#tab4" onclick="checkTab('company')"  class="tab-link  button">企业参访</a>
+                  <a href="#tab1" onclick="checkTab('online')" class="tab-link <#if type=='online'>active</#if> button">线上活动</a>
+                  <a href="#tab2" onclick="checkTab('face')"   class="tab-link <#if type=='face'>active</#if> button">线下活动</a>
+                  <a href="#tab3"  onclick="checkTab('train')"  class="tab-link <#if type=='train'>active</#if> button">培训分享</a>
+                  <a href="#tab4" onclick="checkTab('company')"  class="tab-link <#if type=='company'>active</#if> button">企业参访</a>
               </div>
           </div>
           <div class="bar bar-header-secondary">
@@ -87,14 +87,14 @@
                           </div>
                       </div>
                       <div class="tabs">
-                          <div id="tab1" class="tab active">
+                          <div id="tab1" class="tab <#if type=='online'>active</#if>">
                           </div>
-                          <div id="tab2"class="tab">
+                          <div id="tab2"class="tab <#if type=='face'>active</#if>">
 
                           </div>
-                          <div id="tab3"  class="tab">
+                          <div id="tab3"  class="tab  <#if type=='train'>active</#if>">
                           </div>
-                          <div id="tab4" class="tab">
+                          <div id="tab4" class="tab <#if type=='company'>active</#if>">
                           </div>
                       </div>
                   </div>
@@ -108,7 +108,19 @@
     <script type='text/javascript' src='http://g.alicdn.com/msui/sm/0.6.2/js/sm-extend.min.js' charset='utf-8'></script>
     <script>
         $(function(){
-            $("#tab1").load("${request.contextPath}/assembly/searchAssembly?type=online");
+
+            if("${type}"=="online"){
+                $("#tab1").load("${request.contextPath}/assembly/searchAssembly?type=online");
+            }
+            if("${type}"=="face"){
+                $("#tab2").load("${request.contextPath}/assembly/searchAssembly");
+            }
+            if("${type}"=="train"){
+                $("#tab3").load("${request.contextPath}/assembly/searchAssembly?type=train");
+            }
+            if("${type}"=="company"){
+                $("#tab4").load("${request.contextPath}/assembly/searchAssembly?type=company");
+            }
             //调整搜索框长度
             (function(){
                 var barWidth = $('.bar-header-secondary').width();
