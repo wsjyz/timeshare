@@ -5,6 +5,7 @@ import com.timeshare.dao.crowdfunding.WithdrawalLogDAO;
 import com.timeshare.domain.crowdfunding.WithdrawalLog;
 import com.timeshare.utils.CommonStringUtils;
 import com.timeshare.utils.Contants;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.jdbc.core.PreparedStatementSetter;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Repository;
@@ -44,7 +45,13 @@ public class WithdrawalLogDAOImpl extends BaseDAO implements WithdrawalLogDAO {
 
     @Override
     public List<WithdrawalLog> findWithdrawalLogByOwner(String userId,int startIndex, int loadSize) {
-        StringBuilder sql = new StringBuilder("select * from t_withdrawal_log where user_id='"+userId+"' ");
+        StringBuilder sql = new StringBuilder("select i.nick_name,l.* from t_withdrawal_log l  ");
+        sql.append("left join t_user_info i ");
+        sql.append("on l.user_id=i.user_id ");
+        if(StringUtils.isNotBlank(userId)){
+            sql.append("where l.user_id='"+userId+"' ");
+        }
+        sql.append("order by l.withdrawal_time desc");
         if(startIndex!=0 && loadSize!=0){
             sql.append("limit "+startIndex+","+loadSize);
         }
@@ -71,6 +78,13 @@ public class WithdrawalLogDAOImpl extends BaseDAO implements WithdrawalLogDAO {
             WithdrawalLog.setReplyMsg(rs.getString("reply_msg"));
             WithdrawalLog.setUserId(rs.getString("user_id"));
             WithdrawalLog.setWithdrawalTradeNo(rs.getString("withdrawal_trade_no"));
+            try {
+                if (rs.findColumn("nick_name") > 0 ) {
+                    WithdrawalLog.setNickName(rs.getString("nick_name"));
+                }
+            }
+            catch (SQLException e) {
+            }
             return WithdrawalLog;
         }
     }

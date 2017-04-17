@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <title>我发起的众筹</title>
+    <title>众筹管理</title>
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">      
     <meta name="format-detection" content="telephone=no">
     <meta name="format-detection" content="email=no">
@@ -78,11 +78,11 @@
               }
 
 
-              html += '<li><a href="#" class="item-link item-content create-actions" param="'+crowdFunding.crowdfundingId+'" param1="'+crowdFunding.crowdfundingStatus+'" rowNumber='+i+'>'+
+              html += '<li><a href="#" class="item-link item-content create-actions" param="'+crowdFunding.crowdfundingId+'" param1="'+crowdFunding.crowdfundingStatus+'" param2="'+crowdFunding.isShow+'" rowNumber='+i+'>'+
                   '<div class="item-inner"><div class="item-title-row">'+
                   '<div class="item-title">'+crowdFunding.projectName+'</div></div>'+
                   '<div class="item-subtitle"><span class="tag" id="crowdfundingStatusName'+i+'">'+crowdfundingStatusName+'</span><span class="date">'+crowdFunding.curriculumEndTime+'</span></div>'+
-                  '<div class="item-text"><span class="num">报名人数'+crowdFunding.enrollCount+'/'+crowdFunding.maxPeoples+'</span></div>'+
+                  '<div class="item-text"><span class="num">报名人数'+crowdFunding.enrollCount+'/'+crowdFunding.maxPeoples+'   &nbsp;&nbsp;发起者：'+crowdFunding.createUserName+'</span></div>'+
                   '</div></a></li>';
           });
           // 添加新条目
@@ -97,7 +97,7 @@
           }
       }
       //预先加载众筹项目
-      $.post('${request.contextPath}/crowdFunding/findCrowdFundingByOwner', {startIndex: 0,loadSize:itemsPerLoad}, function (response) {
+      $.post('${request.contextPath}/manager/crowdFunding/findCrowdFundingByOwnerToManager', {startIndex: 0,loadSize:itemsPerLoad}, function (response) {
           //预先加载众筹项目
           addItems(response);
       });
@@ -125,7 +125,7 @@
               }
 
               // 添加新条目
-              $.post('${request.contextPath}/crowdFunding/findCrowdFundingByOwner', {startIndex: lastIndex,loadSize:itemsPerLoad}, function (response) {
+              $.post('${request.contextPath}/manager/crowdFunding/findCrowdFundingByOwnerToManager', {startIndex: lastIndex,loadSize:itemsPerLoad}, function (response) {
                   if(response==null || response==undefined ||  response==''){
                       // 加载完毕，则注销无限加载事件，以防不必要的加载
                       $.detachInfiniteScroll($('.infinite-scroll'));
@@ -149,22 +149,28 @@
       $(document).on("pageInit", ".page", function(e, id, page) {
           $(page).on('click','.create-actions', function () {
               var crowdfundingId=$(this).attr("param");
-              var thiObj=$(this);
+              var thisObj=$(this);
               var crowdfundingStatus=$(this).attr("param1");
               var showText="强制下架";
               if(crowdfundingStatus=='SKETCH' || crowdfundingStatus=='OFF_SHELVE'){
                   showText="发布";
               }
+              var isShow=$(this).attr("param2");
+              var isshowText="在轮播图显示";
+              if(isShow=='YES'){
+                  isshowText="不在轮播图显示";
+              }
+
               var rowNumber=$(this).attr("rowNumber");
               var buttons1 = [
                   {
                       text: showText,
                       onClick: function() {
                           if(crowdfundingStatus=='SKETCH' || crowdfundingStatus=='OFF_SHELVE'){
-                              $.post('${request.contextPath}/crowdFunding/updateSketchAndOffShelveToReleased', {crowdfundingId: crowdfundingId}, function (response) {
+                              $.post('${request.contextPath}/manager/crowdFunding/updateSketchAndOffShelveToReleased', {crowdfundingId: crowdfundingId}, function (response) {
                                   if(response=='success'){
                                       $("#crowdfundingStatusName"+rowNumber).text("已发布");
-                                      thiObj.attr("param1","RELEASED");
+                                      thisObj.attr("param1","RELEASED");
                                       $.toast("发布成功");
                                   }
                                   else{
@@ -175,10 +181,10 @@
                           else{
                               $.prompt('请填写下架理由', '强制下架',
                                   function (value) {
-                                      $.post('${request.contextPath}/crowdFunding/crowdFundingToShelve', {crowdfundingId: crowdfundingId,offShelveReason:value}, function (response) {
+                                      $.post('${request.contextPath}/manager/crowdFunding/crowdFundingToShelve', {crowdfundingId: crowdfundingId,offShelveReason:value}, function (response) {
                                           if(response=='success'){
                                               $("#crowdfundingStatusName"+rowNumber).text("已下架");
-                                              thiObj.attr("param1","OFF_SHELVE");
+                                              thisObj.attr("param1","OFF_SHELVE");
                                               $.toast("下架成功");
                                           }
                                           else{
@@ -204,6 +210,21 @@
                       text: '报名名单',
                       onClick: function() {
                           window.location.href="${request.contextPath}/enroll/toCrowdfundingByMyEnrollToPaging?crowdFundingId="+crowdfundingId;
+                      }
+                  }
+                  ,
+                  {
+                      text: isshowText,
+                      onClick: function() {
+                          $.post('${request.contextPath}/manager/crowdFunding/updateCrowdfundingIsShow', {crowdfundingId: crowdfundingId,isShow:isShow=='YES'?'NO':'YES'}, function (response) {
+                              if(response=='success'){
+                                  thisObj.attr("param2",isShow=='YES'?'NO':'YES');
+                                  $.toast("设置成功");
+                              }
+                              else{
+                                  $.toast("设置失败");
+                              }
+                          });
                       }
                   }
               ];

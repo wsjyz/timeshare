@@ -25,16 +25,16 @@
         	<!--header start-->
             <header class="bar bar-nav">
                 <a href="javascript:history.go(-1);" class="button button-link pull-left back">
-                    <span class="icon icon-left"></span>返回
+                    <span class="icon icon-left"></span>
                 </a>
-                <h1 class="title">提现申请</h1>
+                <h1 class="title"></h1>
             </header>
             <!--header end-->
             <!--页面内容区域 start-->
             <div class="content">
                 <form>
-                <section class="t-c tx-prompt"><img src="${request.contextPath}/images/crowdFunding/icon-prompt.png" class="i-prompt">&nbsp;本月已申请提现${moneyAccount.monthWithdrawalNumber!0}次，还有${monthWithdrawalMaxNumber-moneyAccount.monthWithdrawalNumber!0}次机会</section>
-                <section class="t-c" style="font-size: 14px;color: red">提示：一次提现金额不能小于1.01元，不能大于2000元。 微信平台提现将收取千分之六的手续费，敬请谅解！</section>
+                <section class="t-c tx-prompt"><img src="${request.contextPath}/images/crowdFunding/icon-prompt.png" class="i-prompt">&nbsp;本月已经申请提现${moneyAccount.monthWithdrawalNumber!0}次，还有${monthWithdrawalMaxNumber-moneyAccount.monthWithdrawalNumber!0}次机会</section>
+                <section class="t-c" style="font-size: 14px;color: red">提示：一次提现最低100元 最高2000元，腾讯会收取0.6%的手续费，请知晓!</section>
                 <section>
                   <div class="list-block">
                       <ul>
@@ -79,7 +79,7 @@
 <script>
     $(document).on('click', '.btn-dark',function () {
         var cashWithdrawalAmountInput=$("#cashWithdrawalAmountInput").val();
-        if(cashWithdrawalAmountInput!=null && cashWithdrawalAmountInput!='' && cashWithdrawalAmountInput>=1.01 && cashWithdrawalAmountInput<=2000){
+        if(cashWithdrawalAmountInput!=null && cashWithdrawalAmountInput!='' && cashWithdrawalAmountInput>=100 && cashWithdrawalAmountInput<=2000){
             $.post('${request.contextPath}/moneyAccount/payToSellerCheck',{cashWithdrawalAmountInput:cashWithdrawalAmountInput}, function (response) {
               if (response == "success") {
                   window.location.href = "https://open.weixin.qq.com/connect/oauth2/authorize?appid=wxcd8903dd6a9552eb" +

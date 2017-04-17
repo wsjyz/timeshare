@@ -18,7 +18,7 @@ public interface CrowdFundingService {
     //获取某个众筹项目
     CrowdFunding findCrowdFundingById(String crowdFundingById);
     //众筹首页集合
-    public List<CrowdFunding> findCrowdFundingToIndex(int startIndex, int loadSize) ;
+    public List<CrowdFunding> findCrowdFundingToIndex(int startIndex, int loadSize,String isShowFlag) ;
     //众筹详情页
     public CrowdFunding findCrowdFundingDetailByCrowdfundingId(String crowdfundingId);
     //我发起的众筹

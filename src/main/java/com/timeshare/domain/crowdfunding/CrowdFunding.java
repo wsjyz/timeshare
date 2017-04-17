@@ -41,6 +41,8 @@ public class CrowdFunding extends BaseDomain {
     private int  enrollCount;
     //众筹封面
     private String imageUrl;
+    //发起者人物头像
+    private String userHeadImageUrl;
 
     public int getEnrollCount() {
         return enrollCount;
@@ -178,4 +180,11 @@ public class CrowdFunding extends BaseDomain {
         this.createTime = createTime;
     }
 
+    public String getUserHeadImageUrl() {
+        return userHeadImageUrl;
+    }
+
+    public void setUserHeadImageUrl(String userHeadImageUrl) {
+        this.userHeadImageUrl = userHeadImageUrl;
+    }
 }

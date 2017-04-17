@@ -20,6 +20,8 @@ public class WithdrawalLog extends BaseDomain {
     //商户提现交易号
     private String withdrawalTradeNo;
 
+    //用户昵称
+    private String nickName;
 
 
 
@@ -69,5 +71,13 @@ public class WithdrawalLog extends BaseDomain {
 
     public void setReplyMsg(String replyMsg) {
         this.replyMsg = replyMsg;
+    }
+
+    public String getNickName() {
+        return nickName;
+    }
+
+    public void setNickName(String nickName) {
+        this.nickName = nickName;
     }
 }

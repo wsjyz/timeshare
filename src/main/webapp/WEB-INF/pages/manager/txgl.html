@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <title>提现记录</title>
+    <title>提现管理</title>
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">      
     <meta name="format-detection" content="telephone=no">
     <meta name="format-detection" content="email=no">
@@ -80,7 +80,7 @@
                 '<li>' +
                 '<div class="item-content">' +
                 '<div class="item-inner">' +
-                '<div class="item-title"><span>¥'+withdrawalLog.withdrawalCash+'</span>' +
+                '<div class="item-title"><span>¥'+withdrawalLog.withdrawalCash+'  &nbsp;提现者：'+withdrawalLog.nickName+'</span>' +
                 '</div>' +
                 '</div>' +
                 '</div>' +
@@ -112,7 +112,7 @@
     }
 
     //预先加载
-    $.post('${request.contextPath}/withdrawalLog/listByOwner', {startIndex: 0,loadSize:itemsPerLoad}, function (response) {
+    $.post('${request.contextPath}/manager/withdrawalLog/listByOwner', {startIndex: 0,loadSize:itemsPerLoad}, function (response) {
         //预先加载
         addItems(response);
     });
@@ -138,7 +138,7 @@
                 return;
             }
             // 添加新条目
-            $.post('${request.contextPath}/withdrawalLog/listByOwner', {startIndex: lastIndex,loadSize:itemsPerLoad}, function (response) {
+            $.post('${request.contextPath}/manager/withdrawalLog/listByOwner', {startIndex: lastIndex,loadSize:itemsPerLoad}, function (response) {
                 if(response==null || response==undefined ||  response==''){
                     // 加载完毕，则注销无限加载事件，以防不必要的加载
                     $.detachInfiniteScroll($('.infinite-scroll'));

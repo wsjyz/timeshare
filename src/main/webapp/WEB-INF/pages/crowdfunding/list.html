@@ -25,8 +25,8 @@
         <div class="page page-current">
         	<!--header start-->            
             <header class="bar bar-nav bar-list">
-              <a href="${request.contextPath}/crowdFunding/createCrowdFunding" class="icon i-edit pull-right"></a>
-              <h1 class="title">众筹</h1>
+
+              <h1 class="title"></h1>
             </header>
             <!--header end-->
             <!--页面内容区域 start-->
@@ -97,7 +97,7 @@
 
                 var imageUrlSrc='${request.contextPath}/'+crowdFunding.imageUrl+'_320x240.jpg';
 
-                html += '<div class="item"><div class="item-title">'+crowdFunding.createUserName+'</div>'+
+                html += '<div class="item"><div class="item-title user-head-image_div"><img src="'+crowdFunding.userHeadImageUrl+'" onerror="this.src=\'${request.contextPath}/images/crowdFunding/pic.jpg\'"/>'+crowdFunding.createUserName+'</div>'+
                     '<div class="item-box">'+
                     '<div class="zc-img"><a href="${request.contextPath}/crowdFunding/toDetail?crowdFundingId='+crowdFunding.crowdfundingId+'"><img src="'+imageUrlSrc+'" onerror="this.src=\'${request.contextPath}/images/crowdFunding/pic.jpg\'"/></a></div>'+
                     '<div class="zc-text">'+
@@ -144,7 +144,7 @@
         }
 
         //预先加载轮播图
-        $.post('${request.contextPath}/crowdFunding/listCrowdFundingToIndex', {startIndex: 0,loadSize:5}, function (response) {
+        $.post('${request.contextPath}/crowdFunding/listCrowdFundingToIndex', {startIndex: 0,loadSize:5,isShowFlag:'true'}, function (response) {
             //轮播图
             setSwiperSlide(response);
         });

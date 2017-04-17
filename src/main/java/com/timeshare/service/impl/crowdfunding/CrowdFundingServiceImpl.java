@@ -63,15 +63,15 @@ public class CrowdFundingServiceImpl implements CrowdFundingService {
     }
     //众筹详情页
     public CrowdFunding findCrowdFundingDetailByCrowdfundingId(String crowdfundingId){
-        List<CrowdFunding> crowdFundingList=crowdFundingDAO.findCrowdFundingToIndex(0,1,crowdfundingId);
+        List<CrowdFunding> crowdFundingList=crowdFundingDAO.findCrowdFundingToIndex(0,1,crowdfundingId,null);
         if(crowdFundingList!=null && crowdFundingList.size()>0){
             return crowdFundingList.get(0);
         }
         return null;
     }
     //众筹首页集合
-    public List<CrowdFunding> findCrowdFundingToIndex(int startIndex, int loadSize){
-        return crowdFundingDAO.findCrowdFundingToIndex(startIndex,loadSize,null);
+    public List<CrowdFunding> findCrowdFundingToIndex(int startIndex, int loadSize,String isShowFlag){
+        return crowdFundingDAO.findCrowdFundingToIndex(startIndex,loadSize,null, isShowFlag);
     }
     //我发起的众筹
     public List<CrowdFunding> findCrowdFundingToMyCrowdFunding(int startIndex, int loadSize,String userId){

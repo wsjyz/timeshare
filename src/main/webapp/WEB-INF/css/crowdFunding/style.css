@@ -261,7 +261,7 @@ textarea.form-control{height:auto;line-height:normal}
 .wyydzc-list ul{ background:none}
 .wyydzc-list li{margin:0.5rem 0; background:#fff}
 .wyydzc-list img{width:5rem;height:3.75rem}
-/*±¨ÃûÃûµ¥*/
+/*报名名单*/
 .bmmd-list li{
     display: -webkit-box;
     display: -webkit-flex;
@@ -283,6 +283,5 @@ textarea.form-control{height:auto;line-height:normal}
     -webkit-align-items: center;
     align-items: center; text-align:center}
 .table-head span{width:50%;font-size:0.8rem}
-
-
-
+/*用户头像*/
+.user-head-image_div img{border-radius:50%;width:32px;height: 32px}

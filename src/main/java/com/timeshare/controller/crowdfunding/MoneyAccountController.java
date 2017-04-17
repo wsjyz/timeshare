@@ -61,7 +61,7 @@ public class MoneyAccountController extends  BaseController{
     @RequestMapping(value = "/payToSellerCheck")
     public String payToSellerCheck(@RequestParam BigDecimal cashWithdrawalAmountInput,@CookieValue(value="time_sid", defaultValue="00359e8721c44d168aac7d501177e314") String userId) {
         long cashWithdrawalAmount=(cashWithdrawalAmountInput.multiply(new BigDecimal(100))).longValueExact();
-        if(cashWithdrawalAmount>=101 && cashWithdrawalAmount<=200000){
+        if(cashWithdrawalAmount>=10000 && cashWithdrawalAmount<=200000){
             MoneyAccount moneyAccount=moneyAccountService.findMoneyAccountByOwner(userId);
             if(moneyAccount!=null){
                 if(moneyAccount.getMonthWithdrawalNumber()<Contants.MONTH_WITHDRAWAL_MAX_NUMBER){

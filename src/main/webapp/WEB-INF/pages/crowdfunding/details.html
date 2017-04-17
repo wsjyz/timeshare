@@ -25,10 +25,10 @@
         	<!--header start-->            
             <header class="bar bar-nav bar-list">
                 <a href="javascript:history.go(-1);" class="button button-link pull-left back">
-                    <span class="icon icon-left"></span>返回
+                    <span class="icon icon-left"></span>
                 </a>
               <a href="${request.contextPath}/crowdFunding/createCrowdFunding" class="icon i-edit pull-right"></a>
-              <h1 class="title">详情</h1>
+              <h1 class="title"></h1>
             </header>
             <!--header end-->
             <nav class="bar bar-tab signup">
@@ -70,7 +70,11 @@
                               <span class="num">学员人数:${crowdFunding.enrollCount}/${crowdFunding.maxPeoples}人</span>
                           </div>
                           <div class="row cb">
-                          	<div class="col-50">课程总成本:${crowdFunding.costTotal}</div>
+                          	<div class="col-50">
+                                <#if crowdFunding.costType!='AA'>
+                                    课程总成本:${crowdFunding.costTotal}
+                                </#if>
+                            </div>
                             <div class="col-50">目前人均价:
                                 <#if crowdFunding.costType=='AA'>
                                     ${crowdFunding.costTotal!}
@@ -86,7 +90,9 @@
                           </div>
                            <div class="zc-progress">
 
-                              <div class="progress"><div class="progress-bar" style="width:${crowdFunding.enrollCount/crowdFunding.maxPeoples*100}%"></div></div>
+                              <div class="progress">
+                                  <div class="progress-bar" style="width:${crowdFunding.enrollCount/crowdFunding.maxPeoples*100}%"></div>
+                              </div>
                           </div>
                       </div>
                   </div>

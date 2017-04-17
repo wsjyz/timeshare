@@ -63,6 +63,7 @@ public class CrowdFundingController extends  BaseController{
     public String toMyCrowdFunding() {
         return "crowdfunding/wfqdzc";
     }
+
     //我的
     @RequestMapping(value = "/toMe")
     public String toMe(@CookieValue(value="time_sid", defaultValue="00359e8721c44d168aac7d501177e314") String userId,Model model) {
@@ -150,9 +151,9 @@ public class CrowdFundingController extends  BaseController{
     //获取众筹列表
     @ResponseBody
     @RequestMapping(value = "/listCrowdFundingToIndex")
-    public List<CrowdFunding> listCrowdFundingToIndex(@RequestParam int startIndex, @RequestParam int loadSize) {
+    public List<CrowdFunding> listCrowdFundingToIndex(@RequestParam int startIndex, @RequestParam int loadSize,@RequestParam(defaultValue = "",required = false) String isShowFlag) {
         try{
-            return crowdFundingService.findCrowdFundingToIndex(startIndex,loadSize);
+            return crowdFundingService.findCrowdFundingToIndex(startIndex,loadSize,isShowFlag);
         }
         catch (Exception e){
             e.printStackTrace();

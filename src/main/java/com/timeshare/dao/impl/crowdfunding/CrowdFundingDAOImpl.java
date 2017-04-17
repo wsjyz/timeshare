@@ -109,8 +109,8 @@ public class CrowdFundingDAOImpl extends BaseDAO implements CrowdFundingDAO {
     }
 
 
-    public List<CrowdFunding> findCrowdFundingToIndex(int startIndex, int loadSize,String crowdfundingId) {
-        StringBuilder sql = new StringBuilder("select count(e.enroll_id) enroll_count,o.image_url,c.* ");
+    public List<CrowdFunding> findCrowdFundingToIndex(int startIndex, int loadSize,String crowdfundingId,String isShowFlag) {
+        StringBuilder sql = new StringBuilder("select count(e.enroll_id) enroll_count,o.image_url,o2.image_url user_head_image_url,c.* ");
         sql.append("from t_crowdfunding c ");
         sql.append("left join t_enroll e ");
         sql.append("on c.crowdfunding_id=e.crowdfunding_id ");
@@ -118,6 +118,9 @@ public class CrowdFundingDAOImpl extends BaseDAO implements CrowdFundingDAO {
         sql.append("left join t_img_obj o ");
         sql.append("on c.crowdfunding_id=o.obj_id ");
         sql.append("and o.image_type='CROWD_FUNDING_IMG' ");
+        sql.append("left join t_img_obj o2 ");
+        sql.append("on c.user_id=o2.obj_id ");
+        sql.append("and o2.image_type='USER_HEAD' ");
 
         sql.append("where 1=1 ");
 
@@ -128,6 +131,9 @@ public class CrowdFundingDAOImpl extends BaseDAO implements CrowdFundingDAO {
         sql.append("and c.crowdfunding_status='RELEASED' ");
         sql.append("and c.curriculum_end_time>=SYSDATE() ");
         sql.append("and c.curriculum_start_time<=SYSDATE() ");
+        if(StringUtils.isNotBlank(isShowFlag) && "true".equals(isShowFlag)){
+            sql.append("and c.is_show='YES' ");
+        }
 
         sql.append("group by c.crowdfunding_id ");
         sql.append("order by c.create_time desc ");
@@ -153,7 +159,7 @@ public class CrowdFundingDAOImpl extends BaseDAO implements CrowdFundingDAO {
             sql.append("and c.user_id='"+userId+"' ");
         }
         sql.append("group by c.crowdfunding_id ");
-        sql.append("order by c.create_time desc ");
+        sql.append("order by c.opt_time desc ");
 
         sql.append("limit "+startIndex+","+loadSize);
 
@@ -173,7 +179,9 @@ public class CrowdFundingDAOImpl extends BaseDAO implements CrowdFundingDAO {
         if(StringUtils.isNotBlank(crowdFunding.getOptTime())){
             sql.append(" opt_time = '"+crowdFunding.getOptTime()+"',");
         }
-
+        if(StringUtils.isNotBlank(crowdFunding.getIsShow())){
+            sql.append(" is_show = '"+crowdFunding.getIsShow()+"',");
+        }
 
         if (sql.lastIndexOf(",") + 1 == sql.length()) {
             sql.delete(sql.lastIndexOf(","), sql.length());
@@ -210,6 +218,14 @@ public class CrowdFundingDAOImpl extends BaseDAO implements CrowdFundingDAO {
             }
             catch (SQLException e) {
             }
+            try {
+                if (rs.findColumn("user_head_image_url") > 0 ) {
+                    crowdFunding.setUserHeadImageUrl(rs.getString("user_head_image_url"));
+                }
+            }
+            catch (SQLException e) {
+            }
+
             crowdFunding.setIsShow(rs.getString("is_show"));
             crowdFunding.setCrowdfundingStatus(rs.getString("crowdfunding_status"));
             crowdFunding.setOffShelveReason(rs.getString("off_shelve_reason"));

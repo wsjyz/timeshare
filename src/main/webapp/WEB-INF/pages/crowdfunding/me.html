@@ -24,9 +24,9 @@
         <div class="page page-current">
         	<!--header start-->            
             <header class="bar bar-nav bar-me">
-              <a href="#" class="icon i-menu pull-left"></a>
-              <a href="#" class="icon i-search pull-right"></a>
-              <h1 class="title">我的</h1>
+              <!--<a href="#" class="icon i-menu pull-left"></a>-->
+              <!--<a href="#" class="icon i-search pull-right"></a>-->
+              <h1 class="title"></h1>
             </header>
             <!--header end-->
             <!--页面内容区域 start-->
@@ -35,7 +35,9 @@
                 	<div class="me-info">
                     	<div class="head"><img src="${userInfo.imageObj.imageUrl!}"><i class="flag">VIP</i></div>
                         <div class="name">${userInfo.nickName!}</div>
-                        <div class="tel"><i class="i-left"><img src="${request.contextPath}/images/crowdFunding/icon-left.png"></i>${userInfo.mobile!}<i class="i-right"><img src="${request.contextPath}/images/crowdFunding/icon-right.png"></i></div>
+                        <div class="tel">
+                            <i class="i-left"></i>${userInfo.mobile!}<i class="i-right"></i>
+                        </div>
                     </div>
                 </div>
                 
