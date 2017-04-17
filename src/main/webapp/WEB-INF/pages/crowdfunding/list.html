@@ -32,8 +32,13 @@
             <div class="content infinite-scroll  infinite-scroll-bottom"  data-distance="100">
                 <div class="banner swiper-container">
                     <div class="swiper-wrapper">
-
-
+                        <#list crowdFundingList as crowdFunding>
+                            <div class="swiper-slide">
+                                <a href="${request.contextPath}/crowdFunding/toDetail?crowdFundingId=${crowdFunding.crowdfundingId}">
+                                    <img src="${request.contextPath}/${crowdFunding.imageUrl}_320x240.jpg" onerror="this.src='${request.contextPath}/images/crowdFunding/pic.jpg'"/>
+                                </a>
+                            </div>
+                        </#list>
                     </div>
                     <div class="swiper-pagination"></div>
                 </div>
@@ -61,8 +66,6 @@
   </body>
 <script>
     $(function() {
-
-
         // 众筹列表下拉无限加载
         var loading = false;
         // 最多可加载的条目
@@ -119,50 +122,12 @@
             }
         }
 
-        //设置前五轮播图
-        function setSwiperSlide(data) {
-            // 生成新条目的HTML
-            var html = '';
-            $.each(data, function(i, crowdFunding){
-                var imageUrlSrc='${request.contextPath}/'+crowdFunding.imageUrl+'_320x240.jpg';
-                html += '<div class="swiper-slide"><a href="${request.contextPath}/crowdFunding/toDetail?crowdFundingId='+crowdFunding.crowdfundingId+'"><img src="'+imageUrlSrc+'" onerror="this.src=\'${request.contextPath}/images/crowdFunding/pic.jpg\'"/></a></div>';
-            });
-            // 添加新条目
-            $('.infinite-scroll-bottom .swiper-wrapper').append(html);
-
-
-            //众筹列表 轮播图
-//            var swiper = new Swiper('.swiper-container', {
-//                pagination: '.swiper-pagination',
-//                paginationClickable: true,
-//                loop: true,
-//                autoplay: 2500,
-//                autoplayDisableOnInteraction: false
-//            });
-            $(".swiper-container").swiper({
-                pagination: '.swiper-pagination',
-                paginationClickable: true,
-                spaceBetween: 30,
-                centeredSlides: true,
-                autoplay: 2500,
-                loop:true,
-                autoplayDisableOnInteraction: false
-            });
-        }
-
-        //预先加载轮播图
-        $.post('${request.contextPath}/crowdFunding/listCrowdFundingToIndex', {startIndex: 0,loadSize:5,isShowFlag:'true'}, function (response) {
-            //轮播图
-            setSwiperSlide(response);
-        });
-
         //预先加载众筹项目
         $.post('${request.contextPath}/crowdFunding/listCrowdFundingToIndex', {startIndex: 0,loadSize:itemsPerLoad}, function (response) {
             //预先加载众筹项目
             addItems(response);
 
         });
-
 
         // 上次加载的序号
         var lastIndex = itemsPerLoad;
@@ -208,5 +173,15 @@
         });
     });
 
+    //轮播图
+    $(".swiper-container").swiper({
+        pagination: '.swiper-pagination',
+        paginationClickable: true,
+        spaceBetween: 30,
+        centeredSlides: true,
+        autoplay: 2500,
+        loop:true,
+        autoplayDisableOnInteraction: false
+    })
 </script>
 </html>

@@ -55,7 +55,9 @@ public class CrowdFundingController extends  BaseController{
     }
     //众筹首页
     @RequestMapping(value = "/toIndex")
-    public String toIndex() {
+    public String toIndex(Model model) {
+        List<CrowdFunding> crowdFundingList=crowdFundingService.findCrowdFundingToIndex(0,5,"true");
+        model.addAttribute("crowdFundingList",crowdFundingList);
         return "crowdfunding/list";
     }
     //我发起的众筹
