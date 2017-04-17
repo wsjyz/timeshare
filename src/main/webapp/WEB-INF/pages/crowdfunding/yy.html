@@ -84,16 +84,16 @@
                     </div>
                     </section>
                     <div class="content-block">发票类型:普通增值税发票</div>
-                    <div class="content-block">
-                      <div class="row">
+                    <div class="content-block btn-box">
+
                         <input type="hidden" id="invoiceType" value="VAT_INVOICE" name="invoiceType">
                         <input type="hidden" id="payStatus" value="WAIT_PAY" name="payStatus">
                         <input type="hidden" id="payAmount" value="${crowdFunding.reservationCost!}" name="payAmount">
                         <input type="hidden" id="crowdfundingId" value="${crowdFunding.crowdfundingId!}" name="crowdfundingId">
 
-                        <div class="col-50"><a href="#" class="button button-big btn-dark" id="saveEnrollBtn">确定</a></div>
-                        <div class="col-50"><a href="${request.contextPath}/crowdFunding/toDetail?crowdFundingId=${crowdFunding.crowdfundingId!}" class="button button-big btn-light">取消</a></div>
-                      </div>
+                        <a href="#" class="button btn-dark" id="saveEnrollBtn">确定</a><
+                        <a href="${request.contextPath}/crowdFunding/toDetail?crowdFundingId=${crowdFunding.crowdfundingId!}" class="button btn-light">取消</a>
+
                     </div>
                  </form>
             </div>

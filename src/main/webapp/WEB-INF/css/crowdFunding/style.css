@@ -86,18 +86,18 @@ textarea.form-control{height:auto;line-height:normal}
 .zc-list .item-box .zc-img{height:10rem;overflow:hidden}
 .zc-list .item-box .zc-img img{width:100%;height:100%;border-radius:0.3rem 0.3rem 0 0}
 .zc-list .item-box .zc-text{padding:0.8rem 0.7rem}
-.zc-list .item-box .zc-name{font-size:0.9rem}
-.zc-list .item-box .zc-name .tag{float:left;display:block;margin-top:4px;background:#40445f;color:#fff;font-size:0.7rem;padding:0 2px}
-.zc-list .item-box .zc-info{display:-webkit-box;display:-webkit-flex;display:flex;-webkit-box-pack:justify;-webkit-justify-content:space-between;justify-content:space-between;-webkit-box-align:center;-webkit-align-items:center;align-items:center;margin:0.5rem 0;font-size:0.5rem}
-.zc-list .item-box .i-time{vertical-align:middle;display:inline-block;width:0.9rem;height:0.9rem;margin-right:5px;background:url(../../images/crowdFunding/icon-time.png) no-repeat center center;background-size:contain}
-.zc-list .item-box .i-address{vertical-align:middle;display:inline-block;width:0.9rem;height:0.9rem;margin-right:5px;background:url(../../images/crowdFunding/icon-address.png) no-repeat center center;background-size:contain}
+.zc-list .item-box .zc-name{font-size:0.8rem}
+.zc-list .item-box .zc-name .tag{float:left;display:block;margin-top:2px;background:#40445f;color:#fff;font-size:0.65rem;padding:0 2px}
+.zc-list .item-box .zc-info{display:-webkit-box;display:-webkit-flex;display:flex;-webkit-box-pack:justify;-webkit-justify-content:space-between;justify-content:space-between;-webkit-box-align:center;-webkit-align-items:center;align-items:center;margin:0.5rem 0;font-size:0.6rem}
+.zc-list .item-box .i-time{vertical-align:middle;display:inline-block;width:0.8rem;height:0.8rem;margin-right:5px;background:url(../img/icon-time.png) no-repeat center center;background-size:contain}
+.zc-list .item-box .i-address{vertical-align:middle;display:inline-block;width:0.8rem;height:0.8rem;margin-right:5px;background:url(../img/icon-address.png) no-repeat center center;background-size:contain}
 .zc-list .item-box .price,
 .zc-list .item-box .num{color:#c7c7c7;font-size:0.6rem}
 .zc-list .item-box .zc-link{text-align:right;margin-top:0.6rem}
-.zc-progress{margin-top:2rem}
+.zc-progress{margin:2rem 0.8rem 0}
 .zc-progress .progress{height:12px;overflow:visible;background-color:#d3d9e5;border-radius:6px;-webkit-box-shadow:inset 0 1px 2px rgba(0,0,0,.1);box-shadow:inset 0 1px 2px rgba(0,0,0,.1)}
 .zc-progress .progress-bar{float:left;width:0;height:100%;line-height:12px;color:#fff;text-align:center;background-color:#747b95;-webkit-box-shadow:inset 0 -1px 0 rgba(0,0,0,.15);box-shadow:inset 0 -1px 0 rgba(0,0,0,.15);-webkit-transition:width .6s ease;-o-transition:width .6s ease;transition:width .6s ease;border-radius:6px 0 0 6px;position:relative;animation:animate-positive 2s}
-.zc-progress .progress-bar .remain{position:absolute;bottom:20px;right:-20px;color:#fff;display:block;padding:5px;background:#747b95;border-radius:3px;font-size:0.5rem}
+.zc-progress .progress-bar .remain{display:block;min-width:2.8rem;padding:5px;position:absolute;bottom:20px;right:-20px;color:#fff;background:#747b95;border-radius:3px;font-size:0.5rem}
 .zc-progress .progress .progress-bar span:before{content:"";position:absolute;bottom:-14px;left:1.25rem;border:0.4rem solid transparent;border-top:0.4rem solid #747b95}
 @-webkit-keyframes animate-positive{0%{width:0%}
 }
@@ -112,8 +112,8 @@ textarea.form-control{height:auto;line-height:normal}
 .details .item-box .zc-name{font-size:1rem}
 .details .item-box .zc-name .tag{float:left;display:block;margin-top:4px;background:#40445f;color:#fff;font-size:0.7rem;padding:0 2px}
 .details .item-box .zc-info{display:-webkit-box;display:-webkit-flex;display:flex;-webkit-box-pack:justify;-webkit-justify-content:space-between;justify-content:space-between;-webkit-box-align:center;-webkit-align-items:center;align-items:center;margin:0.5rem 0}
-.details .item-box .i-time{vertical-align:middle;display:inline-block;width:1rem;height:1rem;background:url(../../images/crowdFunding/icon-time.png) no-repeat center center;background-size:contain}
-.details .item-box .i-address{vertical-align:middle;display:inline-block;width:1rem;height:1rem;background:url(../../images/crowdFunding/icon-address.png) no-repeat center center;background-size:contain}
+.details .item-box .i-time{float:left;margin-top:1px;display:inline-block;width:0.8rem;height:0.8rem;background:url(../img/icon-time.png) no-repeat center center;background-size:contain}
+.details .item-box .i-address{float:left;margin-top:2px;display:inline-block;width:0.8rem;height:0.8rem;background:url(../img/icon-address.png) no-repeat center center;background-size:contain}
 .details .item-box .price,
 .details .item-box .num{color:#c7c7c7;font-size:0.6rem}
 .dashed-line{border-bottom:1px dashed #3f435e}
@@ -151,6 +151,10 @@ textarea.form-control{height:auto;line-height:normal}
 .details-comment .star img{width:0.6rem;margin-right:5px}
 .details-comment .item-img{margin-top:0.6rem}
 .details-comment .item-img img{width:3.5rem;height:3.5rem;margin-right:10px}
+.comment-input .input-txt{width:100%;background:#ebecef;border:1px solid #b1b9ce;height:1.35rem;line-height:1.25rem;padding:0 0.5rem;border-radius:5px}
+.btn-comment{background:#40445f;border-color:#40445f;color:#fff}
+.reply-box .reply-item{margin:0.5rem 0;font-size:0.6rem}
+.reply-input{position:fixed;bottom:0;width:104%;padding:0.7rem; background:#fff;z-index:11}
 /*支付*/
 .pay-list{background:#fff;padding:0.7rem;display:-webkit-box;display:-webkit-flex;display:flex;-webkit-box-pack:center;-webkit-justify-content:center;justify-content:center;-webkit-box-align:center;-webkit-align-items:center;align-items:center}
 .pay-list .txt{font-size:0.8rem;text-align:right}
@@ -186,3 +190,5 @@ textarea.form-control{height:auto;line-height:normal}
 .bmmd-list li span{width:50%}
 .table-head{display:-webkit-box;display:-webkit-flex;display:flex;-webkit-box-pack:center;-webkit-justify-content:center;justify-content:center;-webkit-box-align:center;-webkit-align-items:center;align-items:center;text-align:center}
 .table-head span{width:50%;font-size:0.8rem}
+.btn-box{display:-webkit-box;display:-webkit-flex;display:flex;-webkit-box-pack:center;-webkit-justify-content:center;justify-content:center;-webkit-box-align:center;-webkit-align-items:center;align-items:center}
+.btn-box .button{margin:0 0.6rem;height:2rem; line-height:2rem;width:5rem}

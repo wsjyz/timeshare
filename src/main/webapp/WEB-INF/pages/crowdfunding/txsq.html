@@ -50,18 +50,13 @@
                   </div>
                   </section>
                   <div class="content-block t-r">可提现:${moneyAccount.cashWithdrawalAmount!}</div>
-                  <div class="content-block">
-                    <div class="row">
-                      <div class="col-50">
-                        <#if (monthWithdrawalMaxNumber-moneyAccount.monthWithdrawalNumber > 0)>
-                          <a href="#" class="button button-big btn-dark">确定</a>
-                        <#else>
-                            <section class="t-c" style="font-size: 14px;color: red">本次提现次数使用完毕，请下月再进行提现</section>
-                        </#if>
-
-                      </div>
-                      <div class="col-50"><a href="${request.contextPath}/moneyAccount/listByOwner" class="button button-big btn-light">取消</a></div>
-                    </div>
+                  <div class="content-block btn-box">
+                    <#if (monthWithdrawalMaxNumber-moneyAccount.monthWithdrawalNumber > 0)>
+                      <a href="#" class="button button-big btn-dark">确定</a>
+                    <#else>
+                        <section class="t-c" style="font-size: 14px;color: red">本次提现次数使用完毕，请下月再进行提现</section>
+                    </#if>
+                    <a href="${request.contextPath}/moneyAccount/listByOwner" class="button button-big btn-light">取消</a>
                   </div>
                </form>
             </div>

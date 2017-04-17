@@ -126,6 +126,14 @@
                           <div class="no-record" style="display: none;text-align: center">
                               没有更多记录了
                           </div>
+                          <!--评论框-->
+                          <div class="content-block">
+                              <div class="row comment-input">
+                                  <div class="col-80"><input type="text" class="input-txt" placeholder="请输入评论"></div>
+                                  <div class="col-20"><a href="#" class="button btn-comment">评论</a></div>
+                              </div>
+                          </div>
+                          <!--评论框-->
                       </div>
                   </div>
                   <!--评论 end-->
@@ -172,16 +180,7 @@
  	<script type="text/javascript" src="${request.contextPath}/js/crowdFunding/my-js.js"></script>
   </body>
   <script>
-      $(document).on('click', '.btn-reply',function () {
-          $.prompt('回复',
-              function (value) {
-                  $.alert(value);
-              },
-              function (value) {
-                  $.alert("取消了" );
-              }
-          );
-      });
+
       //根据评论标志选择显示的tab
       if("${commentFlag}"=='true'){
           $("#commentTab").trigger("click");
@@ -227,6 +226,9 @@
                                             '<button class="button btn-reply"><i class="i-reply"></i> 回复</button>' +
                                       '</div>' +
                                 '</div>' +
+                                 '<div class="reply-box">' +
+                  '                     <div class="reply-item"><span>xx对xx的回复：</span>说的号的很么说的号的what are you doing.flkjfdajfdjlk999-3433---34343-43号的很么说的号的很么说的号的很么说的号的很么说的号的很么说的号的很么</div><div class="reply-item"><span>xx对xx的回复：</span>说的号的很么说的号的what are you 说的号的很么说的号的很么</div>' +
+                  '               </div>'
                           '</div>' +
                         '</li>';
               count=i;
