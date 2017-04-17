@@ -95,11 +95,11 @@
 
                 var imageUrlSrc='${request.contextPath}/'+crowdFunding.imageUrl+'_320x240.jpg';
 
-                html += '<div class="item"><a href="${request.contextPath}/crowdFunding/toDetail?crowdFundingId='+crowdFunding.crowdfundingId+'"> <div class="item-title"><span class="user-head-image_div"><img src="'+crowdFunding.userHeadImageUrl+'" onerror="this.src=\'${request.contextPath}/images/crowdFunding/pic.jpg\'"/></span>'+crowdFunding.createUserName+'</div>'+
+                html += '<div class="item"><a href="${request.contextPath}/crowdFunding/toDetail?crowdFundingId='+crowdFunding.crowdfundingId+'"><div class="item-title"><span class="user-head-image_div"><img src="'+crowdFunding.userHeadImageUrl+'" onerror="this.src=\'${request.contextPath}/images/crowdFunding/pic.jpg\'"/></span>'+crowdFunding.createUserName+'</div>'+
                     '<div class="item-box">'+
-                    '<div class="zc-img"><a href="${request.contextPath}/crowdFunding/toDetail?crowdFundingId='+crowdFunding.crowdfundingId+'"><img src="'+imageUrlSrc+'" onerror="this.src=\'${request.contextPath}/images/crowdFunding/pic.jpg\'"/></a></div>'+
+                    '<div class="zc-img"><img src="'+imageUrlSrc+'" onerror="this.src=\'${request.contextPath}/images/crowdFunding/pic.jpg\'"/></div>'+
                     '<div class="zc-text">'+
-                    '<div class="zc-name"><a href="${request.contextPath}/crowdFunding/toDetail?crowdFundingId='+crowdFunding.crowdfundingId+'"><em class="tag">'+enrollTitleStatus+'</em>'+crowdFunding.projectName+'</a></div>'+
+                    '<div class="zc-name"><em class="tag">'+enrollTitleStatus+'</em>'+crowdFunding.projectName+'</div>'+
                     '<div class="zc-info"><span class="time"><i class="i-time"></i>上课时间:'+crowdFunding.curriculumEndTime+'</span><span class="address"><i class="i-address"></i>'+crowdFunding.sponsorCity+'</span></div>'+
                     '<div class="zc-progress"><div class="progress"><div class="progress-bar" style="width:'+enrollProgressBar+'%"><span class="remain">剩'+(crowdFunding.maxPeoples-crowdFunding.enrollCount)+'席</span></div></div></div>'+
                     '<div class="zc-info"><span class="price">众筹最低学费:'+price+'元</span><span class="num">学员人数:'+crowdFunding.enrollCount+'/'+crowdFunding.maxPeoples+'人</span></div>'+
