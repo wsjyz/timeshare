@@ -42,12 +42,57 @@ public class Assembly extends BaseDomain{
     private String titleImg;
     private List<Fee> feeList;
     private List<Comment> commentList;
-    private List<String> contentImgList;
+    private List<ImageObj> contentImgList;
     private String createTime;
     private String consultationImg;
     private String resultContent;
     private String status;
     private String quota;
+    private String titleImageId;
+    private String contentImgIds;
+    private String contentImgUrls;
+    private String consultationImgId;
+    private String feeIds;
+
+    public void setFeeIds(String feeIds) {
+        this.feeIds = feeIds;
+    }
+
+    public String getFeeIds() {
+        return feeIds;
+    }
+
+    public String getTitleImageId() {
+        return titleImageId;
+    }
+
+    public void setTitleImageId(String titleImageId) {
+        this.titleImageId = titleImageId;
+    }
+
+    public String getContentImgIds() {
+        return contentImgIds;
+    }
+
+    public void setContentImgIds(String contentImgIds) {
+        this.contentImgIds = contentImgIds;
+    }
+
+    public String getContentImgUrls() {
+        return contentImgUrls;
+    }
+
+    public void setContentImgUrls(String contentImgUrls) {
+        this.contentImgUrls = contentImgUrls;
+    }
+
+    public String getConsultationImgId() {
+        return consultationImgId;
+    }
+
+    public void setConsultationImgId(String consultationImgId) {
+        this.consultationImgId = consultationImgId;
+    }
 
     public void setQuota(String quota) {
         this.quota = quota;
@@ -85,12 +130,12 @@ public class Assembly extends BaseDomain{
         this.createTime = createTime;
     }
 
-    public void setContentImgList(List<String> contentImgList) {
-        this.contentImgList = contentImgList;
+    public List<ImageObj> getContentImgList() {
+        return contentImgList;
     }
 
-    public List<String> getContentImgList() {
-        return contentImgList;
+    public void setContentImgList(List<ImageObj> contentImgList) {
+        this.contentImgList = contentImgList;
     }
 
     public void setBrowseTimes(int browseTimes) {

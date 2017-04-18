@@ -19,4 +19,5 @@ public interface AssemblyDAO {
     List<Assembly> findSignAssemblyList(Assembly Assembly,String userId, int startIndex, int loadSize);
 
 
+    int deleteAssembly(String assemblyId);
 }

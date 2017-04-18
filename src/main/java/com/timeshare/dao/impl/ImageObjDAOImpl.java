@@ -98,6 +98,11 @@ public class ImageObjDAOImpl extends BaseDAO implements ImageObjDAO {
         return imgObjList.get(0);
     }
 
+    @Override
+    public int deleteImageObjByImageId(String imageId) {
+        return getJdbcTemplate().update("delete from t_img_obj where image_id=?",new Object[]{imageId});
+    }
+
     public class ImageObjMapper implements RowMapper<ImageObj>{
 
         @Override

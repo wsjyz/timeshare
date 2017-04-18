@@ -38,4 +38,6 @@ public interface UserService {
     int findUserHasMobileCount();
     ImageObj findById(String imageId);
 
+    int deleteImageObjByImageId(String imageId);
+
 }

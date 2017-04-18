@@ -20,5 +20,6 @@ public interface AssemblyService {
 
     int findAssemblyCount(Assembly Assembly);
     List<Assembly> findSignAssemblyList(Assembly Assembly,String userId, int startIndex, int loadSize);
+    int deleteAssembly(String assemblyId);
 
 }

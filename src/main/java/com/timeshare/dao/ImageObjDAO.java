@@ -22,4 +22,6 @@ public interface ImageObjDAO {
 
     ImageObj findById(String imageId);
 
+
+    int deleteImageObjByImageId(String imageId);
 }

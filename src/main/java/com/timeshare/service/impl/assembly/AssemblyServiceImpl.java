@@ -20,6 +20,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 
+import java.awt.*;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
@@ -65,20 +66,28 @@ public class AssemblyServiceImpl implements AssemblyService {
         }
         List<ImageObj> imageObjList = imageObjDAO.findImgByObjIds("('"+assembly.getAssemblyId()+"')");
         if(!CollectionUtils.isEmpty(imageObjList)){
-            List<String> contentImageList=new ArrayList<String>();
+            List<ImageObj> contentImageList=new ArrayList<ImageObj>();
+            String imageId="";
+            String imgUrl="";
             for (ImageObj imageObj:imageObjList){
                 if (imageObj.getImageType().equals(Contants.IMAGE_TYPE.ASSEMBLY_SHOW_IMG.toString())){
                     assembly.setTitleImg("/time"+imageObj.getImageUrl()+"_320x240.jpg");
+                    assembly.setTitleImageId(imageObj.getImageId());
                 }else  if (imageObj.getImageType().equals(Contants.IMAGE_TYPE.ASSEMBLY_CONTENT_IMG.toString())){
-                    contentImageList.add("/time"+imageObj.getImageUrl()+".jpg");
+                    imageObj.setImageUrl("/time"+imageObj.getImageUrl()+".jpg");
+                    imageId=imageObj.getImageId()+","+imageId;
+                    contentImageList.add(imageObj);
                 }else  if (imageObj.getImageType().equals(Contants.IMAGE_TYPE.ASSEMBLY_CONSULTATION_IMG.toString())){
                     assembly.setConsultationImg("/time"+imageObj.getImageUrl()+"_320x240.jpg");
+                    assembly.setConsultationImgId(imageObj.getImageId());
                 }
             }
+            assembly.setContentImgIds(imageId);
             assembly.setContentImgList(contentImageList);
         }
         List<Fee> feeList=feeService.findFeeByAssemblyId(assembly.getAssemblyId());
         if (!CollectionUtils.isEmpty(feeList)) {
+            String feeId="";
             BigDecimal cost = new BigDecimal(0);
             for (int i = 0; i < feeList.size(); i++) {
                 Fee fee = feeList.get(i);
@@ -89,8 +98,10 @@ public class AssemblyServiceImpl implements AssemblyService {
                         cost = fee.getFee();
                     }
                 }
+                feeId=fee.getFeeId()+","+feeId;
             }
             assembly.setCost(cost.toString());
+            assembly.setFeeIds(feeId);
             assembly.setFeeList(feeList);
         }
             return assembly;
@@ -206,5 +217,10 @@ public class AssemblyServiceImpl implements AssemblyService {
             }
         }
         return list;
+    }
+
+    @Override
+    public int deleteAssembly(String assemblyId) {
+        return assemblyDAO.deleteAssembly(assemblyId);
     }
 }

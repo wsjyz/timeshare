@@ -63,7 +63,7 @@ public class UserServiceImpl implements UserService{
            return  imageObjDAO.saveImg(obj);
         }else{
             imageObjDAO.updateImg(obj);
-            return "";
+            return obj.getImageId();
         }
     }
 
@@ -128,5 +128,10 @@ public class UserServiceImpl implements UserService{
     @Override
     public ImageObj findById(String imageId) {
         return imageObjDAO.findById(imageId);
+    }
+
+    @Override
+    public int deleteImageObjByImageId(String imageId) {
+        return imageObjDAO.deleteImageObjByImageId(imageId);
     }
 }

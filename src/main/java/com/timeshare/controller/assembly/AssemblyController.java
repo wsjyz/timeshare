@@ -91,18 +91,27 @@ public class AssemblyController extends  BaseController {
 
     @RequestMapping(value = "/saveFee")
     @ResponseBody
-    public String saveFee(@RequestParam String feeTitle, @RequestParam String feeStr, @RequestParam String quota) {
+    public String saveFee(@RequestParam(value = "feeIds", defaultValue = "") String feeIds,@RequestParam String feeTitle, @RequestParam String feeStr, @RequestParam String quota) {
         String resultId = "";
         try {
+            String[] feeIdStr = feeIds.split(",");
             String[] feeTitles = feeTitle.split(",");
             String[] fees = feeStr.split(",");
             String[] quotas = quota.split(",");
             for (int i = 0; i < feeTitles.length; i++) {
+
                 Fee fee = new Fee();
                 fee.setFeeTitle(feeTitles[i]);
                 fee.setFee(new BigDecimal(fees[i]));
                 fee.setQuota(Integer.parseInt(quotas[i]));
-                String feeId = feeService.saveFee(fee);
+                String feeId="";
+                if (StringUtils.isNotEmpty(feeIdStr[i])){
+                    feeId=feeIdStr[i];
+                    fee.setFeeId(feeId);
+                    feeService.modifyFee(fee);
+                }else{
+                    feeId = feeService.saveFee(fee);
+                }
                 resultId += feeId + ",";
             }
             List<Fee> feeList = feeService.findFeeByAssemblyId(null);
@@ -122,12 +131,13 @@ public class AssemblyController extends  BaseController {
 
     @RequestMapping(value = "/saveAssembly")
     @ResponseBody
-    public String saveAssembly(@RequestParam String assemblyTitle, @RequestParam String imageIdStr, @RequestParam String startTime, @RequestParam String endTime, @RequestParam String rendezvous,
+    public String saveAssembly(@RequestParam(value = "assemblyId", defaultValue = "") String assemblyId,@RequestParam String assemblyTitle, @RequestParam String imageIdStr, @RequestParam String startTime, @RequestParam String endTime, @RequestParam String rendezvous,
                                @RequestParam String description,@RequestParam String assemblyType,@RequestParam String feeId,@RequestParam String onApply,@RequestParam String phoneNumber,
                                @RequestParam String applyId,@RequestParam String imageIdStrDesc,@RequestParam String imageIdStrCon, @CookieValue(value = "time_sid", defaultValue = "admin") String userId) {
         String resultId = "";
         try {
             Assembly assembly = new Assembly();
+
             assembly.setTitle(assemblyTitle);
             assembly.setStartTime(startTime);
             assembly.setEndTime(endTime);
@@ -136,13 +146,22 @@ public class AssemblyController extends  BaseController {
             assembly.setType(assemblyType);
             assembly.setShowApplyProblem(applyId);
             assembly.setUserId(userId);
-            assembly.setIsOnApply(onApply);
+            if (onApply.equals("true")){
+                assembly.setIsOnApply(onApply);
+            }else{
+                assembly.setIsOnApply("false");
+            }
             assembly.setPhoneNumber(phoneNumber);
             assembly.setStatus("PUBLISHED");
             Calendar cal = Calendar.getInstance();
             SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
             assembly.setCreateTime(sdf.format(cal.getTime()));
-            String assemblyId = assemblyService.saveAssembly(assembly);
+            if (StringUtils.isNotEmpty(assemblyId)){
+                assembly.setAssemblyId(assemblyId);
+                assemblyService.modifyAssembly(assembly);
+            }else{
+                assemblyId = assemblyService.saveAssembly(assembly);
+            }
             if (StringUtils.isNotEmpty(imageIdStr)) {
                 ImageObj imageObj = userService.findById(imageIdStr);
                 imageObj.setObjId(assemblyId);
@@ -168,10 +187,12 @@ public class AssemblyController extends  BaseController {
             if (StringUtils.isNotEmpty(feeId)) {
                 String[] feeIds = feeId.split(",");
                 for (String feeTdTemp : feeIds) {
-                    Fee fee = feeService.findFeeById(feeTdTemp);
-                    if (fee != null) {
-                        fee.setAssemblyId(assemblyId);
-                        feeService.modifyFee(fee);
+                    if (StringUtils.isNotEmpty(feeTdTemp)) {
+                        Fee fee = feeService.findFeeById(feeTdTemp);
+                        if (fee != null) {
+                            fee.setAssemblyId(assemblyId);
+                            feeService.modifyFee(fee);
+                        }
                     }
                 }
             }
@@ -539,10 +560,10 @@ public class AssemblyController extends  BaseController {
     }
 
     @RequestMapping(value = "/to-result")
-    public String result(@RequestParam(value = "assemblyId", defaultValue = "") String assemblyId, Model model) {
+    public String result(@RequestParam(value = "assemblyId", defaultValue = "") String assemblyId,@RequestParam String type, Model model) {
         Assembly assembly = assemblyService.findAssemblyById(assemblyId);
         model.addAttribute("assembly", assembly);
-
+        model.addAttribute("type",type);
         return "assembly/resultContent";
     }
 
@@ -559,4 +580,53 @@ public class AssemblyController extends  BaseController {
         List<Assembly> assemblyList = assemblyService.findSignAssemblyList(assembly, userId,startIndex, loadSize);
         return assemblyList;
     }
+    @RequestMapping(value = "/assemblyList")
+    public String assemblyListlyList( Model model) {
+        return "assembly/assemblyList";
+    }
+
+    @RequestMapping("/assemblyAllList")
+    @ResponseBody
+    public List<Assembly> assemblyAllList(
+            @RequestParam(value = "startIndex", defaultValue = "0") int startIndex, @RequestParam(value = "loadSize", defaultValue = "20") int loadSize, Model model, @CookieValue(value = "time_sid", defaultValue = "admin") String userId) {
+        Assembly assembly = new Assembly();
+        List<Assembly> assemblyList = assemblyService.findAssemblyList(assembly, startIndex, loadSize);
+        return assemblyList;
+    }
+    @RequestMapping("/deleteAssembly")
+    @ResponseBody
+    public String  deleteAssembly(@RequestParam String assemblyId, @CookieValue(value = "time_sid", defaultValue = "admin") String userId) {
+        String type="";
+        try{
+            Assembly assembly = assemblyService.findAssemblyById(assemblyId);
+            if (assembly!=null){
+                assemblyService.deleteAssembly(assemblyId);
+                type="SUCCESS";
+            }
+        }catch (Exception e){
+            e.printStackTrace();
+            type="ERROR";
+        }
+        return type;
+    }
+    @RequestMapping(value = "/to-update")
+    public String updateAssembly(@RequestParam(value = "assemblyId", defaultValue = "") String assemblyId, Model model, HttpServletRequest request, @CookieValue(value = "time_sid", defaultValue = "admin") String userId) {
+        Assembly assembly = assemblyService.findAssemblyById(assemblyId);
+         model.addAttribute("assembly", assembly);
+        return "assembly/updateActivity";
+    }
+    @RequestMapping("/deleteImg")
+    @ResponseBody
+    public String  deleteImg(@RequestParam String imageId, @CookieValue(value = "time_sid", defaultValue = "admin") String userId) {
+        String type="";
+        try{
+                userService.deleteImageObjByImageId(imageId);
+                type="SUCCESS";
+        }catch (Exception e){
+            e.printStackTrace();
+            type="ERROR";
+        }
+        return type;
+    }
+
 }

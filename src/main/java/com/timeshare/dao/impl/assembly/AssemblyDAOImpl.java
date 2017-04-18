@@ -33,7 +33,7 @@ public class AssemblyDAOImpl extends BaseDAO implements AssemblyDAO {
 
     @Override
     public String saveAssembly(Assembly Assembly) {
-        StringBuilder sql = new StringBuilder("INSERT INTO t_assembly (assembly_id, title, start_time, end_time, rendezvous, description,user_id, type, phone_number, attent_count, comment_count, is_on_index,is_on_apply,show_apply_problem,create_time) VALUES (?,?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?,?,?,?);");
+        StringBuilder sql = new StringBuilder("INSERT INTO t_assembly (assembly_id, title, start_time, end_time, rendezvous, description,user_id, type, phone_number, attent_count, comment_count, is_on_index,is_on_apply,show_apply_problem,create_time,status) VALUES (?,?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?,?,?,?,?);");
         final String id = CommonStringUtils.genPK();
         int result = getJdbcTemplate().update(sql.toString(), new PreparedStatementSetter() {
             @Override
@@ -53,6 +53,8 @@ public class AssemblyDAOImpl extends BaseDAO implements AssemblyDAO {
                 ps.setString(13,Assembly.getIsOnApply());
                 ps.setString(14,Assembly.getShowApplyProblem());
                 ps.setString(15,Assembly.getCreateTime());
+                ps.setString(16,Assembly.getStatus());
+
             }
         });
         if(result > 0){
@@ -168,7 +170,7 @@ public class AssemblyDAOImpl extends BaseDAO implements AssemblyDAO {
         }else{
             sql.append(" and ass.end_time>now()");
         }
-        sql.append(" limit ?,?");
+        sql.append(" order by create_time desc  limit ?,?");
         list.add(startIndex);
         list.add(loadSize);
         return getJdbcTemplate().query(sql.toString(),list.toArray(),new AssemblyRowMapper());
@@ -213,8 +215,6 @@ public class AssemblyDAOImpl extends BaseDAO implements AssemblyDAO {
         ;if (StringUtils.isNotEmpty(Assembly.getUserId())){
             sql.append(" and ass.user_id=?");
             list.add(Assembly.getUserId());
-        }else{
-            sql.append(" and ass.end_time>now()");
         }
         sql.append(" and att.user_id=? ");
         list.add(userId);
@@ -222,6 +222,11 @@ public class AssemblyDAOImpl extends BaseDAO implements AssemblyDAO {
         list.add(startIndex);
         list.add(loadSize);
         return getJdbcTemplate().query(sql.toString(),list.toArray(),new AssemblyRowMapper());
+    }
+
+    @Override
+    public int deleteAssembly(String assemblyId) {
+        return getJdbcTemplate().update("delete from t_assembly where assembly_id=?",new Object[]{assemblyId});
     }
 
     class AssemblyRowMapper implements RowMapper<Assembly>{
