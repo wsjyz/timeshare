@@ -16,7 +16,6 @@
     <link rel="stylesheet" type="text/css" href="${request.contextPath}/css/crowdFunding/sm.min.css">
     <link rel="stylesheet" type="text/css" href="${request.contextPath}/css/crowdFunding/sm-extend.min.css">
     <link rel="stylesheet" type="text/css" href="${request.contextPath}/css/crowdFunding/style.css">
-    <link rel="stylesheet" type="text/css" href="${request.contextPath}/css/crowdFunding/swiper.min.css">
     <script type="text/javascript" src="${request.contextPath}/js/zepto.min.js"></script>
     <script type="text/javascript" src="${request.contextPath}/js/crowdFunding/config.js"></script>
   </head>
@@ -33,8 +32,13 @@
             <div class="content infinite-scroll  infinite-scroll-bottom"  data-distance="100">
                 <div class="banner swiper-container">
                     <div class="swiper-wrapper">
-
-
+                        <#list crowdFundingList as crowdFunding>
+                            <div class="swiper-slide">
+                                <a href="${request.contextPath}/crowdFunding/toDetail?crowdFundingId=${crowdFunding.crowdfundingId}">
+                                    <img src="${request.contextPath}/${crowdFunding.imageUrl}_320x240.jpg" onerror="this.src='${request.contextPath}/images/crowdFunding/pic.jpg'"/>
+                                </a>
+                            </div>
+                        </#list>
                     </div>
                     <div class="swiper-pagination"></div>
                 </div>
@@ -59,12 +63,9 @@
     <script type="text/javascript" src="${request.contextPath}/js/crowdFunding/sm-extend.min.js"></script>
 	<script type="text/javascript" src="${request.contextPath}/js/crowdFunding/sm-city-picker.min.js"></script>
 	<script type="text/javascript" src="${request.contextPath}/js/crowdFunding/my-js.js"></script>
-    <script type="text/javascript" src="${request.contextPath}/js/crowdFunding/swiper.min.js"></script>
   </body>
 <script>
     $(function() {
-
-
         // 众筹列表下拉无限加载
         var loading = false;
         // 最多可加载的条目
@@ -97,16 +98,16 @@
 
                 var imageUrlSrc='${request.contextPath}/'+crowdFunding.imageUrl+'_320x240.jpg';
 
-                html += '<div class="item"><div class="item-title user-head-image_div"><img src="'+crowdFunding.userHeadImageUrl+'" onerror="this.src=\'${request.contextPath}/images/crowdFunding/pic.jpg\'"/>'+crowdFunding.createUserName+'</div>'+
+                html += '<div class="item"><a href="${request.contextPath}/crowdFunding/toDetail?crowdFundingId='+crowdFunding.crowdfundingId+'"><div class="item-title"><span class="user-head-image_div"><img src="'+crowdFunding.userHeadImageUrl+'" onerror="this.src=\'${request.contextPath}/images/crowdFunding/pic.jpg\'"/></span>'+crowdFunding.createUserName+'</div>'+
                     '<div class="item-box">'+
-                    '<div class="zc-img"><a href="${request.contextPath}/crowdFunding/toDetail?crowdFundingId='+crowdFunding.crowdfundingId+'"><img src="'+imageUrlSrc+'" onerror="this.src=\'${request.contextPath}/images/crowdFunding/pic.jpg\'"/></a></div>'+
+                    '<div class="zc-img"><img src="'+imageUrlSrc+'" onerror="this.src=\'${request.contextPath}/images/crowdFunding/pic.jpg\'"/></div>'+
                     '<div class="zc-text">'+
-                    '<div class="zc-name"><a href="${request.contextPath}/crowdFunding/toDetail?crowdFundingId='+crowdFunding.crowdfundingId+'"><em class="tag">'+enrollTitleStatus+'</em>'+crowdFunding.projectName+'</a></div>'+
+                    '<div class="zc-name"><em class="tag">'+enrollTitleStatus+'</em> &nbsp;'+crowdFunding.projectName+'</div>'+
                     '<div class="zc-info"><span class="time"><i class="i-time"></i>上课时间:'+crowdFunding.curriculumEndTime+'</span><span class="address"><i class="i-address"></i>'+crowdFunding.sponsorCity+'</span></div>'+
-                    '<div class="zc-progress"><div class="progress"><div class="progress-bar" style="width:'+enrollProgressBar+'%"></div></div></div>'+
+                    '<div class="zc-progress"><div class="progress"><div class="progress-bar" style="width:'+enrollProgressBar+'%"><span class="remain">剩'+(crowdFunding.maxPeoples-crowdFunding.enrollCount)+'席</span></div></div></div>'+
                     '<div class="zc-info"><span class="price">众筹最低学费:'+price+'元</span><span class="num">学员人数:'+crowdFunding.enrollCount+'/'+crowdFunding.maxPeoples+'人</span></div>'+
                     '<div class="zc-abstract">'+crowdFunding.detail+'</div>'+
-                    '<div class="zc-link"><a href="${request.contextPath}/crowdFunding/toDetail?crowdFundingId='+crowdFunding.crowdfundingId+'">查看详情</a></div></div></div></div>';
+                    '<div class="zc-link">查看详情</div></div></div></a></div>';
 
                 count=i;
             });
@@ -121,41 +122,12 @@
             }
         }
 
-        //设置前五轮播图
-        function setSwiperSlide(data) {
-            // 生成新条目的HTML
-            var html = '';
-            $.each(data, function(i, crowdFunding){
-                var imageUrlSrc='${request.contextPath}/'+crowdFunding.imageUrl+'_320x240.jpg';
-                html += '<div class="swiper-slide"><a href="${request.contextPath}/crowdFunding/toDetail?crowdFundingId='+crowdFunding.crowdfundingId+'"><img src="'+imageUrlSrc+'" onerror="this.src=\'${request.contextPath}/images/crowdFunding/pic.jpg\'"/></a></div>';
-            });
-            // 添加新条目
-            $('.infinite-scroll-bottom .swiper-wrapper').append(html);
-
-
-            //众筹列表 轮播图
-            var swiper = new Swiper('.swiper-container', {
-                pagination: '.swiper-pagination',
-                paginationClickable: true,
-                loop: true,
-                autoplay: 2500,
-                autoplayDisableOnInteraction: false
-            });
-        }
-
-        //预先加载轮播图
-        $.post('${request.contextPath}/crowdFunding/listCrowdFundingToIndex', {startIndex: 0,loadSize:5,isShowFlag:'true'}, function (response) {
-            //轮播图
-            setSwiperSlide(response);
-        });
-
         //预先加载众筹项目
         $.post('${request.contextPath}/crowdFunding/listCrowdFundingToIndex', {startIndex: 0,loadSize:itemsPerLoad}, function (response) {
             //预先加载众筹项目
             addItems(response);
 
         });
-
 
         // 上次加载的序号
         var lastIndex = itemsPerLoad;
@@ -201,5 +173,15 @@
         });
     });
 
+    //轮播图
+    $(".swiper-container").swiper({
+        pagination: '.swiper-pagination',
+        paginationClickable: true,
+        spaceBetween: 30,
+        centeredSlides: true,
+        autoplay: 2500,
+        loop:true,
+        autoplayDisableOnInteraction: false
+    })
 </script>
 </html>

@@ -24,9 +24,7 @@
         <div class="page page-current">
         	<!--header start-->
             <header class="bar bar-nav">
-                <a href="javascript:history.go(-1);" class="button button-link pull-left back">
-                    <span class="icon icon-left"></span>
-                </a>
+                <a class="icon icon-left pull-left back" href="javascript:history.go(-1);"></a>
                 <h1 class="title"></h1>
             </header>
             <!--header end-->
@@ -77,7 +75,7 @@
               }
 
               html += '<li><a href="${request.contextPath}/crowdFunding/toDetail?crowdFundingId='+enroll.crowdfundingId+'" class="item-link item-content">'+
-                  '<div class="item-media"><img src="'+imageUrlSrc+'"></div><div class="item-inner">'+
+                  '<div class="item-media"><img src="'+imageUrlSrc+'" onerror="this.src=\'${request.contextPath}/images/crowdFunding/pic.jpg\'"/></div><div class="item-inner">'+
                   '<div class="item-title-row"><div class="item-title">'+enroll.projectName+'</div></div>'+
                   '<div class="item-text">'+enroll.detail+'</div>'+
                   '</div></a></li>';
