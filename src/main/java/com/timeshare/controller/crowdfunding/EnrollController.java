@@ -56,7 +56,7 @@ public class EnrollController extends  BaseController{
 
     //预约页面
     @RequestMapping(value = "/yy")
-    public String yy(@RequestParam String crowdFundingId,@RequestParam String enrollId, Model model)  {
+    public String yy(@RequestParam String crowdFundingId,@RequestParam String enrollId, Model model,@CookieValue(value="time_sid", defaultValue="00359e8721c44d168aac7d501177e314") String userId)  {
         String crowdFundingIdTemp=crowdFundingId;
         //从支付返回回来的需要获取一次预约信息展示到页面
         if(StringUtils.isNotBlank(enrollId)){
@@ -64,6 +64,10 @@ public class EnrollController extends  BaseController{
             model.addAttribute("enroll",enroll);
             crowdFundingIdTemp=enroll.getCrowdfundingId();
         }
+
+        //根据购买用户ID判断用户是否已经购买过
+        model.addAttribute("isAlreadyBuy",enrollService.enrollUserIdIsAlreadyBuy(userId));
+
         CrowdFunding crowdFunding=crowdFundingService.findCrowdFundingDetailByCrowdfundingId(crowdFundingIdTemp);
         model.addAttribute("crowdFunding",crowdFunding);
         return "crowdfunding/yy";
@@ -81,6 +85,7 @@ public class EnrollController extends  BaseController{
                     String curriculumEndTime=crowdFunding.getCurriculumEndTime();
                     SimpleDateFormat sdf=new SimpleDateFormat("yyyy-MM-dd HH:mm");
                     Date curriculumEndTimeDate=sdf.parse(curriculumEndTime);
+                    Enroll enrollDB=enrollService.findEnrollById(enroll.getEnrollId());
                     if(curriculumEndTimeDate.compareTo(new Date())>=0){
                         if(crowdFunding.getEnrollCount()<crowdFunding.getMaxPeoples()){
                             if(Contants.CROWD_FUNDING_STATUS.RELEASED.name().equals(crowdFunding.getCrowdfundingStatus())){

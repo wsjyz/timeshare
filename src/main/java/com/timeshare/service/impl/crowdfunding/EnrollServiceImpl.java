@@ -168,4 +168,18 @@ public class EnrollServiceImpl implements EnrollService {
     public String autoMoneyTransferAfterUpdate(String enrollId) {
         return enrollDAO.autoMoneyTransferAfterUpdate(enrollId);
     }
+    //根据购买用户ID 获取预约集合
+    public List<Enroll> findEnrollByEnrollUserId(String enrollUserId) {
+        return enrollDAO.findEnrollByEnrollUserId(enrollUserId);
+    }
+    //根据购买用户ID判断用户是否已经购买过
+    public Boolean enrollUserIdIsAlreadyBuy(String enrollUserId) {
+        List<Enroll> enrollList=enrollDAO.findEnrollByEnrollUserId(enrollUserId);
+        if(enrollList!=null && enrollList.size()>0){
+            return true;
+        }
+        else{
+            return true;
+        }
+    }
 }

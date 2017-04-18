@@ -108,6 +108,19 @@
   </body>
 <script>
     $("#saveEnrollBtn").on('click', function () {
+        //用户曾经是否购买过
+        if("${isAlreadyBuy}"=="true"){
+            $.confirm('您已经购买过，还需要继续购买吗？',
+                function () {
+                    pay();
+                }
+            );
+        }
+        else{
+            pay();
+        }
+    });
+    function pay(){
         //支付
         $.post('${request.contextPath}/enroll/save', $("#enrollForm").serialize(), function (result) {
             if(result=="NOT_RELEASED"){
@@ -128,6 +141,6 @@
                     "&state=" + result + "#wechat_redirect";
             }
         });
-    });
+    }
 </script>
 </html>

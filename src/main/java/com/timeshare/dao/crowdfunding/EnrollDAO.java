@@ -30,4 +30,6 @@ public interface EnrollDAO {
     public String autoRefundAfterUpdate(String enrollId,String refundTradeNo) ;
     //自动更新现金账户可提现金额后更新已转移标志
     public String autoMoneyTransferAfterUpdate(String enrollId) ;
+    //根据购买用户ID 获取预约集合
+    public List<Enroll> findEnrollByEnrollUserId(String enrollUserId) ;
 }
