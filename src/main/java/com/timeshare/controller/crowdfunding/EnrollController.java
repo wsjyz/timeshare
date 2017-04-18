@@ -66,7 +66,7 @@ public class EnrollController extends  BaseController{
         }
 
         //根据购买用户ID判断用户是否已经购买过
-        model.addAttribute("isAlreadyBuy",enrollService.enrollUserIdIsAlreadyBuy(userId));
+        model.addAttribute("isAlreadyBuy",enrollService.enrollUserIdIsAlreadyBuy(userId,crowdFundingId));
 
         CrowdFunding crowdFunding=crowdFundingService.findCrowdFundingDetailByCrowdfundingId(crowdFundingIdTemp);
         model.addAttribute("crowdFunding",crowdFunding);

@@ -37,8 +37,8 @@ public interface EnrollService {
     public String autoRefundAfterUpdate(String enrollId,String refundTradeNo) ;
     //自动更新现金账户可提现金额后更新已转移标志
     public String autoMoneyTransferAfterUpdate(String enrollId) ;
-    //根据购买用户ID 获取预约集合
-    public List<Enroll> findEnrollByEnrollUserId(String enrollUserId) ;
+    //根据购买用户ID及项目ID 获取预约信息
+    public List<Enroll> findEnrollByEnrollUserIdAndCrowdFundingId(String enrollUserId,String crowdFundingId) ;
     //根据购买用户ID判断用户是否已经购买过
-    public Boolean enrollUserIdIsAlreadyBuy(String enrollUserId) ;
+    public Boolean enrollUserIdIsAlreadyBuy(String enrollUserId,String crowdFundingId) ;
 }

@@ -64,8 +64,10 @@ public class EnrollDAOImpl extends BaseDAO implements EnrollDAO {
         StringBuilder sql = new StringBuilder("select * from t_enroll where enroll_id='"+enrollId+"'");
         return getJdbcTemplate().query(sql.toString(),new Object[]{},new EnrollRowMapper());
     }
-    public List<Enroll> findEnrollByEnrollUserId(String enrollUserId) {
-        StringBuilder sql = new StringBuilder("select * from t_enroll where enroll_user_id='"+enrollUserId+"'");
+    public List<Enroll> findEnrollByEnrollUserIdAndCrowdFundingId(String enrollUserId,String crowdFundingId) {
+        StringBuilder sql = new StringBuilder("select * from t_enroll where enroll_user_id='"+enrollUserId+"' ");
+        sql.append("and crowdfunding_id='"+crowdFundingId+"'");
+
         return getJdbcTemplate().query(sql.toString(),new Object[]{},new EnrollRowMapper());
     }
 
