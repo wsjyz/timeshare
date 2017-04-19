@@ -31,7 +31,7 @@
         </header>
         <!--header end-->
         <nav class="bar bar-tab signup">
-            <#if (crowdFunding.enrollCount >= crowdFunding.maxPeoples)>
+            <#if (crowdFunding.enrollCount!0 >= crowdFunding.maxPeoples)>
                 <span class="cost">名额已满</span>
                 <#else>
                     <a href="${request.contextPath}/enroll/yy?crowdFundingId=${crowdFunding.crowdfundingId}&enrollId="
@@ -49,10 +49,10 @@
                     <div class="zc-text">
                         <div class="zc-name">
                             <em class="tag">
-                                <#if (crowdFunding.enrollCount >= crowdFunding.maxPeoples)>
+                                <#if (crowdFunding.enrollCount!0 >= crowdFunding.maxPeoples)>
                                     已爆仓
-                                    <#else>
-                                        报名中
+                                <#else>
+                                    报名中
                                 </#if>
                             </em>
                             ${crowdFunding.projectName!}
@@ -67,10 +67,10 @@
                                   <#if crowdFunding.costType=='AA'>
                                       ${crowdFunding.costTotal!}
                                   <#else>
-                                      ${crowdFunding.costTotal/crowdFunding.maxPeoples!}
+                                      ${crowdFunding.costTotal/crowdFunding.maxPeoples}
                                   </#if>
                                   元</span>
-                            <span class="num">学员人数:${crowdFunding.enrollCount}/${crowdFunding.maxPeoples}人</span>
+                            <span class="num">学员人数:${crowdFunding.enrollCount!0}/${crowdFunding.maxPeoples}人</span>
                         </div>
                         <div class="row cb">
                             <div class="col-50">
@@ -85,7 +85,7 @@
                                         <#if crowdFunding.enrollCount==0>
                                             ${crowdFunding.costTotal!}
                                             <#else>
-                                                ${crowdFunding.costTotal/crowdFunding.enrollCount!}
+                                                ${crowdFunding.costTotal/crowdFunding.enrollCount}
                                         </#if>
 
                                 </#if>
@@ -94,14 +94,10 @@
                         <div class="zc-progress">
                             <div class="progress">
                                 <div class="progress-bar"
-                                     style="width:${crowdFunding.enrollCount/crowdFunding.maxPeoples*100}%">
-                                    <span class="remain">剩${crowdFunding.maxPeoples-crowdFunding.enrollCount}席</span>
+                                     style="width:${(crowdFunding.enrollCount!0)/crowdFunding.maxPeoples*100}%">
+                                    <span class="remain">剩${crowdFunding.maxPeoples-crowdFunding.enrollCount!0}席</span>
                                 </div>
                             </div>
-
-                            <!--<div class="progress">-->
-                            <!--<div class="progress-bar" style="width:${crowdFunding.enrollCount/crowdFunding.maxPeoples*100}%"></div>-->
-                            <!--</div>-->
                         </div>
                     </div>
                 </div>

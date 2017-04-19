@@ -18,4 +18,5 @@ public interface CrowdFundingDAO {
     public List<CrowdFunding> findCrowdFundingByPrjectName(String crowdFundingPrjectName) ;
     public List<CrowdFunding> editCrowdFundingByCrowdFundingId(String crowdFundingId) ;
     public String deleteCrowdFunding(String crowdFundingId) ;
+    public List<CrowdFunding> findCrowdFundingDetailByCrowdfundingId(String crowdfundingId) ;
 }
