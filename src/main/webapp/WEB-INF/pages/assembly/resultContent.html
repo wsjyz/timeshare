@@ -50,7 +50,11 @@
                 if(data=="ERROR"){
                     $.alert("保存失败，请稍后再试!");
                 }else{
-                    location.href="${request.contextPath}/assembly/myAssembly";
+                    if("${type}"=="MYASSEMBLY"){
+                        location.href="${request.contextPath}/assembly/myAssembly";
+                    }else{
+                        location.href="${request.contextPath}/assembly/assemblyList";
+                    }
                 }
             })
         }
