@@ -99,6 +99,7 @@ public class CommentDAOImpl extends BaseDAO implements CommentDAO {
 
     public List<Comment> findCommentByObjId(String assemblyId,int startIndex,  int loadSize) {
         StringBuilder sql = new StringBuilder("select * from t_comment where obj_id=? ");
+        sql.append("order by create_time desc ");
         if(startIndex!=0 || loadSize!=0){
             sql.append("limit "+startIndex+","+loadSize);
         }

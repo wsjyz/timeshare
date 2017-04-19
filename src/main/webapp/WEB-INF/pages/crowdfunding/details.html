@@ -1,10 +1,10 @@
 <!DOCTYPE html>
 <html>
-  <head>
+<head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <title>众筹详情</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">      
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
     <meta name="format-detection" content="telephone=no">
     <meta name="format-detection" content="email=no">
     <meta name="apple-mobile-web-app-capable" content="yes">
@@ -18,46 +18,51 @@
     <link rel="stylesheet" type="text/css" href="${request.contextPath}/css/crowdFunding/style.css">
     <link rel="stylesheet" type="text/css" href="${request.contextPath}/css/crowdFunding/swiper.min.css">
     <script type="text/javascript" src="${request.contextPath}/js/crowdFunding/zepto.min.js"></script>
-    <script type="text/javascript" src="${request.contextPath}/js/crowdFunding/config.js"></script>  </head>
-  <body>
-    <div class="page-group">
-        <div class="page page-current">
-        	<!--header start-->            
-            <header class="bar bar-nav bar-list">
-                <a class="icon icon-left pull-left back" href="javascript:history.go(-1);"></a>
-              <a href="${request.contextPath}/crowdFunding/createCrowdFunding" class="icon i-edit pull-right"></a>
-              <h1 class="title"></h1>
-            </header>
-            <!--header end-->
-            <nav class="bar bar-tab signup">
-                <#if (crowdFunding.enrollCount >= crowdFunding.maxPeoples)>
-                    <span class="cost">名额已满</span>
+    <script type="text/javascript" src="${request.contextPath}/js/crowdFunding/config.js"></script>
+</head>
+<body>
+<div class="page-group">
+    <div class="page page-current">
+        <!--header start-->
+        <header class="bar bar-nav bar-list">
+            <a class="icon icon-left pull-left back" href="javascript:history.go(-1);"></a>
+            <a href="https://open.weixin.qq.com/connect/oauth2/authorize?appid=wxcd8903dd6a9552eb&redirect_uri=http%3A%2F%2Fjk.zhangqidong.cn%2Ftime%2FcrowdFunding%2FcreateCrowdFunding%2F&response_type=code&scope=snsapi_base&state=#wechat_redirect" class="icon i-edit pull-right"></a>
+            <h1 class="title"></h1>
+        </header>
+        <!--header end-->
+        <nav class="bar bar-tab signup">
+            <#if (crowdFunding.enrollCount >= crowdFunding.maxPeoples)>
+                <span class="cost">名额已满</span>
                 <#else>
-                    <a href="${request.contextPath}/enroll/yy?crowdFundingId=${crowdFunding.crowdfundingId}&enrollId=" class="button button-fill button-round">报名参加</a>
+                    <a href="${request.contextPath}/enroll/yy?crowdFundingId=${crowdFunding.crowdfundingId}&enrollId="
+                       class="button button-fill button-round">报名参加</a>
                     <span class="cost">¥${crowdFunding.reservationCost!}</span>
-                </#if>
-            </nav>
-            <!--页面内容区域 start-->
-            <div class="content">
-               <div class="details">
-                  <div class="item-box">
-                      <div class="zc-img"><img src="${request.contextPath}/${crowdFunding.imageUrl}_320x240.jpg" onerror="this.src='${request.contextPath}/images/crowdFunding/pic.jpg'"></div>
-                      <div class="zc-text">
-                          <div class="zc-name">
-                              <em class="tag">
-                                  <#if (crowdFunding.enrollCount >= crowdFunding.maxPeoples)>
+            </#if>
+        </nav>
+        <!--页面内容区域 start-->
+        <div class="content">
+            <div class="details">
+                <div class="item-box">
+                    <div class="zc-img"><img src="${request.contextPath}/${crowdFunding.imageUrl}_320x240.jpg"
+                                             onerror="this.src='${request.contextPath}/images/crowdFunding/pic.jpg'">
+                    </div>
+                    <div class="zc-text">
+                        <div class="zc-name">
+                            <em class="tag">
+                                <#if (crowdFunding.enrollCount >= crowdFunding.maxPeoples)>
                                     已爆仓
-                                  <#else>
-                                    报名中
-                                  </#if>
-                              </em>
-                              ${crowdFunding.projectName!}</div>
-                          <div class="zc-info">
-                              <span class="time"><i class="i-time"></i>上课时间:${crowdFunding.curriculumEndTime!}</span>
-                              <span class="address"><i class="i-address"></i>${crowdFunding.sponsorCity!}</span>
-                          </div>
-                          <div class="dashed-line"></div>
-                          <div class="zc-info">
+                                    <#else>
+                                        报名中
+                                </#if>
+                            </em>
+                            ${crowdFunding.projectName!}
+                        </div>
+                        <div class="zc-info">
+                            <span class="time"><i class="i-time"></i>上课时间:${crowdFunding.curriculumEndTime!}</span>
+                            <span class="address"><i class="i-address"></i>${crowdFunding.sponsorCity!}</span>
+                        </div>
+                        <div class="dashed-line"></div>
+                        <div class="zc-info">
                               <span class="price">众筹最低学费:
                                   <#if crowdFunding.costType=='AA'>
                                       ${crowdFunding.costTotal!}
@@ -65,10 +70,10 @@
                                       ${crowdFunding.costTotal/crowdFunding.maxPeoples!}
                                   </#if>
                                   元</span>
-                              <span class="num">学员人数:${crowdFunding.enrollCount}/${crowdFunding.maxPeoples}人</span>
-                          </div>
-                          <div class="row cb">
-                          	<div class="col-50">
+                            <span class="num">学员人数:${crowdFunding.enrollCount}/${crowdFunding.maxPeoples}人</span>
+                        </div>
+                        <div class="row cb">
+                            <div class="col-50">
                                 <#if crowdFunding.costType!='AA'>
                                     课程总成本:${crowdFunding.costTotal}
                                 </#if>
@@ -79,225 +84,328 @@
                                     <#else>
                                         <#if crowdFunding.enrollCount==0>
                                             ${crowdFunding.costTotal!}
-                                        <#else>
-                                            ${crowdFunding.costTotal/crowdFunding.enrollCount!}
+                                            <#else>
+                                                ${crowdFunding.costTotal/crowdFunding.enrollCount!}
                                         </#if>
 
                                 </#if>
                             </div>
-                          </div>
-                           <div class="zc-progress">
-                               <div class="progress">
-                                   <div class="progress-bar" style="width:${crowdFunding.enrollCount/crowdFunding.maxPeoples*100}%">
-                                       <span class="remain">剩${crowdFunding.maxPeoples-crowdFunding.enrollCount}席</span>
-                                   </div>
-                               </div>
+                        </div>
+                        <div class="zc-progress">
+                            <div class="progress">
+                                <div class="progress-bar"
+                                     style="width:${crowdFunding.enrollCount/crowdFunding.maxPeoples*100}%">
+                                    <span class="remain">剩${crowdFunding.maxPeoples-crowdFunding.enrollCount}席</span>
+                                </div>
+                            </div>
 
-                              <!--<div class="progress">-->
-                                  <!--<div class="progress-bar" style="width:${crowdFunding.enrollCount/crowdFunding.maxPeoples*100}%"></div>-->
-                              <!--</div>-->
-                          </div>
-                      </div>
-                  </div>
-              </div>
-              <div class="buttons-row fixed-tab details-tab" data-offset="44">
-                  <a href="#tab1" class="tab-link button" id="detailTab">详情</a>
-                  <a href="#tab2" class="tab-link button" id="commentTab">评论</a>
-                  <a href="#tab3" class="tab-link button">已报名</a>
-              </div>
-              <div class="tabs">
-                  <!--详情 start-->
-                  <div id="tab1" class="tab active">
-                    <div class="content-block details-content">
-                      <p>${crowdFunding.detail!}</p>
+                            <!--<div class="progress">-->
+                            <!--<div class="progress-bar" style="width:${crowdFunding.enrollCount/crowdFunding.maxPeoples*100}%"></div>-->
+                            <!--</div>-->
+                        </div>
                     </div>
-                  </div>
-                  <!--详情 end-->
-                  <!--评论 start-->
-                  <div id="tab2" class="tab">
-                      <div class="content-block details-comment infinite-scroll media-scroll">
-                          <div class="list-block media-list">
-                              <ul>
-                              </ul>
-                          </div>
-                          <div class="infinite-scroll-preloader">
-                              <div class="preloader"></div>
-                          </div>
-                          <div class="no-record" style="display: none;text-align: center">
-                              没有更多记录了
-                          </div>
-                          <!--评论框-->
-                          <div class="content-block">
-                              <div class="row comment-input">
-                                  <div class="col-80"><input type="text" class="input-txt" placeholder="请输入评论"></div>
-                                  <div class="col-20"><a href="#" class="button btn-comment">评论</a></div>
-                              </div>
-                          </div>
-                          <!--评论框-->
-                      </div>
-                  </div>
-                  <!--评论 end-->
-                  <!--报名 start-->
-                  <div id="tab3" class="tab">
-                      <div class="list-block media-list details-apply">
-                          <ul>
-                              <#list enrollList as enroll>
-                                  <li class="item-content">
-                                      <#assign enrollImageUrlStr="">
-                                      <#if enroll.imageUrl?index_of("http")==-1>
-                                          <#assign  enrollImageUrlStr="${request.contextPath}${enroll.imageUrl}.jpg"/>
-                                          <#else>
-                                              <#assign  enrollImageUrlStr="${enroll.imageUrl}"/>
-                                      </#if>
-                                      <div class="item-media"><img src="${enrollImageUrlStr}"></div>
-                                      <div class="item-inner">
-                                          <div class="item-title-row">
-                                              <div class="item-title">${enroll.userName}</div>
-                                              <div class="item-after"><span class="yy-t">成功预约</span></div>
-                                          </div>
-                                          <div class="item-title-row">
-                                              <div class="item-title"><span class="cop">${enroll.corpName}</span></div>
-                                              <div class="item-after"><span class="yy-price">¥${enroll.payAmount}</span></div>
-                                          </div>
-                                      </div>
-                                  </li>
-                              </#list>
-                          </ul>
-                      </div>
-                  </div>
-                  <!--报名 end-->
-
-              </div>
+                </div>
             </div>
-            <!-- 页面内容区域 end -->
-            
+            <div class="buttons-row fixed-tab details-tab" data-offset="44">
+                <a href="#tab1" class="tab-link button" id="detailTab">详情</a>
+                <a href="#tab2" class="tab-link button" id="commentTab">评论</a>
+                <a href="#tab3" class="tab-link button">已报名</a>
+            </div>
+            <div class="tabs">
+                <!--详情 start-->
+                <div id="tab1" class="tab active">
+                    <div class="content-block details-content">
+                        <p>${crowdFunding.detail!}</p>
+                    </div>
+                </div>
+                <!--详情 end-->
+                <!--评论 start-->
+                <div id="tab2" class="tab">
+                    <div class="content-block details-comment infinite-scroll media-scroll">
+                        <div class="list-block media-list">
+                            <ul>
+                            </ul>
+                        </div>
+                        <div class="infinite-scroll-preloader">
+                            <div class="preloader"></div>
+                        </div>
+                        <div class="no-record" style="display: none;text-align: center">
+                            没有更多记录了
+                        </div>
+                        <!--评论框-->
+                        <div class="content-block">
+                            <div class="row comment-input">
+                                <div class="col-80"><input type="text" id="commentContent" value="" class="input-txt" placeholder="请输入评论"></div>
+                                <div class="col-20"><a href="javascript:newComment();" class="button btn-comment">评论</a></div>
+                            </div>
+                        </div>
+                        <!--评论框-->
+                    </div>
+                </div>
+                <!--评论 end-->
+                <!--报名 start-->
+                <div id="tab3" class="tab">
+                    <div class="list-block media-list details-apply">
+                        <ul>
+                            <#list enrollList as enroll>
+                                <li class="item-content">
+                                    <#assign enrollImageUrlStr="">
+                                        <#if enroll.imageUrl?index_of("http")==-1>
+                                            <#assign  enrollImageUrlStr="${request.contextPath}${enroll.imageUrl}.jpg"/>
+                                            <#else>
+                                                <#assign  enrollImageUrlStr="${enroll.imageUrl}"/>
+                                        </#if>
+                                        <div class="item-media"><img src="${enrollImageUrlStr}"></div>
+                                        <div class="item-inner">
+                                            <div class="item-title-row">
+                                                <div class="item-title">${enroll.userName}</div>
+                                                <div class="item-after"><span class="yy-t">成功预约</span></div>
+                                            </div>
+                                            <div class="item-title-row">
+                                                <div class="item-title"><span class="cop">${enroll.corpName}</span>
+                                                </div>
+                                                <div class="item-after"><span
+                                                        class="yy-price">¥${enroll.payAmount}</span></div>
+                                            </div>
+                                        </div>
+                                </li>
+                            </#list>
+                        </ul>
+                    </div>
+                </div>
+                <!--报名 end-->
+
+            </div>
         </div>
+        <!-- 页面内容区域 end -->
+
     </div>
-  
-	<script type="text/javascript" src="${request.contextPath}/js/crowdFunding/sm.min.js"></script>
-    <script type="text/javascript" src="${request.contextPath}/js/crowdFunding/sm-extend.min.js"></script>
-	<script type="text/javascript" src="${request.contextPath}/js/crowdFunding/sm-city-picker.min.js"></script>
- 	<script type="text/javascript" src="${request.contextPath}/js/crowdFunding/my-js.js"></script>
-  </body>
-  <script>
+</div>
 
-      //根据评论标志选择显示的tab
-      if("${commentFlag}"=='true'){
-          $("#commentTab").trigger("click");
-          $("#commentTab").addClass("active");
-      }
-      else{
-          $("#detailTab").trigger("click");
-          $("#detailTab").addClass("active");
-      }
+<script type="text/javascript" src="${request.contextPath}/js/crowdFunding/sm.min.js"></script>
+<script type="text/javascript" src="${request.contextPath}/js/crowdFunding/sm-extend.min.js"></script>
+<script type="text/javascript" src="${request.contextPath}/js/crowdFunding/sm-city-picker.min.js"></script>
+<script type="text/javascript" src="${request.contextPath}/js/crowdFunding/my-js.js"></script>
+</body>
+<script>
 
-      // 下拉无限加载
-      var loading = false;
-      // 最多可加载的条目
-      var maxItems = 999;
-      // 每次加载添加多少条目
-      var itemsPerLoad = 20;
-      function addItems(data) {
-          // 生成新条目的HTML
-          var html = '';
-          var count=0;
-          $.each(data, function(i, comment){
-              html += '<li class="item-content">' +
-                          '<div class="item-media">' +
-                              '<img src="'+comment.userImg+'">' +
-                          '</div>' +
-                          '<div class="item-inner">' +
-                                '<div class="item-title-row"> ' +
-                                    '<div class="item-title">'+comment.userName+'<span class="flag">vip</span>' + '</div>' +
-                                    '<div class="item-after">' + '<span class="date">'+comment.createTime+'</span>' + '</div> ' +
-                                '</div>' +
-                                '<div class="item-subtitle score">打分<span class="star">' +
-                                      '<img src="${request.contextPath}/images/crowdFunding/icon-star.png">' +
-                                      '<img src="${request.contextPath}/images/crowdFunding/icon-star.png">' +
-                                      '<img src="${request.contextPath}/images/crowdFunding/icon-star.png">' +
-                                      '<img src="${request.contextPath}/images/crowdFunding/icon-star-e.png">' +
-                                      '</span>' +
-                                '</div>' +
-                                '<div class="item-text">'+comment.content+'</div>' +
-                                '<div class="item-title-row mt5">' +
-                                      '<div class="item-title"><span class="browse"></span></div>'+
-                                      '<div class="item-after">' +
-                                            '<button class="button btn-praise"><i class="i-praise"></i> 赞</button>' +
-                                            '<button class="button btn-reply"><i class="i-reply"></i> 回复</button>' +
-                                      '</div>' +
-                                '</div>' +
-                                 '<div class="reply-box">' +
-                  '                     <div class="reply-item"><span>xx对xx的回复：</span>说的号的很么说的号的what are you doing.flkjfdajfdjlk999-3433---34343-43号的很么说的号的很么说的号的很么说的号的很么说的号的很么说的号的很么</div><div class="reply-item"><span>xx对xx的回复：</span>说的号的很么说的号的what are you 说的号的很么说的号的很么</div>' +
-                  '               </div>'
-                          '</div>' +
-                        '</li>';
-              count=i;
-          });
-          // 添加新条目
-          $('.media-scroll .media-list ul').append(html);
+    //根据评论标志选择显示的tab
+    if ("${commentFlag}" == 'true') {
+        $("#commentTab").trigger("click");
+        $("#commentTab").addClass("active");
+    }
+    else {
+        $("#detailTab").trigger("click");
+        $("#detailTab").addClass("active");
+    }
 
+    // 下拉无限加载
+    var loading = false;
+    // 最多可加载的条目
+    var maxItems = 999;
+    // 每次加载添加多少条目
+    var itemsPerLoad = 20;
+    function addItems(data) {
+        // 生成新条目的HTML
+        var html = '';
+        var count = 0;
+        $.each(data, function (i, comment) {
+            var zanCommentStr = "";
+            if (comment.zanContent != null && comment.zanContent != '' && comment.zanContent != '') {
+                zanCommentStr = '<span><i class="i-praise"></i></span>' + replaceAll(comment.zanContent, "&", "，");
+            }
+            html += '<li class="item-content">' +
+                '<div class="item-media"><span class="user-head-image_div">' +
+                '<img src="' + comment.userImg + '">' +
+                '</span></div>' +
+                '<div class="item-inner">' +
+                '<div class="item-title-row"> ' +
+                '<div class="item-title">' + comment.userName + '<span class="flag">vip</span>' + '</div>' +
+                '<div class="item-after">' + '<span class="date">' + comment.createTime + '</span>' + '</div> ' +
+                '</div>' +
 
-          if(count+1 < itemsPerLoad){
-              // 加载完毕，则注销无限加载事件，以防不必要的加载
-              $.detachInfiniteScroll($('.infinite-scroll'));
-              // 删除加载提示符
-              $('.infinite-scroll-preloader').remove();
-              $('.no-record').show();
-          }
-      }
-
-      //预先加载
-      var crowdFundingIdTemp="${crowdFunding.crowdfundingId!}";
-      $.post('${request.contextPath}/crowdFunding/commentList', {crowdfundingId:crowdFundingIdTemp,startIndex: 0,loadSize:itemsPerLoad}, function (response) {
-          //预先加载
-          addItems(response);
-      });
+                '<div class="item-text">' + comment.content + '</div>' +
+                '<div class="item-title-row mt5">' +
+                '<div class="item-title"><span class="browse"></span></div>' +
+                '<div class="item-after">' +
+                '<button class="button btn-praise" onclick="newZan(' + i + ')"><i class="i-praise"></i> 赞</button>' +
+                '<button class="button btn-reply" onclick="newReply(' + i + ')"><i class="i-reply"></i> 回复</button>' +
+                '</div>' +
+                '</div>' +
+                '<div class="reply-box reply-content'+i+'">' +
+                '                     <div class="reply-item reply-item-zan-content' + i + '">' + zanCommentStr + '</div>';
+                    if(comment.replyContentList!=null){
+                        $.each(comment.replyContentList, function (j, replyContent) {
+                            html += '<div class="reply-item">' + replyContent + '</div>';
+                        });
+                    }
+            html += '               </div>' +
+                '</div>' +
+                '<input type="hidden" value="' + comment.commentId + '" id="commendId' + i + '"/>' +
+                '<input type="hidden" value="' + comment.replyContent + '" id="commendReplys' + i + '"/></li>';
+            count = i;
+        });
+        // 添加新条目
+        $('.media-scroll .media-list ul').append(html);
 
 
-      // 上次加载的序号
-      var lastIndex = itemsPerLoad;
-      // 注册'infinite'事件处理函数
-      $(document).on('infinite', '.media-scroll',function() {
-          // 如果正在加载，则退出
-          if (loading) return;
-          // 设置flag
-          loading = true;
-          // 模拟1s的加载过程
-          setTimeout(function() {
-              // 重置加载flag
-              loading = false;
-              if (lastIndex >= maxItems) {
-                  // 加载完毕，则注销无限加载事件，以防不必要的加载
-                  $.detachInfiniteScroll($('.infinite-scroll'));
-                  // 删除加载提示符
-                  $('.infinite-scroll-preloader').remove();
-                  // 提示没有更多数据
-                  $('.no-record').show();
-              }
-              // 添加新条目
-              var crowdFundingIdTemp="${crowdFunding.crowdfundingId!}";
-              $.post('${request.contextPath}/crowdFunding/commentList', {crowdfundingId:crowdFundingIdTemp,startIndex: lastIndex,loadSize:itemsPerLoad}, function (response) {
-                  if(response==null || response==undefined ||  response==''){
-                      // 加载完毕，则注销无限加载事件，以防不必要的加载
-                      $.detachInfiniteScroll($('.infinite-scroll'));
-                      // 删除加载提示符
-                      $('.infinite-scroll-preloader').remove();
-                      // 提示没有更多数据
-                      $('.no-record').show();
-                      return ;
-                  }
-                  else{
-                      addItems(response);
-                  }
-              });
+        if (count + 1 < itemsPerLoad) {
+            // 加载完毕，则注销无限加载事件，以防不必要的加载
+            $.detachInfiniteScroll($('.infinite-scroll'));
+            // 删除加载提示符
+            $('.infinite-scroll-preloader').remove();
+            $('.no-record').show();
+        }
+    }
 
-              // 更新最后加载的序号
-              lastIndex = lastIndex+itemsPerLoad;
-              //容器发生改变,如果是js滚动，需要刷新滚动
-              $.refreshScroller();
-          }, 1);
-      });
+    //预先加载
+    var crowdFundingIdTemp = "${crowdFunding.crowdfundingId!}";
+    $.post('${request.contextPath}/crowdFunding/commentList', {crowdfundingId: crowdFundingIdTemp, startIndex: 0, loadSize: itemsPerLoad}, function (response) {
+        //预先加载
+        addItems(response);
+    });
 
-  </script>
+
+    // 上次加载的序号
+    var lastIndex = itemsPerLoad;
+    // 注册'infinite'事件处理函数
+    $(document).on('infinite', '.media-scroll', function () {
+        // 如果正在加载，则退出
+        if (loading) return;
+        // 设置flag
+        loading = true;
+        // 模拟1s的加载过程
+        setTimeout(function () {
+            // 重置加载flag
+            loading = false;
+            if (lastIndex >= maxItems) {
+                // 加载完毕，则注销无限加载事件，以防不必要的加载
+                $.detachInfiniteScroll($('.infinite-scroll'));
+                // 删除加载提示符
+                $('.infinite-scroll-preloader').remove();
+                // 提示没有更多数据
+                $('.no-record').show();
+            }
+            // 添加新条目
+            var crowdFundingIdTemp = "${crowdFunding.crowdfundingId!}";
+            $.post('${request.contextPath}/crowdFunding/commentList', {
+                crowdfundingId: crowdFundingIdTemp,
+                startIndex: lastIndex,
+                loadSize: itemsPerLoad
+            }, function (response) {
+                if (response == null || response == undefined || response == '') {
+                    // 加载完毕，则注销无限加载事件，以防不必要的加载
+                    $.detachInfiniteScroll($('.infinite-scroll'));
+                    // 删除加载提示符
+                    $('.infinite-scroll-preloader').remove();
+                    // 提示没有更多数据
+                    $('.no-record').show();
+                    return;
+                }
+                else {
+                    addItems(response);
+                }
+            });
+
+            // 更新最后加载的序号
+            lastIndex = lastIndex + itemsPerLoad;
+            //容器发生改变,如果是js滚动，需要刷新滚动
+            $.refreshScroller();
+        }, 1);
+    });
+
+    //点赞
+    function newZan(i) {
+        var commendId = $("#commendId" + i).val();
+        var zanContent = $(".reply-item-zan-content" + i).html();
+
+        if (zanContent.lastIndexOf("${userInfo.nickName}") != -1) {
+            $.toast("您已经点过赞了");
+            return;
+        }
+
+
+        var zanNamesDB = "";
+        if (zanContent != null && zanContent != '' && zanContent != 'null' && (zanContent.lastIndexOf("</span>")) >= 0) {
+            var zanNames = zanContent.substring(zanContent.lastIndexOf("</span>") + 7, zanContent.length);
+            if (zanNames != null && zanNames != '') {
+                zanNamesDB = replaceAll(zanNames, "，", "&") + "&${userInfo.nickName}";
+            }
+        }
+        else {
+            zanNamesDB = "${userInfo.nickName}";
+        }
+        $.post('${request.contextPath}/crowdFunding/modifyComment', {commentId: commendId, zanContent: zanNamesDB}, function (response) {
+            if (response == "success") {
+                zanContent += "，${userInfo.nickName}";
+                if ((zanContent.lastIndexOf("</span>")) >= 0) {
+                    $(".reply-item-zan-content" + i).html(zanContent);
+                }
+                else {
+                    $(".reply-item-zan-content" + i).html('<span><i class="i-praise"></i></span>${userInfo.nickName}');
+                }
+            }
+            else {
+                $.toast("点赞失败");
+            }
+        });
+    }
+    //新回复
+    function newReply(i){
+        $.prompt('请填写回复信息', '',
+            function (value) {
+                var commendId = $("#commendId" + i).val();
+                var commendReplys=$("#commendReplys"+i).val();
+                var replyContentDB="";
+                if(commendReplys!=null && commendReplys!='' && commendReplys!='null'){
+                    replyContentDB=commendReplys+"&#${userInfo.nickName}:"+value;
+                }
+                else{
+                    replyContentDB="${userInfo.nickName}:"+value;
+                }
+                $.post('${request.contextPath}/crowdFunding/modifyComment', {commentId: commendId, replyContent: replyContentDB}, function (response) {
+                    if (response == "success") {
+                        var replys=$(".reply-content"+i).html()+'<div class="reply-item">${userInfo.nickName}:'+value+'</div>';
+                        $(".reply-content"+i).html(replys);
+                        $("#commendReplys"+i).val(replyContentDB);
+                    }
+                    else {
+                        $.toast("回复失败");
+                    }
+                });
+            },
+            function (value) {
+                //$.alert('取消');
+            }
+        );
+    }
+    //发表评论
+    function newComment(){
+        var crowdFundingIdTemp = "${crowdFunding.crowdfundingId!}";
+        var commentContent=$("#commentContent").val();
+        $.post('${request.contextPath}/crowdFunding/saveComment', {crowdfundingId: crowdFundingIdTemp, content: commentContent}, function (comment) {
+            if (comment !=null) {
+                $.toast("发表评论成功");
+                //预先加载
+                $.post('${request.contextPath}/crowdFunding/commentList', {crowdfundingId: crowdFundingIdTemp, startIndex: 0, loadSize: itemsPerLoad}, function (response) {
+                    $('.media-scroll .media-list ul').html("");
+                    //预先加载
+                    addItems(response);
+                });
+
+            }
+            else {
+                $.toast("发表评论失败");
+            }
+        });
+    }
+
+    function replaceAll(str, sptr, sptr1) {
+        while (str.indexOf(sptr) >= 0) {
+            str = str.replace(sptr, sptr1);
+        }
+        return str;
+    }
+</script>
 
 </html>
