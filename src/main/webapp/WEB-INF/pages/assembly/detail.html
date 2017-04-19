@@ -18,10 +18,30 @@
       <div class="page">
           <div class="detailHeader header">
               <h1 class="title">邂逅活动</h1>
-              <a class="button button-link button-nav back pull-left" style="" external href="${request.contextPath}/assembly/to-index?type=${assembly.type}">
-                  <span class="icon icon-left"></span>
-                  返回
-              </a>
+              <#if type=="MYASSEMBLY">
+                  <a class="button button-link button-nav back pull-left" style="" external href="${request.contextPath}/assembly/myAssembly">
+                      <span class="icon icon-left"></span>
+                      返回
+                  </a>
+
+                  <#elseif type=="ASSEMBLYLIST">
+                      <a class="button button-link button-nav back pull-left" style="" external href="${request.contextPath}/assembly/assemblyList">
+                          <span class="icon icon-left"></span>
+                          返回
+                      </a>
+                      <#elseif type=="COLLASSEMBLY">
+                      <a class="button button-link button-nav back pull-left" style="" external href="${request.contextPath}/assembly/myCollectionAssembly">
+                          <span class="icon icon-left"></span>
+                          返回
+                      </a>
+
+                  <#else>
+                      <a class="button button-link button-nav back pull-left" style="" external href="${request.contextPath}/assembly/to-index?type=${assembly.type}">
+                          <span class="icon icon-left"></span>
+                          返回
+                      </a>
+              </#if>
+
           </div>
 
           <nav class="bar bar-tab activityFooter">
@@ -82,6 +102,11 @@
                       <img src="${request.contextPath}/images/assembly/icon/human.png" />
                       <span>已报名${userCount}人</span>
                   </div>
+                  <div class="activityRow">
+                      <img src="${request.contextPath}/images/assembly/icon/type.png" />
+                      <span>地址:${assembly.rendezvous!}</span>
+                  </div>
+
                   <div class="activityRow">
                       <img class="moneyImg" src="${request.contextPath}/images/assembly/icon/money.png" />
                       <span class="money">${minMoney}-${maxMoney}</span>

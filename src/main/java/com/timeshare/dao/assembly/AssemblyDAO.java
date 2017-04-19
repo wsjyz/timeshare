@@ -20,4 +20,6 @@ public interface AssemblyDAO {
 
 
     int deleteAssembly(String assemblyId);
+
+    List<Assembly> findCollectionAssemblyList(Assembly assembly, String userId, int startIndex, int loadSize);
 }

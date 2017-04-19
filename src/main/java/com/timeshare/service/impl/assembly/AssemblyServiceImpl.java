@@ -223,4 +223,57 @@ public class AssemblyServiceImpl implements AssemblyService {
     public int deleteAssembly(String assemblyId) {
         return assemblyDAO.deleteAssembly(assemblyId);
     }
+
+    @Override
+    public List<Assembly> findCollectionAssemblyList(Assembly Assembly, String userId, int startIndex, int loadSize) {
+        List<Assembly> list=  assemblyDAO.findCollectionAssemblyList(Assembly,  userId,  startIndex,  loadSize);
+        if (!CollectionUtils.isEmpty(list)){
+            for (Assembly assembly:list){
+                UserInfo userInfo=userService.findUserByUserId(assembly.getUserId());
+                assembly.setUserName(userInfo.getNickName());
+                ImageObj userImg = userService.findUserImg(assembly.getUserId(), Contants.IMAGE_TYPE.USER_HEAD.toString());
+                if(userImg!=null && StringUtils.isNotEmpty(userImg.getImageId())){
+                    String headImg = userImg.getImageUrl();
+                    if(headImg.indexOf("http") == -1){//修改过头像
+                        headImg = "/time"+headImg+"_320x240.jpg";
+                    }
+                    assembly.setUserImg(headImg);
+                }
+                ImageObj titleImg = userService.findUserImg(assembly.getAssemblyId(), Contants.IMAGE_TYPE.ASSEMBLY_SHOW_IMG.toString());
+                if(titleImg!=null && StringUtils.isNotEmpty(titleImg.getImageId())){
+                    assembly.setTitleImg("/time"+titleImg.getImageUrl()+".jpg");
+                }
+                List<Fee> feeList=feeService.findFeeByAssemblyId(assembly.getAssemblyId());
+                if (!CollectionUtils.isEmpty(feeList)){
+                    int quota=0;
+                    BigDecimal cost=new BigDecimal(0);
+                    for (int i=0;i<feeList.size();i++){
+                        Fee fee=feeList.get(i);
+                        if (i==0){
+                            cost=fee.getFee();
+                        }else{
+                            if (fee.getFee().compareTo(cost)<0){
+                                cost=fee.getFee();
+                            }
+                        }
+                        if (fee.getQuota()==0){
+                            quota=-1;
+                        }
+                        if (quota!=-1){
+                            quota=quota+fee.getQuota();
+                        }
+                    }
+                    assembly.setCost(cost.toString());
+                    if (quota==-1){
+                        assembly.setQuota("不限制");
+                    }else{
+                        assembly.setQuota(quota+"");
+                    }
+                }
+                List<Attender> attenderList = attenderService.getListByAssemblyId(assembly.getAssemblyId());
+                assembly.setAttentCount(attenderList.size());
+            }
+        }
+        return list;
+    }
 }

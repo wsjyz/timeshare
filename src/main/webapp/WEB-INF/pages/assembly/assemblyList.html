@@ -134,7 +134,7 @@
                         ' <div class="rightArrow"><span class="icon icon-right"></span></div>'+
                         ' </li>';
             }else{
-                html +=  ' <li class="card">'+
+                html +=  ' <li class="card deleteOrUpdate">'+
                         '   <div class="myActivityTitle">'+item.title+'</div>'+
                         '  <div class="myActivityStatRow">'+
                         ' <span class="myActivityStat">'+itemStatus+'</span></div>'+
@@ -206,13 +206,74 @@
                 $.refreshScroller();
             }, 1000);
         });
-
-
     });
     $(function () {
         $(document).on("click",".updateResult",function () {
             var assemblyId=$(this).attr("data-id");
-            window.location.href="${request.contextPath}/assembly/to-result?assemblyId="+assemblyId+"&type=ASSEMBLYLIST";
+
+            var buttons1 = [
+                {
+                    text: '请选择',
+                    label: true
+                },
+                {
+                    text: '下架',
+                    bold: true,
+                    color: 'danger',
+                    onClick: function() {
+                        window.location.href="${request.contextPath}/assembly/to-result?assemblyId="+assemblyId+"&type=ASSEMBLYLIST";
+                    }
+                },
+                {
+                    text: '查看详情',
+                    onClick: function() {
+                        window.location.href="${request.contextPath}/assembly/to-detail?assemblyId="+assemblyId+"&type=ASSEMBLYLIST";
+                    }
+                }
+            ];
+            var buttons2 = [
+                {
+                    text: '取消',
+                    bg: 'danger'
+                }
+            ];
+            var groups = [buttons1, buttons2];
+            $.actions(groups);
+        });
+        $(document).on("click",".deleteOrUpdate",function () {
+            var assemblyId=$(this).attr("data-id");
+            var buttons1 = [
+                {
+                    text: '请选择',
+                    label: true
+                },
+                {
+                    text: '重新上架',
+                    onClick: function() {
+                        $.post("${request.contextPath}/assembly/updateAssemblyStatus?assemblyId="+assemblyId,function (data) {
+                            if (data=="ERROR"){
+                                $.alert("上架失败，请稍候重试!");
+                            }else{
+                                window.location.href="${request.contextPath}/assembly/assemblyList";
+                            }
+                        });
+                    }
+                },
+                {
+                    text: '查看详情',
+                    onClick: function() {
+                        window.location.href="${request.contextPath}/assembly/to-detail?assemblyId="+assemblyId+"&type=ASSEMBLYLIST";
+                    }
+                }
+            ];
+            var buttons2 = [
+                {
+                    text: '取消',
+                    bg: 'danger'
+                }
+            ];
+            var groups = [buttons1, buttons2];
+            $.actions(groups);
         });
     })
 </script>
