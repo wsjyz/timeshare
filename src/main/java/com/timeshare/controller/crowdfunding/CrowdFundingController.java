@@ -55,6 +55,15 @@ public class CrowdFundingController extends  BaseController{
     public String createCrowdFunding(@CookieValue(value="time_sid", defaultValue="00359e8721c44d168aac7d501177e314") String userId) {
         return "crowdfunding/fbzc";
     }
+    //编辑众筹页面
+    @RequestMapping(value = "/editCrowdFunding")
+    public String editCrowdFunding(@RequestParam String crowdFundingId,Model model) {
+        if(StringUtils.isNotBlank(crowdFundingId)){
+            CrowdFunding crowdFunding=crowdFundingService.editCrowdFundingByCrowdFundingId(crowdFundingId);
+            model.addAttribute("crowdFunding",crowdFunding);
+        }
+        return "crowdfunding/bjzc";
+    }
     //众筹首页
     @RequestMapping(value = "/toIndex")
     public String toIndex(Model model) {
@@ -136,6 +145,49 @@ public class CrowdFundingController extends  BaseController{
         }
         return Contants.FAILED;
     }
+
+    //编辑众筹
+    @ResponseBody
+    @RequestMapping(value = "/edit")
+    public String edit(CrowdFunding crowdFunding, @RequestParam String imgUrl,@CookieValue(value="time_sid", defaultValue="00359e8721c44d168aac7d501177e314") String userId, Model model) {
+        try{
+            if(crowdFunding!=null && StringUtils.isNotBlank(crowdFunding.getProjectName())){
+
+                CrowdFunding crowdFundingDB=crowdFundingService.findCrowdFundingById(crowdFunding.getCrowdfundingId());
+
+                UserInfo userinfo=getCurrentUser(crowdFundingDB.getUserId());
+                crowdFunding.setCrowdfundingId(crowdFundingDB.getCrowdfundingId());
+                crowdFunding.setUserId(userId);
+                crowdFunding.setCreateUserName(userinfo.getNickName());
+                crowdFunding.setCreateTime(crowdFundingDB.getCreateTime());
+                crowdFunding.setOptTime(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date()));
+                //保存众筹
+                String pk= crowdFundingService.editCrowdFunding(crowdFunding);
+
+                ImageObj obj = new ImageObj();
+                obj.setObjId(pk);
+                if(imgUrl.indexOf("images") != -1){
+                    imgUrl = imgUrl.substring(imgUrl.indexOf("images") - 1,imgUrl.indexOf("_"));
+                }
+                obj.setImageUrl(imgUrl);
+                obj.setImageType(Contants.IMAGE_TYPE.CROWD_FUNDING_IMG.name());
+                //保存众筹图片
+                userService.saveOrUpdateImg(obj);
+                return Contants.SUCCESS;
+
+            }
+            else{
+                return "PROJECT_NAME_IS_NULL";
+            }
+
+        }
+        catch (Exception e){
+            e.printStackTrace();
+        }
+        return Contants.FAILED;
+    }
+
+
     //修改项目草稿、已下架为已发布状态
     @ResponseBody
     @RequestMapping(value = "/updateSketchAndOffShelveToReleased")

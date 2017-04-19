@@ -96,16 +96,7 @@
                                 </div>
                             </div>
                         </div>
-
-
-
-
                     </label>
-                    <!--<div class="radio-group">-->
-                        <!--<span class="input-label">是否在轮播图显示:</span>-->
-                        <!--<label><input type="radio" name="isShow" value="YES" id="isShowYes" checked>是</label>-->
-                        <!--<label><input type="radio" name="isShow" value="NO" id="isShowNo">否</label>-->
-                    <!--</div>-->
                     <div class="content-block">
                         <div class="row">
                             <div class="col-33"><input type="button" id="sketch" class="button button-big btn-dark" value="保存草稿"></div>
@@ -131,9 +122,9 @@
                 <div class="item-box">
                     <div class="zc-img"><img src="" id="previewImage"></div>
                     <div class="zc-text">
-                        <div class="zc-name"><em class="tag">预览中</em><div id="previewProjectName"></div></div>
+                        <div class="zc-name"><em class="tag">预览中</em> &nbsp;<div id="previewProjectName"></div></div>
                         <div class="zc-info">
-                            <span class="time"><i class="i-time"></i>上课时间:<div id="previewCurriculumEndTime"></div></span>
+                            <span class="time"><i class="i-time"></i>上课时间:<div id="previewCurriculumStartTime"></div></span>
                             <span class="address"><i class="i-address"></i><div id="previewSponsorCity"></div></span>
                         </div>
                         <div class="dashed-line"></div>
@@ -142,7 +133,7 @@
                             <span class="num">学员人数:0/<span id="previewMaxPeoples"></span>人</span>
                         </div>
                         <div class="row cb">
-                            <div class="col-50">课程总成本:<span id="priviewCostTotal"></span></div>
+                            <div class="col-50" id="priviewCostTotalDIV">课程总成本:<span id="priviewCostTotal"></span></div>
                             <div class="col-50">目前人均价:<span id="priviewAATotal"></span></div>
                         </div>
                         <div class="zc-progress">
@@ -348,7 +339,7 @@
         $("#previewImage").attr("src",imageUrl);
         $("#previewProjectName").text($("#projectName").val());
 
-        $("#previewCurriculumEndTime").text($("#endTime").val());
+        $("#previewCurriculumStartTime").text($("#startTime").val());
         $("#previewSponsorCity").text($("#address").val());
 
 
@@ -366,7 +357,14 @@
             }
         }
         $("#previewMaxPeoples").text($("#maxPeoples").val());
-        $("#priviewCostTotal").text($("#costTotal").val());
+
+        if($("#costBetween").attr("checked")){
+            $("#priviewCostTotal").text($("#costTotal").val());
+        }
+        else{
+            $("#priviewCostTotalDIV").html("");
+        }
+
         $("#priviewAATotal").text($("#costTotal").val());
         $("#previewDetail").text($("#detail").val());
     }

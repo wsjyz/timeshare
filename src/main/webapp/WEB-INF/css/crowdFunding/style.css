@@ -107,13 +107,13 @@ textarea.form-control{height:auto;line-height:normal}
 }
 .zc-abstract{overflow:hidden;height:3rem;text-overflow:ellipsis;word-wrap:break-word;overflow-wrap:break-word}
 /*众筹详情*/
-.details .item-box{background:#fff}
+.details .item-box{background:#fff;color:#3f435e}
 .details .item-box .zc-img{height:10rem;overflow:hidden}
 .details .item-box .zc-img img{width:100%;height:100%}
 .details .item-box .zc-text{padding:0.8rem 0.7rem}
 .details .item-box .zc-name{font-size:1rem}
 .details .item-box .zc-name .tag{float:left;display:block;margin-top:4px;background:#40445f;color:#fff;font-size:0.7rem;padding:0 2px}
-.details .item-box .zc-info{display:-webkit-box;display:-webkit-flex;display:flex;-webkit-box-pack:justify;-webkit-justify-content:space-between;justify-content:space-between;-webkit-box-align:center;-webkit-align-items:center;align-items:center;margin:0.5rem 0}
+.details .item-box .zc-info{display:-webkit-box;display:-webkit-flex;display:flex;-webkit-box-pack:justify;-webkit-justify-content:space-between;justify-content:space-between;-webkit-box-align:center;-webkit-align-items:center;align-items:center;margin:0.5rem 0;font-size:0.6rem}
 .details .item-box .i-time{float:left;margin-top:1px;display:inline-block;width:0.8rem;height:0.8rem;background:url(../../images/crowdFunding/icon-time.png) no-repeat center center;background-size:contain}
 .details .item-box .i-address{float:left;margin-top:2px;display:inline-block;width:0.8rem;height:0.8rem;background:url(../../images/crowdFunding/icon-address.png) no-repeat center center;background-size:contain}
 .details .item-box .price,

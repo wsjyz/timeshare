@@ -11,6 +11,8 @@ import java.util.List;
 public interface CrowdFundingService {
     //保存众筹项目
     String saveCrowdFunding(CrowdFunding crowdFunding);
+    //编辑众筹项目
+    public String editCrowdFunding(CrowdFunding crowdFunding) ;
     //我发起的众筹
     List<CrowdFunding> findCrowdFundingByOwner(String userId,int startIndex, int loadSize);
     //我发起的众筹-总计数
@@ -31,4 +33,8 @@ public interface CrowdFundingService {
     public CrowdFunding findCrowdFundingToPay(String crowdfundingId);
     //项目名称是否存在
     public Boolean crowdFundingPrjectNameIsExisting(String crowdFundingPrjectName) ;
+    //编辑众筹项目-获取众筹信息
+    public CrowdFunding editCrowdFundingByCrowdFundingId(String crowdFundingId) ;
+    //删除众筹项目及对应图片对象
+    public String deleteCrowdFunding(String crowdFundingId) ;
 }

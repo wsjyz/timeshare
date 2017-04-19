@@ -41,6 +41,12 @@ public class CrowdFundingServiceImpl implements CrowdFundingService {
         return crowdFundingDAO.saveCrowdFunding(crowdFunding);
     }
 
+    public String editCrowdFunding(CrowdFunding crowdFunding) {
+        //删除老项目及图片对象
+        deleteCrowdFunding(crowdFunding.getCrowdfundingId());
+        return crowdFundingDAO.saveCrowdFunding(crowdFunding);
+    }
+
     @Override
     public List<CrowdFunding> findCrowdFundingByOwner(String userId, int startIndex, int loadSize) {
         return crowdFundingDAO.findCrowdFundingByOwner(userId,startIndex,loadSize);
@@ -113,4 +119,14 @@ public class CrowdFundingServiceImpl implements CrowdFundingService {
         return crowdFundingDAO.findCrowdFundingByPrjectName(crowdFundingPrjectName);
     }
 
+    public CrowdFunding editCrowdFundingByCrowdFundingId(String crowdFundingId) {
+        List<CrowdFunding> crowdFundingList=crowdFundingDAO.editCrowdFundingByCrowdFundingId(crowdFundingId);
+        if(crowdFundingList!=null && crowdFundingList.size()>0){
+            return crowdFundingList.get(0);
+        }
+        return null;
+    }
+    public String deleteCrowdFunding(String crowdFundingId) {
+        return crowdFundingDAO.deleteCrowdFunding(crowdFundingId);
+    }
 }

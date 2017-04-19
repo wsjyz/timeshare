@@ -26,11 +26,16 @@ public class CrowdFundingDAOImpl extends BaseDAO implements CrowdFundingDAO {
     @Override
     public String saveCrowdFunding(CrowdFunding crowdFunding) {
         StringBuilder sql = new StringBuilder("INSERT INTO t_crowdfunding (crowdfunding_id, project_name, curriculum_start_time, curriculum_end_time, sponsor_city, detail, cost_type, cost_total,min_peoples,max_peoples,reservation_cost,is_show,crowdfunding_status,off_shelve_reason,user_id,create_user_name,create_time,opt_time) VALUES (?, ?, ?, ?, ?, ?, ?, ?,?,?, ?, ?, ?, ?, ?, ?, ?,?);");
-        final String id = CommonStringUtils.genPK();
+        String id=crowdFunding.getCrowdfundingId();
+        if(StringUtils.isBlank(crowdFunding.getCrowdfundingId())){
+            id = CommonStringUtils.genPK();
+        }
+
+        String finalId = id;
         int result = getJdbcTemplate().update(sql.toString(), new PreparedStatementSetter() {
             @Override
             public void setValues(PreparedStatement ps) throws SQLException {
-                ps.setString(1,id);
+                ps.setString(1, finalId);
                 ps.setString(2,crowdFunding.getProjectName());
                 ps.setString(3,crowdFunding.getCurriculumStartTime());
                 ps.setString(4,crowdFunding.getCurriculumEndTime());
@@ -196,6 +201,31 @@ public class CrowdFundingDAOImpl extends BaseDAO implements CrowdFundingDAO {
         }
     }
 
+    public List<CrowdFunding> editCrowdFundingByCrowdFundingId(String crowdFundingId) {
+        StringBuilder sql = new StringBuilder("select o.image_url,c.* ");
+        sql.append("from t_crowdfunding c ");
+        sql.append("left join t_img_obj o ");
+        sql.append("on c.crowdfunding_id=o.obj_id ");
+        sql.append("and o.image_type='CROWD_FUNDING_IMG' ");
+        sql.append("where c.crowdfunding_id='"+crowdFundingId+"'" );
+        return getJdbcTemplate().query(sql.toString(),new Object[]{},new CrowdFundingRowMapper());
+    }
+
+    public String deleteCrowdFunding(String crowdFundingId) {
+        StringBuilder sql = new StringBuilder("delete from t_crowdfunding where crowdfunding_id='"+crowdFundingId+"' ");
+        int result = getJdbcTemplate().update(sql.toString());
+
+        StringBuilder sql2 = new StringBuilder("delete from t_img_obj where obj_id='"+crowdFundingId+"' ");
+        int result2 = getJdbcTemplate().update(sql2.toString());
+
+
+        if(result > 0){
+            return Contants.SUCCESS;
+        }else{
+            return "FAILED";
+        }
+    }
+
     class CrowdFundingRowMapper implements RowMapper<CrowdFunding>{
         @Override
         public CrowdFunding mapRow(ResultSet rs, int i) throws SQLException {
@@ -244,4 +274,6 @@ public class CrowdFundingDAOImpl extends BaseDAO implements CrowdFundingDAO {
             return crowdFunding;
         }
     }
+
+
 }

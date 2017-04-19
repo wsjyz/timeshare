@@ -148,10 +148,12 @@
           $(page).on('click','.create-actions', function () {
               var crowdfundingId=$(this).attr("param");
               var thiObj=$(this);
+              var isEdit="";
               var crowdfundingStatus=$(this).attr("param1");
               var showText="强制下架";
               if(crowdfundingStatus=='SKETCH' || crowdfundingStatus=='OFF_SHELVE'){
                   showText="发布";
+                  isEdit="编辑众筹";
               }
               var rowNumber=$(this).attr("rowNumber");
               var buttons1 = [
@@ -189,6 +191,12 @@
                                   }
                               );
                           }
+                      }
+                  },
+                  {
+                      text: isEdit,
+                      onClick: function() {
+                          window.location.href="${request.contextPath}/crowdFunding/editCrowdFunding?crowdFundingId="+crowdfundingId;
                       }
                   },
                   {
