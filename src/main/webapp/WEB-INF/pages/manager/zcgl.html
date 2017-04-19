@@ -277,8 +277,7 @@
                       onClick: function() {
                           window.location.href="${request.contextPath}/enroll/toCrowdfundingByMyEnrollToPaging?crowdFundingId="+crowdfundingId;
                       }
-                  }
-                  ,
+                  },
                   {
                       text: isshowText,
                       onClick: function() {
@@ -291,6 +290,12 @@
                                   $.toast("设置失败");
                               }
                           });
+                      }
+                  },
+                  {
+                      text: '查看详情',
+                      onClick: function() {
+                          window.location.href="${request.contextPath}/crowdFunding/toDetail?crowdFundingId="+crowdfundingId;
                       }
                   }
               ];

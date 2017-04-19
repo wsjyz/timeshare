@@ -211,6 +211,12 @@
                       onClick: function() {
                           window.location.href="${request.contextPath}/enroll/toCrowdfundingByMyEnrollToPaging?crowdFundingId="+crowdfundingId;
                       }
+                  },
+                  {
+                      text: '查看详情',
+                      onClick: function() {
+                          window.location.href="${request.contextPath}/crowdFunding/toDetail?crowdFundingId="+crowdfundingId;
+                      }
                   }
               ];
               var buttons2 = [
