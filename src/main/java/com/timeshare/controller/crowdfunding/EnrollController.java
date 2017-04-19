@@ -83,9 +83,8 @@ public class EnrollController extends  BaseController{
                 if(crowdFunding!=null){
 
                     String curriculumEndTime=crowdFunding.getCurriculumEndTime();
-                    SimpleDateFormat sdf=new SimpleDateFormat("yyyy-MM-dd HH:mm");
+                    SimpleDateFormat sdf=new SimpleDateFormat("yyyy-MM-dd HH");
                     Date curriculumEndTimeDate=sdf.parse(curriculumEndTime);
-                    Enroll enrollDB=enrollService.findEnrollById(enroll.getEnrollId());
                     if(curriculumEndTimeDate.compareTo(new Date())>=0){
                         if(crowdFunding.getEnrollCount()<crowdFunding.getMaxPeoples()){
                             if(Contants.CROWD_FUNDING_STATUS.RELEASED.name().equals(crowdFunding.getCrowdfundingStatus())){

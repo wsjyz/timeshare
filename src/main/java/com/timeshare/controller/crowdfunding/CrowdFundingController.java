@@ -1,5 +1,7 @@
 package com.timeshare.controller.crowdfunding;
 
+import com.sun.tools.internal.jxc.ap.Const;
+import com.taobao.api.internal.toplink.embedded.websocket.util.StringUtil;
 import com.timeshare.controller.BaseController;
 import com.timeshare.domain.ImageObj;
 import com.timeshare.domain.UserInfo;
@@ -50,7 +52,7 @@ public class CrowdFundingController extends  BaseController{
 
     //发布众筹页面
     @RequestMapping(value = "/createCrowdFunding")
-    public String createCrowdFunding() {
+    public String createCrowdFunding(@CookieValue(value="time_sid", defaultValue="00359e8721c44d168aac7d501177e314") String userId) {
         return "crowdfunding/fbzc";
     }
     //众筹首页
@@ -77,7 +79,7 @@ public class CrowdFundingController extends  BaseController{
     }
     //众筹详情页
     @RequestMapping(value = "/toDetail")
-    public String toDetail(@RequestParam String crowdFundingId,Model model,@RequestParam(defaultValue = "false" ,required = false) String commentFlag) {
+    public String toDetail(@RequestParam String crowdFundingId,Model model,@RequestParam(defaultValue = "false" ,required = false) String commentFlag,@CookieValue(value = "time_sid", defaultValue = "00359e8721c44d168aac7d501177e314") String userId) {
         //是否默认显示评论tab
         model.addAttribute("commentFlag",commentFlag);
         //众筹详情页
@@ -89,6 +91,8 @@ public class CrowdFundingController extends  BaseController{
             List<Enroll> enrollList=enrollService.findCrowdfundingEnrollList(crowdFunding.getCrowdfundingId());
             model.addAttribute("enrollList",enrollList);
         }
+        UserInfo userInfo=getCurrentUser(userId);
+        model.addAttribute("userInfo",userInfo);
         return "crowdfunding/details";
     }
     //保存众筹
@@ -196,17 +200,42 @@ public class CrowdFundingController extends  BaseController{
 
     @RequestMapping(value = "/saveComment")
     @ResponseBody
-    public String saveComment(@RequestParam String crowdfundingId, @RequestParam String content, @RequestParam int rating, @CookieValue(value = "time_sid", defaultValue = "00359e8721c44d168aac7d501177e314") String userId) {
+    public Comment saveComment(@RequestParam String crowdfundingId, @RequestParam String content, @CookieValue(value = "time_sid", defaultValue = "00359e8721c44d168aac7d501177e314") String userId) {
         try {
+            UserInfo userInfo=getCurrentUser(userId);
             Comment comment = new Comment();
             comment.setUserId(userId);
             comment.setContent(content);
             comment.setObjId(crowdfundingId);
-            comment.setRating(rating);
             comment.setObjType(Contants.COMMENT_OBJ_TYPE.CROWDFUNDING.name());
             comment.setCreateTime(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date()));
-            String resultId = commentService.saveComment(comment);
-            return resultId;
+            commentService.saveComment(comment);
+
+            comment.setUserImg(userInfo.getHeadImgPath());
+            comment.setUserName(userInfo.getNickName());
+            return comment;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+    @RequestMapping(value = "/modifyComment")
+    @ResponseBody
+    public String modifyComment(@RequestParam String commentId, @RequestParam(required = false) String zanContent, @RequestParam(required = false) String replyContent, @CookieValue(value = "time_sid", defaultValue = "00359e8721c44d168aac7d501177e314") String userId) {
+        try {
+            if(StringUtils.isNotBlank(commentId)){
+                Comment comment = new Comment();
+                comment.setCommentId(commentId);
+                if(StringUtils.isNotBlank(zanContent)){
+                    comment.setZanContent(zanContent);
+                }
+                if(StringUtils.isNotBlank(replyContent)){
+                    comment.setReplyContent(replyContent);
+                }
+                commentService.modifyComment(comment);
+                return Contants.SUCCESS;
+
+            }
         } catch (Exception e) {
             e.printStackTrace();
         }

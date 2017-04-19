@@ -62,14 +62,14 @@ textarea.form-control{height:auto;line-height:normal}
 .i-reply{float:left;margin-top:0.2rem;margin-right:5px;display:block;width:0.8rem;height:0.8rem;background:url(../../images/crowdFunding/icon-reply.png) no-repeat center center;background-size:100%}
 .i-praise{float:left;margin-top:0.2rem;margin-right:5px;display:block;width:0.8rem;height:0.8rem;background:url(../../images/crowdFunding/icon-praise.png) no-repeat center center;background-size:100%}
 /*我的*/
-.me-bg{height:15rem;background:url(../../images/crowdFunding/pic.jpg) no-repeat 0 -2.2rem;background-size:100%}
+.me-bg{height:12rem;background:url(../../images/crowdFunding/pic.jpg) no-repeat 0 -2.2rem;background-size:100%}
 .me-info{padding-top:2.5rem;font-size:0.8rem;text-align:center;color:#fff}
 .me-info .head{width:5.5rem;height:5.5rem;border-radius:5.5rem;margin:0 auto;position:relative}
 .me-info .head img{width:100%}
 .me-info .head .flag{position:absolute;top:0px;right:0;width:1.5rem;height:1.5rem;line-height:1.5rem;border-radius:50%;background:#3f435e;color:#fff;font-size:0.4rem}
 .me-info .head .user-head-image_div{}
-.me-info .head .user-head-image_div img{border-radius:3rem}
-.me-info .name{margin-top:0.7rem}
+.me-info .head .user-head-image_div img{width:4.2rem;height:4.2rem;border-radius:3rem}
+.me-info .name{margin-top:0rem}
 .me-info .tel{display:-webkit-box;display:-webkit-flex;display:flex;-webkit-box-pack:justify;-webkit-justify-content:space-between;justify-content:space-between;-webkit-box-align:center;-webkit-align-items:center;align-items:center;margin:0.7rem 1rem}
 .i-left,.i-right{display:inline-block;width:0.5rem}
 .i-left img,.i-right img{width:100%}
@@ -144,6 +144,7 @@ textarea.form-control{height:auto;line-height:normal}
 .details-comment .item-content{-webkit-box-align:flex-start;-webkit-align-items:flex-start;align-items:flex-start;padding:0.6rem}
 .details-comment .item-media{width:2.8rem;position:relative;width:2.8rem;height:2.8rem}
 .details-comment .item-media img{width:2.8rem;height:2.8rem}
+.details-comment .item-media .user-head-image_div img{border-radius:3rem}
 .details-comment .lv{position:absolute;bottom:0;right:0;background:#26a4d4;color:#fff;font-size:0.4rem;height:0.7rem;line-height:0.7rem;border-radius:0.35rem;padding:0 5px}
 .details-comment .flag{display:inline-block;background:#40445f;color:#fff;font-size:0.6rem;padding:0 5px}
 .details-comment .date,
