@@ -1,0 +1,959 @@
+body{font-family: Arial, Helvetica, sans-serif;}
+.title {
+    color: #fff;
+    font-weight: 500;
+    font-size: 1.1rem;
+}
+
+.header {
+    background-image: url(../../images/assembly/headerBg.jpg);
+    background-size: cover;
+}
+
+.indexHeader {
+    height: 4.8rem;
+    border: 0;
+    padding-top: 2.4rem;
+}
+
+.addActivityImg{
+    width: 2.2rem;
+}
+#searchBar{
+    background: none;
+}
+#search{
+    background-color: #eeeeee;
+}
+.icon-search{
+    color:white;
+}
+.indexContent{
+    top:4.8rem;
+}
+
+.detailHeader {
+    height: 2.4rem;
+    border: 0;
+    padding-top: .15rem;
+}
+
+.detailHeader .back {
+    position: relative;
+    top: 0.1rem;
+}
+
+.back {
+    border: none;
+    color: white;
+    margin-top: 0.4rem;
+}
+
+.searchbar {
+    background-color: transparent;
+    width: 13rem;
+    display: inline-block;
+
+}
+
+.cities {
+    width: 4.2rem;
+    display: inline-block;
+    height: 2.2rem;
+    line-height: 2.2rem;
+    vertical-align: top;
+    font-size: .75rem;
+}
+.bar-header-secondary .cities{
+    padding-left: .5rem;
+    width:3rem;
+}
+.bar .searchbar{
+    padding: .4rem .3rem .4rem .7rem
+}
+
+.searchIcon {
+    width: 1.5rem;
+    height: 1.5rem;
+    line-height: 1.5rem;
+    vertical-align: top;
+    display: inline-block;
+    padding-left: .4rem;
+}
+
+select {
+    height: 2.2rem;
+    line-height: 2.2rem;
+    /*Chrome??Firefox??????????����???????��??????��?????????????*/
+    border: solid 1px #000;
+    /*?????��???????????select?????����?��???????*/
+    appearance: none;
+    -moz-appearance: none;
+    -webkit-appearance: none;
+    background: transparent;
+    /*???????����????????����??????????????��????*/
+    background-image: url("../../images/assembly/downArrow.png");
+    background-repeat: no-repeat;
+    background-position: center right;
+    background-size: .7rem .7rem;
+    /*????????????��???????????????????????????????*/
+    padding-right: .7rem;
+}
+
+.swiper-container {
+    padding: 0;
+
+}
+
+.swiper-slide {
+    width: 100%;
+    height: 10rem;
+}
+
+.swiper-slide img {
+    width: 100%;
+    height: 100%;
+}
+
+/*????ie???????????����?��?????????????????????��*/
+select::-ms-expand {
+    display: none;
+}
+
+.activityTitle {
+    line-height: 1rem;
+    margin-top: .2rem;
+    padding-left: 1rem;
+    padding-right: .8rem;
+    word-break: break-all;
+}
+
+.activityDesc {
+    color: #bdbdbd;
+    font-size: .7rem;
+    padding-left: 1rem;
+    padding-bottom: .5rem;
+    position: relative;
+}
+
+.activityPrice {
+    position: absolute;
+    right: 1rem;
+    bottom: .4rem;
+    color: #fcb063;
+    line-height: 1rem;
+}
+
+.priceNum {
+    font-size: 1rem;
+    position: relative;
+    top: .05rem;
+    padding: 0 .05rem;
+}
+
+.citySelect {
+    border: 0;
+    color: white;
+}
+
+.citySelect option {
+    background: white;
+    color: black;
+}
+
+.bar-header-secondary {
+    border: 0;
+    background-color: transparent;
+    padding: 0;
+    height: 2.2rem;
+    top: 0.2rem;
+}
+
+.content-block {
+    padding: 0;
+    margin: 0;
+    background-color: #fff;
+}
+
+.indexBottom {
+    background: url(../../images/assembly/bottomBg.png) repeat-x;
+    background-size: auto 2.4rem;
+    padding-top: .2rem;
+    padding-bottom: .1rem;
+}
+
+.userRow {
+    margin: .2rem .2rem .2rem .5rem;
+}
+
+.userName {
+    vertical-align: middle;
+    line-height: 1.8rem;
+    display: inline-block;
+}
+
+.userPhoto {
+    width: 1.8rem;
+    height: 1.8rem;
+}
+
+.fullWidth {
+    width: 100%;
+}
+
+.btnUpVote,.btnReply{
+    padding: .1rem .5rem .05rem .5rem;
+    border-radius: .5rem;
+    text-align: right;
+    border: 1px solid #b1b9cd;
+    min-width: 2rem;
+    margin-right: .3rem;
+    color: black;
+}
+.btnReply{
+    padding-left:.7rem;
+}
+.commentFooter{
+    margin:0 1rem 2rem 1rem;
+    font-size:.7rem;
+}
+.clearFix::after{
+    content:'.';
+    display:block;
+    height:0;
+    clear: both;
+    visibility: hidden;
+}
+.commentContent{
+    padding: 1rem; font-size:.75rem;
+}
+.commentImgs >img{
+    width:5.4rem;
+    height:5.4rem;
+}
+.filledStar,.emptyStar{
+    display: inline-block;
+    width:1rem;
+    height:1rem;
+    background-size: cover;
+    vertical-align: top;
+}
+.filledStar{
+    background-image: url(../../images/assembly/filledStar.png);
+}
+.emptyStar{
+    background-image: url(../../images/assembly/emptyStar.png);
+}
+.commentSection{
+    background-color: #ebecf0;
+}
+.commentSection > header{
+    padding:.5rem .8rem .5rem .5rem;
+    height:2rem;
+
+}
+.commentTagList{
+    overflow: hidden;
+    margin:0;padding:0;
+    text-align: center;
+}
+.commentTagList li{
+    list-style-type: none;
+    width:4.6rem;
+    float:left;
+    margin-left:.3rem;
+    margin-top:.2rem;
+    margin-bottom:.2rem;
+
+    padding:.1rem;
+    border-radius:1rem;
+    border:1px solid #b1b9cd;
+    color:#b1b9cd;
+    font-size:.75rem;
+}
+header.commentUser{
+    font-size:.7rem;
+    height:3rem;
+}
+header.commentUser .userPhoto{
+    width:2.8rem;
+    height:2.8rem;
+    border-radius: 1.4rem;
+    margin-right:.2rem;
+}
+
+.activityRow{
+    color:#40445e; vertical-align: top;padding-left:2.8rem;
+    height:1.6rem;
+    line-height: 1.6rem;
+    position: relative;
+    font-size:.75rem;
+}
+.eyeImg{
+    width: 1rem;vertical-align: top;
+}
+.viewNum{
+    width:3rem;display: inline-block;
+}
+.activityRow img{
+    width:1rem;
+    position:absolute;
+    left:1.6rem;
+    top:.2rem;
+}
+.activityRow .clockImg{
+    top:.5rem;
+}
+.activityRow .moneyImg{
+    top:.45rem;
+}
+.activityRow .money{
+    color:#f6b377;
+}
+.darkBg{
+    background-color: #40445f;
+    color:white;
+    font-size:.7rem;
+    padding:.1rem;
+}
+.activityContent{
+    top:2.4rem;
+}
+.activityContent .userRow{
+    padding-left:1rem;
+    font-size:.75rem;
+}
+.activityContent .userRow .userName{
+    margin-left:.5rem;
+    margin-right:.5rem;
+}
+.activityContent .activityDetailWrap{
+    padding: 1rem;text-align: center;
+    color:#414560;
+}
+
+.showMoreDetail {
+    height: 2.4rem;
+    line-height: 2.4rem;;
+    text-align: center;
+    background: url(../../images/assembly/showMoreBg.png) repeat-x;
+    background-size: auto 2.4rem;
+    font-size:.7rem;
+    z-index:1;
+    position: relative;
+    top:-.3rem;
+}
+
+.userList{
+    background-color: #fff;
+    padding-left:.5rem;
+    height: auto;
+    overflow: hidden;
+}
+.userList li{
+    width:2.8rem;
+    height:5rem;
+    float:left;
+    list-style-type: none;
+    text-align: center;
+    font-size:.75rem;
+}
+.userList li img{
+    border-radius: 1.2rem;
+    width:2.4rem;
+    height:2.4rem;
+}
+
+.userSection > header{
+    padding:.5rem;
+    height:2rem;
+}
+.userSection hr,.commentSection hr{
+    width:95%;
+    color:#b3b7c5;
+}
+.activityFooter > .tab-item{
+    width: 8rem;border-right:.1rem solid #ebebee;background-color: #fff;
+}
+.activityFooter > .tab-item.item-me{
+    width: 10rem;background-color: #40445f;color:white;
+    line-height: 1.5rem;
+    height:1.5rem;
+}
+
+.activityBottom{
+    margin-bottom: 0;
+    bottom:0.5rem;
+    top:auto;
+    left:5%;
+    margin-left:0;
+    width:90%;
+    border-radius: .5rem;
+}
+.activityBottom .title{
+    color:#b3b6c4;
+    font-size: 1rem;
+    text-align: left;
+    padding-left: .4rem;
+}
+.activityBottom .modal-inner{
+    background-color: #fff;
+    border-radius: .35rem;
+}
+
+.activitySecondStep .list-block ul::before,
+.activitySecondStep .list-block ul::after,
+.activitySecondStep .list-block .item-inner::after
+{
+    height:0;
+}
+.activityBottom li{
+    border:none;
+}
+.closeModal{
+    width:1.2rem;
+    position:absolute;
+    right:.5rem;
+    top:.6rem;
+}
+.closeModal img{
+    width:100%;
+}
+.activityBottom .item-content{
+    padding-left:0;
+    font-size:.75rem;
+    height:1.85rem;
+}
+.activityBottom .list-block{
+    margin-top:2.5rem;
+}
+.activityBottom .list-block .item-title.label{
+    width:22%;
+    color:#777d98;
+    padding-right: .2rem;
+    font-size:.72rem;
+    overflow: visible;
+}
+.activitySecondStep  .list-block .item-title.label
+.customForm  .list-block .item-title.label
+{
+    text-align: right;
+}
+.activityFirstStep .list-block .item-title.label,
+.customForm .list-block .item-title.label
+{
+    line-height:.7rem;
+    width:35%;
+    text-align: left;
+    padding-left:.5rem;
+}
+.activityFirstStep .item-input{
+    text-align: right;
+}
+
+.activityBottom .list-block .item-inner{
+    margin-left:0;
+}
+.activityBottom input[type="text"]{
+    height:1.3rem;
+    line-height: 1.3rem;
+    border-radius:.25rem;
+    border:.05rem solid #e0e2e7;
+}
+
+.smallTitle{
+    color:#ccc;
+    font-size:.65rem;
+    position:relative;
+    top:.2rem;
+}
+.circle{
+    width:.6rem;
+    height:.6rem;
+    border-radius: .3rem;
+    background-color: #747b95;
+    display: block;
+    margin-right:.2rem;
+    padding-left:.5rem;
+}
+
+.activityBottom input[type="radio"] {
+    margin: 3px 3px 0px 5px;
+    display: none;
+}
+.radioLabel,.checkboxLabel {
+    width: 1rem;
+    height: 1rem;
+    cursor: pointer;
+    background-image: url(../../images/assembly/radio.png);
+    background-size: 1rem 1rem;
+    padding: .5rem;
+    margin-left:.5rem;
+    background-repeat: no-repeat;
+    background-position: center center;
+}
+
+.normalPrice{
+    color:#f6b377;
+}
+.freePrice{
+    color:#ccc;
+}
+.radioLabel.checked, .checkboxLabel.checked{
+    background-image: url(../../images/assembly/radioChecked.png);
+}
+
+.activityBottom .modal-inner{
+    margin-bottom:.3rem;
+}
+.activityBottom .modal-buttons{
+    border-radius:.3rem;
+}
+.activityBottom .modal-button{
+    color:#888a9a;
+    background-color:#fff;
+}
+.activityBottom .item-inner.agree{
+    text-align: center;
+    justify-content:center;
+    color:#ccc;
+}
+
+.gongxi{
+    text-align: center;
+    vertical-align: middle;
+    height:8rem;
+    line-height: 8rem;
+    color:#333;
+    font-size:.8rem;
+    font-weight: bold;
+}
+.gongxi img{
+    width:1.4rem;
+    position:relative;
+    top:.4rem;
+}
+.share{
+    text-align: center;
+}
+.share header{
+    color:#cfd4e1;
+    margin-top:1.5rem;
+    margin-bottom:1.5rem;
+}
+.bdsharebuttonbox a{
+    width:5rem;
+    height:6rem;
+    display: inline-block;
+    background-image:none;
+}
+.bdsharebuttonbox a img{
+    width:80%;
+}
+
+.successHeader{
+    background-image: none;
+    height:2.2rem;
+    line-height:2.2rem;
+    padding-right:1rem;
+}
+.successHeader .title{
+    color:#23232f;
+}
+.successHeader .button-link{
+    color:#9ca0b3;
+    font-size:.8rem;
+    position: relative;
+    font-weight: bold;
+    top:.2rem;
+    padding-left:.1rem;
+}
+.attendSuccessContent .activityTitle{
+    padding-left:0;
+    padding-top:.5rem;
+    padding-bottom:.2rem;
+    margin-right:.2rem;
+    margin-bottom:0;
+    border-bottom:1px solid #ccc;
+}
+
+.attendSuccessContent .activityRow{
+    padding-left:0;
+    padding-top:.1rem;
+    padding-bottom:.2rem;
+    margin-right:.2rem;
+    margin-bottom:0;
+    border-bottom:1px solid #ccc;
+}
+
+.attendUserHeader{
+    background-image: none;
+    height: 2rem;
+    line-height:2rem;
+    padding-bottom:.2rem;
+    padding-right:1rem;
+}
+.attendUserHeader .title{
+    color:#23232f;
+}
+.attendUserHeader .button-link{
+    color:#9ca0b3;
+    font-size:.8rem;
+    position: relative;
+    font-weight: bold;
+    top:.2rem;
+    padding-left:.1rem;
+}
+.attendUserContent .activityTitle{
+    padding-left:0;
+    padding-top:.5rem;
+    padding-bottom:.2rem;
+    margin-right:.2rem;
+    margin-bottom:0;
+    border-bottom:1px solid #ccc;
+}
+.attendUserHeader a.button-link{
+    color:#90cee5;
+}
+.attendUserContent{
+    top:2.2rem;background-color: #fff;
+}
+
+.activityPublishHeader{
+    background-image: none;
+    background-color: #fff;
+    height: 2.2rem;
+    line-height:2.2rem;
+    padding-bottom:.2rem;
+    padding-right:.5rem;
+}
+.activityPublishHeader .title{
+    color:#23232f;
+    font-weight: 900;
+}
+.activityPublishHeader .button-link{
+    color:#9ca0b3;
+    font-size:.8rem;
+    position: relative;
+    font-weight: bold;
+    top:.2rem;
+    padding-left:.1rem;
+}
+.activityPublishHeader .button-link .icon-left{
+    color:#9ca0b3;
+    position: relative;
+    top:-0.05rem;
+    font-size:.6rem;
+}
+.activityPublishContent .activityTitle{
+    padding-left:0;
+    padding-top:.5rem;
+    padding-bottom:.2rem;
+    margin-right:.2rem;
+    margin-bottom:0;
+    border-bottom:1px solid #ccc;
+}
+/*.activityRow{*/
+/*padding-left:0;*/
+/*padding-top:.1rem;*/
+/*padding-bottom:.2rem;*/
+/*margin-right:.2rem;*/
+/*margin-bottom:0;*/
+/*border-bottom:1px solid #ccc;*/
+/*}*/
+.activityPublishHeader a.button-link.pull-left{
+    color:#23232f;
+
+}
+.activityPublishContent{
+    top:2.2rem;background-color: #eeeff4;
+}
+.activityPublishHeader .button-link.publish,
+.activityPublishHeader .button-link.finishCustomOne
+{
+    padding-left:.2rem;
+    padding-right:.2rem;
+    height:1.3rem;
+    width:2.8rem;
+    font-size:.75rem;
+    border-radius: 0;
+}
+
+.activityPublishHeader .button-link.publish{
+    background-color:#d3d9e5;
+}
+.activityPublishHeader .button-link.finishCustomOne{
+    background-color: #0099e9;
+    color:#f0f9fe;
+}
+
+.activityPublishContent .list-block{
+    margin-top:0;
+}
+.activityPublishContent .list-block ul::after,.activityPublishContent .list-block ul::before{
+    height:0;
+}
+.activityPublishContent .list-block .item-inner::after{
+    width:95%;
+}
+.activityPublishContent .item-title{
+    color:#a4a7b6;
+    font-weight: 600;
+    font-size:.75rem;
+}
+.list-block .activitySettings{
+    margin-top:.5rem;
+    padding-top:.5rem;
+    padding-left:.5rem;
+    padding-right:.5rem;
+    color:black;
+}
+.list-block .activitySettings li{
+    padding-top:.4rem;
+    padding-bottom:.3rem;
+    border-bottom:1px solid #dbdce3;
+}
+.activitySubject{
+    margin-top:.5rem;
+    margin-bottom:.5rem;
+}
+.activitySubject .item-title.label{
+    font-size:.9rem;
+    font-weight: bold;
+}
+
+.activityPublishList > li{
+    display: flex;height:3.2rem;line-height:3.2rem;border-bottom: 1px solid #eee;width:90%;margin-left:5%;
+}
+.activityPublishImg{
+    padding:0;
+    border-radius: 1.5rem;
+    overflow: hidden;
+    border:none;
+    margin:.2rem .5rem;
+}
+.activityPublishImg > img{
+    width:2.8rem;
+    height:2.8rem;
+}
+
+
+.customForm .list-block .item-title.label{
+    font-size:.8rem;
+}
+
+.customForm .title{
+    font-size:.9rem;
+}
+
+
+.formDesc{
+    font-size:.7rem;padding:.5rem;
+    color:#747b95;
+}
+.feeSpacingLine{
+    height: .3rem;background-color: #eeeff4;
+}
+.addFeeItem{
+    padding-left:.5rem;
+    font-size:.6rem;
+    color:#3f435e;
+}
+.customDesc{
+    color:#bec5d6;
+    font-size:.65rem;
+}
+
+
+.subjectPicture{
+    width: 3.5rem;
+}
+a.subjectPicture{
+    color:#7e859f;
+}
+.choosePicture{
+    margin-left:.3rem;
+}
+textarea.activityDesc{
+    width: 92%;border:1px solid #eee;margin-left:4%;height:12rem;
+}
+
+.list-block .activityTypes{
+    margin-top:.5rem;
+}
+
+.activityTypes > li{
+    padding:.5rem;
+    border-bottom:1px solid #ccc;
+    width:92%;
+    margin-left:4%;
+}
+
+.activityTypes > li:last-child {
+    border-bottom:none;
+}
+
+.activityTypes .radioLabel{
+    width:1.2rem;
+    height:1.2rem;
+    background-size: 1.2rem 1.2rem;
+}
+
+.list-block .customRadioItems,.list-block .customCheckboxItems{
+    margin-top:.5rem;
+}
+
+.customRadioItems > li,.customCheckboxItems > li{
+    padding:.1rem .1rem .1rem .2rem;
+    border-bottom:1px solid #ccc;
+    width:100%;
+}
+
+.list-block .customRadioSubject,.list-block .customCheckboxSubject{
+    background-color: #fff;
+    padding-left:.2rem;
+    margin-top:.3rem;
+    margin-bottom:.1rem;
+}
+.addCustomRadioItem,.addCustomCheckboxItem{
+    text-align: center;
+    font-size:2rem;
+    height:2.2rem;
+    line-height:2.2rem;
+    color:#0099e9;
+    background-color: #fff;
+}
+
+.item-input.activityDescImgs{
+    margin-top:0;
+}
+.activityDescImgs img{
+    height:1.2rem;
+}
+
+
+.attendUserList > li{
+    display: flex;height:3.2rem;line-height:3.2rem;border-bottom: 1px solid #eee;width:90%;margin-left:5%;
+}
+.attendUserImg{
+    padding:0;
+    border-radius: 1.5rem;
+    overflow: hidden;
+    border:none;
+    margin:.2rem .5rem;
+}
+.attendUserImg > img{
+    width:2.8rem;
+    height:2.8rem;
+}
+.attendUserName{
+    flex:1;
+    color:#606060;
+}
+.attendTimeBefore{
+    color:#d3d3d3;
+    font-size:.7rem;
+}
+
+a.pull-right{
+    color:#000;
+}
+
+#routerPublishSuccess{
+    background-color: #eee;
+}
+.publishSuccessContent{
+    top:2.2rem;background-color: #eee;
+}
+.publishSuccessContent .share header{
+    margin-top:.5rem;
+    padding-top:1rem;
+}
+.publishSuccessHeader a{
+    color:#7a7981;
+    position: relative;
+}
+
+.commentUserName{
+    font-size:.8rem;color:#3e435e;
+}
+
+
+/*????????*/
+.commentPublishContent{
+    top:2.1rem;background-color: #eeeff4;
+}
+.commentPublishHeader .title{
+    color:#292431;
+    font-weight: bold;
+}
+.commentPublishHeader .button-link.publish{
+    background-color:#7b7d9c;
+    color:#bdbede;
+    margin-top:.2rem;
+}
+
+.commentPublishContent .list-block{
+    margin-top:0;
+}
+
+
+.commentPublishContent .item-title.label{
+    font-size:.75rem;
+    width: 100%;color:#4a4563;padding-top:0;
+}
+.item-input.commentDescImgs{
+    margin-top:0;
+
+}
+.commentDescImgs img{
+    height:1.2rem;
+    margin-right:1rem;
+}
+
+.attendSuccessHeader{
+    background-color: #fff;
+}
+
+.attendSuccessContent .pull-left img{
+    height:3.9rem;
+    margin-bottom:.6rem;
+}
+.attendSuccessContent .activityRow{
+    height:1.2rem;
+    line-height: 1.2rem;
+    font-size:.7rem;
+    color:#b2b8e9;
+}
+
+.activityPublishContent input[type="text"],.activityPublishContent input.datetimePicker{
+    border:none;
+    border-bottom:1px solid #ccc;
+    padding-bottom:0;
+    height:1.2rem;
+}
+
+.replyArea{
+    padding-left:3.48rem;
+}
+
+.commentSection{
+    background-color: #fff;
+}
+.vcodeModal .modal-inner{
+    background-color: #fff;
+}
+.vcodeModal .title{
+    font-size:.9rem;
+    color:black;
+}
+.vcodeImg{
+    margin-left:auto;
+    margin-right:auto;
+    margin-top:.5rem;
+    width:10rem;
+    height:10rem;
+}
+.vcodeImg img{
+    width:100%;
+}

@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <title>发起众筹</title>
+    <title>编辑众筹</title>
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
     <meta name="format-detection" content="telephone=no">
     <meta name="format-detection" content="email=no">
@@ -19,11 +19,10 @@
     <link rel="stylesheet" href="${request.contextPath}/css/upload.css">
     <link rel="stylesheet" href="${request.contextPath}/css/crowdFunding/img-custom.css">
     <link rel="stylesheet" type="text/css" href="${request.contextPath}/css/crowdFunding/style.css">
-
 </head>
 <body>
 <div class="page-group">
-    <div class="page page-current" id="page-crowdFunding">
+    <div class="page page-current" id="page-crowdFundingEdit">
         <!--header start-->
         <header class="bar bar-nav">
             <a class="icon icon-left pull-left back" href="javascript:history.go(-1);"></a>
@@ -33,10 +32,10 @@
         <!--页面内容区域 start-->
         <div class="content">
             <section class="from-list">
-                <form action="${request.contextPath}/crowdFunding/save" method="post" id="publishCrowdFunding">
+                <form action="${request.contextPath}/crowdFunding/edit" method="post" id="editCrowdFunding">
                     <label class="form-group">
                         <span class="input-label">项目名称</span>
-                        <input type="text" name="projectName" id="projectName" class="form-control" placeholder="项目名称">
+                        <input type="text" name="projectName" id="projectName" value="${crowdFunding.projectName}" class="form-control" placeholder="项目名称">
                     </label>
                     <label class="form-group">
                         <span class="input-label">课程开始时间</span>
@@ -48,31 +47,39 @@
                     </label>
                     <label class="form-group">
                         <span class="input-label">主办地址</span>
-                        <input type="text" name="sponsorCity" class="form-control" placeholder="主办地址" id="address" value="">
+                        <input type="text" name="sponsorCity" value="${crowdFunding.sponsorCity}" class="form-control" placeholder="主办地址" id="address" value="">
                     </label>
                     <label class="form-group">
                         <span class="input-label">详情描述</span>
-                        <textarea rows="5" name="detail" id="detail" class="form-control" placeholder="详情描述"></textarea>
+                        <textarea rows="5" name="detail" id="detail" class="form-control" placeholder="详情描述">${crowdFunding.detail}</textarea>
                     </label>
                     <div class="radio-group">
-                        <label><input type="radio" name="costType" value="AA" id="costBetween" checked>费用均摊</label>
-                        <label><input type="radio" name="costType" value="FIXED_PRICE" id="price"> 一口价</label>
+
+
+                        <label><input type="radio" name="costType" value="AA" id="costBetween" <#if crowdFunding.costType=='AA'>checked</#if>>费用均摊</label>
+                        <label><input type="radio" name="costType" value="FIXED_PRICE" id="price" <#if crowdFunding.costType=='FIXED_PRICE'>checked</#if>> 一口价</label>
                     </div>
                     <label class="form-group">
-                        <span class="input-label" id="costSpan">总费用</span>
-                        <input type="number" name="costTotal" id="costTotal" class="form-control" placeholder="总费用">
+                        <#assign costTypeName="">
+                        <#if crowdFunding.costType=="AA">
+                            <#assign costTypeName="总费用">
+                        <#else>
+                            <#assign costTypeName="单价">
+                        </#if>
+                        <span class="input-label" id="costSpan">${costTypeName}</span>
+                        <input type="number" name="costTotal" id="costTotal" value="${crowdFunding.costTotal}" class="form-control" placeholder="${costTypeName}">
                     </label>
                     <label class="form-group">
                         <span class="input-label">最少人数</span>
-                        <input type="number" name="minPeoples" id="minPeoples" class="form-control" placeholder="最少人数">
+                        <input type="number" name="minPeoples" id="minPeoples" value="${crowdFunding.minPeoples}" class="form-control" placeholder="最少人数">
                     </label>
                     <label class="form-group">
                         <span class="input-label">最多人数</span>
-                        <input type="number" name="maxPeoples" id="maxPeoples" class="form-control" placeholder="最多人数">
+                        <input type="number" name="maxPeoples" value="${crowdFunding.maxPeoples}" id="maxPeoples" class="form-control" placeholder="最多人数">
                     </label>
                     <label class="form-group">
                         <span class="input-label">预约费用</span>
-                        <input type="number" name="reservationCost" id="reservationCost" class="form-control" placeholder="预约费用">
+                        <input type="number" name="reservationCost" id="reservationCost" value="${crowdFunding.reservationCost}" class="form-control" placeholder="预约费用">
                     </label>
                     <label class="form-group">
                         <span class="input-label">众筹封面</span>
@@ -81,25 +88,34 @@
                         <a class="subjectPicture" href="#crowdFundingAddWallpaper" onclick="updateType();">   <img src="${request.contextPath}/images/assembly/icon/publishImg.png" /></a>
 
 
-                        <div class="imgShow" style="text-align: center"><img id="crowdFundingImageUrl" style="height: 5rem;width: 10rem;display:none"/></div>
+                        <#assign editImgShowPath=""/>
+                        <#if crowdFunding.imageUrl??>
+                            <#assign editImgShowPath="${request.contextPath}/${crowdFunding.imageUrl}_320x240.jpg"/>
+                        </#if>
+
+                        <div class="imgShow" style="text-align: center"><img src="${editImgShowPath}" id="crowdFundingImageUrl" style="height: 5rem;width: 10rem;"/></div>
+
+
 
                     </label>
-
                     <div class="content-block">
                         <div class="row">
                             <div class="col-33"><input type="button" id="sketch" class="button button-big btn-dark" value="保存草稿" onclick="sketchCrowdFundingClick();"></div>
-                            <div class="col-33"><input type="button" id="publishCrowdFundingBtn" class="button button-big btn-dark" value="发 布" onclick="publishCrowdFundingClick();"></div>
+                            <div class="col-33"><input type="button" id="publish" class="button button-big btn-dark" value="发 布" onclick="publishCrowdFundingClick()"></div>
                             <div class="col-33"><a href="javascript:preview();" class="button button-big btn-light open-popup" data-popup=".popup-preview">预 览</a></div>
 
                         </div>
                     </div>
                     <input type="hidden" name="crowdfundingStatus" id="crowdfundingStatus" value="RELEASED">
                     <input type="hidden" name="imgUrl" id="imgUrl" value="">
+                    <input type="hidden" name="crowdfundingId" id="crowdfundingId" value="${crowdFunding.crowdfundingId}">
                 </form>
             </section>
         </div>
         <!-- 页面内容区域 end -->
     </div>
+
+
     <!--图片上传-->
     <div class="page" id="crowdFundingAddWallpaper">
         <div class="activityPublishHeader header">
@@ -108,7 +124,7 @@
                 <span class="icon icon-left"></span>
                 返回
             </a>
-            <a class="button button-link button-nav back pull-right publish" id="addImgFinish">
+            <a class="button button-link button-nav back pull-right publish" id="editImgFinish">
                 完成
             </a>
 
@@ -138,42 +154,42 @@
         </div>
     </div>
     <!--图片上传-->
+
 </div>
 
-<!-- 预览弹窗的框 -->
-<div class="popup popup-preview" style="display:none">
-    <div class="content-block">
-        <p><a href="#" class="close-popup">关闭</a></p>
-        <div class="details">
-            <div class="item-box">
-                <div class="zc-img"><img src="" id="previewImage"></div>
-                <div class="zc-text">
-                    <div class="zc-name"><em class="tag">预览中</em> &nbsp;<div id="previewProjectName"></div></div>
-                    <div class="zc-info">
-                        <span class="time"><i class="i-time"></i>上课时间:<div id="previewCurriculumStartTime"></div></span>
-                        <span class="address"><i class="i-address"></i><div id="previewSponsorCity"></div></span>
-                    </div>
-                    <div class="dashed-line"></div>
-                    <div class="zc-info">
-                        <span class="price">众筹最低学费:<span id="previewPrice"></span>元</span>
-                        <span class="num">学员人数:0/<span id="previewMaxPeoples"></span>人</span>
-                    </div>
-                    <div class="row cb">
-                        <div class="col-50" id="priviewCostTotalDIV">课程总成本:<span id="priviewCostTotal"></span></div>
-                        <div class="col-50">目前人均价:<span id="priviewAATotal"></span></div>
-                    </div>
-                    <div class="zc-progress">
-                        <div class="progress"><div class="progress-bar" style="width:1%"></div></div>
+    <!-- 预览弹窗的框 -->
+    <div class="popup popup-preview" style="display:none">
+        <div class="content-block">
+            <p><a href="#" class="close-popup">关闭</a></p>
+            <div class="details">
+                <div class="item-box">
+                    <div class="zc-img"><img src="" id="previewImage"></div>
+                    <div class="zc-text">
+                        <div class="zc-name"><em class="tag">预览中</em> <div id="previewProjectName"></div></div>
+                        <div class="zc-info">
+                            <span class="time"><i class="i-time"></i>上课时间:<div id="previewCurriculumStartTime"></div></span>
+                            <span class="address"><i class="i-address"></i><div id="previewSponsorCity"></div></span>
+                        </div>
+                        <div class="dashed-line"></div>
+                        <div class="zc-info">
+                            <span class="price">众筹最低学费:<span id="previewPrice"></span>元</span>
+                            <span class="num">学员人数:0/<span id="previewMaxPeoples"></span>人</span>
+                        </div>
+                        <div class="row cb">
+                            <div class="col-50" id="priviewCostTotalDIV">课程总成本:<span id="priviewCostTotal"></span></div>
+                            <div class="col-50">目前人均价:<span id="priviewAATotal"></span></div>
+                        </div>
+                        <div class="zc-progress">
+                            <div class="progress"><div class="progress-bar" style="width:1%"></div></div>
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
-        <div class="content-block details-content">
-            <p id="previewDetail"></p>
+            <div class="content-block details-content">
+                <p id="previewDetail"></p>
+            </div>
         </div>
     </div>
-</div>
-
 <script type='text/javascript' src='${request.contextPath}/js/zepto.min.js' charset='utf-8'></script>
 <script type='text/javascript' src='${request.contextPath}/js/upload.js?v=20160720-2' charset='utf-8'></script>
 <script type="text/javascript" src="${request.contextPath}/js/crowdFunding/sm.min.js"></script>
@@ -182,12 +198,9 @@
 <script type="text/javascript" src="${request.contextPath}/js/crowdFunding/sm-city-picker.js"></script>
 <script type="text/javascript" src="${request.contextPath}/js/crowdFunding/my-js.js"></script>
 <script type="text/javascript" src="${request.contextPath}/js/crowdFunding/config.js"></script>
-
-
 </body>
 <script type="application/javascript">
     $(function() {
-
         var today = new Date();
 
         var getDays = function(max) {
@@ -232,8 +245,9 @@
             strDate2 = "0" + strDate2;
         }
 
+        var startDateDB="${crowdFunding.curriculumStartTime}";
         $("#startTime").datetimePicker({
-            value: [date.getFullYear(), month, strDate, date.getHours()],
+           value: [startDateDB.substring(0,4), startDateDB.substring(5,7), startDateDB.substring(8,10), startDateDB.substring(11,12)==0?startDateDB.substring(12,13):startDateDB.substring(11,13)],
             cols: [
                 // Years
                 {
@@ -266,8 +280,9 @@
                 return displayValues[0] + '-' + values[1] + '-' + values[2] + ' ' + values[3];
             }
         });
+        var endDateDB="${crowdFunding.curriculumEndTime}";
         $("#endTime").datetimePicker({
-            value: [date.getFullYear(), month, strDate2, date.getHours()],
+            value: [endDateDB.substring(0,4), endDateDB.substring(5,7), endDateDB.substring(8,10), endDateDB.substring(11,12)==0?endDateDB.substring(12,13):endDateDB.substring(11,13)],
             cols: [
                 // Years
                 {
@@ -320,11 +335,13 @@
                 $("#costTotal").attr("placeholder","单价");
             });
 
+
+
         });
 
 
         //添加图片显示
-        $("#addImgFinish").click(function() {
+        $("#editImgFinish").click(function() {
             var imageUrl=$('#imageUrl')[0].src;
             if(imageUrl!=null && imageUrl!='' && imageUrl!='null' && imageUrl.lastIndexOf(".jpg")!=-1){
                 $("#crowdFundingImageUrl").attr("src",imageUrl);
@@ -334,12 +351,14 @@
         });
         // 默认必须要执行$.init()
         $.init();
+
     });
-
-
-
     function preview(){
         var imageUrl = $('#imageUrl')[0].src;
+        if(imageUrl.lastIndexOf(".jpg")==-1){
+            imageUrl=$("#crowdFundingImageUrl").attr("src")
+        }
+
         $("#previewImage").attr("src",imageUrl);
         $("#previewProjectName").text($("#projectName").val());
 
@@ -423,14 +442,15 @@
         }
 
 
-
-
         var imageUrl = $('#imageUrl')[0].src;
         if(imageUrl.lastIndexOf(".jpg")>=0){
             $("#imgUrl").val(imageUrl);
         }
+        else{
+            $("#imgUrl").val($("#crowdFundingImageUrl").attr("src"));
+        }
         $("#crowdfundingStatus").val("RELEASED");
-        $.post('${request.contextPath}/crowdFunding/save', $("#publishCrowdFunding").serialize(), function (result) {
+        $.post('${request.contextPath}/crowdFunding/edit', $("#editCrowdFunding").serialize(), function (result) {
             if (result == "success") {
                 $.toast("发布成功");
                 window.location.href = "${request.contextPath}/crowdFunding/toMyCrowdFunding";
@@ -486,8 +506,11 @@
         if(imageUrl.lastIndexOf(".jpg")>=0){
             $("#imgUrl").val(imageUrl);
         }
+        else{
+            $("#imgUrl").val($("#crowdFundingImageUrl").attr("src"));
+        }
         $("#crowdfundingStatus").val("SKETCH");
-        $.post('${request.contextPath}/crowdFunding/save', $("#publishCrowdFunding").serialize(), function (result) {
+        $.post('${request.contextPath}/crowdFunding/edit', $("#editCrowdFunding").serialize(), function (result) {
             if (result == "success") {
                 $.toast("草稿保存成功");
                 window.location.href = "${request.contextPath}/crowdFunding/toMyCrowdFunding";
