@@ -110,6 +110,8 @@
                                 </div>
                             </div>
                         </div>
+                        <div class="imgShow" style="text-align: center">
+                        </div>
                         <textarea class="activityDesc" name="description"></textarea>
                     </li>
                 </ul>
@@ -250,6 +252,7 @@
                             <div class="item-inner">
                                 <div class="item-title label">费用名称</div>
                                 <div class="item-input">
+                                    <input type="hidden" placeholder="" name="feeIds" value="">
                                     <input type="text" placeholder="" name="feeTitle">
                                 </div>
                             </div>
@@ -437,12 +440,27 @@
                 $("input[name='imageUrlStr']").val(imageUrl);
             }else if(imageType=="ASSEMBLY_CONTENT_IMG") {
                 $("input[name='imageIdStrDesc']").val($("input[name='imageIdStrDesc']").val()+","+imageId);
+                var html='<img src="'+imageUrl+'" style="height: 5rem;width: 10rem;"/><span class="icon icon-remove" data-id="'+imageId+'"></span>'
+                $(".imgShow").append(html);
             }else if(imageType=="ASSEMBLY_CONSULTATION_IMG"){
                 $("input[name='imageIdStrCon']").val(imageId);
                 $("input[name='imageUrlStrCon']").val(imageUrl);
 
             }
 
+        });
+        $(document).on("click",".imgShow .icon-remove",function () {
+            var imageId=$(this).attr("data-id");
+            var $this=$(this);
+            $.post("${request.contextPath}/assembly/deleteImg?imageId="+imageId,function (data) {
+                if (data=="ERROR"){
+                    $.alert("删除失败，请稍候重试!");
+                }else{
+                    $this.prev("img").remove();
+                    $this.remove();
+                    $("input[name='imageIdStrDesc']").val($("input[name='imageIdStrDesc']").val().replace(imageId,""));
+                }
+            });
         });
         $(document).on('beforePageSwitch', '#routerActivityType', function(){
             var value=$('input[name="activityType"]:checked').val();
@@ -527,17 +545,18 @@
 
         var imageUrlStr=$("input[name='imageUrlStr']").val();
         var imageUrlStrCon=$("input[name='imageUrlStrCon']").val();
-        if (type== "ASSEMBLY_SHOW_IMG" ){
-            $("#imageUrl").attr("src", imageUrlStr);
-        }
-        if (type== "ASSEMBLY_CONSULTATION_IMG") {
-            $("#imageUrl").attr("src",imageUrlStrCon );
-        }
-        if (type== "ASSEMBLY_SHOW_IMG" && imageIdStr=="") {
-            $("#imageId").val("");
-            $("#imageUrl").attr("src", "");
-            $("#imageUrl").css("display", "none");
-            $('#filePicker').show();
+        if (type== "ASSEMBLY_SHOW_IMG" ) {
+            if(imageIdStr==""){
+                $("#imageId").val("");
+                $("#imageUrl").attr("src", "");
+                $("#imageUrl").css("display", "none");
+                $('#filePicker').show();
+            }else{
+                $("#imageId").val(imageIdStr);
+                $("#imageUrl").attr("src", imageUrlStr);
+                $("#imageUrl").css("display", "block");
+                $('#filePicker').show();
+            }
         }
         if (type== "ASSEMBLY_CONTENT_IMG" ) {
             $("#imageId").val("");
@@ -545,11 +564,18 @@
             $("#imageUrl").css("display", "none");
             $('#filePicker').show();
         }
-        if (type== "ASSEMBLY_CONSULTATION_IMG" && imageIdStrCon=="") {
-            $("#imageId").val("");
-            $("#imageUrl").attr("src", "");
-            $("#imageUrl").css("display", "none");
-            $('#filePicker').show();
+        if (type== "ASSEMBLY_CONSULTATION_IMG" ) {
+            if(imageIdStrCon==""){
+                $("#imageId").val("");
+                $("#imageUrl").attr("src", "");
+                $("#imageUrl").css("display", "none");
+                $('#filePicker').show();
+            }else{
+                $("#imageId").val(imageIdStrCon);
+                $("#imageUrl").attr("src", imageUrlStrCon);
+                $("#imageUrl").css("display", "block");
+                $('#filePicker').show();
+            }
         }
     }
     function  saveAssembly() {

@@ -64,7 +64,11 @@ public class AttenderServiceImpl implements AttenderService {
                 attender.setUserName(userInfo.getNickName());
                 ImageObj userImg = userService.findUserImg(attender.getUserId(), Contants.IMAGE_TYPE.USER_HEAD.toString());
                 if(userImg!=null && StringUtils.isNotEmpty(userImg.getImageId())){
-                    attender.setUserImg(userImg.getImageUrl());
+                    String headImg = userImg.getImageUrl();
+                    if(headImg.indexOf("http") == -1){//修改过头像
+                        headImg = "/time"+headImg+"_320x240.jpg";
+                    }
+                    attender.setUserImg(headImg);
                 }
             }
         }else{
