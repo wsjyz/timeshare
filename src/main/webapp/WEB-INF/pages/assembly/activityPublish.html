@@ -596,10 +596,22 @@
             $.alert("开始时间不能为空!");
             return false;
         }
+        var startNum = parseInt(startTime.replace(/-/g,''),10);
+        var endNum = parseInt(endTime.replace(/-/g,''),10);
+
         if(endTime==""){
             $.alert("结束时间不能为空!");
             return false;
         }
+        if(startNum>endNum){
+            $.alert("结束时间不能在开始时间之前！");
+            return false;
+        }
+        if( new Date() > Date.parse(startTime)){
+            $.alert("开始时间不能在当前时间之前！");
+            return false;
+        }
+
         if(description=="" && imageIdStrDesc==""){
             $.alert("活动描述不能为空!");
             return false;

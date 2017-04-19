@@ -57,6 +57,7 @@ public class AssemblyController extends  BaseController {
         model.addAttribute("type", type);
         Assembly assembly = new Assembly();
         assembly.setStatus("PUBLISHED");
+        assembly.setShowOldTime("true");
         List<Assembly> assemblyList = assemblyService.findAssemblyList(assembly, 0, 10);
         model.addAttribute("assemblyList", assemblyList);
         return "assembly/index";
@@ -80,6 +81,7 @@ public class AssemblyController extends  BaseController {
         assembly.setTitle(searchName);
         assembly.setRendezvous(citySelect);
         assembly.setStatus("PUBLISHED");
+        assembly.setShowOldTime("true");
         List<Assembly> assemblyList = assemblyService.findAssemblyList(assembly, startIndex, loadSize);
         return assemblyList;
     }
@@ -224,7 +226,7 @@ public class AssemblyController extends  BaseController {
     }
 
     @RequestMapping(value = "/to-detail")
-    public String detail(@RequestParam(value = "assemblyId", defaultValue = "") String assemblyId, Model model, HttpServletRequest request, @CookieValue(value = "time_sid", defaultValue = "admin") String userId) {
+    public String detail(@RequestParam(value = "assemblyId", defaultValue = "") String assemblyId,String type, Model model, HttpServletRequest request, @CookieValue(value = "time_sid", defaultValue = "admin") String userId) {
         Assembly assembly = assemblyService.findAssemblyById(assemblyId);
         UserInfo userInfo = getCurrentUser(userId);
         //浏览次数加1
@@ -320,7 +322,7 @@ public class AssemblyController extends  BaseController {
         model.addAttribute("commentList", commentList);
         model.addAttribute("collectionCount", list.size());
         model.addAttribute("collectionStr", collectionStr);
-
+        model.addAttribute("type",type);
         //微信jssdk相关代码
         String url = WxUtils.getUrl(request);
         Map<String, String> parmsMap = WxUtils.sign(url);
@@ -530,8 +532,7 @@ public class AssemblyController extends  BaseController {
 
     @RequestMapping("/myAssemblylist")
     @ResponseBody
-    public List<Assembly> myAssemblylist(
-                                   @RequestParam(value = "startIndex", defaultValue = "0") int startIndex, @RequestParam(value = "loadSize", defaultValue = "20") int loadSize, Model model, @CookieValue(value = "time_sid", defaultValue = "admin") String userId) {
+    public List<Assembly> myAssemblylist( @RequestParam(value = "startIndex", defaultValue = "0") int startIndex, @RequestParam(value = "loadSize", defaultValue = "20") int loadSize, @CookieValue(value = "time_sid", defaultValue = "admin") String userId) {
         Assembly assembly = new Assembly();
         assembly.setUserId(userId);
         List<Assembly> assemblyList = assemblyService.findAssemblyList(assembly, startIndex, loadSize);
@@ -558,7 +559,25 @@ public class AssemblyController extends  BaseController {
         }
         return type;
     }
-
+    @RequestMapping("/updateAssemblyStatus")
+    @ResponseBody
+    public String  updateAssemblyStatus(@RequestParam String assemblyId,Model model, @CookieValue(value = "time_sid", defaultValue = "admin") String userId) {
+        String type="";
+        try{
+            Assembly assembly = assemblyService.findAssemblyById(assemblyId);
+            if (assembly!=null){
+                assembly=new Assembly();
+                assembly.setAssemblyId(assemblyId);
+                assembly.setStatus("PUBLISHED");
+                assemblyService.modifyAssembly(assembly);
+                type="SUCCESS";
+            }
+        }catch (Exception e){
+            e.printStackTrace();
+            type="ERROR";
+        }
+        return type;
+    }
     @RequestMapping(value = "/to-result")
     public String result(@RequestParam(value = "assemblyId", defaultValue = "") String assemblyId,@RequestParam String type, Model model) {
         Assembly assembly = assemblyService.findAssemblyById(assemblyId);
@@ -628,5 +647,17 @@ public class AssemblyController extends  BaseController {
         }
         return type;
     }
+    @RequestMapping(value = "/myCollectionAssembly")
+    public String myCollectionAssembly( Model model) {
+        return "assembly/myCollectionAssembly";
+    }
 
+    @RequestMapping("/myCollectionAssemblyList")
+    @ResponseBody
+    public List<Assembly> myCollectionAssemblyList(
+            @RequestParam(value = "startIndex", defaultValue = "0") int startIndex, @RequestParam(value = "loadSize", defaultValue = "20") int loadSize, Model model, @CookieValue(value = "time_sid", defaultValue = "admin") String userId) {
+        Assembly assembly = new Assembly();
+        List<Assembly> assemblyList = assemblyService.findCollectionAssemblyList(assembly, userId,startIndex, loadSize);
+        return assemblyList;
+    }
 }

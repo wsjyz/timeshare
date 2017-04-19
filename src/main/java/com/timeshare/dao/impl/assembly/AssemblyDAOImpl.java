@@ -167,7 +167,8 @@ public class AssemblyDAOImpl extends BaseDAO implements AssemblyDAO {
         ;if (StringUtils.isNotEmpty(Assembly.getUserId())){
             sql.append(" and ass.user_id=?");
             list.add(Assembly.getUserId());
-        }else{
+        }
+        if("true".equals(Assembly.getShowOldTime())){
             sql.append(" and ass.end_time>now()");
         }
         sql.append(" order by create_time desc  limit ?,?");
@@ -227,6 +228,38 @@ public class AssemblyDAOImpl extends BaseDAO implements AssemblyDAO {
     @Override
     public int deleteAssembly(String assemblyId) {
         return getJdbcTemplate().update("delete from t_assembly where assembly_id=?",new Object[]{assemblyId});
+    }
+
+    @Override
+    public List<Assembly> findCollectionAssemblyList(Assembly Assembly, String userId, int startIndex, int loadSize) {
+        StringBuilder sql = new StringBuilder("select * from t_assembly ass left join t_collection att on att.assembly_id=ass.assembly_id  where 1=1");
+        List<Object> list=new ArrayList<Object>();
+        if (StringUtils.isNotEmpty(Assembly.getType())){
+            sql.append(" and ass.type=?");
+            list.add(Assembly.getType());
+        }
+        if (StringUtils.isNotEmpty(Assembly.getStatus())){
+            sql.append(" and ass.status=?");
+            list.add(Assembly.getStatus());
+        }
+        if (StringUtils.isNotEmpty(Assembly.getTitle())){
+            sql.append(" and ass.title like ?");
+            list.add("%"+Assembly.getTitle()+"%");
+        }
+        if (StringUtils.isNotEmpty(Assembly.getRendezvous())){
+            sql.append(" and ass.rendezvous like ?");
+            list.add("%"+Assembly.getRendezvous()+"%");
+        }
+        ;if (StringUtils.isNotEmpty(Assembly.getUserId())){
+            sql.append(" and ass.user_id=?");
+            list.add(Assembly.getUserId());
+        }
+        sql.append(" and att.user_id=? ");
+        list.add(userId);
+        sql.append(" limit ?,?");
+        list.add(startIndex);
+        list.add(loadSize);
+        return getJdbcTemplate().query(sql.toString(),list.toArray(),new AssemblyRowMapper());
     }
 
     class AssemblyRowMapper implements RowMapper<Assembly>{

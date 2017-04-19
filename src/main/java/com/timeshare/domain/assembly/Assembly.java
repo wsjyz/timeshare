@@ -53,6 +53,15 @@ public class Assembly extends BaseDomain{
     private String contentImgUrls;
     private String consultationImgId;
     private String feeIds;
+    private String showOldTime;
+
+    public void setShowOldTime(String showOldTime) {
+        this.showOldTime = showOldTime;
+    }
+
+    public String getShowOldTime() {
+        return showOldTime;
+    }
 
     public void setFeeIds(String feeIds) {
         this.feeIds = feeIds;

@@ -22,4 +22,5 @@ public interface AssemblyService {
     List<Assembly> findSignAssemblyList(Assembly Assembly,String userId, int startIndex, int loadSize);
     int deleteAssembly(String assemblyId);
 
+    List<Assembly> findCollectionAssemblyList(Assembly assembly, String userId, int startIndex, int loadSize);
 }
