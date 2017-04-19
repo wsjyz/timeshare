@@ -18,7 +18,7 @@
       <div class="page" id="routerresultContent">
           <div class="resultContentHeader successHeader header" style="background-color: #fff;">
               <h1 class="title">强制下架</h1>
-              <a class="button button-link button-nav back pull-left" external href="${request.contextPath}/assembly/myAssembly">
+              <a class="button button-link button-nav back pull-left" external href="javaScript:void(0)" onclick="back()">
                   <span class="icon icon-left"></span>
                   返回
               </a>
@@ -57,6 +57,13 @@
                     }
                 }
             })
+        }
+        function  back() {
+            if("${type}"=="MYASSEMBLY"){
+                location.href="${request.contextPath}/assembly/myAssembly";
+            }else{
+                location.href="${request.contextPath}/assembly/assemblyList";
+            }
         }
         $.init();
     </script>
