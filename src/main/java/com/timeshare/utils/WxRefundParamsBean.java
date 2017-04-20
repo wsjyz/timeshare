@@ -39,6 +39,12 @@ public class WxRefundParamsBean {
     //操作员	op_user_id	是	String(32)	1900000109	操作员帐号, 默认为商户号
     private String op_user_id;
 
+    //退款资金来源	refund_account	否	String(30)	REFUND_SOURCE_RECHARGE_FUNDS
+    //仅针对老资金流商户使用
+    //REFUND_SOURCE_UNSETTLED_FUNDS---未结算资金退款（默认使用未结算资金退款）
+    //REFUND_SOURCE_RECHARGE_FUNDS---可用余额退款(限非当日交易订单的退款）
+    private String refund_account;
+
 
     public String getAppid() {
         return appid;
@@ -118,6 +124,14 @@ public class WxRefundParamsBean {
 
     public void setOp_user_id(String op_user_id) {
         this.op_user_id = op_user_id;
+    }
+
+    public String getRefund_account() {
+        return refund_account;
+    }
+
+    public void setRefund_account(String refund_account) {
+        this.refund_account = refund_account;
     }
 }
 
