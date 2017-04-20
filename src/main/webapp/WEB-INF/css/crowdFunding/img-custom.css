@@ -1,0 +1,70 @@
+body{font-family: Arial, Helvetica, sans-serif;}
+.title {
+    color: #fff;
+    font-weight: 500;
+    font-size: 1.1rem;
+}
+.header {
+    background-image: url(../../images/assembly/headerBg.jpg);
+    background-size: cover;
+}
+.back {
+    border: none;
+    color: white;
+    margin-top: 0.4rem;
+}
+.activityPublishHeader{
+    background-image: none;
+    background-color: #fff;
+    height: 2.2rem;
+    line-height:2.2rem;
+    padding-bottom:.2rem;
+    padding-right:.5rem;
+}
+.activityPublishHeader .title{
+    color:#23232f;
+    font-weight: 900;
+}
+.activityPublishHeader .button-link{
+    color:#9ca0b3;
+    font-size:.8rem;
+    position: relative;
+    font-weight: bold;
+    top:.2rem;
+    padding-left:.1rem;
+}
+.activityPublishHeader .button-link .icon-left{
+    color:#9ca0b3;
+    position: relative;
+    top:-0.05rem;
+    font-size:.6rem;
+}
+.activityPublishHeader a.button-link.pull-left{
+    color:#23232f;
+
+}
+.activityPublishContent{
+    top:2.2rem;background-color: #eeeff4;
+}
+.activityPublishHeader .button-link.publish,
+.activityPublishHeader .button-link.finishCustomOne
+{
+    padding-left:.2rem;
+    padding-right:.2rem;
+    height:1.3rem;
+    width:2.8rem;
+    font-size:.75rem;
+    border-radius: 0;
+}
+.activityPublishHeader .button-link.publish{
+    background-color:#d3d9e5;
+}
+.activityPublishContent .list-block{
+    margin-top:0;
+}
+a.subjectPicture{
+    color:#7e859f;
+}
+a.pull-right{
+    color:#000;
+}

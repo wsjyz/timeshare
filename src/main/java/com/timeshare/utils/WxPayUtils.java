@@ -120,6 +120,9 @@ public class WxPayUtils {
 
         xmlParams.setOp_user_id(Contants.MCHID);
         parameters.put("op_user_id",Contants.MCHID);
+        //使用余额来退款，当日交易不可退款，次日进行退款
+        xmlParams.setRefund_account("REFUND_SOURCE_RECHARGE_FUNDS");
+        parameters.put("refund_account","REFUND_SOURCE_RECHARGE_FUNDS");
 
 
         String sign = WxUtils.createSign(parameters,Contants.KEY);

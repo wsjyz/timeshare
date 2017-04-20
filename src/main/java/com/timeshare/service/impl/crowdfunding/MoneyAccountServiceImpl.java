@@ -41,6 +41,15 @@ public class MoneyAccountServiceImpl implements MoneyAccountService {
                return moneyAccountDAO.updateMoneyAccount(moneyAccount);
            }
            else{
+               if(moneyAccount.getCashWithdrawalAmount()==null){
+                   moneyAccount.setCashWithdrawalAmount(new BigDecimal(0));
+               }
+               if(moneyAccount.getCashRaisedAmount()==null){
+                   moneyAccount.setCashRaisedAmount(new BigDecimal(0));
+               }
+               if(moneyAccount.getMonthWithdrawalNumber()==null){
+                   moneyAccount.setMonthWithdrawalNumber(0);
+               }
                return moneyAccountDAO.saveMoneyAccount(moneyAccount);
            }
         }

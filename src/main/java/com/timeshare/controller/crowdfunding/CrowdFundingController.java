@@ -107,7 +107,7 @@ public class CrowdFundingController extends  BaseController{
     //保存众筹
     @ResponseBody
     @RequestMapping(value = "/save")
-    public String save(CrowdFunding crowdFunding, @RequestParam String imgUrl,@CookieValue(value="time_sid", defaultValue="00359e8721c44d168aac7d501177e314") String userId, Model model) {
+    public String save(CrowdFunding crowdFunding, @RequestParam(required =  false) String imgUrl,@CookieValue(value="time_sid", defaultValue="00359e8721c44d168aac7d501177e314") String userId, Model model) {
         try{
             if(crowdFunding!=null && StringUtils.isNotBlank(crowdFunding.getProjectName())){
                 boolean isExisting=crowdFundingService.crowdFundingPrjectNameIsExisting(crowdFunding.getProjectName());
@@ -120,15 +120,17 @@ public class CrowdFundingController extends  BaseController{
                     //保存众筹
                     String pk= crowdFundingService.saveCrowdFunding(crowdFunding);
 
-                    ImageObj obj = new ImageObj();
-                    obj.setObjId(pk);
-                    if(imgUrl.indexOf("images") != -1){
-                        imgUrl = imgUrl.substring(imgUrl.indexOf("images") - 1,imgUrl.indexOf("_"));
+                    if(StringUtils.isNotBlank(imgUrl)){
+                        ImageObj obj = new ImageObj();
+                        obj.setObjId(pk);
+                        if(imgUrl.indexOf("images") != -1){
+                            imgUrl = imgUrl.substring(imgUrl.indexOf("images") - 1,imgUrl.indexOf("_"));
+                        }
+                        obj.setImageUrl(imgUrl);
+                        obj.setImageType(Contants.IMAGE_TYPE.CROWD_FUNDING_IMG.name());
+                        //保存众筹图片
+                        userService.saveOrUpdateImg(obj);
                     }
-                    obj.setImageUrl(imgUrl);
-                    obj.setImageType(Contants.IMAGE_TYPE.CROWD_FUNDING_IMG.name());
-                    //保存众筹图片
-                    userService.saveOrUpdateImg(obj);
                     return Contants.SUCCESS;
                 }
                 else{
@@ -164,15 +166,17 @@ public class CrowdFundingController extends  BaseController{
                 //保存众筹
                 String pk= crowdFundingService.editCrowdFunding(crowdFunding);
 
-                ImageObj obj = new ImageObj();
-                obj.setObjId(pk);
-                if(imgUrl.indexOf("images") != -1){
-                    imgUrl = imgUrl.substring(imgUrl.indexOf("images") - 1,imgUrl.indexOf("_"));
+                if(StringUtils.isNotBlank(imgUrl)){
+                    ImageObj obj = new ImageObj();
+                    obj.setObjId(pk);
+                    if(imgUrl.indexOf("images") != -1){
+                        imgUrl = imgUrl.substring(imgUrl.indexOf("images") - 1,imgUrl.indexOf("_"));
+                    }
+                    obj.setImageUrl(imgUrl);
+                    obj.setImageType(Contants.IMAGE_TYPE.CROWD_FUNDING_IMG.name());
+                    //保存众筹图片
+                    userService.saveOrUpdateImg(obj);
                 }
-                obj.setImageUrl(imgUrl);
-                obj.setImageType(Contants.IMAGE_TYPE.CROWD_FUNDING_IMG.name());
-                //保存众筹图片
-                userService.saveOrUpdateImg(obj);
                 return Contants.SUCCESS;
 
             }

@@ -148,6 +148,37 @@ public class CrowdFundingDAOImpl extends BaseDAO implements CrowdFundingDAO {
 
         return getJdbcTemplate().query(sql.toString(),new Object[]{},new CrowdFundingRowMapper());
     }
+    public List<CrowdFunding> findCrowdFundingDetailByCrowdfundingId(String crowdfundingId) {
+        StringBuilder sql = new StringBuilder("select count(e.enroll_id) enroll_count,o.image_url,o2.image_url user_head_image_url,c.* ");
+        sql.append("from t_crowdfunding c ");
+        sql.append("left join t_enroll e ");
+        sql.append("on c.crowdfunding_id=e.crowdfunding_id ");
+        sql.append("and e.pay_status='PAYED' ");
+        sql.append("left join t_img_obj o ");
+        sql.append("on c.crowdfunding_id=o.obj_id ");
+        sql.append("and o.image_type='CROWD_FUNDING_IMG' ");
+        sql.append("left join t_img_obj o2 ");
+        sql.append("on c.user_id=o2.obj_id ");
+        sql.append("and o2.image_type='USER_HEAD' ");
+
+        sql.append("where 1=1 ");
+
+        if(StringUtils.isNotBlank(crowdfundingId)){
+            sql.append("and c.crowdfunding_id='"+crowdfundingId+"'");
+        }
+
+
+        sql.append("group by c.crowdfunding_id ");
+        sql.append("order by c.create_time desc ");
+
+
+
+
+        return getJdbcTemplate().query(sql.toString(),new Object[]{},new CrowdFundingRowMapper());
+    }
+
+
+
     public List<CrowdFunding> findCrowdFundingToMyCrowdFunding(int startIndex, int loadSize,String userId) {
         StringBuilder sql = new StringBuilder("select count(e.enroll_id) enroll_count,o.image_url,c.* ");
         sql.append("from t_crowdfunding c ");

@@ -69,7 +69,7 @@ public class CrowdFundingServiceImpl implements CrowdFundingService {
     }
     //众筹详情页
     public CrowdFunding findCrowdFundingDetailByCrowdfundingId(String crowdfundingId){
-        List<CrowdFunding> crowdFundingList=crowdFundingDAO.findCrowdFundingToIndex(0,1,crowdfundingId,null);
+        List<CrowdFunding> crowdFundingList=crowdFundingDAO.findCrowdFundingDetailByCrowdfundingId(crowdfundingId);
         if(crowdFundingList!=null && crowdFundingList.size()>0){
             return crowdFundingList.get(0);
         }
