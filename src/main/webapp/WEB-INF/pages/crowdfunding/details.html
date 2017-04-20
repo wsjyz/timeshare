@@ -31,7 +31,7 @@
         </header>
         <!--header end-->
         <nav class="bar bar-tab signup">
-            <#if (crowdFunding.enrollCount!0 >= crowdFunding.maxPeoples)>
+            <#if (crowdFunding.enrollCount >= crowdFunding.maxPeoples)>
                 <span class="cost">名额已满</span>
                 <#else>
                     <a href="${request.contextPath}/enroll/yy?crowdFundingId=${crowdFunding.crowdfundingId}&enrollId="
@@ -49,7 +49,7 @@
                     <div class="zc-text">
                         <div class="zc-name">
                             <em class="tag">
-                                <#if (crowdFunding.enrollCount!0 >= crowdFunding.maxPeoples)>
+                                <#if (crowdFunding.enrollCount >= crowdFunding.maxPeoples)>
                                     已爆仓
                                 <#else>
                                     报名中
@@ -58,7 +58,7 @@
                             ${crowdFunding.projectName!}
                         </div>
                         <div class="zc-info">
-                            <span class="time"><i class="i-time"></i>上课时间:${crowdFunding.curriculumEndTime!}</span>
+                            <span class="time"><i class="i-time"></i>上课时间:${crowdFunding.curriculumStartTime!}</span>
                             <span class="address"><i class="i-address"></i>${crowdFunding.sponsorCity!}</span>
                         </div>
                         <div class="dashed-line"></div>
@@ -79,7 +79,7 @@
                                 </#if>
                             </div>
                             <div class="col-50">目前人均价:
-                                <#if crowdFunding.costType=='AA'>
+                                <#if crowdFunding.costType=='FIXED_PRICE'>
                                     ${crowdFunding.costTotal!}
                                     <#else>
                                         <#if crowdFunding.enrollCount==0>
