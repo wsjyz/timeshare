@@ -68,7 +68,6 @@ public class AssemblyServiceImpl implements AssemblyService {
         if(!CollectionUtils.isEmpty(imageObjList)){
             List<ImageObj> contentImageList=new ArrayList<ImageObj>();
             String imageId="";
-            String imgUrl="";
             for (ImageObj imageObj:imageObjList){
                 if (imageObj.getImageType().equals(Contants.IMAGE_TYPE.ASSEMBLY_SHOW_IMG.toString())){
                     assembly.setTitleImg("/time"+imageObj.getImageUrl()+"_320x240.jpg");

@@ -19,16 +19,13 @@
     <div class="page page-current" id="routerActivityPublish">
         <div class="activityPublishHeader header">
             <h1 class="title">活动发布</h1>
-            <a class="button button-link button-nav back pull-left" external href="${request.contextPath}/assembly/to-index">
-                <span class="icon icon-left"></span>
-                返回
-            </a>
+            <a class="button button-link button-nav back pull-left"><span class="icon icon-left"></span></a>
             <a class="button button-link button-nav back pull-right publish"  external href="javaScript:void(0)" onclick="saveAssembly()">
                 发布
             </a>
-            <!--<a class="button button-link button-nav back pull-right "  external href="${request.contextPath}/assembly/to-index">-->
-                <!--预览-->
-            <!--</a>-->
+            <a class="button button-link button-nav  pull-right" style="border: none;margin-top: 0.4rem;" href="#viewAssembly" onclick="viewAssembly()" >
+                预览
+            </a>
         </div>
         <div class="content activityPublishContent">
             <form id="saveAssemblyForm" name="saveAssemblyForm" type="post">
@@ -387,13 +384,88 @@
             </div>
         </div>
     </div>
+    <div class="page" id="viewAssembly">
+        <div class="activityPublishHeader header">
+            <h1 class="title">活动预览</h1>
+            <a class="button button-link button-nav back pull-left">
+                <span class="icon icon-left"></span>
+                返回
+            </a>
+            <a class="button button-link button-nav back pull-right publish" onclick="saveSetting()">
+                完成
+            </a>
+        </div>
+
+        <div class="content activityContent">
+                <div class="content-block">
+                    <img class="fullWidth" src=""  id="titleImg" />
+                    <h4 class="activityTitle"></h4>
+                    <div class="activityDesc">
+                        <span id="createTime"></span>
+                        <img class="eyeImg" src="${request.contextPath}/images/assembly/icon/eye.svg" />
+                        <span class="viewNum">0</span>
+                    </div>
+                    <div class="activityRow">
+                        <img class="clockImg"  src="${request.contextPath}/images/assembly/icon/clock.png"/>
+                        <span id="viewTime"></span>
+                    </div>
+                    <div class="activityRow">
+                        <img src="${request.contextPath}/images/assembly/icon/type.png" />
+                           <span id="assemblyTypeText">线上活动</span>
+                    </div>
+                    <div class="activityRow">
+                        <img src="${request.contextPath}/images/assembly/icon/human.png" />
+                        <span>已报名0人</span>
+                    </div>
+                    <div class="activityRow">
+                        <img src="${request.contextPath}/images/assembly/icon/type.png" />
+                        <span id="rendezvous"></span>
+                    </div>
+
+                    <div class="activityRow">
+                        <img class="moneyImg" src="${request.contextPath}/images/assembly/icon/money.png" />
+                        <span class="money">0 - 0</span>
+                    </div>
+
+                    <div class="userRow">
+                        <img class="userPhoto" src="${userInfo.headImgPath}" align="left" style="border-radius:35px"/>
+                        <span class="userName">${userInfo.nickName}</span>
+                        <span class="darkBg">主办方</span>
+                    </div>
+
+                    <div class="activityDetailWrap" style="height: 18.8rem;z-index:2;position:relative;overflow: hidden;">
+                        <div class="activityDetail">
+                            <div class="imgShowText" style="text-align: center">
+                            <div id="description"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
 <script type='text/javascript' src='${request.contextPath}/js/zepto.min.js' charset='utf-8'></script>
 <script type='text/javascript' src='${request.contextPath}/js/upload.js?v=20160720-2' charset='utf-8'></script>
 <script type='text/javascript' src='http://g.alicdn.com/msui/sm/0.6.2/js/sm.min.js' charset='utf-8'></script>
 <script type='text/javascript' src='http://g.alicdn.com/msui/sm/0.6.2/js/sm-extend.min.js' charset='utf-8'></script>
 <script type='text/javascript' src='${request.contextPath}/js/assembly/main.js' charset='utf-8'></script>
-
+<style>
+    .activityRow {
+        color: #40445e;
+        vertical-align: top;
+        padding-left: 1.8rem;
+        height: 1.6rem;
+        line-height: 1.6rem;
+        position: relative;
+        font-size: .75rem;
+    }
+    .activityRow img {
+        width: 1rem;
+        position: absolute;
+        left: 0.8rem;
+        top: .2rem;
+    }
+</style>
 <script>
     $(function(){
         $(".datetimePickerStartTime").click(function(){
@@ -435,19 +507,22 @@
             var imageId = $('#imageId').val();
             var imageType= $('#imageType').val();
             var imageUrl=$('#imageUrl')[0].src;
-            if(imageType=="ASSEMBLY_SHOW_IMG"){
-                $("input[name='imageIdStr']").val(imageId);
-                $("input[name='imageUrlStr']").val(imageUrl);
-            }else if(imageType=="ASSEMBLY_CONTENT_IMG") {
-                $("input[name='imageIdStrDesc']").val($("input[name='imageIdStrDesc']").val()+","+imageId);
-                var html='<img src="'+imageUrl+'" style="height: 5rem;width: 10rem;"/><span class="icon icon-remove" data-id="'+imageId+'"></span>'
-                $(".imgShow").append(html);
-            }else if(imageType=="ASSEMBLY_CONSULTATION_IMG"){
-                $("input[name='imageIdStrCon']").val(imageId);
-                $("input[name='imageUrlStrCon']").val(imageUrl);
-
+            if(imageId!=""){
+                if(imageType=="ASSEMBLY_SHOW_IMG"){
+                    $("input[name='imageIdStr']").val(imageId);
+                    $("input[name='imageUrlStr']").val(imageUrl);
+                    $("#titleImg").attr("src",imageUrl);
+                }else if(imageType=="ASSEMBLY_CONTENT_IMG") {
+                        $("input[name='imageIdStrDesc']").val($("input[name='imageIdStrDesc']").val()+","+imageId);
+                        var html='<img src="'+imageUrl+'" style="height: 5rem;width: 10rem;"/><span class="icon icon-remove" data-id="'+imageId+'"></span>'
+                        $(".imgShow").append(html);
+                        var htmlText='<img src="'+imageUrl+'" style="width: 100%;"/>'
+                        $(".imgShowText").append(htmlText);
+                }else if(imageType=="ASSEMBLY_CONSULTATION_IMG"){
+                    $("input[name='imageIdStrCon']").val(imageId);
+                    $("input[name='imageUrlStrCon']").val(imageUrl);
+                }
             }
-
         });
         $(document).on("click",".imgShow .icon-remove",function () {
             var imageId=$(this).attr("data-id");
@@ -465,16 +540,22 @@
         $(document).on('beforePageSwitch', '#routerActivityType', function(){
             var value=$('input[name="activityType"]:checked').val();
             var assemblyType="";
+            var assemblyTypeText="";
             if(value=="1"){
-                assemblyType="online"
+                assemblyType="online";
+                assemblyTypeText="线上活动"
             }else if(value=="2"){
                 assemblyType="face";
+                assemblyTypeText="线下活动"
             }else if(value=="3"){
                 assemblyType="train";
+                assemblyTypeText="培训分享"
             }else if(value=="4"){
                 assemblyType="company";
+                assemblyTypeText="企业参访"
             }
             $('input[name="assemblyType"]').val(assemblyType)
+            $("#assemblyTypeText").html(assemblyTypeText)
         });
         //添加费用项
         $('.addFeeItem').click(function(){
@@ -504,12 +585,30 @@
             $.alert("名额限制不能为空!");
             return false;
         }
+        var minMoney=0;
+        var maxMoney=0;
+        $("input[name='feeStr']").each(function (data) {
+            var money=$(this).val();
+            if(minMoney==0){
+                minMoney=money;
+            }
+            if(maxMoney==0){
+                maxMoney=money;
+            }
+            if(money<minMoney){
+                minMoney=money;
+            }
+            if(money>maxMoney){
+                maxMoney=money;
+            }
+        })
         var params=$("#addFee").serialize();
         $.post("${request.contextPath}/assembly/saveFee",params,function (data) {
             if(data=="ERROR"){
                 $.alert("保存失败，请稍后再试!");
             }else{
-                $('input[name="feeId"]').val(data)
+                $('input[name="feeId"]').val(data);
+                $(".money").html(minMoney+"-"+maxMoney);
             }
         })
     };
@@ -579,7 +678,7 @@
         }
     }
     function  saveAssembly() {
-        $("input[name='rendezvous']").val($(".citySelect").val()+$("input[name='rendezvous']").val());
+
         var assemblyTitle=$("input[name='assemblyTitle']").val();
         var startTime=$("input[name='startTime']").val();
         var endTime=$("input[name='endTime']").val();
@@ -611,7 +710,15 @@
             $.alert("开始时间不能在当前时间之前！");
             return false;
         }
-
+        var rendevous=$("input[name='rendezvous']").val();
+        if(rendevous==""){
+            $.alert("活动地址不能为空!");
+            return false;
+        }
+        var city=$(".citySelect").val();
+        if(rendevous.indexOf(city)==-1){
+            $("input[name='rendezvous']").val(city+rendevous);
+        }
         if(description=="" && imageIdStrDesc==""){
             $.alert("活动描述不能为空!");
             return false;
@@ -641,12 +748,64 @@
             }
         })
     }
-        Zepto(function($) {
-            var imageId = $('#imageId').val();
-            if(imageId != ''){
-                $('#imageUrl').css('display','block');
-            }
-        });
+    function  viewAssembly () {
+
+        var assemblyTitle=$("input[name='assemblyTitle']").val();
+        var startTime=$("input[name='startTime']").val();
+        var endTime=$("input[name='endTime']").val();
+        var description=$("textarea[name='description']").val();
+        var rendevous=$("input[name='rendezvous']").val();
+        var city=$(".citySelect").val();
+        $(".activityTitle").html(assemblyTitle);
+        $("#description").html(description);
+        var dt = new Date();
+        var year =dt.getFullYear();
+        var month =dt.getMonth()+1;
+        if(month<10) month='0'+month;
+        var day = dt.getDate();
+        if(day<10) day='0'+day;
+        var hour =dt.getHours();
+        if(hour<10) hour='0'+hour;
+        var minute= dt.getMinutes();
+        if(minute<10)minute='0'+minute;
+        $("#createTime").html(month+"月"+day+"日"+hour+"时"+minute+"分");
+        if(rendevous.indexOf(city)==-1){
+            $("#rendezvous").html("地址："+city+rendevous);
+        }else{
+            $("#rendezvous").html("地址："+rendevous);
+        }
+        if(startTime!="" && endTime!=""){
+            dt = new Date(startTime);
+            year =dt.getFullYear();
+            month =dt.getMonth()+1;
+            if(month<10) month='0'+month;
+            day = dt.getDate();
+            if(day<10) day='0'+day;
+            hour =dt.getHours();
+            if(hour<10) hour='0'+hour;
+            minute= dt.getMinutes();
+            if(minute<10)minute='0'+minute;
+            var startTimeText=month+"月"+day+"日"+hour+"时"+minute+"分";
+            dt = new Date(endTime);
+            year =dt.getFullYear();
+            month =dt.getMonth()+1;
+            if(month<10) month='0'+month;
+            day = dt.getDate();
+            if(day<10) day='0'+day;
+            hour =dt.getHours();
+            if(hour<10) hour='0'+hour;
+            minute= dt.getMinutes();
+            if(minute<10)minute='0'+minute;
+            var endTimeText=month+"月"+day+"日"+hour+"时"+minute+"分";
+            $("#viewTime").html(startTimeText+" 至 "+endTimeText);
+        }
+    }
+    Zepto(function($) {
+        var imageId = $('#imageId').val();
+        if(imageId != ''){
+            $('#imageUrl').css('display','block');
+        }
+    });
     $("#saveImgBtn").on('click', function () {
         var imageId = $('#imageId').val();
         var imageType= $('#imageType').val();

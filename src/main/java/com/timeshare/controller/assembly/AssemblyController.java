@@ -53,11 +53,14 @@ public class AssemblyController extends  BaseController {
 
     @RequestMapping(value = "/to-index")
     public String index(@RequestParam(value = "searchName", defaultValue = "") String searchName,
-                        @RequestParam(value = "type", defaultValue = "online") String type, Model model) {
+                        @RequestParam(value = "type", defaultValue = "online") String type, Model model, @CookieValue(value = "time_sid", defaultValue = "admin") String userId) {
         model.addAttribute("type", type);
         Assembly assembly = new Assembly();
         assembly.setStatus("PUBLISHED");
         assembly.setShowOldTime("true");
+        UserInfo userInfo = getCurrentUser(userId);
+        model.addAttribute("userInfo",userInfo);
+
         List<Assembly> assemblyList = assemblyService.findAssemblyList(assembly, 0, 10);
         model.addAttribute("assemblyList", assemblyList);
         return "assembly/index";
@@ -87,7 +90,9 @@ public class AssemblyController extends  BaseController {
     }
 
     @RequestMapping(value = "/to-add")
-    public String add() {
+    public String add(@CookieValue(value = "time_sid", defaultValue = "admin") String userId,Model model) {
+        UserInfo userInfo = getCurrentUser(userId);
+        model.addAttribute("userInfo",userInfo);
         return "assembly/activityPublish";
     }
 
@@ -101,16 +106,17 @@ public class AssemblyController extends  BaseController {
             String[] fees = feeStr.split(",");
             String[] quotas = quota.split(",");
             for (int i = 0; i < feeTitles.length; i++) {
-
                 Fee fee = new Fee();
                 fee.setFeeTitle(feeTitles[i]);
                 fee.setFee(new BigDecimal(fees[i]));
                 fee.setQuota(Integer.parseInt(quotas[i]));
                 String feeId="";
-                if (StringUtils.isNotEmpty(feeIdStr[i])){
-                    feeId=feeIdStr[i];
-                    fee.setFeeId(feeId);
-                    feeService.modifyFee(fee);
+                if (feeIdStr.length>0){
+                    if(StringUtils.isNotEmpty(feeIdStr[i])){
+                        feeId=feeIdStr[i];
+                        fee.setFeeId(feeId);
+                        feeService.modifyFee(fee);
+                    }
                 }else{
                     feeId = feeService.saveFee(fee);
                 }
@@ -631,7 +637,29 @@ public class AssemblyController extends  BaseController {
     @RequestMapping(value = "/to-update")
     public String updateAssembly(@RequestParam(value = "assemblyId", defaultValue = "") String assemblyId, Model model, HttpServletRequest request, @CookieValue(value = "time_sid", defaultValue = "admin") String userId) {
         Assembly assembly = assemblyService.findAssemblyById(assemblyId);
-         model.addAttribute("assembly", assembly);
+        BigDecimal minMoney = new BigDecimal(0);
+        BigDecimal maxMoney = new BigDecimal(0);
+        if (!CollectionUtils.isEmpty(assembly.getFeeList())) {
+            for (Fee fee : assembly.getFeeList()) {
+                if (minMoney.compareTo(new BigDecimal(0)) == 0) {
+                    minMoney = fee.getFee();
+                }
+                if (maxMoney.compareTo(new BigDecimal(0)) == 0) {
+                    maxMoney = fee.getFee();
+                }
+                if (fee.getFee().compareTo(minMoney) < 0) {
+                    minMoney = fee.getFee();
+                }
+                if (fee.getFee().compareTo(maxMoney) > 0) {
+                    maxMoney = fee.getFee();
+                }
+            }
+        }
+        UserInfo userInfo = getCurrentUser(userId);
+        model.addAttribute("userInfo",userInfo);
+        model.addAttribute("minMoney", minMoney);
+        model.addAttribute("maxMoney", maxMoney);
+        model.addAttribute("assembly", assembly);
         return "assembly/updateActivity";
     }
     @RequestMapping("/deleteImg")

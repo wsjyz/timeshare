@@ -20,11 +20,8 @@
         <div class="page page-current" id="routerCommentPublish">
             <div class="activityPublishHeader myActivityHeader header">
                 <h1 class="title">我发起的活动</h1>
-                <a class="button button-link button-nav back pull-left" external href="${request.contextPath}/assembly/to-index">
-                    <span class="icon icon-left"></span>
-                </a>
+                <a class="button button-link button-nav back pull-left"><span class="icon icon-left"></span></a>
             </div>
-
             <div>
                 <div class="content myActivityContent infinite-scroll infinite-scroll-bottom" data-distance="100">
                     <div class="list-block">
@@ -254,12 +251,14 @@
                     bold: true,
                     color: 'danger',
                     onClick: function() {
-                        $.post("${request.contextPath}/assembly/deleteAssembly?assemblyId="+assemblyId,function (data) {
-                            if (data=="ERROR"){
-                                $.alert("删除失败，请稍候重试!");
-                            }else{
-                                window.location.href="${request.contextPath}/assembly/myAssembly";
-                            }
+                        $.confirm("确定要删除吗？",function (data) {
+                            $.post("${request.contextPath}/assembly/deleteAssembly?assemblyId="+assemblyId,function (data) {
+                                if (data=="ERROR"){
+                                    $.alert("删除失败，请稍候重试!");
+                                }else{
+                                    window.location.href="${request.contextPath}/assembly/myAssembly";
+                                }
+                            });
                         });
                     }
                 },

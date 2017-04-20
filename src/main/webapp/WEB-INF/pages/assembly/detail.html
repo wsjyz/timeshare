@@ -95,7 +95,7 @@
                       <#elseif assembly.type=="train">
                           <span>培训分享</span>
                       <#elseif assembly.type=="company">
-                          <span>企业参考</span>
+                          <span>企业参访</span>
                       </#if>
                   </div>
                   <div class="activityRow">
@@ -121,7 +121,7 @@
                   <div class="activityDetailWrap" style="height: 18.8rem;z-index:2;position:relative;overflow: hidden;">
                       <div class="activityDetail">
                           <#list assembly.contentImgList as contentImg>
-                              <img src="${contentImg.contentImg}" class="fullWidth"  />
+                              <img src="${contentImg.imageUrl}" class="fullWidth"  />
                           </#list>
                           <div>${assembly.description}</div>
                       </div>
@@ -414,16 +414,7 @@
                     '</div>',
                     text: ''+
                     '  <div class="list-block"><ul>' +
-                    text+
-                    '<li>' +
-                    '   <div class="item-content">'+
-                    '       <div class="item-media"></div>'+
-                    '       <div class="item-inner agree">'+
-                    '       我同意XXX协议'+
-                    '       </div>'+
-                    '   </div>'+
-                    '</li>' +
-                    '</ul></div>',
+                    text+'</ul></div>',
                     buttons: [
                         {
                             text: '下一步',

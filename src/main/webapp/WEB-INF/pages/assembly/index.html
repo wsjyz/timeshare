@@ -69,12 +69,13 @@
                   <label class="icon icon-search" for="search"></label>
               </div>
           </div>
-
-          <nav class="bar bar-tab indexBottom">
-              <a class="tab-item external" href="javaScript:void(0)" onclick="toAdd()">
-                  <img class="addActivityImg" src="${request.contextPath}/images/assembly/addActivity.png" />
-              </a>
-          </nav>
+          <#if userInfo.acountType=="VIP">
+              <nav class="bar bar-tab indexBottom">
+                  <a class="tab-item external" href="javaScript:void(0)" onclick="toAdd()">
+                      <img class="addActivityImg" src="${request.contextPath}/images/assembly/addActivity.png" />
+                  </a>
+              </nav>
+          </#if>
               <div class="indexContent content infinite-scroll  infinite-scroll-bottom " data-ptr-distance="100">
                   <div class="content-block">
                       <div class="swiper-container">
@@ -168,8 +169,8 @@
         })
         $.init();
         function toAdd() {
-//            var backUrl = 'http://jk.zhangqidong.cn'+'${request.contextPath}/assembly/to-add';
-//            window.location.href = '${request.contextPath}/wx/to-get-open-id?backUrl='+encodeURIComponent(backUrl);
+           //  var backUrl = 'http://jk.zhangqidong.cn'+'${request.contextPath}/assembly/to-add';
+            // window.location.href = '${request.contextPath}/wx/to-get-open-id?backUrl='+encodeURIComponent(backUrl);
             window.location.href = '${request.contextPath}/assembly/to-add';
         }
         function  checkTab(type) {
