@@ -170,7 +170,7 @@ select::-ms-expand {
 }
 
 .content-block {
-    padding: 0;
+    /*padding: 0;*/
     margin: 0;
     background-color: #fff;
 }
