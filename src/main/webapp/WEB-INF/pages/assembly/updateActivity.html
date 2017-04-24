@@ -485,7 +485,7 @@
                     <span class="darkBg">主办方</span>
                 </div>
 
-                <div class="activityDetailWrap" style="height: 18.8rem;z-index:2;position:relative;overflow: hidden;">
+                <div class="activityDetailWrap" style="height: 18.8rem;z-index:2;position:relative;">
                     <div class="activityDetail">
                         <div class="imgShowText" style="text-align: center">
                             <#list assembly.contentImgList as contentImg>
@@ -812,6 +812,10 @@
         var city=$(".citySelect").val();
         $(".activityTitle").html(assemblyTitle);
         $("#description").html(description);
+        var imageTitle=$("input[name='imageUrlStr']").val();
+        if(imageTitle==""){
+            $("#titleImg").attr("src","${request.contextPath}/images/assembly/default_tImage.jpg");
+        }
         var dt = new Date();
         var year =dt.getFullYear();
         var month =dt.getMonth()+1;
@@ -851,7 +855,9 @@
             minute= dt.getMinutes();
             if(minute<10)minute='0'+minute;
             var endTimeText=month+"月"+day+"日"+hour+"时"+minute+"分";
-            $("#viewTime").html(startTimeText+" 至 "+endTimeText);
+            if(startTimeText.indexOf("NaN")==-1 && endTimeText.indexOf("NaN")==-1) {
+                $("#viewTime").html(startTimeText+" 至 "+endTimeText);
+            }
         }
     }
         Zepto(function($) {

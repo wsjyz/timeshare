@@ -75,7 +75,11 @@
               <div class="content-block">
                   <input type="hidden" name="feeId" value="">
                   <input type="hidden" name="price" value="">
-                  <img class="fullWidth" src="${assembly.titleImg}"  />
+                  <#if assembly.titleImg=="">
+                      <img class="fullWidth" src="${request.contextPath}/images/assembly/default_tImage.jpg"  />
+                      <#else>
+                      <img class="fullWidth" src="${assembly.titleImg}"  />
+                  </#if>
                   <h4 class="activityTitle">${assembly.title}</h4>
                   <div class="activityDesc">
                       <span>${assembly.createTime}</span>

@@ -2,6 +2,12 @@ package com.timeshare.utils;
 
 import com.alibaba.fastjson.JSON;
 
+import com.xiaomi.xmpush.server.Constants;
+import com.xiaomi.xmpush.server.Message;
+import com.xiaomi.xmpush.server.Result;
+import com.xiaomi.xmpush.server.Sender;
+
+import java.io.IOException;
 import java.security.MessageDigest;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -92,6 +98,32 @@ public class CommonStringUtils {
             }
         }
     }
+    //小米推送密钥
+    private static final String APP_SECRET_KEY = "GBXx3bqW+oOuZFspoH8ELA==";
 
+    public static Result sendMessage(String title, String json, String wxId)  {
+        Constants.useOfficial();
+        Sender sender = new Sender(APP_SECRET_KEY);
+        String messagePayload= json;
+        String description ="wgs";
+        Message message = new Message.Builder()
+                .title(title)
+                .description(description).payload(messagePayload)
+                .restrictedPackageName("")
+                .notifyType(1)     // 使用默认提示音提示
+                .build();
+        Result result = null;//根据regID，发送消息到指定设备上，不重试。
+        try {
+            try {
+                result = sender.sendToUserAccount(message, wxId, 0);
+            } catch (org.json.simple.parser.ParseException e) {
+                e.printStackTrace();
+            }
+            System.out.println("Server response: "+"MessageId: " + result.getMessageId()+ " ErrorCode: " + result.getErrorCode().getValue()+ " Reason: " + result.getReason());
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return result;
+    }
 
 }
