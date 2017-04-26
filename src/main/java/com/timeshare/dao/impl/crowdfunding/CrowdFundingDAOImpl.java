@@ -134,14 +134,14 @@ public class CrowdFundingDAOImpl extends BaseDAO implements CrowdFundingDAO {
         }
 
         sql.append("and c.crowdfunding_status='RELEASED' ");
-        sql.append("and c.curriculum_end_time>=SYSDATE() ");
-        sql.append("and c.curriculum_start_time<=SYSDATE() ");
+        //sql.append("and c.curriculum_end_time>=SYSDATE() ");
+        sql.append("and c.curriculum_start_time>=SYSDATE() ");
         if(StringUtils.isNotBlank(isShowFlag) && "true".equals(isShowFlag)){
             sql.append("and c.is_show='YES' ");
         }
 
         sql.append("group by c.crowdfunding_id ");
-        sql.append("order by c.create_time desc ");
+        sql.append("order by c.curriculum_start_time");
 
         sql.append("limit "+startIndex+","+loadSize);
 
