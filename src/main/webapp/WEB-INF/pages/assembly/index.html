@@ -82,7 +82,14 @@
                           <div class="swiper-wrapper">
                               <#list assemblyList as assembly>
                                   <div class="swiper-slide">
-                                      <a class="external" href="${request.contextPath}/assembly/to-detail?assemblyId=${assembly.assemblyId}"><img src="${assembly.titleImg}" /></a>
+                                      <a class="external" href="${request.contextPath}/assembly/to-detail?assemblyId=${assembly.assemblyId}">
+                                          <#if assembly.titleImg!="">
+                                              <img src="${assembly.titleImg}" />
+                                              <#else>
+                                                  <img src="${request.contextPath}/images/assembly/default_tImage.jpg" />
+                                          </#if>
+
+                                      </a>
                                   </div>
                               </#list>
                           </div>
@@ -169,9 +176,8 @@
         })
         $.init();
         function toAdd() {
-           //  var backUrl = 'http://jk.zhangqidong.cn'+'${request.contextPath}/assembly/to-add';
-            // window.location.href = '${request.contextPath}/wx/to-get-open-id?backUrl='+encodeURIComponent(backUrl);
-            window.location.href = '${request.contextPath}/assembly/to-add';
+            var backUrl = 'http://jk.zhangqidong.cn'+'${request.contextPath}/assembly/to-add';
+           window.location.href = '${request.contextPath}/wx/to-get-open-id?backUrl='+encodeURIComponent(backUrl);
         }
         function  checkTab(type) {
             $("#searchType").val(type);

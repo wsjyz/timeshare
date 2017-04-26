@@ -91,9 +91,10 @@ public class AssemblyController extends  BaseController {
     }
 
     @RequestMapping(value = "/to-add")
-    public String add(@CookieValue(value = "time_sid", defaultValue = "admin") String userId,Model model,@RequestParam(value = "sendTo", defaultValue = "") String sendTo) {
+    public String add(@CookieValue(value = "time_sid", defaultValue = "admin") String userId,Model model,@RequestParam(value = "sendTo", defaultValue = "") String sendTo,@RequestParam(value = "userAccount", defaultValue = "") String userAccount) {
         UserInfo userInfo = getCurrentUser(userId);
         model.addAttribute("sendTo",sendTo);
+        model.addAttribute("userAccount",userAccount);
         model.addAttribute("userInfo",userInfo);
         return "assembly/activityPublish";
     }
@@ -143,7 +144,8 @@ public class AssemblyController extends  BaseController {
     @ResponseBody
     public String saveAssembly(@RequestParam(value = "assemblyId", defaultValue = "") String assemblyId,@RequestParam String assemblyTitle, @RequestParam String imageIdStr, @RequestParam String startTime, @RequestParam String endTime, @RequestParam String rendezvous,
                                @RequestParam String description,@RequestParam String assemblyType,@RequestParam String feeId,@RequestParam String onApply,@RequestParam String phoneNumber,
-                               @RequestParam String applyId,@RequestParam String imageIdStrDesc,@RequestParam String imageIdStrCon, @CookieValue(value = "time_sid", defaultValue = "admin") String userId,HttpServletRequest request,@RequestParam(value = "sendTo", defaultValue = "") String sendTo) {
+                               @RequestParam String applyId,@RequestParam String imageIdStrDesc,@RequestParam String imageIdStrCon, @CookieValue(value = "time_sid", defaultValue = "admin") String userId,HttpServletRequest request,@RequestParam(value = "sendTo", defaultValue = "") String sendTo
+    ,@RequestParam(value = "userAccount", defaultValue = "") String userAccount) {
         String resultId = "";
         try {
             Assembly assembly = new Assembly();
@@ -210,14 +212,14 @@ public class AssemblyController extends  BaseController {
             }
            if(StringUtils.isNotEmpty(sendTo)){
                try {
-                   System.out.println("推送" + assemblyId + "group.getRobotWxId()" + sendTo);
+                   System.out.println("推送" + assemblyId + "group.getRobotWxId()" + userAccount);
                    JSONObject pushJson = new JSONObject();
                    pushJson.put("sendTo", sendTo);
                    pushJson.put("title", assembly.getTitle());
                    pushJson.put("description", assembly.getDescription());
                    pushJson.put("thumbUrl",imageTitleUrl);
-                   pushJson.put("url", request.getContextPath() + "/controller/assembly/to-detail?assemblyId=" + assemblyId);
-                   CommonStringUtils.sendMessage("sendShare", pushJson.toJSONString(), sendTo);
+                   pushJson.put("url", "http://jk.zhangqidong.cn"+request.getContextPath() + "/controller/assembly/to-detail?assemblyId=" + assemblyId);
+                   CommonStringUtils.sendMessage("sendShare", pushJson.toJSONString(), userAccount);
                }catch (Exception e){
                    e.printStackTrace();
                    resultId = "ERROR";
