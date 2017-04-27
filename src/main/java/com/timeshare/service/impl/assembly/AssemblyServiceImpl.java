@@ -126,9 +126,10 @@ public class AssemblyServiceImpl implements AssemblyService {
                     assembly.setTitleImg("/time"+titleImg.getImageUrl()+".jpg");
                 }
                 List<Fee> feeList=feeService.findFeeByAssemblyId(assembly.getAssemblyId());
+                BigDecimal cost=new BigDecimal(0);
+                int quota=0;
                 if (!CollectionUtils.isEmpty(feeList)){
-                    int quota=0;
-                    BigDecimal cost=new BigDecimal(0);
+
                     for (int i=0;i<feeList.size();i++){
                         Fee fee=feeList.get(i);
                         if (i==0){
@@ -145,13 +146,14 @@ public class AssemblyServiceImpl implements AssemblyService {
                             quota=quota+fee.getQuota();
                         }
                     }
-                    assembly.setCost(cost.toString());
-                    if (quota==-1){
-                        assembly.setQuota("不限制");
-                    }else{
-                        assembly.setQuota(quota+"");
-                    }
                 }
+                if (quota==-1){
+                    assembly.setQuota("不限制");
+                }else{
+                    assembly.setQuota(quota+"");
+                }
+                assembly.setCost(cost.toString());
+
                 List<Attender> attenderList = attenderService.getListByAssemblyId(assembly.getAssemblyId());
                 assembly.setAttentCount(attenderList.size());
             }

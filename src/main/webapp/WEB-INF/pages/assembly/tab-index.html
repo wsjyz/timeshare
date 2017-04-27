@@ -48,13 +48,17 @@
             if(assembly.type=="company"){
                 type="企业参考";
             }
+            var titleImg="${request.contextPath}/images/assembly/default_tImage.jpg";
+            if(assembly.titleImg!=""  && assembly.titleImg!=null && assembly.titleImg!="null"){
+                titleImg=assembly.titleImg;
+            }
             html +=' <div class="card" data-id="'+assembly.assemblyId+'">' +
                     ' <div class="userRow" >'+
                     ' <img class="userPhoto" src="'+assembly.userImg+'" align="left" style="border-radius:30px;margin-top: 0.2rem" />'+
                     ' <span class="userName" style="margin-top: 0.2rem;margin-left:0.5rem">'+assembly.userName+'</span>'+
                     '</div>'+
                     ' <div style="margin-top: 0.5rem">'+
-                    ' <img src="'+assembly.titleImg+'" class="fullWidth" height="256px"  />'+
+                    ' <img src="'+titleImg+'" class="fullWidth" height="256px"  />'+
                     ' </div>'+
                     ' <h4 class="activityTitle">'+assembly.title+'</h4>'+
                     ' <div class="activityDesc">'+

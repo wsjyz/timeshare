@@ -31,6 +31,7 @@
             <form id="saveAssemblyForm" name="saveAssemblyForm" type="post">
                 <input type="hidden" id="imageType" name="imageType" value=""/>
                 <input type="hidden" id="sendTo" name="sendTo" value="${sendTo!}"/>
+                <input type="hidden" id="userAccount" name="userAccount" value="${userAccount!}"/>
                 <div class="list-block">
                 <ul>
                     <li class="activitySubject">
@@ -780,7 +781,7 @@
             $("#rendezvous").html("地址："+rendevous);
         }
         if(startTime!="" && endTime!=""){
-            dt = new Date(startTime);
+            dt = new Date(startTime.replace("-", "/").replace("-", "/"));
             month =dt.getMonth()+1;
             if(month<10) month='0'+month;
             day = dt.getDate();
@@ -790,7 +791,8 @@
             minute= dt.getMinutes();
             if(minute<10)minute='0'+minute;
             var startTimeText=month+"月"+day+"日"+hour+"时"+minute+"分";
-            dt = new Date(endTime);
+            dt = new Date(endTime.replace("-", "/").replace("-", "/"));
+
             year =dt.getFullYear();
             month =dt.getMonth()+1;
             if(month<10) month='0'+month;
@@ -801,9 +803,7 @@
             minute= dt.getMinutes();
             if(minute<10)minute='0'+minute;
             var endTimeText=month+"月"+day+"日"+hour+"时"+minute+"分";
-            if(startTimeText.indexOf("NaN")==-1 && endTimeText.indexOf("NaN")==-1) {
-                $("#viewTime").html(startTimeText+" 至 "+endTimeText);
-            }
+           $("#viewTime").html(startTimeText+" 至 "+endTimeText);
         }
     }
     Zepto(function($) {
