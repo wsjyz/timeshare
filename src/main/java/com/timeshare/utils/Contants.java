@@ -27,7 +27,7 @@ public interface Contants {
     String FILE_SAVE_PATH = "/work/appfile";
 
     //月最大提现次数
-    int MONTH_WITHDRAWAL_MAX_NUMBER=4;
+    int MONTH_WITHDRAWAL_MAX_NUMBER=9999;
 
     enum ITEM_STATUS {
         draft,for_sale,

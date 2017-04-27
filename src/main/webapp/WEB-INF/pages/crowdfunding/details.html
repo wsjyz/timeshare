@@ -26,7 +26,7 @@
         <!--header start-->
         <header class="bar bar-nav bar-list">
             <a class="icon icon-left pull-left back" href="javascript:history.go(-1);"></a>
-            <a href="${request.contextPath}/wx/to-get-open-id?backUrl=/crowdFunding/createCrowdFunding" class="icon i-edit pull-right"></a>
+            <!--<a href="${request.contextPath}/wx/to-get-open-id?backUrl=/crowdFunding/createCrowdFunding" class="icon i-edit pull-right"></a>-->
             <h1 class="title"></h1>
         </header>
         <!--header end-->
@@ -58,7 +58,7 @@
                             ${crowdFunding.projectName!}
                         </div>
                         <div class="zc-info">
-                            <span class="time"><i class="i-time"></i>上课时间:${crowdFunding.curriculumStartTime!}</span>
+                            <span class="time"><i class="i-time"></i>上课时间:${crowdFunding.curriculumStartTime!}:00</span>
                             <span class="address"><i class="i-address"></i>${crowdFunding.sponsorCity!}</span>
                         </div>
                         <div class="dashed-line"></div>
