@@ -504,8 +504,16 @@
             $.toast("主办地址不能为空");
             return ;
         }
+        var chkRadio = $("#costBetween").attr("checked");
+        var costTotalTitle="不能为空";
+        if(chkRadio){
+            costTotalTitle="总费用"+costTotalTitle;
+        }
+        else{
+            costTotalTitle="单价"+costTotalTitle;
+        }
         if(isEmpty("costTotal")){
-            $.toast("总费用不能为空");
+            $.toast(costTotalTitle);
             return ;
         }
         if(isEmpty("minPeoples")){
@@ -564,8 +572,16 @@
             $.toast("主办地址不能为空");
             return ;
         }
+        var chkRadio = $("#costBetween").attr("checked");
+        var costTotalTitle="不能为空";
+        if(chkRadio){
+            costTotalTitle="总费用"+costTotalTitle;
+        }
+        else{
+            costTotalTitle="单价"+costTotalTitle;
+        }
         if(isEmpty("costTotal")){
-            $.toast("总费用不能为空");
+            $.toast(costTotalTitle);
             return ;
         }
         if(isEmpty("minPeoples")){
