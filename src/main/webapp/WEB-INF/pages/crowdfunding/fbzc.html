@@ -604,5 +604,10 @@
         $("#detail").val(detailContent);
         $("#editDetailCloseBtn").trigger("click");
     }
+    if("${userInfo.acountType}"!='VIP'){
+        $.toast("很抱歉，只有VIP会员才可以发布众筹");
+        $("#sketch").prop('disabled',true);
+        $("#publishCrowdFundingBtn").prop('disabled',true);
+    }
 </script>
 </html>

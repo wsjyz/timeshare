@@ -52,7 +52,11 @@ public class CrowdFundingController extends  BaseController{
 
     //发布众筹页面
     @RequestMapping(value = "/createCrowdFunding")
-    public String createCrowdFunding(@CookieValue(value="time_sid", defaultValue="00359e8721c44d168aac7d501177e314") String userId) {
+    public String createCrowdFunding(@CookieValue(value="time_sid", defaultValue="00359e8721c44d168aac7d501177e314") String userId,Model model) {
+        ImageObj imageObj=new ImageObj();
+        imageObj.setImageType(Contants.IMAGE_TYPE.USER_HEAD.name());
+        UserInfo userInfo=userService.findUserByUserId(userId,imageObj);
+        model.addAttribute("userInfo",userInfo);
         return "crowdfunding/fbzc";
     }
     //编辑众筹页面
