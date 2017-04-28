@@ -19,7 +19,12 @@
     <link rel="stylesheet" href="${request.contextPath}/css/upload.css">
     <link rel="stylesheet" href="${request.contextPath}/css/crowdFunding/img-custom.css">
     <link rel="stylesheet" type="text/css" href="${request.contextPath}/css/crowdFunding/style.css">
+    <link rel="stylesheet" href="${request.contextPath}/css/crowdFunding/artEditor-style.css">
+    <script type='text/javascript' src='${request.contextPath}/js/zepto.min.js' charset='utf-8'></script>
 
+    <!--<script type='text/javascript' src='${request.contextPath}/js/upload.js?v=20160720-2' charset='utf-8'></script>-->
+    <!--<script type="text/javascript" src="${request.contextPath}/js/crowdFunding/my-js.js"></script>-->
+    <!--<script type="text/javascript" src="${request.contextPath}/js/crowdFunding/config.js"></script>-->
 </head>
 <body>
 <div class="page-group">
@@ -52,7 +57,8 @@
                     </label>
                     <label class="form-group">
                         <span class="input-label">详情描述</span>
-                        <textarea rows="5" name="detail" id="detail" class="form-control" placeholder="详情描述"></textarea>
+                        <!--<textarea rows="5" name="detail" id="detail" class="form-control" placeholder="详情描述"></textarea>-->
+                        <div class=""><a href="javascript:gotoEditDetails();" class="button  btn-light open-popup"  data-popup=".popup-editDetail">编辑详情</a></div>
                     </label>
                     <div class="radio-group">
                         <label><input type="radio" name="costType" value="AA" id="costBetween" checked>费用均摊</label>
@@ -95,6 +101,7 @@
                     </div>
                     <input type="hidden" name="crowdfundingStatus" id="crowdfundingStatus" value="RELEASED">
                     <input type="hidden" name="imgUrl" id="imgUrl" value="">
+                    <input type="hidden" name="detail" id="detail" value="${detail}">
                 </form>
             </section>
         </div>
@@ -169,12 +176,42 @@
             </div>
         </div>
         <div class="content-block details-content">
-            <p id="previewDetail"></p>
+            <div id="previewDetail"></div>
         </div>
     </div>
 </div>
 
-<script type='text/javascript' src='${request.contextPath}/js/zepto.min.js' charset='utf-8'></script>
+
+<!--编辑详情start-->
+<div style="width:100%;margin: 0 auto;" class="editDetail popup popup-editDetail" style="display:none">
+
+    <div class="publish-article-content content-block">
+        <p><a href="#" class="close-popup" id="editDetailCloseBtn">关闭</a></p>
+        <div class="footer-btn g-image-upload-box">
+            <div class="upload-button">
+                <span class="upload"><i class="upload-img"></i>插入图片</span>
+                <input class="input-file" id="imageUpload" type="file" name="fileInput" capture="camera" accept="image/*" style="position:absolute;left:0;opacity:0;width:100%;">
+            </div>
+        </div>
+        <div class="title-tips"></div>
+        <input type="hidden" id="target">
+        <div class="article-content" id="contentEditDetail" style="border: 1px solid;">${detail!}</div>
+        <div class="footer-btn g-image-upload-box">
+            <div class="upload-button">
+                <!--<span class="upload"><i class="upload-img"></i>插入图片</span>-->
+                <nav class="bar bar-tab signup">
+                    <span class="upload"><input type="button" value="完成" onclick="setContentValue();"/></span>
+                    <!--<span class="upload"><input type="button" id="bjxqCallback" value="返回" onclick="javascript:history.go(-1);"/></span>-->
+                </nav>
+                <!--<input class="input-file" id="imageUpload" type="file" name="fileInput" capture="camera" accept="image/*" style="position:absolute;left:0;opacity:0;width:100%;">-->
+            </div>
+        </div>
+    </div>
+</div>
+<!--编辑详情end-->
+
+
+<!--<script type='text/javascript' src='${request.contextPath}/js/zepto.min.js' charset='utf-8'></script>-->
 <script type='text/javascript' src='${request.contextPath}/js/upload.js?v=20160720-2' charset='utf-8'></script>
 <script type="text/javascript" src="${request.contextPath}/js/crowdFunding/sm.min.js"></script>
 <script type="text/javascript" src="${request.contextPath}/js/crowdFunding/picker.js"></script>
@@ -182,11 +219,47 @@
 <script type="text/javascript" src="${request.contextPath}/js/crowdFunding/sm-city-picker.js"></script>
 <script type="text/javascript" src="${request.contextPath}/js/crowdFunding/my-js.js"></script>
 <script type="text/javascript" src="${request.contextPath}/js/crowdFunding/config.js"></script>
-
-
+<script src="${request.contextPath}/js/crowdFunding/artEditor.js"></script>
 </body>
 <script type="application/javascript">
     $(function() {
+
+        $('#contentEditDetail').artEditor({
+            imgTar: '#imageUpload',
+            limitSize: 5,   // 兆
+            showServer: true,
+            uploadUrl: '/time/upload/upload-img',
+            data: {},
+            uploadField: 'image',
+            placeholader: '<p>请输入文章正文内容</p>',
+            validHtml: ["<br/>"],
+            formInputId: 'target',
+            uploadSuccess: function (res) {
+                // 这里是处理返回数据业务逻辑的地方
+                // `res`为服务器返回`status==200`的`response`
+                // 如果这里`return <path>`将会以`<img src='path'>`的形式插入到页面
+                // 如果发现`res`不符合业务逻辑
+                // 比如后台告诉你这张图片不对劲
+                // 麻烦返回 `false`
+                // 当然如果`showServer==false`
+                // 无所谓咯
+
+                //var result = JSON.parse(res);
+
+                if (res.success) {
+                    return res.thumbUrl;
+                } else {
+                    $.toast("图片上传失败");
+                }
+                return false;
+            },
+            uploadError: function (status, error) {
+                //这里做上传失败的操作
+                //也就是http返回码非200的时候
+                $.toast('网络异常' + status);
+            }
+        });
+
 
         var today = new Date();
 
@@ -370,7 +443,7 @@
         }
 
         $("#priviewAATotal").text($("#costTotal").val());
-        $("#previewDetail").text($("#detail").val());
+        $("#previewDetail").html($("#detail").val());
     }
     //让每次都可以选择图片
     function updateType(type) {
@@ -502,6 +575,34 @@
                 $.toast("草稿保存失败");
             }
         });
+
+
+
+    }
+    function serializeJson(formObj){
+        var serializeObj={};
+        var array=formObj.serializeArray();
+        var str=formObj.serialize();
+        $(array).each(function(){
+            if(serializeObj[this.name]){
+                if($.isArray(serializeObj[this.name])){
+                    serializeObj[this.name].push(this.value);
+                }else{
+                    serializeObj[this.name]=[serializeObj[this.name],this.value];
+                }
+            }else{
+                serializeObj[this.name]=this.value;
+            }
+        });
+        return serializeObj;
+    };
+    function gotoEditDetails(){
+        $.config = {router: false};
+    }
+    function setContentValue(){
+        var detailContent=$("#target").val();
+        $("#detail").val(detailContent);
+        $("#editDetailCloseBtn").trigger("click");
     }
 </script>
 </html>

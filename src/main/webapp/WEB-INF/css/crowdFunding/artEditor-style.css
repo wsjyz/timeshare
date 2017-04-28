@@ -1,0 +1,175 @@
+.editDetail html {
+  font-family: "Hiragino Sans GB", "Microsoft YaHei", "微软雅黑", "宋体", Arial, Verdana, sans-serif;
+  -ms-text-size-adjust: 100%;
+  -webkit-text-size-adjust: 100%;
+  font-size: 62.5%;
+}
+.editDetail body {
+  font-size: 1.4rem;
+}
+.editDetail html,
+.editDetail body,
+.editDetail div,
+.editDetail p {
+  margin: 0;
+  padding: 0;
+  border: 0;
+  vertical-align: baseline;
+  font-weight: normal;
+}
+.editDetail a {
+  background: transparent;
+}
+.editDetail a:active,
+.editDetail a:hover {
+  outline: 0;
+}
+.editDetail img {
+  border: 0;
+}
+.editDetail button,
+.editDetail input,
+.editDetail optgroup,
+.editDetail select,
+.editDetail textarea {
+  color: inherit;
+  font: inherit;
+  margin: 0;
+}
+.editDetail button {
+  overflow: visible;
+}
+.editDetail button,
+.editDetail select {
+  text-transform: none;
+}
+.editDetail button,
+.editDetail html input[type="button"],
+.editDetail input[type="reset"],
+.editDetail input[type="submit"] {
+  -webkit-appearance: button;
+  cursor: pointer;
+}
+.editDetail button[disabled],
+.editDetail html input[disabled] {
+  cursor: default;
+}
+.editDetail button::-moz-focus-inner,
+.editDetail input::-moz-focus-inner {
+  border: 0;
+  padding: 0;
+}
+.editDetail input {
+  line-height: normal;
+}
+* {
+  -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+}
+.editDetail body {
+  background: #ededed;
+  color: #666666;
+  line-height: 20px;
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+}
+.editDetail body.white {
+  background: #ffffff;
+}
+.editDetail html.hairlines div,
+.editDetail html.hairlines li,
+.editDetail html.hairlines a,
+.editDetail html.hairlines i,
+.editDetail html.hairlines header {
+  border-width: 0.5px !important;
+}
+.editDetail html .g-image-upload-box .upload-btn {
+  border: 1px dashed #e3e3e3 !important;
+}
+.editDetail a {
+  color: #000;
+  text-decoration: none;
+}
+.editDetail input[type="text"],
+.editDetail input[type="password"],
+.editDetail input[type="search"],
+.editDetail input[type="tel"],
+.editDetail textarea {
+  border: none;
+  font-size: 1.4rem;
+  height: 20px;
+  line-height: 20px;
+  padding: 5px;
+  color: #333333;
+  font-family: "Hiragino Sans GB", "Microsoft YaHei", "微软雅黑", "宋体", Arial, Verdana, sans-serif;
+  outline: none;
+  -webkit-border-radius: none;
+  -moz-border-radius: none;
+  border-radius: none;
+}
+.editDetail textarea {
+  outline: none;
+  border: none;
+  resize: none;
+  height: 90px;
+  width: 100%;
+  box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  /* Firefox */
+  -webkit-box-sizing: border-box;
+  /* Safari */
+}
+.editDetail input[type=text]:active,
+.editDetail input[type=password]:active,
+.editDetail textarea:active,
+.editDetail input[type=text]:focus,
+.editDetail input[type=password]:focus,
+.editDetail textarea:focus {
+  border: none;
+  background: #ffffff;
+  outline: none;
+}
+.editDetail ::-webkit-input-placeholder {
+  -webkit-text-fill-color: #bdbdbd;
+}
+.editDetail ::-moz-placeholder {
+  color: #dddddd;
+}
+.editDetail input:-ms-input-placeholder {
+  color: #dddddd;
+}
+.editDetail textarea:-ms-input-placeholder {
+  color: #dddddd;
+}
+
+.editDetail .publish-article-title {
+  padding: 15px;
+  background: #fff;
+  margin-bottom: 10px;
+  border: 1px solid #ccc;
+}
+.editDetail .title-tips {
+  font-weight: bold;
+  margin-bottom: 3px;
+}
+.editDetail .publish-article-content {
+  padding: 15px;
+  background: #fff;
+  border: 0px solid #ccc;
+}
+.editDetail .publish-article-content .article-content {
+  height: 200px;
+  border-bottom: 1px solid #ccc;
+}
+.editDetail .publish-article-content .footer-btn {
+  text-align: center;
+  padding-top: 10px;
+}
+.editDetail .publish-article-content .footer-btn .upload-img {
+  display: inline-block;
+  vertical-align: bottom;
+  width: 25px;
+  height: 20px;
+  margin-right: 10px;
+  background: url(../../images/crowdFunding/artEditor-img.png) 0 no-repeat;
+  background-size: 100%;
+}
