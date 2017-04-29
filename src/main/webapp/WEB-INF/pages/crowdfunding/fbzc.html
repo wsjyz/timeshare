@@ -200,7 +200,7 @@
             <div class="upload-button">
                 <!--<span class="upload"><i class="upload-img"></i>插入图片</span>-->
                 <nav class="bar bar-tab signup">
-                    <span class="upload"><input type="button" value="完成" onclick="setContentValue();"/></span>
+                    <span class="upload"><input type="button" value="完成" onclick="setContentValue();" class="close-popup"/></span>
                     <!--<span class="upload"><input type="button" id="bjxqCallback" value="返回" onclick="javascript:history.go(-1);"/></span>-->
                 </nav>
                 <!--<input class="input-file" id="imageUpload" type="file" name="fileInput" capture="camera" accept="image/*" style="position:absolute;left:0;opacity:0;width:100%;">-->
@@ -213,7 +213,7 @@
 
 <!--<script type='text/javascript' src='${request.contextPath}/js/zepto.min.js' charset='utf-8'></script>-->
 <script type='text/javascript' src='${request.contextPath}/js/upload.js?v=20160720-2' charset='utf-8'></script>
-<script type="text/javascript" src="${request.contextPath}/js/crowdFunding/sm.min.js"></script>
+<script type="text/javascript" src="${request.contextPath}/js/crowdFunding/sm.js"></script>
 <script type="text/javascript" src="${request.contextPath}/js/crowdFunding/picker.js"></script>
 <script type="text/javascript" src="${request.contextPath}/js/crowdFunding/sm-extend.min.js"></script>
 <script type="text/javascript" src="${request.contextPath}/js/crowdFunding/sm-city-picker.js"></script>
@@ -613,12 +613,12 @@
         return serializeObj;
     };
     function gotoEditDetails(){
-        $.config = {router: false};
+        //$.config = {router: false};
+//        $("#contentEditDetail").focus();
     }
     function setContentValue(){
         var detailContent=$("#target").val();
         $("#detail").val(detailContent);
-        $("#editDetailCloseBtn").trigger("click");
     }
     if("${userInfo.acountType}"!='VIP'){
         $.toast("很抱歉，只有VIP会员才可以发布众筹");

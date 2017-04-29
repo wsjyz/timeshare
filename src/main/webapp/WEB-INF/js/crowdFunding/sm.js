@@ -499,7 +499,7 @@ Device/OS Detection
          *
          * @type number
          */
-        this.tapTimeout = options.tapTimeout || 700;
+        this.tapTimeout = options.tapTimeout || 0;
 
         if (FastClick.notNeeded(layer)) {
             return;
