@@ -27,7 +27,7 @@ $.extend($.fn,{
                 var file = e.target.files[0];
                 e.target.value = '';
                 if (Math.ceil(file.size / 1024 / 1024) > _this._opt.limitSize) {
-                    console.error('文件太大');
+                    console.error('上传的文件太大,限制为：'+_this._opt.limitSize+"MB以内");
                     return;
                 }
                 var reader = new FileReader();
@@ -116,7 +116,7 @@ $.extend($.fn,{
                     var img = '<img src="' + src + '" style="width:90%;" />';
                     _this.insertImage(img);
                 } else {
-                    console.log('地址为空啊!大兄弟', src)
+                    console.log('图片地址为空', src)
                 }
             }, function (error) {
                 _this._opt.uploadError(error.status,error);
