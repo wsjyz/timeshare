@@ -293,7 +293,7 @@
 
         var date = new Date();
         var month = date.getMonth() + 1;
-        var strDate = date.getDate();
+        var strDate = date.getDate()+1;
         var strDate2 = date.getDate()+1;
         if (month >= 1 && month <= 9) {
             month = "0" + month;
@@ -306,7 +306,7 @@
         }
 
         $("#startTime").datetimePicker({
-            value: [date.getFullYear(), month, strDate, date.getHours()],
+            value: [date.getFullYear(), month, strDate, "09"],
             cols: [
                 // Years
                 {
@@ -330,7 +330,12 @@
                 {
                     values: (function () {
                         var arr = [];
-                        for (var i = 0; i <= 23; i++) { arr.push(i); }
+                        for (var i = 0; i <= 23; i++) {
+                            if (i >= 0 && i <= 9) {
+                                i = "0" + i;
+                            }
+                            arr.push(i);
+                        }
                         return arr;
                     })(),
                 }
@@ -340,7 +345,7 @@
             }
         });
         $("#endTime").datetimePicker({
-            value: [date.getFullYear(), month, strDate2, date.getHours()],
+            value: [date.getFullYear(), month, strDate2, "18"],
             cols: [
                 // Years
                 {
@@ -364,7 +369,12 @@
                 {
                     values: (function () {
                         var arr = [];
-                        for (var i = 0; i <= 23; i++) { arr.push(i); }
+                        for (var i = 0; i <= 23; i++) {
+                            if (i >= 0 && i <= 9) {
+                                i = "0" + i;
+                            }
+                            arr.push(i);
+                        }
                         return arr;
                     })(),
                 }
@@ -470,7 +480,12 @@
             return false;
         }
     }
-
+    function replaceAll(str, sptr, sptr1) {
+        while (str.indexOf(sptr) >= 0) {
+            str = str.replace(sptr, sptr1);
+        }
+        return str;
+    }
 
     //发布
     function publishCrowdFundingClick(){
@@ -486,6 +501,38 @@
             $.toast("课程结束时间不能为空");
             return ;
         }
+
+        var startTimeInput=$("#startTime").val();
+        startTimeInput=replaceAll(startTimeInput, "-", "");
+        startTimeInput=replaceAll(startTimeInput, " ", "");
+        startTimeInputNoHour=startTimeInput.substring("0",startTimeInput.length-2);
+
+        var endTimeInput=$("#endTime").val();
+        endTimeInput=replaceAll(endTimeInput, "-", "");
+        endTimeInput=replaceAll(endTimeInput, " ", "");
+
+
+        var date = new Date();
+        var year=date.getFullYear();
+        var month = date.getMonth() + 1;
+        if (month >= 1 && month <= 9) {
+            month = "0" + month;
+        }
+        var day=date.getDate();
+        if (day >= 0 && day <= 9) {
+            day = "0" + day;
+        }
+        var today=year+month+day;
+
+        if(startTimeInputNoHour<=today){
+            $.toast("课程开始时间最早需明日");
+            return ;
+        }
+        if(endTimeInput<startTimeInput){
+            $.toast("课程结束时间不能小于课程开始时间");
+            return ;
+        }
+
         if(isEmpty("address")){
             $.toast("主办地址不能为空");
             return ;
@@ -531,8 +578,6 @@
         }
 
 
-
-
         var imageUrl = $('#imageUrl')[0].src;
         if(imageUrl.lastIndexOf(".jpg")>=0){
             $("#imgUrl").val(imageUrl);
@@ -568,6 +613,37 @@
             $.toast("课程结束时间不能为空");
             return ;
         }
+
+        var startTimeInput=$("#startTime").val();
+        startTimeInput=replaceAll(startTimeInput, "-", "");
+        startTimeInput=replaceAll(startTimeInput, " ", "");
+        startTimeInputNoHour=startTimeInput.substring("0",startTimeInput.length-2);
+
+        var endTimeInput=$("#endTime").val();
+        endTimeInput=replaceAll(endTimeInput, "-", "");
+        endTimeInput=replaceAll(endTimeInput, " ", "");
+
+
+        var date = new Date();
+        var year=date.getFullYear();
+        var month = date.getMonth() + 1;
+        if (month >= 1 && month <= 9) {
+            month = "0" + month;
+        }
+        var day=date.getDate();
+        if (day >= 0 && day <= 9) {
+            day = "0" + day;
+        }
+        var today=year+month+day;
+        if(startTimeInputNoHour<=today){
+            $.toast("课程开始时间最早需明日");
+            return ;
+        }
+        if(endTimeInput<startTimeInput){
+            $.toast("课程结束时间不能小于课程开始时间");
+            return ;
+        }
+
         if(isEmpty("address")){
             $.toast("主办地址不能为空");
             return ;
