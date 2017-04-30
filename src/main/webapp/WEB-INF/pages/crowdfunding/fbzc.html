@@ -452,6 +452,16 @@
         $("#imageUrl").css("display", "none");
         $('#filePicker').show();
     }
+    function isMoney(moneyName){
+        var reg = /(^[1-9]([0-9]+)?(\.[0-9]{1,2})?$)|(^(0){1}$)|(^[0-9]\.[0-9]([0-9])?$)/;
+        var money=$("#"+moneyName).val();
+        if(reg.test(money)){
+            return true;
+        }
+        else{
+            return false;
+        }
+    }
     function isEmpty(name){
         if($("#"+name).val()=='' || $("#"+name).val()==null || $("#"+name).val()=='null'){
             return true;
@@ -460,6 +470,8 @@
             return false;
         }
     }
+
+
     //发布
     function publishCrowdFundingClick(){
         if(isEmpty("projectName")){
@@ -486,17 +498,32 @@
         else{
             costTotalTitle="单价"+costTotalTitle;
         }
+        if(!isMoney("costTotal")) {
+            $.toast((chkRadio ? "总费用" : "单价" )+ "输入的金额不正确，请重新输入");
+            return;
+        }
         if(isEmpty("costTotal")){
             $.toast(costTotalTitle);
             return ;
         }
+
         if(isEmpty("minPeoples")){
-            $.toast("最少人数不能为空");
+            $.toast("最少人数输入必须是纯数字，请重新输入");
             return ;
         }
+
         if(isEmpty("maxPeoples")){
-            $.toast("最多人数不能为空");
+            $.toast("最多人数输入必须是纯数字，请重新输入");
             return ;
+        }
+        if(($("#maxPeoples").val())<($("#minPeoples").val())){
+            $.toast("最多人数不能小于最少人数，请重新输入");
+            return ;
+        }
+
+        if(!isMoney("reservationCost")) {
+            $.toast("预约费用输入的金额不正确，请重新输入");
+            return;
         }
         if(isEmpty("reservationCost")){
             $.toast("预约费用不能为空");
@@ -553,17 +580,31 @@
         else{
             costTotalTitle="单价"+costTotalTitle;
         }
+        if(!isMoney("costTotal")) {
+            $.toast((chkRadio ? "总费用" : "单价" )+ "输入的金额不正确，请重新输入");
+            return;
+        }
         if(isEmpty("costTotal")){
             $.toast(costTotalTitle);
             return ;
         }
+
         if(isEmpty("minPeoples")){
-            $.toast("最少人数不能为空");
+            $.toast("最少人数输入必须是纯数字，请重新输入");
             return ;
         }
+
         if(isEmpty("maxPeoples")){
-            $.toast("最多人数不能为空");
+            $.toast("最多人数输入必须是纯数字，请重新输入");
             return ;
+        }
+        if(($("#maxPeoples").val())<($("#minPeoples").val())){
+            $.toast("最多人数不能小于最少人数，请重新输入");
+            return ;
+        }
+        if(!isMoney("reservationCost")) {
+            $.toast("预约费用输入的金额不正确，请重新输入");
+            return;
         }
         if(isEmpty("reservationCost")){
             $.toast("预约费用不能为空");

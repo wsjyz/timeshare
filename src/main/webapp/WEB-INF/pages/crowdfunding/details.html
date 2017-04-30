@@ -64,7 +64,7 @@
                         <div class="dashed-line"></div>
                         <div class="zc-info">
                               <span class="price">众筹最低学费:
-                                  <#if crowdFunding.costType=='AA'>
+                                  <#if crowdFunding.costType=='FIXED_PRICE'>
                                       ${crowdFunding.costTotal!}
                                   <#else>
                                       ${crowdFunding.costTotal/crowdFunding.maxPeoples}
