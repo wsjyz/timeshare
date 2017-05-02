@@ -13,6 +13,7 @@
     <link rel="stylesheet" href="http://g.alicdn.com/msui/sm/0.6.2/css/sm-extend.min.css">
     <link rel="stylesheet" href="${request.contextPath}/css/assembly/main.css">
     <link rel="stylesheet" href="${request.contextPath}/css/upload.css">
+    <link rel="stylesheet" href="${request.contextPath}/css/assembly/artEditor-style.css">
 </head>
 <body>
 <div class="page-group">
@@ -101,21 +102,12 @@
                             <div class="item-inner">
                                 <div class="item-title label">活动详细描述</div>
                                 <div class="item-input activityDescImgs">
-                                    <input type="hidden"  name="imageIdStrDesc" value="${assembly.contentImgIds}">
-                                    <input type="hidden"  name="imageUrlStrDesc" value="">
 
-                                    <a class="subjectPicture" href="#routerAddWallpaper" onclick="updateType('ASSEMBLY_CONTENT_IMG')">
-                                        <img src="${request.contextPath}/images/assembly/icon/publishImg.png" /></a>
                                 </div>
                             </div>
                         </div>
-                        <div class="imgShow" style="text-align: center">
-                        <#list assembly.contentImgList as contentImg>
-                                <img src="${contentImg.imageUrl}" style="height: 5rem;width: 10rem;"/>
-                                <span class="icon icon-remove" data-id="${contentImg.imageId}"></span>
-                        </#list>
-                        </div>
-                        <textarea class="activityDesc" name="description">${assembly.description}</textarea>
+                        <input type="hidden" name="description" id="detail" value='${assembly.description}'>
+                        <div class=""><a href="javascript:void(0)" class="button  btn-light open-popup"  data-popup=".popup-editDetail">编辑详情</a></div>
                     </li>
                 </ul>
                 <ul class="activitySettings">
@@ -434,7 +426,7 @@
                 <span class="icon icon-left"></span>
                 返回
             </a>
-            <a class="button button-link button-nav back pull-right publish" onclick="saveSetting()">
+            <a class="button button-link button-nav back pull-right publish">
                 完成
             </a>
         </div>
@@ -485,13 +477,8 @@
                     <span class="darkBg">主办方</span>
                 </div>
 
-                <div class="activityDetailWrap" style="height: 18.8rem;z-index:2;position:relative;">
+                <div class="activityDetailWrap" style="height: 30rem;z-index:2;position:relative;">
                     <div class="activityDetail">
-                        <div class="imgShowText" style="text-align: center">
-                            <#list assembly.contentImgList as contentImg>
-                                <img src="${contentImg.imageUrl}" style="height: 5rem;width: 10rem;"/>
-                            </#list>
-                        </div>
                          <div id="description">${assembly.description}</div>
                     </div>
                 </div>
@@ -499,11 +486,42 @@
         </div>
     </div>
 </div>
+
+<!--编辑详情start-->
+<div style="width:100%;margin: 0 auto;" class="editDetail popup popup-editDetail" style="display:none">
+
+    <div class="publish-article-content content-block">
+        <p><a href="#" class="close-popup" id="editDetailCloseBtn">关闭</a></p>
+        <div class="footer-btn g-image-upload-box">
+            <div class="upload-button">
+                <span class="upload"><i class="upload-img"></i>插入图片</span>
+                <input class="input-file" id="imageUpload" type="file" name="fileInput" capture="camera" accept="image/*" style="position:absolute;left:0;opacity:0;width:100%;">
+            </div>
+        </div>
+        <div class="title-tips"></div>
+        <input type="hidden" id="target">
+        <div class="article-content" id="contentEditDetail" style="border: 1px solid;">${assembly.description}</div>
+        <div class="footer-btn g-image-upload-box">
+            <div class="upload-button">
+                <!--<span class="upload"><i class="upload-img"></i>插入图片</span>-->
+                <nav class="bar bar-tab signup">
+                    <span class="upload"><input type="button" value="完成" onclick="setContentValue();" class="close-popup"/></span>
+                    <!--<span class="upload"><input type="button" id="bjxqCallback" value="返回" onclick="javascript:history.go(-1);"/></span>-->
+                </nav>
+                <!--<input class="input-file" id="imageUpload" type="file" name="fileInput" capture="camera" accept="image/*" style="position:absolute;left:0;opacity:0;width:100%;">-->
+            </div>
+        </div>
+    </div>
+</div>
+<!--编辑详情end-->
 <script type='text/javascript' src='${request.contextPath}/js/zepto.min.js' charset='utf-8'></script>
 <script type='text/javascript' src='${request.contextPath}/js/upload.js?v=20160720-2' charset='utf-8'></script>
 <script type='text/javascript' src='http://g.alicdn.com/msui/sm/0.6.2/js/sm.min.js' charset='utf-8'></script>
 <script type='text/javascript' src='http://g.alicdn.com/msui/sm/0.6.2/js/sm-extend.min.js' charset='utf-8'></script>
 <script type='text/javascript' src='${request.contextPath}/js/assembly/main.js' charset='utf-8'></script>
+<script src="${request.contextPath}/js/crowdFunding/artEditor.js"></script>
+<script type="text/javascript" src="${request.contextPath}/js/crowdFunding/sm.js"></script>
+
 <style>
     .activityRow {
         color: #40445e;
@@ -523,6 +541,41 @@
 </style>
 <script>
     $(function(){
+        $('#contentEditDetail').artEditor({
+            imgTar: '#imageUpload',
+            limitSize: 5,   // 兆
+            showServer: true,
+            uploadUrl: '/time/upload/upload-img',
+            data: {},
+            uploadField: 'image',
+            placeholader: '<p>请输入文章正文内容</p>',
+            validHtml: ["<br/>"],
+            formInputId: 'target',
+            uploadSuccess: function (res) {
+                // 这里是处理返回数据业务逻辑的地方
+                // `res`为服务器返回`status==200`的`response`
+                // 如果这里`return <path>`将会以`<img src='path'>`的形式插入到页面
+                // 如果发现`res`不符合业务逻辑
+                // 比如后台告诉你这张图片不对劲
+                // 麻烦返回 `false`
+                // 当然如果`showServer==false`
+                // 无所谓咯
+
+                //var result = JSON.parse(res);
+
+                if (res.success) {
+                    return res.thumbUrl;
+                } else {
+                    $.toast("图片上传失败");
+                }
+                return false;
+            },
+            uploadError: function (status, error) {
+                //这里做上传失败的操作
+                //也就是http返回码非200的时候
+                $.toast('网络异常' + status);
+            }
+        });
         $(".datetimePickerStartTime").click(function(){
             var dt = new Date("${assembly.startTime}");
             var year =dt.getFullYear();
@@ -562,12 +615,6 @@
                     $("input[name='imageIdStr']").val(imageId);
                     $("input[name='imageUrlStr']").val(imageUrl);
                     $("#titleImg").attr("src",imageUrl);
-                }else if(imageType=="ASSEMBLY_CONTENT_IMG") {
-                    $("input[name='imageIdStrDesc']").val($("input[name='imageIdStrDesc']").val()+","+imageId);
-                    var html='<img src="'+imageUrl+'" style="height: 5rem;width: 10rem;"/><span class="icon icon-remove" data-id="'+imageId+'"></span>'
-                    $(".imgShow").append(html);
-                    var htmlText='<img src="'+imageUrl+'" style="width: 100%;"/>'
-                    $(".imgShowText").append(htmlText);
                 }else if(imageType=="ASSEMBLY_CONSULTATION_IMG"){
                     $("input[name='imageIdStrCon']").val(imageId);
                     $("input[name='imageUrlStrCon']").val(imageUrl);
@@ -613,12 +660,16 @@
                 }else{
                     $this.prev("img").remove();
                     $this.remove();
-                    $("input[name='imageIdStrDesc']").val($("input[name='imageIdStrDesc']").val().replace(imageId,""));
+                 //   $("input[name='imageIdStrDesc']").val($("input[name='imageIdStrDesc']").val().replace(imageId,""));
                 }
            });
         });
     })
     $.init();
+    function setContentValue(){
+        var detailContent=$("#target").val();
+        $("#detail").val(detailContent);
+    }
     function saveFee(){
         var feeTitle=$("input[name='feeTitle']").val();
         var feeStr=$("input[name='feeStr']").val();
@@ -688,7 +739,7 @@
     function updateType(type) {
         $("#imageType").val(type);
         var imageIdStr=$("input[name='imageIdStr']").val();
-        var imageIdStrDesc= $("input[name='imageIdStrDesc']").val();
+       // var imageIdStrDesc= $("input[name='imageIdStrDesc']").val();
         var imageIdStrCon=$("input[name='imageIdStrCon']").val();
 
         var imageUrlStr=$("input[name='imageUrlStr']").val();
@@ -733,7 +784,7 @@
         var startTime=$("input[name='startTime']").val();
         var endTime=$("input[name='endTime']").val();
         var description=$("textarea[name='description']").val();
-        var imageIdStrDesc=$("input[name='imageIdStrDesc']").val();
+       // var imageIdStrDesc=$("input[name='imageIdStrDesc']").val();
         var assemblyType=$("input[name='assemblyType']").val();
         var feeId=$("input[name='feeId']").val();
         var applyId=$("input[name='applyId']").val();
@@ -774,12 +825,8 @@
             $("input[name='rendezvous']").val(city+rendevous);
 
         }
-        if(description=="" && imageIdStrDesc==""){
+        if(description=="" ){
             $.alert("活动描述不能为空!");
-            return false;
-        }
-        if(imageIdStrDesc.length<10){
-            $.alert("活动描述图片不能少于1张!");
             return false;
         }
         if(assemblyType==""){
@@ -807,7 +854,7 @@
         var assemblyTitle=$("input[name='assemblyTitle']").val();
         var startTime=$("input[name='startTime']").val();
         var endTime=$("input[name='endTime']").val();
-        var description=$("textarea[name='description']").val();
+        var description=$("input[name='description']").val();
         var rendevous=$("input[name='rendezvous']").val();
         var city=$(".citySelect").val();
         $(".activityTitle").html(assemblyTitle);

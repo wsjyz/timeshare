@@ -144,7 +144,7 @@ public class AssemblyController extends  BaseController {
     @ResponseBody
     public String saveAssembly(@RequestParam(value = "assemblyId", defaultValue = "") String assemblyId,@RequestParam String assemblyTitle, @RequestParam String imageIdStr, @RequestParam String startTime, @RequestParam String endTime, @RequestParam String rendezvous,
                                @RequestParam String description,@RequestParam String assemblyType,@RequestParam String feeId,@RequestParam String onApply,@RequestParam String phoneNumber,
-                               @RequestParam String applyId,@RequestParam String imageIdStrDesc,@RequestParam String imageIdStrCon, @CookieValue(value = "time_sid", defaultValue = "admin") String userId,HttpServletRequest request,@RequestParam(value = "sendTo", defaultValue = "") String sendTo
+                               @RequestParam String applyId,@RequestParam String imageIdStrCon, @CookieValue(value = "time_sid", defaultValue = "admin") String userId,HttpServletRequest request,@RequestParam(value = "sendTo", defaultValue = "") String sendTo
     ,@RequestParam(value = "userAccount", defaultValue = "") String userAccount) {
         String resultId = "";
         try {
@@ -185,18 +185,6 @@ public class AssemblyController extends  BaseController {
                 ImageObj imageObj = userService.findById(imageIdStrCon);
                 imageObj.setObjId(assemblyId);
                 userService.saveOrUpdateImg(imageObj);
-            }
-            if (StringUtils.isNotEmpty(imageIdStrDesc)) {
-                String[] imageIdStrDescs = imageIdStrDesc.split(",");
-                for (String imageIdStrTemp : imageIdStrDescs) {
-                    if (StringUtils.isNotEmpty(imageIdStrTemp)) {
-                        ImageObj imageObj = userService.findById(imageIdStrTemp);
-                        if (imageObj != null) {
-                            imageObj.setObjId(assemblyId);
-                            userService.saveOrUpdateImg(imageObj);
-                        }
-                    }
-                }
             }
             if (StringUtils.isNotEmpty(feeId)) {
                 String[] feeIds = feeId.split(",");
