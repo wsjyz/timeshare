@@ -585,7 +585,7 @@
             $.toast("最多人数输入必须是纯数字，请重新输入");
             return ;
         }
-        if(($("#maxPeoples").val())<($("#minPeoples").val())){
+        if(parseInt($("#maxPeoples").val(),10)<parseInt(($("#minPeoples").val()),10)){
             $.toast("最多人数不能小于最少人数，请重新输入");
             return ;
         }
@@ -697,7 +697,7 @@
             $.toast("最多人数输入必须是纯数字，请重新输入");
             return ;
         }
-        if(($("#maxPeoples").val())<($("#minPeoples").val())){
+        if(parseInt($("#maxPeoples").val(),10)<parseInt(($("#minPeoples").val()),10)){
             $.toast("最多人数不能小于最少人数，请重新输入");
             return ;
         }
