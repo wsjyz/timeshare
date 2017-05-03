@@ -209,7 +209,7 @@
         </div>
         <div class="title-tips"></div>
         <input type="hidden" id="target" value="">
-        <div class="article-content" id="contentEditDetail" style="border: 1px solid;"></div>
+        <div class="article-content" id="contentEditDetail" style="border: 1px solid;">${crowdFunding.detail}</div>
         <div class="footer-btn g-image-upload-box">
             <div class="upload-button">
                 <!--<span class="upload"><i class="upload-img"></i>插入图片</span>-->
@@ -238,7 +238,6 @@
 </body>
 <script type="application/javascript">
     $(function() {
-
         $('#contentEditDetail').artEditor({
             imgTar: '#imageUpload',
             limitSize: 5,   // 兆
@@ -247,7 +246,6 @@
             data: {},
             uploadField: 'image',
             placeholader: '<p>请输入文章正文内容</p>',
-            validHtml: ["<br/>"],
             formInputId: 'target',
             uploadSuccess: function (res) {
                 // 这里是处理返回数据业务逻辑的地方
@@ -274,7 +272,7 @@
                 $.toast('网络异常' + status);
             }
         });
-        $('#contentEditDetail').setValue('${crowdFunding.detail!}');
+        //$('#contentEditDetail').setValue('${crowdFunding.detail}');
         $("#target").val($("#contentEditDetail").getValue());
         var detailContent=$("#target").val();
         $("#detail").val(detailContent);
@@ -326,6 +324,7 @@
         }
 
         var startDateDB="${crowdFunding.curriculumStartTime}";
+
         $("#startTime").datetimePicker({
            value: [startDateDB.substring(0,4), startDateDB.substring(5,7), startDateDB.substring(8,10), startDateDB.substring(11,13)],
             cols: [
