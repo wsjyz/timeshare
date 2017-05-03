@@ -13,7 +13,7 @@
     <link rel="stylesheet" href="http://g.alicdn.com/msui/sm/0.6.2/css/sm-extend.min.css">
     <link rel="stylesheet" href="${request.contextPath}/css/assembly/main.css">
     <link rel="stylesheet" href="${request.contextPath}/css/upload.css">
-    <link rel="stylesheet" href="${request.contextPath}/css/assembly/artEditor-style.css">
+    <link rel="stylesheet" href="${request.contextPath}/css/crowdFunding/artEditor-style.css">
 </head>
 <body>
 <div class="page-group">
@@ -107,11 +107,10 @@
                             </div>
                         </div>
                         <input type="hidden" name="description" id="detail" value='${assembly.description}'>
-                        <div class=""><a href="javascript:void(0)" class="button  btn-light open-popup"  data-popup=".popup-editDetail">编辑详情</a></div>
+                        <div style="margin-left: 1rem;margin-right: 1rem;"><a href="javascript:void(0)" class="button  btn-light open-popup"  data-popup=".popup-editDetail">编辑详情</a></div>
                     </li>
                 </ul>
                 <ul class="activitySettings">
-
                     <a style="color:black" href="#routerActivityType">  <li>
                         <input type="hidden" name="assemblyType"  value="${assembly.type}"/>活动类型
                         <span class="icon icon-right pull-right"></span>
@@ -516,7 +515,6 @@
 <!--编辑详情end-->
 <script type='text/javascript' src='${request.contextPath}/js/zepto.min.js' charset='utf-8'></script>
 <script type='text/javascript' src='${request.contextPath}/js/upload.js?v=20160720-2' charset='utf-8'></script>
-<script type='text/javascript' src='http://g.alicdn.com/msui/sm/0.6.2/js/sm.min.js' charset='utf-8'></script>
 <script type='text/javascript' src='http://g.alicdn.com/msui/sm/0.6.2/js/sm-extend.min.js' charset='utf-8'></script>
 <script type='text/javascript' src='${request.contextPath}/js/assembly/main.js' charset='utf-8'></script>
 <script src="${request.contextPath}/js/crowdFunding/artEditor.js"></script>
