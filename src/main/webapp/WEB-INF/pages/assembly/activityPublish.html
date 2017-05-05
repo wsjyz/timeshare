@@ -12,7 +12,7 @@
     <link rel="stylesheet" href="http://g.alicdn.com/msui/sm/0.6.2/css/sm.min.css">
     <link rel="stylesheet" href="http://g.alicdn.com/msui/sm/0.6.2/css/sm-extend.min.css">
     <link rel="stylesheet" href="${request.contextPath}/css/assembly/main.css">
-    <link rel="stylesheet" href="${request.contextPath}/css/assembly/artEditor-style.css">
+    <link rel="stylesheet" href="${request.contextPath}/css/crowdFunding/artEditor-style.css">
     <link rel="stylesheet" href="${request.contextPath}/css/upload.css">
 
 </head>
@@ -111,7 +111,7 @@
                                 </div>
                             </div>
                         </div>
-                        <div>
+                        <div style="margin-left: 1rem;margin-right: 1rem;">
                             <input type="hidden" name="description" id="detail" value="">
                             <a href="javascript:void(0)" class="button  btn-light open-popup"  data-popup=".popup-editDetail">编辑详情</a>
                         </div>
@@ -428,7 +428,7 @@
                     </div>
 
                     <div class="activityRow">
-                        <img class="moneyImg" src="${request.contextPath}/images/assembly/icon/money.png" />
+                        <img  class="moneyImg" src="${request.contextPath}/images/assembly/icon/money.png" />
                         <span class="money">0 - 0</span>
                     </div>
 
@@ -444,44 +444,41 @@
                 </div>
             </div>
         </div>
-    </div>
+</div>
+<!--编辑详情start-->
+<div style="width:100%;margin: 0 auto;" class="editDetail popup popup-editDetail" style="display:none">
 
-    <!--编辑详情start-->
-    <div style="width:100%;margin: 0 auto;" class="editDetail popup popup-editDetail" style="display:none">
-
-        <div class="publish-article-content content-block">
-            <p><a href="#" class="close-popup" id="editDetailCloseBtn">关闭</a></p>
-            <div class="footer-btn g-image-upload-box">
-                <div class="upload-button">
-                    <span class="upload"><i class="upload-img"></i>插入图片</span>
-                    <input class="input-file" id="imageUpload" type="file" name="fileInput" capture="camera" accept="image/*" style="position:absolute;left:0;opacity:0;width:100%;">
-                </div>
+    <div class="publish-article-content content-block">
+        <p><a href="#" class="close-popup" id="editDetailCloseBtn">关闭</a></p>
+        <div class="footer-btn g-image-upload-box">
+            <div class="upload-button">
+                <span class="upload"><i class="upload-img"></i>插入图片</span>
+                <input class="input-file" id="imageUpload" type="file" name="fileInput" capture="camera" accept="image/*" style="position:absolute;left:0;opacity:0;width:100%;">
             </div>
-            <div class="title-tips"></div>
-            <input type="hidden" id="target">
-            <div class="article-content" id="contentEditDetail" style="border: 1px solid;">${detail!}</div>
-            <div class="footer-btn g-image-upload-box">
-                <div class="upload-button">
-                    <!--<span class="upload"><i class="upload-img"></i>插入图片</span>-->
-                    <nav class="bar bar-tab signup">
-                        <span class="upload"><input type="button" value="完成" onclick="setContentValue();" class="close-popup"/></span>
-                        <!--<span class="upload"><input type="button" id="bjxqCallback" value="返回" onclick="javascript:history.go(-1);"/></span>-->
-                    </nav>
-                    <!--<input class="input-file" id="imageUpload" type="file" name="fileInput" capture="camera" accept="image/*" style="position:absolute;left:0;opacity:0;width:100%;">-->
-                </div>
+        </div>
+        <div class="title-tips"></div>
+        <input type="hidden" id="target">
+        <div class="article-content" id="contentEditDetail" style="border: 1px solid;">${detail!}</div>
+        <div class="footer-btn g-image-upload-box">
+            <div class="upload-button">
+                <!--<span class="upload"><i class="upload-img"></i>插入图片</span>-->
+                <nav class="bar bar-tab signup">
+                    <span class="upload"><input type="button" value="完成" onclick="setContentValue();" class="close-popup"/></span>
+                    <!--<span class="upload"><input type="button" id="bjxqCallback" value="返回" onclick="javascript:history.go(-1);"/></span>-->
+                </nav>
+                <!--<input class="input-file" id="imageUpload" type="file" name="fileInput" capture="camera" accept="image/*" style="position:absolute;left:0;opacity:0;width:100%;">-->
             </div>
         </div>
     </div>
-    <!--编辑详情end-->
 </div>
-
+<!--编辑详情end-->
 <script type='text/javascript' src='${request.contextPath}/js/zepto.min.js' charset='utf-8'></script>
 <script type='text/javascript' src='${request.contextPath}/js/upload.js?v=20160720-2' charset='utf-8'></script>
-<script type='text/javascript' src='http://g.alicdn.com/msui/sm/0.6.2/js/sm.min.js' charset='utf-8'></script>
+<script type="text/javascript" src="${request.contextPath}/js/crowdFunding/sm.js"></script>
 <script type='text/javascript' src='http://g.alicdn.com/msui/sm/0.6.2/js/sm-extend.min.js' charset='utf-8'></script>
+
 <script type='text/javascript' src='${request.contextPath}/js/assembly/main.js' charset='utf-8'></script>
 <script src="${request.contextPath}/js/crowdFunding/artEditor.js"></script>
-<script type="text/javascript" src="${request.contextPath}/js/crowdFunding/sm.js"></script>
 <style>
     .activityRow {
         color: #40445e;
@@ -617,7 +614,7 @@
                 assemblyTypeText="企业参访"
             }
             $('input[name="assemblyType"]').val(assemblyType)
-            $("#assemblyTypeText").html(assemblyTypeText)
+            $("#assemblyTypeText").html(assemblyTypeText);
         });
         //添加费用项
         $('.addFeeItem').click(function(){
