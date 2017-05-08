@@ -26,6 +26,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.xml.bind.SchemaOutputResolver;
 import java.io.UnsupportedEncodingException;
 import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
@@ -119,6 +120,8 @@ public class AssemblyController extends  BaseController {
                         feeId=feeIdStr[i];
                         fee.setFeeId(feeId);
                         feeService.modifyFee(fee);
+                    }else{
+                        feeId = feeService.saveFee(fee);
                     }
                 }else{
                     feeId = feeService.saveFee(fee);
@@ -375,25 +378,31 @@ public class AssemblyController extends  BaseController {
             Calendar cal = Calendar.getInstance();
             SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
             attender.setCreateTime(sdf.format(cal.getTime()));
-            if (StringUtils.isNotEmpty(questionAnswer)) {
-                String[] questionAnswers = questionAnswer.split(",");
-                if (!questionAnswers[0].equals("undefined")) {
-                    attender.setUserName(questionAnswers[0]);
-                }
-                if (!questionAnswers[1].equals("undefined")) {
-                    attender.setPhone(questionAnswers[1]);
-                }
-                if (!questionAnswers[2].equals("undefined")) {
-                    attender.setWx(questionAnswers[2]);
-                }
-                if (!questionAnswers[3].equals("undefined")) {
-                    attender.setEmail(questionAnswers[3]);
-                }
-                if (!questionAnswers[4].equals("undefined")) {
-                    attender.setCompany(questionAnswers[4]);
+            Assembly assembly = assemblyService.findAssemblyById(assemblyId);
+            String[] questions = assembly.getShowApplyProblem().split("\\,");
+            String[] questionAnswers = questionAnswer.split("\\^");
+            for (int i=1;i<=questions.length;i++){
+                if (!"undefined".equals(questionAnswers[i])) {
+                    if (questions[i-1].equals("userName")){
+                        attender.setUserName(questionAnswers[i]);
+                    }
+                    if (questions[i-1].equals("phone")){
+                        attender.setPhone(questionAnswers[i]);
+                    }
+                    if (questions[i-1].equals("wx")){
+                        attender.setWx(questionAnswers[i]);
+                    }
+                    if (questions[i-1].equals("email")){
+                        attender.setEmail(questionAnswers[i]);
+                    }
+                    if (questions[i-1].equals("company")){
+                        attender.setCompany(questionAnswers[i]);
+                    }
                 }
             }
-            attenderService.saveAttender(attender);
+
+
+           attenderService.saveAttender(attender);
         } catch (Exception e) {
             e.printStackTrace();
         }

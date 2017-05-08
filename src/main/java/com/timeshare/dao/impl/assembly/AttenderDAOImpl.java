@@ -35,11 +35,11 @@ public class AttenderDAOImpl extends BaseDAO implements AttenderDAO {
                 ps.setString(4,Attender.getFeedId());
                 ps.setString(5,Attender.getCreateTime());
                 ps.setString(6,Attender.getQuestionAnswer());
-                ps.setString(7,Attender.getQuestionAnswer());
-                ps.setString(8,Attender.getQuestionAnswer());
-                ps.setString(9,Attender.getQuestionAnswer());
-                ps.setString(10,Attender.getQuestionAnswer());
-                ps.setString(11,Attender.getQuestionAnswer());
+                ps.setString(7,Attender.getUserName());
+                ps.setString(8,Attender.getPhone());
+                ps.setString(9,Attender.getWx());
+                ps.setString(10,Attender.getEmail());
+                ps.setString(11,Attender.getCompany());
             }
         });
         if(result > 0){

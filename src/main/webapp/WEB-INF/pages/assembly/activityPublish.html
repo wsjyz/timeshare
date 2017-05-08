@@ -538,11 +538,11 @@
             var year =dt.getFullYear();
             var month =dt.getMonth()+1;
             if(month<10) month='0'+month;
-            var day = dt.getDate();
+            var day = dt.getDate()+1;
             if(day<10) day='0'+day;
-            var hour =dt.getHours();
+            var hour =9;
             if(hour<10) hour='0'+hour;
-            var minute= dt.getMinutes();
+            var minute= 0;
             if(minute<10)minute='0'+minute;
             if($(this).val()==''){
                 $(this).datetimePicker({
@@ -556,11 +556,11 @@
             var month =dt.getMonth()+1;
             if(month<10) month='0'+month;
             var day = dt.getDate();
-            day=day+2;
+            day=day+1;
             if(day<10) day='0'+day;
-            var hour =dt.getHours();
+            var hour =18;
             if(hour<10) hour='0'+hour;
-            var minute= dt.getMinutes();
+            var minute= 0;
             if(minute<10)minute='0'+minute;
             if($(this).val()==''){
                 $(this).datetimePicker({
@@ -688,7 +688,7 @@
             if(apply==""){
                 apply=$(this).val();
             }else{
-                apply=$(this).val()+","+apply;
+                apply=apply+","+$(this).val();
             }
         })
         $('input[name="applyId"]').val(apply);

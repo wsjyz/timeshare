@@ -521,26 +521,46 @@
                             onClick:function(){
                                 var feeId=$("input[name='feeId']").val();
                                 var price=$("input[name='price']").val();
-
-                                var userName=$("input[name='userName']").val();
-                                var phone=$("input[name='phone']").val();
-                                var wxName=$("input[name='wxName']").val();
-                                var email=$("input[name='email']").val();
-                                var companyName=$("input[name='companyName']").val();
-
                                 var questionAnswer="";
+                                //  <#if assembly.showApplyProblem?contains("userName")>
+                                var userName=$("input[name='userName']").val();
+                                if (userName==""){
+                                    $.alert("姓名是必填项！");
+                                    return false;
+                                }
                                 if(userName!="" && userName!=undefined){
-                                    questionAnswer=questionAnswer+","+userName;
+                                    questionAnswer=questionAnswer+"^"+userName;
+                                }
+                                //</#if>
+                                //  <#if assembly.showApplyProblem?contains("phone")>
+                                var phone=$("input[name='phone']").val();
+                                if (phone==""){
+                                    $.alert("手机是必填项！");
+                                    return false;
                                 }
                                 if(phone!="" && phone!=undefined){
                                     if(!(/^1[3|4|5|8][0-9]\d{4,8}$/.test(phone))){
                                         $.alert("手机号码格式不正确!");
                                         return false;
                                     }
-                                    questionAnswer=questionAnswer+","+phone;
+                                    questionAnswer=questionAnswer+"^"+phone;
+                                }
+                                //</#if>
+                                //  <#if assembly.showApplyProblem?contains("wx")>
+                                var wxName=$("input[name='wxName']").val();
+                                if (wxName==""){
+                                    $.alert("微信是必填项！");
+                                    return false;
                                 }
                                 if(wxName!=""){
                                     questionAnswer=questionAnswer+","+wxName;
+                                }
+                                //</#if>
+                                //  <#if assembly.showApplyProblem?contains("email")>
+                                var email=$("input[name='email']").val();
+                                if (email==""){
+                                    $.alert("邮件是必填项！");
+                                    return false;
                                 }
                                 if(email!="" && email!=undefined){
                                     var regex = /^([0-9A-Za-z\-_\.]+)@([0-9a-z]+\.[a-z]{2,3}(\.[a-z]{2})?)$/g;
@@ -548,14 +568,22 @@
                                         $.alert("邮箱格式不正确!");
                                         return false;
                                     }
-                                    questionAnswer=questionAnswer+","+email;
+                                    questionAnswer=questionAnswer+"^"+email;
+                                }
+                                //</#if>
+                                //  <#if assembly.showApplyProblem?contains("company")>
+                                var companyName=$("input[name='companyName']").val();
+                                if (companyName==""){
+                                    $.alert("所在企业是必填项！");
+                                    return false;
                                 }
                                 if(companyName!="" && companyName!=undefined){
-                                    questionAnswer=questionAnswer+","+companyName;
+                                    questionAnswer=questionAnswer+"^"+companyName;
                                 }
+                                //</#if>
+                           //     window.location.href = "${request.contextPath}/assembly/saveAttender?assemblyId=${assembly.assemblyId}&questionAnswer="+questionAnswer+"&feeId="+feeId;
                                     window.location.href = "https://open.weixin.qq.com/connect/oauth2/authorize?appid=wxcd8903dd6a9552eb" +
-                                            "&redirect_uri=http%3A%2F%2Fjk.zhangqidong.cn%2Ftime%2Fassembly%2Fto-pay-for-confirm%2F&response_type=code&scope=snsapi_base&state=" +feeId+"_${assembly.assemblyId}"+
-                                            "_questionAnswer="+questionAnswer+"#wechat_redirect";
+                                            "&redirect_uri=http%3A%2F%2Fjk.zhangqidong.cn%2Ftime%2Fassembly%2Fto-pay-for-confirm%2F&response_type=code&scope=snsapi_base&state=" +feeId+"_${assembly.assemblyId}_"+questionAnswer+"#wechat_redirect";
                             }
                         },
                     ]
