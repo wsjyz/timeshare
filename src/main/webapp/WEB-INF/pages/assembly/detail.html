@@ -63,6 +63,7 @@
               </#if>
               <a class="tab-item external item-me" href="#">
                   <span class="icon icon-me"></span>
+                  ${userInfo.userId}
                   <#if attenderTouser=="true">
                       <span>已报名</span>
                       <#else>
@@ -244,6 +245,12 @@
                 'onMenuShareQQ'
             ] // 必填，需要使用的JS接口列表，所有JS接口列表见附录2
         });
+        var shareImgUrl="";
+       // <#if assembly.titleImg=="">
+        shareImgUrl=="${request.contextPath}/images/assembly/default_tImage.jpg";
+       //         <#else>
+        shareImgUrl="${assembly.titleImg}";
+            //    </#if>
         wx.ready(function(){
             wx.onMenuShareAppMessage({
                 title: '邂逅活动',

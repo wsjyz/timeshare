@@ -32,6 +32,8 @@ import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
+import static com.timeshare.utils.WxPayUtils.*;
+
 /**
  * Created by user on 2016/9/26.
  */
@@ -245,7 +247,7 @@ public class AssemblyController extends  BaseController {
     }
 
     @RequestMapping(value = "/to-detail")
-    public String detail(@RequestParam(value = "assemblyId", defaultValue = "") String assemblyId,String type, Model model, HttpServletRequest request, @CookieValue(value = "time_sid", defaultValue = "admin") String userId) {
+    public String detail(@RequestParam(value = "assemblyId", defaultValue = "") String assemblyId,String type, Model model, HttpServletRequest request, @CookieValue(value = "time_sid", defaultValue = "a141107f7f3646db8827c45bac9d76a2") String userId) {
         Assembly assembly = assemblyService.findAssemblyById(assemblyId);
         UserInfo userInfo = getCurrentUser(userId);
         //浏览次数加1
@@ -367,7 +369,7 @@ public class AssemblyController extends  BaseController {
     }
 
     @RequestMapping(value = "/saveAttender")
-    public String saveAttender(@RequestParam String assemblyId, @RequestParam String feeId, @RequestParam String questionAnswer, @CookieValue(value = "time_sid", defaultValue = "admin") String userId, Model model) {
+    public String saveAttender(@RequestParam String assemblyId, @RequestParam String feeId, @RequestParam String questionAnswer, @RequestParam String userId, Model model) {
         String resultId = "";
         try {
             Attender attender = new Attender();
@@ -515,17 +517,35 @@ public class AssemblyController extends  BaseController {
         String feeId = states[0];
         String assemblyId = states[1];
         String questionAnswer = states[2];
-        System.out.println("feeId" + feeId);
-        System.out.println("questionAnswer" + questionAnswer);
-        System.out.println("assemblyId" + assemblyId);
 
         Fee fee = feeService.findFeeById(feeId);
+        WeixinOauth weixinOauth=new WeixinOauth();
+        AccessTokenBean accessTokenBean = weixinOauth.obtainOauthAccessToken(code);
+        WeixinUser weixinUser=weixinOauth.getUserInfo(accessTokenBean.getAccess_token(),accessTokenBean.getOpenid());
+        UserInfo user = new UserInfo();
+        String userId = CommonStringUtils.genPK();
+        if(weixinUser != null && StringUtils.isNotBlank(weixinUser.getOpenId())){
+            UserInfo userInfo = userService.findUserByOpenId(weixinUser.getOpenId());
+            if(userInfo == null){
+                user.setUserId(userId);
+                user.setOpenId(weixinUser.getOpenId());
+                user.setNickName(weixinUser.getNickname());
+                user.setSex(weixinUser.getSex());
+                user.setCity(weixinUser.getCity());
+                ImageObj imageObj = new ImageObj();
+                imageObj.setImageUrl(weixinUser.getHeadimgurl());
+                user.setImageObj(imageObj);
+                String result = userService.saveUser(user);
+            }else{
+                userId=userInfo.getUserId();
+            }
 
+        }
         String payMessageTitle = "您在邂逅活动的报名款项：" + fee.getFeeTitle();
-        String jsApiParams = WxPayUtils.userPayToCorp(code, payMessageTitle, fee.getFee());
+        String jsApiParams = userPayToCorpByHuodong(code, payMessageTitle, fee.getFee(),weixinOauth,accessTokenBean.getOpenid());
         attr.addAttribute("jsApiParams", jsApiParams);
         attr.addAttribute("payTip", "你确定要支付" + fee.getFee() + "元吗");
-        attr.addAttribute("okUrl", request.getContextPath() + "/assembly/saveAttender?assemblyId=" + assemblyId + "&feeId=" + feeId + "&questionAnswer=" + questionAnswer);
+        attr.addAttribute("okUrl", request.getContextPath() + "/assembly/saveAttender?assemblyId=" + assemblyId + "&feeId=" + feeId + "&questionAnswer=" + questionAnswer+"&userId="+userId);
         attr.addAttribute("backUrl", request.getContextPath() + "/assembly/to-detail?assemblyId=" + assemblyId);
 
         return "redirect:/wxPay/to-pay/";
