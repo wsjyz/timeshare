@@ -187,6 +187,7 @@
 </body>
 <script>
     var projectName="${crowdFunding.projectName!}";
+    var detail='${crowdFunding.createUserName!}'+'创建了一个众筹项目';
     var shareImgUrl="${request.contextPath}/${crowdFunding.imageUrl!}.jpg";
     if(shareImgUrl.indexOf('http') == -1){
         shareImgUrl = 'http://jk.zhangqidong.cn'+shareImgUrl;
@@ -207,7 +208,7 @@
         //分享到朋友
         wx.onMenuShareAppMessage({
             title: projectName,
-            desc: '',
+            desc: detail,
             link: window.location.href,
             imgUrl: shareImgUrl,
             trigger: function (res) {
