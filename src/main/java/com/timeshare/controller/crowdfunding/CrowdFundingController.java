@@ -13,6 +13,7 @@ import com.timeshare.service.assembly.CommentService;
 import com.timeshare.service.crowdfunding.CrowdFundingService;
 import com.timeshare.service.crowdfunding.EnrollService;
 import com.timeshare.utils.Contants;
+import com.timeshare.utils.WxUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -28,6 +29,7 @@ import javax.servlet.http.HttpServletRequest;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by user on 2016/9/26.
@@ -92,7 +94,7 @@ public class CrowdFundingController extends  BaseController{
     }
     //众筹详情页
     @RequestMapping(value = "/toDetail")
-    public String toDetail(@RequestParam String crowdFundingId,Model model,@RequestParam(defaultValue = "false" ,required = false) String commentFlag,@CookieValue(value = "time_sid", defaultValue = "00359e8721c44d168aac7d501177e314") String userId) {
+    public String toDetail(@RequestParam String crowdFundingId,Model model,@RequestParam(defaultValue = "false" ,required = false) String commentFlag,@CookieValue(value = "time_sid", defaultValue = "00359e8721c44d168aac7d501177e314") String userId,HttpServletRequest request) {
         //是否默认显示评论tab
         model.addAttribute("commentFlag",commentFlag);
         //众筹详情页
@@ -106,6 +108,13 @@ public class CrowdFundingController extends  BaseController{
         }
         UserInfo userInfo=getCurrentUser(userId);
         model.addAttribute("userInfo",userInfo);
+
+
+        //微信jssdk相关代码
+        String url = WxUtils.getUrl(request);
+        Map<String,String> parmsMap = WxUtils.sign(url);
+        model.addAttribute("parmsMap",parmsMap);
+
         return "crowdfunding/details";
     }
     //保存众筹

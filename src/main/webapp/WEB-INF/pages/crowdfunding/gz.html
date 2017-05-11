@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>已报名成功，关注邂逅时刻</title>
+    <meta name="viewport" content="initial-scale=1, maximum-scale=1">
+    <link rel="shortcut icon" href="/favicon.ico">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <link rel="stylesheet" href="${request.contextPath}/css/time.css">
+    <link rel="stylesheet" href="//g.alicdn.com/msui/sm/0.6.2/css/sm.min.css">
+    <link rel="stylesheet" href="//g.alicdn.com/msui/sm/0.6.2/css/sm-extend.min.css">
+    <link rel="stylesheet" href="${request.contextPath}/css/material-icon.css">
+    <link rel="stylesheet" href="${request.contextPath}/css/main.css">
+    <style>
+        .row .col-10{
+            margin-left: 10%
+        }
+        .row .col-30{
+            margin-left: 4%
+        }
+        .float-btn-div i:active {
+            color: #BCEE68;
+        }
+    </style>
+</head>
+<body>
+
+
+<div class="page-group">
+    <div class="page page-current">
+        <!-- 你的html代码 -->
+        <header class="bar bar-nav">
+            <!--<a class="icon icon-left pull-left back"></a>-->
+            <h1 class='title'>您已报名成功</h1>
+            <!-- 邂逅拾刻log -->
+            <div class="xhsk-fixed-log">
+                <div class="fixed-log-con">
+                    <!--<img id="logoImg" src="${request.contextPath}/images/icon/logo.png" alt="邂逅拾刻" >-->
+                </div>
+            </div>
+        </header>
+        <div class="content">
+            <div style="width: 100%;margin-top: 0.5rem;">
+                <img src="${request.contextPath}/images/qrcode_8cm.jpg" style="width: 4.5rem;height: 4.5rem;display:block;margin:0 auto;"/>
+                <div style="text-align: center">更多精彩，敬请关注邂逅拾刻</div>
+                <div style="text-align: center">（公众号：xiehoushike）</div>
+            </div>
+
+            <div id="bidDiv">
+                <div class="content-block">
+                    <div class="row">
+                        <div class="col-100"><input type="button" id="" class="button button-big btn-dark button-fill button-round" value="确   定" onclick="toCrowdfundingByMyEnroll();"></div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+        </div>
+</div>
+
+<script type='text/javascript' src='//g.alicdn.com/sj/lib/zepto/zepto.min.js' charset='utf-8'></script>
+
+<script type='text/javascript' src='//g.alicdn.com/msui/sm/0.6.2/js/sm.min.js' charset='utf-8'></script>
+<script type='text/javascript' src='//g.alicdn.com/msui/sm/0.6.2/js/sm-extend.min.js' charset='utf-8'></script>
+<script type="text/javascript" src="${request.contextPath}/js/crowdFunding/config.js"></script>
+
+</body>
+<script>
+    function toCrowdfundingByMyEnroll(){
+        window.location.href="${request.contextPath}/enroll/toCrowdfundingByMyEnroll";
+    }
+</script>
+</html>
