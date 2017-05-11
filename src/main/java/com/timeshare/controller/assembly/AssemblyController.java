@@ -247,7 +247,7 @@ public class AssemblyController extends  BaseController {
     }
 
     @RequestMapping(value = "/to-detail")
-    public String detail(@RequestParam(value = "assemblyId", defaultValue = "") String assemblyId,String type, Model model, HttpServletRequest request, @CookieValue(value = "time_sid", defaultValue = "a141107f7f3646db8827c45bac9d76a2") String userId) {
+    public String detail(@RequestParam(value = "assemblyId", defaultValue = "") String assemblyId,String type, Model model, HttpServletRequest request, @CookieValue(value = "time_sid", defaultValue = "admin") String userId) {
         Assembly assembly = assemblyService.findAssemblyById(assemblyId);
         UserInfo userInfo = getCurrentUser(userId);
         //浏览次数加1
@@ -402,9 +402,19 @@ public class AssemblyController extends  BaseController {
                     }
                 }
             }
-
-
-           attenderService.saveAttender(attender);
+            List<Attender> attenders = attenderService.getListByAssemblyId(assemblyId);
+            boolean save=true;
+            if (!CollectionUtils.isEmpty(attenders)){
+                for (Attender attender1:attenders){
+                    if (attender1.getUserId().equals(userId)){
+                        save=false;
+                        break;
+                    }
+                }
+            }
+            if (save) {
+                attenderService.saveAttender(attender);
+            }
         } catch (Exception e) {
             e.printStackTrace();
         }
