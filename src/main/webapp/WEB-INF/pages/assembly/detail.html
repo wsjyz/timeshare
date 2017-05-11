@@ -63,7 +63,6 @@
               </#if>
               <a class="tab-item external item-me" href="#">
                   <span class="icon icon-me"></span>
-                  ${userInfo.userId}
                   <#if attenderTouser=="true">
                       <span>已报名</span>
                       <#else>
@@ -251,6 +250,9 @@
        //         <#else>
         shareImgUrl="${assembly.titleImg}";
             //    </#if>
+        if(shareImgUrl.indexOf('http') == -1){
+            shareImgUrl = 'http://jk.zhangqidong.cn'+shareImgUrl;
+        }
         wx.ready(function(){
             wx.onMenuShareAppMessage({
                 title: '邂逅活动',
@@ -258,16 +260,16 @@
                 link: window.location.href,
                 imgUrl: shareImgUrl,
                 trigger: function (res) {
-                    //alert('用户点击发送给朋友');
+                 //  alert('用户点击发送给朋友');
                 },
                 success: function (res) {
-                    //$.toast('已分享');
+               //     $.toast('已分享');
                 },
                 cancel: function (res) {
-                    //$.toast('已取消分享');
+              //      $.toast('已取消分享');
                 },
                 fail: function (res) {
-                    console.log('失败');
+              //      console.log('失败');
                 }
             });
             wx.onMenuShareTimeline({

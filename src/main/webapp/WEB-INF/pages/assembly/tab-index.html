@@ -127,7 +127,8 @@
     $(function () {
         $(document).on("click",".card",function () {
             var assemblyId=$(this).attr("data-id");
-           window.location.href="${request.contextPath}/assembly/to-detail?assemblyId="+assemblyId;
+            var backUrl = 'http://jk.zhangqidong.cn'+'${request.contextPath}/assembly/to-detail?assemblyId='+assemblyId;
+           window.location.href = '${request.contextPath}/wx/to-get-open-id?backUrl='+encodeURIComponent(backUrl);
         });
     })
 </script>
