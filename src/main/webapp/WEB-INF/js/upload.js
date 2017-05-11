@@ -8,6 +8,7 @@
         $filePicker = $('#filePicker'),
         $filePickerInput = $('#filePicker').find('input'),
         state = 'pedding';
+    var isReturnCutPath=$("#isReturnCutPath").val();
 
     $filePicker.on('click','label',function(){
         $filePickerInput.trigger('click');
@@ -21,6 +22,7 @@
         var inputFile = $filePickerInput[0].files[0];
         var form = new FormData();
         form.append("inputFile", inputFile);
+        form.append("isReturnCutPath", isReturnCutPath);
 
         //视图
         var $li = $('<div class="item" data-name=""><p class="imgWrap"></p></div>');

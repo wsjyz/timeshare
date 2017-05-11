@@ -35,7 +35,7 @@
                         <#list crowdFundingList as crowdFunding>
                             <div class="swiper-slide">
                                 <a href="${request.contextPath}/wx/to-get-open-id?backUrl=/crowdFunding/toDetail?crowdFundingId=${crowdFunding.crowdfundingId}">
-                                    <img src="${request.contextPath}/${crowdFunding.imageUrl}_320x240.jpg" onerror="this.src='${request.contextPath}/images/crowdFunding/pic.jpg'"/>
+                                    <img src="${request.contextPath}/${crowdFunding.imageUrl}.jpg" onerror="this.src='${request.contextPath}/images/crowdFunding/pic.jpg'" style="height: calc(460/750*100vw);width: 100%;"/>
                                 </a>
                             </div>
                         </#list>
@@ -96,11 +96,11 @@
                 }
 
 
-                var imageUrlSrc='${request.contextPath}/'+crowdFunding.imageUrl+'_320x240.jpg';
+                var imageUrlSrc='${request.contextPath}/'+crowdFunding.imageUrl+'.jpg';
 
                 html += '<div class="item"><a href="${request.contextPath}/wx/to-get-open-id?backUrl=/crowdFunding/toDetail?crowdFundingId='+crowdFunding.crowdfundingId+'"><div class="item-title"><span class="user-head-image_div"><img src="'+crowdFunding.userHeadImageUrl+'" onerror="this.src=\'${request.contextPath}/images/crowdFunding/pic.jpg\'"/></span>'+crowdFunding.createUserName+'</div>'+
                     '<div class="item-box">'+
-                    '<div class="zc-img"><img src="'+imageUrlSrc+'" onerror="this.src=\'${request.contextPath}/images/crowdFunding/pic.jpg\'"/></div>'+
+                    '<div class="zc-img"><img src="'+imageUrlSrc+'" onerror="this.src=\'${request.contextPath}/images/crowdFunding/pic.jpg\'" style="height: calc(460/750*100vw);width: 100%;"/></div>'+
                     '<div class="zc-text">'+
                     '<div class="zc-name"><em class="tag">'+enrollTitleStatus+'</em> &nbsp;'+crowdFunding.projectName+'</div>'+
                     '<div class="zc-info"><span class="time"><i class="i-time"></i>上课时间:'+crowdFunding.curriculumEndTime+':00</span><span class="address"><i class="i-address"></i>'+crowdFunding.sponsorCity+'</span></div>'+

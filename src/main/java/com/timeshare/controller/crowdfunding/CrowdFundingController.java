@@ -136,8 +136,8 @@ public class CrowdFundingController extends  BaseController{
                     if(StringUtils.isNotBlank(imgUrl)){
                         ImageObj obj = new ImageObj();
                         obj.setObjId(pk);
-                        if(imgUrl.indexOf("images") != -1){
-                            imgUrl = imgUrl.substring(imgUrl.indexOf("images") - 1,imgUrl.indexOf("_"));
+                        if(imgUrl.indexOf("images") != -1 && imgUrl.indexOf(".jpg")!=-1){
+                            imgUrl = imgUrl.substring(imgUrl.indexOf("images") - 1,imgUrl.indexOf(".jpg"));
                         }
                         obj.setImageUrl(imgUrl);
                         obj.setImageType(Contants.IMAGE_TYPE.CROWD_FUNDING_IMG.name());
@@ -182,8 +182,8 @@ public class CrowdFundingController extends  BaseController{
                 if(StringUtils.isNotBlank(imgUrl)){
                     ImageObj obj = new ImageObj();
                     obj.setObjId(pk);
-                    if(imgUrl.indexOf("images") != -1){
-                        imgUrl = imgUrl.substring(imgUrl.indexOf("images") - 1,imgUrl.indexOf("_"));
+                    if(imgUrl.indexOf("images") != -1 && imgUrl.indexOf(".jpg")!=-1){
+                        imgUrl = imgUrl.substring(imgUrl.indexOf("images") - 1,imgUrl.indexOf(".jpg"));
                     }
                     obj.setImageUrl(imgUrl);
                     obj.setImageType(Contants.IMAGE_TYPE.CROWD_FUNDING_IMG.name());

@@ -8,7 +8,8 @@ $.extend($.fn,{
         placeholader: '<p>请输入文章正文内容</p>',
         validHtml: [],
         limitSize: 3,
-        showServer: false
+        showServer: false,
+        isReturnCutPath:true
     },
     artEditor: function (options) {
         var _this = this,
@@ -41,7 +42,7 @@ $.extend($.fn,{
                     }
                     if (_this._opt.showServer) {
                         //_this.upload(data);
-                        _this.upload(file);
+                        _this.upload(file,_this._opt.isReturnCutPath);
                         return;
                     }
                 };
@@ -97,7 +98,7 @@ $.extend($.fn,{
         tCanvas.width = tCanvas.height = canvas.width = canvas.height = 0;
         return ndata;
     },
-    upload: function (file) {
+    upload: function (file,isReturnCutPath) {
         var _this = this, filed = _this._opt.uploadField;
         if ($.trim($(_this).html()) === _this._opt.placeholader) {
             $(_this).html('');
@@ -105,6 +106,7 @@ $.extend($.fn,{
 
         var form = new FormData();
         form.append("inputFile", file);
+        form.append("isReturnCutPath", isReturnCutPath);
         $.ajax({
             url: _this._opt.uploadUrl,
             type: 'post',
@@ -116,7 +118,7 @@ $.extend($.fn,{
         }).then(function (res) {
                 var src = _this._opt.uploadSuccess(res);
                 if (src) {
-                    var img = '<img src="' + src + '" style="width:90%;" />';
+                    var img = '<img src="' + src + '" style="height: calc(525/900*100vw);width: 100%;" />';
                     _this.insertImage(img);
                 } else {
                     console.log('图片地址为空', src)

@@ -93,10 +93,10 @@
 
                         <#assign editImgShowPath=""/>
                         <#if crowdFunding.imageUrl??>
-                            <#assign editImgShowPath="${request.contextPath}/${crowdFunding.imageUrl}_320x240.jpg"/>
+                            <#assign editImgShowPath="${request.contextPath}/${crowdFunding.imageUrl}.jpg"/>
                         </#if>
 
-                        <div class="imgShow" ><img src="${editImgShowPath}" id="crowdFundingImageUrl" style="height: 5rem;width: 10rem;"/></div>
+                        <div class="imgShow" ><img src="${editImgShowPath}" id="crowdFundingImageUrl" style="height: calc(460/750*100vw);width: 100%;"/></div>
 
 
 
@@ -136,12 +136,15 @@
         <div class="content activityPublishContent">
             <div class="list-block">
                 <input type="hidden" id="imageId" value=""/>
-                <img src="" id="imageUrl" style="display: none;margin: 0 auto;height: 9rem;width: 16rem;"/>
+                <!--设置上传图片 后返回的路径是否带有320*240后缀 false等于不返回-->
+                <input type="hidden" id="isReturnCutPath" value="false"/>
+                <h3 style="text-align: center">建议图片尺寸750*460，大小不超过4M</h3>
+                <img src="" id="imageUrl" style="display: none;margin: 0 auto;height: calc(460/750*100vw);width: 100%;"/>
                 <div class="main-wrap">
                     <div id="uploader">
                         <div class="queueList fix">
                             <div class="filelist"></div>
-                            <div id="filePicker">
+                            <div id="filePicker" style="margin-left: 35%">
                                 <label class="trigger">+</label>
                                 <input type="file" name="file" class="webuploader-element-invisible" accept="image/*">
                             </div>
@@ -167,7 +170,7 @@
             <p><a href="#" class="close-popup">关闭</a></p>
             <div class="details">
                 <div class="item-box">
-                    <div class="zc-img"><img src="" id="previewImage"></div>
+                    <div class="zc-img"><img src="" id="previewImage" style="height: calc(460/750*100vw);width: 100%;"></div>
                     <div class="zc-text">
                         <div class="zc-name"><em class="tag">预览中</em> <div id="previewProjectName"></div></div>
                         <div class="zc-info">
@@ -219,6 +222,7 @@
                 </nav>
                 <!--<input class="input-file" id="imageUpload" type="file" name="fileInput" capture="camera" accept="image/*" style="position:absolute;left:0;opacity:0;width:100%;">-->
             </div>
+            <h4 style="text-align: center">建议图片尺寸900*525，大小不超过4M</h4>
         </div>
     </div>
 </div>
@@ -240,7 +244,7 @@
     $(function() {
         $('#contentEditDetail').artEditor({
             imgTar: '#imageUpload',
-            limitSize: 5,   // 兆
+            limitSize: 4,   // 兆
             showServer: true,
             uploadUrl: '/time/upload/upload-img',
             data: {},

@@ -3,6 +3,7 @@ package com.timeshare.controller.upload;
 import com.timeshare.domain.ImageObj;
 import com.timeshare.utils.CommonStringUtils;
 import com.timeshare.utils.ImgUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -28,6 +29,7 @@ public class UploadController {
     public UploadResult uploadImg(MultipartHttpServletRequest request){
         UploadResult result = new UploadResult();
         MultipartFile file = request.getFile("inputFile");
+        String isReturnCutPath=request.getParameter("isReturnCutPath");
         if(file == null){
             System.out.println("no file");
             return null;
@@ -55,7 +57,12 @@ public class UploadController {
             ImgUtils.cropImageCenter(targetFile.getAbsolutePath(),path+"/"+name+"_320x240.jpg",320,240);
 
             result.setSuccess(true);
-            result.setThumbUrl(request.getContextPath()+"/images/" + month + "/" + day + "/" +name+"_320x240.jpg");
+
+            String cutPath="_320x240";
+            if(StringUtils.isNotBlank(isReturnCutPath) && "false".equals(isReturnCutPath)){
+                cutPath="";
+            }
+            result.setThumbUrl(request.getContextPath()+"/images/" + month + "/" + day + "/" +name+""+cutPath+".jpg");
         } catch (IOException e) {
             e.printStackTrace();
             result.setSuccess(false);
