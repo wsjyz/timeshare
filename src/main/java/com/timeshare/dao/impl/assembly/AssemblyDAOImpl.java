@@ -33,7 +33,7 @@ public class AssemblyDAOImpl extends BaseDAO implements AssemblyDAO {
 
     @Override
     public String saveAssembly(Assembly Assembly) {
-        StringBuilder sql = new StringBuilder("INSERT INTO t_assembly (assembly_id, title, start_time, end_time, rendezvous, description,user_id, type, phone_number, attent_count, comment_count, is_on_index,is_on_apply,show_apply_problem,create_time,status) VALUES (?,?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?,?,?,?,?);");
+        StringBuilder sql = new StringBuilder("INSERT INTO t_assembly (assembly_id, title, start_time, end_time, rendezvous, description,user_id, type, phone_number, attent_count, comment_count, is_on_index,is_on_apply,show_apply_problem,create_time,status,carousel) VALUES (?,?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?,?,?,?,?,?);");
         final String id = CommonStringUtils.genPK();
         int result = getJdbcTemplate().update(sql.toString(), new PreparedStatementSetter() {
             @Override
@@ -54,6 +54,7 @@ public class AssemblyDAOImpl extends BaseDAO implements AssemblyDAO {
                 ps.setString(14,Assembly.getShowApplyProblem());
                 ps.setString(15,Assembly.getCreateTime());
                 ps.setString(16,Assembly.getStatus());
+                ps.setString(17,"true");
 
             }
         });
@@ -116,6 +117,9 @@ public class AssemblyDAOImpl extends BaseDAO implements AssemblyDAO {
         if(StringUtils.isNotBlank(Assembly.getResultContent())){
             sql.append(" result_content = '"+Assembly.getResultContent()+"',");
         }
+        if(StringUtils.isNotBlank(Assembly.getCarousel())){
+            sql.append(" carousel = '"+Assembly.getCarousel()+"',");
+        }
 
         if (sql.lastIndexOf(",") + 1 == sql.length()) {
             sql.delete(sql.lastIndexOf(","), sql.length());
@@ -170,6 +174,10 @@ public class AssemblyDAOImpl extends BaseDAO implements AssemblyDAO {
         }
         if("true".equals(Assembly.getShowOldTime())){
             sql.append(" and ass.end_time>now()");
+        }
+        ;if (StringUtils.isNotEmpty(Assembly.getCarousel())){
+            sql.append(" and ass.carousel=?");
+            list.add(Assembly.getCarousel());
         }
         sql.append(" order by create_time desc  limit ?,?");
         list.add(startIndex);
@@ -285,6 +293,7 @@ public class AssemblyDAOImpl extends BaseDAO implements AssemblyDAO {
             assembly.setCreateTime(rs.getString("create_time"));
             assembly.setStatus(rs.getString("status"));
             assembly.setResultContent(rs.getString("result_content"));
+            assembly.setCarousel(rs.getString("carousel"));
             return assembly;
         }
     }

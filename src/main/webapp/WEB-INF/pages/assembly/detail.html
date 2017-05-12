@@ -76,9 +76,9 @@
                   <input type="hidden" name="feeId" value="">
                   <input type="hidden" name="price" value="">
                   <#if assembly.titleImg=="">
-                      <img class="fullWidth" src="${request.contextPath}/images/assembly/default_tImage.jpg"  />
+                      <img style="width:100%;height: calc(460/750*100vw)" src="${request.contextPath}/images/assembly/default_tImage.jpg"  />
                       <#else>
-                      <img class="fullWidth" src="${assembly.titleImg}"  />
+                      <img style="width:100%;height: calc(460/750*100vw)" src="${assembly.titleImg}"  />
                   </#if>
                   <h4 class="activityTitle">${assembly.title}</h4>
                   <div class="activityDesc">
@@ -329,13 +329,13 @@
                     extraClass:'vcodeModal',
                     title:  '<div class="buttons-row">'+
                     '   <h4 class="title">加好友咨询</h4>'+
-                    '   <span class="closeModal"><img src="${request.contextPath}/images/assembly/close.png" /></span>'+
+                    '   <span class="closeModal"><img  src="${request.contextPath}/images/assembly/close.png" /></span>'+
                     '</div>',
                     text: ''+
                     '<div class="list-block"><ul>' +
                     '   <li>' +
-                    '       <div class="item-content vcodeImg">'+
-                    '           <img src="${assembly.consultationImg}" />'+
+                    '       <div >'+
+                    '           <img src="${assembly.consultationImg}" style="width:100%;height: calc(460/750*100vw)" />'+
                     '       </div>'+
                     '   </li>' +
                     '</ul></div>',

@@ -22,11 +22,9 @@
                   <span class="icon icon-left"></span>
                   返回
               </a>
-              <a class="button button-link button-nav back pull-left"  external href="${request.contextPath}/assembly/to-index">
+              <a class="button button-link button-nav back pull-right"  external href="${request.contextPath}/assembly/to-index">
                   关闭
               </a>
-
-              <span class="pull-right icon icon-edit"></span>
           </div>
 
 
@@ -34,13 +32,22 @@
               <div class="content-block">
                  <p class="gongxi">
                      <img src="${request.contextPath}/images/assembly/radioChecked.png" />
-                     恭喜您报名成功
+                     您已报名成功
                  </p>
+                      <div style="width: 100%;margin-top: 0.5rem;">
+                          <img src="${request.contextPath}/images/qrcode_8cm.jpg" style="width: 4.5rem;height: 4.5rem;display:block;margin:0 auto;"/>
+                          <div style="text-align: center">更多精彩，敬请关注邂逅拾刻</div>
+                          <div style="text-align: center">（公众号：xiehoushike）</div>
+                      </div>
+
+                      <div id="bidDiv">
+
+                      </div>
               </div>
               <section class="clearFix content-block" style="display: flex;">
                   <div class="pull-left" style="padding:.5rem;">
-                      <img style="width:5rem;" src="${assembly.titleImg}" align="left">
-                  </div>
+                  <img style="width:5rem;" src="${assembly.titleImg}" align="left">
+              </div>
                   <div class="pull-left" style="flex:1;">
                       <h4 class="activityTitle">${assembly.title}</h4>
                       <div class="activityRow">${assembly.startTime} 开始</div>
@@ -48,23 +55,6 @@
                   </div>
               </section>
 
-              <!--<section class="share">-->
-                  <!--<header>-邀请好友一起参加活动-</header>-->
-                  <!--<div class="bdsharebuttonbox">-->
-                      <!--<table align="center">-->
-                          <!--<tr>-->
-                              <!--<td><a title="分享到QQ好友" href="#" class="bds_sqq" data-cmd="sqq"><img src="${request.contextPath}/images/assembly/icon/shareQQ.png" /></a></td>-->
-                              <!--<td><a title="分享到QQ空间" href="#" class="bds_qzone" data-cmd="qzone"><img src="${request.contextPath}/images/assembly/icon/shareQzone.png" /></a></td>-->
-                              <!--<td><a title="分享到腾讯微博" href="#" class="bds_tqq" data-cmd="tqq"><img src="${request.contextPath}/images/assembly/icon/shareTencentWeibo.png" /></a></td>-->
-                          <!--</tr>-->
-                          <!--<tr>-->
-                              <!--<td><a title="分享到微信好友" href="#" class="bds_weixin" data-cmd="weixin"><img src="${request.contextPath}/images/assembly/icon/shareWeixin.png" /></a></td>-->
-                              <!--<td><a title="分享到微信朋友圈" href="#" ><img src="${request.contextPath}/images/assembly/icon/shareTimeline.png" /></a></td>-->
-                              <!--<td><a title="分享到新浪微博" href="#" class="bds_tsina" data-cmd="tsina"><img src="${request.contextPath}/images/assembly/icon/shareSinaWeibo.png" /></a></td>-->
-                          <!--</tr>-->
-                      <!--</table>-->
-                  <!--</div>-->
-              <!--</section>-->
           </div>
       </div>
   </div>

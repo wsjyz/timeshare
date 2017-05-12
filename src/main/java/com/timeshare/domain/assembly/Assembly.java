@@ -55,6 +55,16 @@ public class Assembly extends BaseDomain{
     private String feeIds;
     private String showOldTime;
 
+    private String carousel;
+
+    public void setCarousel(String carousel) {
+        this.carousel = carousel;
+    }
+
+    public String getCarousel() {
+        return carousel;
+    }
+
     public void setShowOldTime(String showOldTime) {
         this.showOldTime = showOldTime;
     }

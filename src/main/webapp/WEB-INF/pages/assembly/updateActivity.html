@@ -218,6 +218,7 @@
                             </div><div class="info"></div>
                         </div>
                     </div>
+                    <span>(建议750*460，不超过4M)</span>
                 </div>
                 <input type="button" value="确定" id="saveImgBtn" class="button button-fill button-danger button-big" style="margin: 1rem;width: 90%"/>
             </div>
@@ -432,7 +433,7 @@
 
         <div class="content activityContent">
             <div class="content-block">
-                <img class="fullWidth" src="${assembly.titleImg}"  id="titleImg" />
+                <img class="fullWidth" src="${assembly.titleImg}"  id="titleImg" style="width: 100%;height: calc(460/750*100vw)" />
                 <h4 class="activityTitle"></h4>
                 <div class="activityDesc">
                     <span id="createTime"></span>
@@ -496,6 +497,7 @@
                 <span class="upload"><i class="upload-img"></i>插入图片</span>
                 <input class="input-file" id="imageUpload" type="file" name="fileInput" capture="camera" accept="image/*" style="position:absolute;left:0;opacity:0;width:100%;">
             </div>
+            <span>（图片建议900*525，不超过4M）</span>
         </div>
         <div class="title-tips"></div>
         <input type="hidden" id="target">

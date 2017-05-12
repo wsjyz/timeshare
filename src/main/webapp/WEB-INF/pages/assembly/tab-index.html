@@ -58,7 +58,7 @@
                     ' <span class="userName" style="margin-top: 0.2rem;margin-left:0.5rem">'+assembly.userName+'</span>'+
                     '</div>'+
                     ' <div style="margin-top: 0.5rem">'+
-                    ' <img src="'+titleImg+'" class="fullWidth" height="256px"  />'+
+                    ' <img src="'+titleImg+'" style="width:100%;height: calc(460/750*100vw)" />'+
                     ' </div>'+
                     ' <h4 class="activityTitle">'+assembly.title+'</h4>'+
                     ' <div class="activityDesc">'+
@@ -126,9 +126,10 @@
     });
     $(function () {
         $(document).on("click",".card",function () {
-            var assemblyId=$(this).attr("data-id");
-            var backUrl = 'http://jk.zhangqidong.cn'+'${request.contextPath}/assembly/to-detail?assemblyId='+assemblyId;
-           window.location.href = '${request.contextPath}/wx/to-get-open-id?backUrl='+encodeURIComponent(backUrl);
+           var assemblyId=$(this).attr("data-id");
+//            var backUrl = 'http://jk.zhangqidong.cn'+'${request.contextPath}/assembly/to-detail?assemblyId='+assemblyId;
+//           window.location.href = '${request.contextPath}/wx/to-get-open-id?backUrl='+encodeURIComponent(backUrl);
+            window.location.href = '${request.contextPath}/assembly/to-detail?assemblyId='+assemblyId;
         });
     })
 </script>

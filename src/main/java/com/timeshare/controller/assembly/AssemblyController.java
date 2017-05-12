@@ -57,11 +57,12 @@ public class AssemblyController extends  BaseController {
 
     @RequestMapping(value = "/to-index")
     public String index(@RequestParam(value = "searchName", defaultValue = "") String searchName,
-                        @RequestParam(value = "type", defaultValue = "online") String type, Model model, @CookieValue(value = "time_sid", defaultValue = "admin") String userId) {
+                        @RequestParam(value = "type", defaultValue = "") String type, Model model, @CookieValue(value = "time_sid", defaultValue = "admin") String userId) {
         model.addAttribute("type", type);
         Assembly assembly = new Assembly();
         assembly.setStatus("PUBLISHED");
         assembly.setShowOldTime("true");
+        assembly.setCarousel("Y");
         UserInfo userInfo = getCurrentUser(userId);
         model.addAttribute("userInfo",userInfo);
 
@@ -71,7 +72,7 @@ public class AssemblyController extends  BaseController {
     }
 
     @RequestMapping(value = "/searchAssembly")
-    public String searchAssembly(@RequestParam(value = "searchName", defaultValue = "") String searchName, @RequestParam(value = "citySelect", defaultValue = "") String citySelect, @RequestParam(value = "type", defaultValue = "online") String type, Model model) {
+    public String searchAssembly(@RequestParam(value = "searchName", defaultValue = "") String searchName, @RequestParam(value = "citySelect", defaultValue = "") String citySelect, @RequestParam(value = "type", defaultValue = "") String type, Model model) {
         model.addAttribute("type", type);
         model.addAttribute("citySelect", citySelect);
         model.addAttribute("searchName", searchName);
@@ -81,7 +82,7 @@ public class AssemblyController extends  BaseController {
 
     @RequestMapping("/list")
     @ResponseBody
-    public List<Assembly> findList(@RequestParam(value = "searchName", defaultValue = "") String searchName, @RequestParam(value = "citySelect", defaultValue = "") String citySelect, @RequestParam(value = "type", defaultValue = "online") String type,
+    public List<Assembly> findList(@RequestParam(value = "searchName", defaultValue = "") String searchName, @RequestParam(value = "citySelect", defaultValue = "") String citySelect, @RequestParam(value = "type", defaultValue = "") String type,
                                    @RequestParam(value = "startIndex", defaultValue = "0") int startIndex, @RequestParam(value = "loadSize", defaultValue = "20") int loadSize, Model model) {
         Assembly assembly = new Assembly();
         assembly.setType(type);
@@ -624,6 +625,25 @@ public class AssemblyController extends  BaseController {
                 assembly=new Assembly();
                 assembly.setAssemblyId(assemblyId);
                 assembly.setStatus("PUBLISHED");
+                assemblyService.modifyAssembly(assembly);
+                type="SUCCESS";
+            }
+        }catch (Exception e){
+            e.printStackTrace();
+            type="ERROR";
+        }
+        return type;
+    }
+    @RequestMapping("/updateAssemblyCarousel")
+    @ResponseBody
+    public String  updateAssemblyCarousel(@RequestParam String assemblyId,@RequestParam String carousel,Model model, @CookieValue(value = "time_sid", defaultValue = "admin") String userId) {
+        String type="";
+        try{
+            Assembly assembly = assemblyService.findAssemblyById(assemblyId);
+            if (assembly!=null){
+                assembly=new Assembly();
+                assembly.setAssemblyId(assemblyId);
+                assembly.setCarousel(carousel);
                 assemblyService.modifyAssembly(assembly);
                 type="SUCCESS";
             }

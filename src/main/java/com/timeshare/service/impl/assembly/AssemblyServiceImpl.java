@@ -112,7 +112,9 @@ public class AssemblyServiceImpl implements AssemblyService {
         if (!CollectionUtils.isEmpty(list)){
             for (Assembly assembly:list){
                 UserInfo userInfo=userService.findUserByUserId(assembly.getUserId());
-                assembly.setUserName(userInfo.getNickName());
+               if(userInfo!=null){
+                   assembly.setUserName(userInfo.getNickName());
+               }
                 ImageObj userImg = userService.findUserImg(assembly.getUserId(), Contants.IMAGE_TYPE.USER_HEAD.toString());
                 if(userImg!=null && StringUtils.isNotEmpty(userImg.getImageId())){
                     String headImg = userImg.getImageUrl();

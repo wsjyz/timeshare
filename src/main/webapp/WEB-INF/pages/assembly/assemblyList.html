@@ -122,7 +122,7 @@
                 itemStatus = "已下架："+item.resultContent;
             }
             if(itemStatus=="已发布"){
-                html +=  '<li class="card updateResult" data-id="'+item.assemblyId+'" >'+
+                html +=  '<li class="card updateResult" data-id="'+item.assemblyId+'" data-carousel="'+item.carousel+'" >'+
                         '   <div class="myActivityTitle">'+item.title+'</div>'+
                         '  <div class="myActivityStatRow">'+
                         ' <span class="myActivityStat">'+itemStatus+'</span>'+
@@ -134,7 +134,7 @@
                         ' <div class="rightArrow"><span class="icon icon-right"></span></div>'+
                         ' </li>';
             }else{
-                html +=  ' <li class="card deleteOrUpdate">'+
+                html +=  ' <li class="card deleteOrUpdate" data-id="'+item.assemblyId+'" data-carousel="'+item.carousel+'">'+
                         '   <div class="myActivityTitle">'+item.title+'</div>'+
                         '  <div class="myActivityStatRow">'+
                         ' <span class="myActivityStat">'+itemStatus+'</span></div>'+
@@ -210,7 +210,13 @@
     $(function () {
         $(document).on("click",".updateResult",function () {
             var assemblyId=$(this).attr("data-id");
-
+            var carousel=$(this).attr("data-carousel");
+            var carouselType="设为轮播";
+            var carouselValue="Y";
+            if($.trim(carousel) =="Y"){
+                carouselType="取消轮播";
+                carouselValue="N";
+            }
             var buttons1 = [
                 {
                     text: '请选择',
@@ -222,6 +228,18 @@
                     color: 'danger',
                     onClick: function() {
                         window.location.href="${request.contextPath}/assembly/to-result?assemblyId="+assemblyId+"&type=ASSEMBLYLIST";
+                    }
+                },
+                {
+                    text: carouselType,
+                    onClick: function() {
+                        $.post("${request.contextPath}/assembly/updateAssemblyCarousel?assemblyId="+assemblyId+"&carousel="+carouselValue,function (data) {
+                            if (data=="ERROR"){
+                                $.alert("操作失败，请稍候重试!");
+                            }else{
+                                window.location.href="${request.contextPath}/assembly/assemblyList";
+                            }
+                        });
                     }
                 },
                 {
@@ -242,6 +260,13 @@
         });
         $(document).on("click",".deleteOrUpdate",function () {
             var assemblyId=$(this).attr("data-id");
+            var carousel=$(this).attr("data-carousel");
+            var carouselType="设为轮播";
+            var carouselValue="Y";
+            if($.trim(carousel) =="Y"){
+                carouselType="取消轮播";
+                carouselValue="N";
+            }
             var buttons1 = [
                 {
                     text: '请选择',
@@ -253,6 +278,18 @@
                         $.post("${request.contextPath}/assembly/updateAssemblyStatus?assemblyId="+assemblyId,function (data) {
                             if (data=="ERROR"){
                                 $.alert("上架失败，请稍候重试!");
+                            }else{
+                                window.location.href="${request.contextPath}/assembly/assemblyList";
+                            }
+                        });
+                    }
+                },
+                {
+                    text: carouselType,
+                    onClick: function() {
+                        $.post("${request.contextPath}/assembly/updateAssemblyCarousel?assemblyId="+assemblyId+"&carousel="+carouselValue,function (data) {
+                            if (data=="ERROR"){
+                                $.alert("操作失败，请稍候重试!");
                             }else{
                                 window.location.href="${request.contextPath}/assembly/assemblyList";
                             }

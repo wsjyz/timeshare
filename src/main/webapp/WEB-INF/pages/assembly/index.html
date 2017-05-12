@@ -84,7 +84,7 @@
                                   <div class="swiper-slide">
                                       <a class="external" href="${request.contextPath}/assembly/to-detail?assemblyId=${assembly.assemblyId}">
                                           <#if assembly.titleImg!="">
-                                              <img src="${assembly.titleImg}" />
+                                              <img src="${assembly.titleImg}"  style="width:100%;height: calc(460/750*100vw)"/>
                                               <#else>
                                                   <img src="${request.contextPath}/images/assembly/default_tImage.jpg" />
                                           </#if>
@@ -95,7 +95,7 @@
                           </div>
                       </div>
                       <div class="tabs">
-                          <div id="tab1" class="tab <#if type=='online'>active</#if>">
+                          <div id="tab1" class="tab <#if type=='online' || type==''>active</#if>">
                           </div>
                           <div id="tab2"class="tab <#if type=='face'>active</#if>">
 
@@ -116,11 +116,11 @@
     <script type='text/javascript' src='http://g.alicdn.com/msui/sm/0.6.2/js/sm-extend.min.js' charset='utf-8'></script>
     <script>
         $(function(){
-            if("${type}"=="online"){
-                $("#tab1").load("${request.contextPath}/assembly/searchAssembly?type=online");
+            if("${type}"=="online" || "${type}"==""){
+                $("#tab1").load("${request.contextPath}/assembly/searchAssembly");
             }
             if("${type}"=="face"){
-                $("#tab2").load("${request.contextPath}/assembly/searchAssembly");
+                $("#tab2").load("${request.contextPath}/assembly/searchAssembly?type=train");
             }
             if("${type}"=="train"){
                 $("#tab3").load("${request.contextPath}/assembly/searchAssembly?type=train");
