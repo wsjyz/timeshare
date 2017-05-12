@@ -65,6 +65,20 @@
 	<script type="text/javascript" src="${request.contextPath}/js/crowdFunding/my-js.js"></script>
   </body>
 <script>
+    function returnFloat(value){
+        var value=Math.round(parseFloat(value)*100)/100;
+        var xsd=value.toString().split(".");
+        if(xsd.length==1){
+            value=value.toString()+".00";
+            return value;
+        }
+        if(xsd.length>1){
+            if(xsd[1].length<2){
+                value=value.toString()+"0";
+            }
+            return value;
+        }
+    }
     $(function() {
         // 众筹列表下拉无限加载
         var loading = false;
@@ -93,6 +107,12 @@
                 else{
                     //费用分摊 默认显示最低价 即除以最大人数
                     price=crowdFunding.costTotal/crowdFunding.maxPeoples;
+                    if(price<0.01){
+                        price=0.01;
+                    }
+                    else{
+                        price=returnFloat(price);
+                    }
                 }
 
 

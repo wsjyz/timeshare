@@ -67,7 +67,7 @@
                                   <#if crowdFunding.costType=='FIXED_PRICE'>
                                       ${crowdFunding.costTotal!}
                                   <#else>
-                                      ${crowdFunding.costTotal/crowdFunding.maxPeoples}
+                                      ${(((crowdFunding.costTotal/crowdFunding.maxPeoples)?string("#.00"))==0)?string('0.01',((crowdFunding.costTotal/crowdFunding.maxPeoples)?string("#.00")))}
                                   </#if>
                                   元</span>
                             <span class="num">学员人数:${crowdFunding.enrollCount!0}/${crowdFunding.maxPeoples}人</span>
