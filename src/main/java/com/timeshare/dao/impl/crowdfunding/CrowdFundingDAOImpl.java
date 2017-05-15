@@ -195,7 +195,7 @@ public class CrowdFundingDAOImpl extends BaseDAO implements CrowdFundingDAO {
             sql.append("and c.user_id='"+userId+"' ");
         }
         sql.append("group by c.crowdfunding_id ");
-        sql.append("order by c.opt_time desc ");
+        sql.append("order by c.curriculum_start_time ");
 
         sql.append("limit "+startIndex+","+loadSize);
 
