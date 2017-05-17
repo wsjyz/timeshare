@@ -2,6 +2,7 @@ package com.timeshare.controller.upload;
 
 import com.timeshare.domain.ImageObj;
 import com.timeshare.utils.CommonStringUtils;
+import com.timeshare.utils.ImgCompress;
 import com.timeshare.utils.ImgUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Controller;
@@ -54,8 +55,9 @@ public class UploadController {
             file.transferTo(targetFile);
 
             //压缩裁剪图片
-            ImgUtils.cropImageCenter(targetFile.getAbsolutePath(),path+"/"+name+"_320x240.jpg",320,240);
-
+            //ImgUtils.cropImageCenter(targetFile.getAbsolutePath(),path+"/"+name+"_320x240.jpg",320,240);
+            ImgCompress imgCom = new ImgCompress(targetFile.getAbsolutePath());
+            imgCom.resizeFix(600, 600,path+"/"+name+"_320x240.jpg");
             result.setSuccess(true);
 
             String cutPath="_320x240";

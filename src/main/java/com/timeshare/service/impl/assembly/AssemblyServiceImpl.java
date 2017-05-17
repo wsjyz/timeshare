@@ -70,14 +70,14 @@ public class AssemblyServiceImpl implements AssemblyService {
             String imageId="";
             for (ImageObj imageObj:imageObjList){
                 if (imageObj.getImageType().equals(Contants.IMAGE_TYPE.ASSEMBLY_SHOW_IMG.toString())){
-                    assembly.setTitleImg("/time"+imageObj.getImageUrl()+"_320x240.jpg");
+                    assembly.setTitleImg("/time"+imageObj.getImageUrl()+".jpg");
                     assembly.setTitleImageId(imageObj.getImageId());
                 }else  if (imageObj.getImageType().equals(Contants.IMAGE_TYPE.ASSEMBLY_CONTENT_IMG.toString())){
                     imageObj.setImageUrl("/time"+imageObj.getImageUrl()+".jpg");
                     imageId=imageObj.getImageId()+","+imageId;
                     contentImageList.add(imageObj);
                 }else  if (imageObj.getImageType().equals(Contants.IMAGE_TYPE.ASSEMBLY_CONSULTATION_IMG.toString())){
-                    assembly.setConsultationImg("/time"+imageObj.getImageUrl()+"_320x240.jpg");
+                    assembly.setConsultationImg("/time"+imageObj.getImageUrl()+".jpg");
                     assembly.setConsultationImgId(imageObj.getImageId());
                 }
             }
