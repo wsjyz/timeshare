@@ -1,6 +1,5 @@
 package com.timeshare.controller.crowdfunding;
 
-import com.sun.tools.internal.jxc.ap.Const;
 import com.timeshare.controller.BaseController;
 import com.timeshare.domain.crowdfunding.CrowdFunding;
 import com.timeshare.domain.crowdfunding.Enroll;
@@ -9,7 +8,6 @@ import com.timeshare.service.crowdfunding.CrowdFundingService;
 import com.timeshare.service.crowdfunding.EnrollService;
 import com.timeshare.utils.CommonStringUtils;
 import com.timeshare.utils.Contants;
-import com.timeshare.utils.WeixinOauth;
 import com.timeshare.utils.WxPayUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
