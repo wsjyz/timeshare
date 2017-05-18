@@ -29,7 +29,7 @@ public class ZCImgUtils {
             op.addImage();
             op.extent(0, 0);
             //图片质量
-            op.addRawArgs("-quality", "75");
+            op.addRawArgs("-quality", "10");
             op.addImage();
             ConvertCmd convert = new ConvertCmd(true);
             convert.run(op, srcPath, desPath);
