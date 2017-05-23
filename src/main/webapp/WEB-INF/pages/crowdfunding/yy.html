@@ -37,9 +37,19 @@
                         <li>
                           <div class="item-content">
                             <div class="item-inner">
+                              <div class="item-title label">购买数量</div>
+                              <div class="item-input">
+                                <input type="number" name="quantity" id="quantity" placeholder="请输入购买数量" value="${enroll.quantity!1}">
+                              </div>
+                            </div>
+                          </div>
+                        </li>
+                        <li>
+                          <div class="item-content">
+                            <div class="item-inner">
                               <div class="item-title label">姓名</div>
                               <div class="item-input">
-                                <input type="text" name="userName" placeholder="请输入姓名" value="${enroll.userName}">
+                                <input type="text" name="userName" id="userName" placeholder="请输入姓名" value="${enroll.userName}">
                               </div>
                             </div>
                           </div>
@@ -49,7 +59,7 @@
                             <div class="item-inner">
                               <div class="item-title label">手机</div>
                               <div class="item-input">
-                                <input type="number" placeholder="请输入电话" name="phone" value="${enroll.phone}">
+                                <input type="number" placeholder="请输入电话" name="phone" id="phone" value="${enroll.phone}">
                               </div>
                             </div>
                           </div>
@@ -120,9 +130,49 @@
             pay();
         }
     });
+    function isEmpty(name){
+        if($("#"+name).val()=='' || $("#"+name).val()==null || $("#"+name).val()=='null'){
+            return true;
+        }
+        else{
+            return false;
+        }
+    }
     function pay(){
+
+        var reg = new RegExp("^[0-9]*$");
+        var quantity=$("#quantity").val();
+
+
+        if(isEmpty("quantity")){
+            $.toast("购买数量不能为空");
+            return ;
+        }
+
+        if(!reg.test(quantity)){
+            $.toast("购买数量只能输入纯数字");
+            return ;
+        }
+        var quantity=parseInt(quantity,10);
+        if(quantity<=0){
+            $.toast("购买数量最少为1");
+            return ;
+        }
+
+        if(isEmpty("userName")){
+            $.toast("姓名不能为空");
+            return ;
+        }
+        if(isEmpty("phone")){
+            $.toast("手机不能为空");
+            return ;
+        }
+        //设置支付金额
+        $("#payAmount").val($("#payAmount").val()*quantity);
+
         //支付
         $.post('${request.contextPath}/enroll/save', $("#enrollForm").serialize(), function (result) {
+
             if(result=="NOT_RELEASED"){
                 $.toast("该项目已下架或未发布");
             }
@@ -136,6 +186,7 @@
                 $.toast("该项目目前不可报名");
             }
             else{
+
                 window.location.href = "https://open.weixin.qq.com/connect/oauth2/authorize?appid=wxcd8903dd6a9552eb" +
                     "&redirect_uri=http%3A%2F%2Fjk.zhangqidong.cn%2Ftime%2Fenroll%2FtoEnroolPayConfirm%2F&response_type=code&scope=snsapi_base" +
                     "&state=" + result + "#wechat_redirect";

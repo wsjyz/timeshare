@@ -20,6 +20,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
+import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
@@ -132,13 +133,14 @@ public class EnrollController extends  BaseController{
         enroll.setPayTradeNo(outTradeNo);
         enrollService.modifyEnroll(enroll);
 
-
-        String payMessageTitle = "金额："+crowdFunding.getReservationCost();
+        //应付预约费用
+        BigDecimal payAmount=crowdFunding.getReservationCost().multiply(BigDecimal.valueOf(Long.parseLong(enroll.getQuantity())));
+        String payMessageTitle = "金额："+payAmount;
         //封装支付参数
-        String jsApiParams = WxPayUtils.userPayToCorp(code,payMessageTitle,crowdFunding.getReservationCost(),outTradeNo);
+        String jsApiParams = WxPayUtils.userPayToCorp(code,payMessageTitle,payAmount,outTradeNo);
 
         attr.addAttribute("jsApiParams",jsApiParams);
-        attr.addAttribute("payTip","你确定要支付"+crowdFunding.getReservationCost()+"元吗");
+        attr.addAttribute("payTip","你确定要支付"+payAmount+"元吗");
         attr.addAttribute("okUrl",request.getContextPath()+"/enroll/payComplete/"+enrollId);
         attr.addAttribute("backUrl",request.getContextPath()+"/enroll/yy?enrollId="+enrollId+"&crowdFundingId=");
 

@@ -13,6 +13,8 @@ public class Enroll extends BaseDomain {
     private String crowdfundingId;
     //'报名者ID'
     private String enrollUserId;
+    //购买数量
+    private String quantity;
     //'姓名'
     private String userName;
     //'手机'
@@ -188,5 +190,13 @@ public class Enroll extends BaseDomain {
 
     public void setOwnerUserId(String ownerUserId) {
         this.ownerUserId = ownerUserId;
+    }
+
+    public String getQuantity() {
+        return quantity;
+    }
+
+    public void setQuantity(String quantity) {
+        this.quantity = quantity;
     }
 }

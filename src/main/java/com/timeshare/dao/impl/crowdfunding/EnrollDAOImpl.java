@@ -25,7 +25,7 @@ import java.util.List;
 public class EnrollDAOImpl extends BaseDAO implements EnrollDAO {
     @Override
     public String saveEnroll(Enroll enroll) {
-        StringBuilder sql = new StringBuilder("INSERT INTO t_enroll (enroll_id, crowdfunding_id, enroll_user_id, user_name, phone, corp_name, invoice_title, invoice_type,pay_status,pay_amount,user_id,opt_time,pay_trade_no,refund_trade_no,is_transfer_cash_account) VALUES (?, ?, ?, ?, ?, ?, ?, ?,?,?, ?, ?,?,?,?);");
+        StringBuilder sql = new StringBuilder("INSERT INTO t_enroll (enroll_id, crowdfunding_id, enroll_user_id,quantity, user_name, phone, corp_name, invoice_title, invoice_type,pay_status,pay_amount,user_id,opt_time,pay_trade_no,refund_trade_no,is_transfer_cash_account) VALUES (?, ?, ?, ?, ?, ?, ?, ?,?,?, ?, ?,?,?,?,?);");
         final String id = CommonStringUtils.genPK();
         int result = getJdbcTemplate().update(sql.toString(), new PreparedStatementSetter() {
             @Override
@@ -33,18 +33,20 @@ public class EnrollDAOImpl extends BaseDAO implements EnrollDAO {
                 ps.setString(1,id);
                 ps.setString(2,enroll.getCrowdfundingId());
                 ps.setString(3,enroll.getEnrollUserId());
-                ps.setString(4,enroll.getUserName());
-                ps.setString(5,enroll.getPhone());
-                ps.setString(6,enroll.getCorpName());
-                ps.setString(7,enroll.getInvoiceTitle());
-                ps.setString(8,enroll.getInvoiceType());
-                ps.setString(9,enroll.getPayStatus());
-                ps.setBigDecimal(10,enroll.getPayAmount());
-                ps.setString(11,enroll.getUserId());
-                ps.setString(12,enroll.getOptTime());
-                ps.setString(13,enroll.getPayTradeNo());
-                ps.setString(14,enroll.getRefundTradeNo());
-                ps.setString(15,enroll.getIsTransferCashAccount());
+                ps.setString(4,enroll.getQuantity());
+
+                ps.setString(5,enroll.getUserName());
+                ps.setString(6,enroll.getPhone());
+                ps.setString(7,enroll.getCorpName());
+                ps.setString(8,enroll.getInvoiceTitle());
+                ps.setString(9,enroll.getInvoiceType());
+                ps.setString(10,enroll.getPayStatus());
+                ps.setBigDecimal(11,enroll.getPayAmount());
+                ps.setString(12,enroll.getUserId());
+                ps.setString(13,enroll.getOptTime());
+                ps.setString(14,enroll.getPayTradeNo());
+                ps.setString(15,enroll.getRefundTradeNo());
+                ps.setString(16,enroll.getIsTransferCashAccount());
             }
         });
         if(result > 0){
@@ -197,6 +199,7 @@ public class EnrollDAOImpl extends BaseDAO implements EnrollDAO {
             enroll.setEnrollId(rs.getString("enroll_id"));
             enroll.setCrowdfundingId(rs.getString("crowdfunding_id"));
             enroll.setEnrollUserId(rs.getString("enroll_user_id"));
+            enroll.setQuantity(rs.getString("quantity"));
             enroll.setUserName(rs.getString("user_name"));
             enroll.setPhone(rs.getString("phone"));
             enroll.setCorpName(rs.getString("corp_name"));
