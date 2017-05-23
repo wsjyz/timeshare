@@ -136,8 +136,8 @@
         <div class="content activityPublishContent">
             <div class="list-block">
                 <input type="hidden" id="imageId" value=""/>
-                <!--设置上传图片 后返回的路径是否带有320*240后缀 false等于不返回-->
-                <input type="hidden" id="isReturnCutPath" value="false"/>
+                <!--设置上传图片 是否返回带压缩格式的 false等于不返回-->
+                <input type="hidden" id="isReturnCutPath" value="true"/>
                 <h3 style="text-align: center">建议图片尺寸750*460，大小不超过4M</h3>
                 <img src="" id="imageUrl" style="display: none;margin: 0 auto;height: calc(460/750*100vw);width: 100%;"/>
                 <div class="main-wrap">
@@ -231,7 +231,7 @@
 
 
 
-<script type='text/javascript' src='${request.contextPath}/js/upload.js?v=20160720-2' charset='utf-8'></script>
+<script type='text/javascript' src='${request.contextPath}/js/crowdFunding/zcupload.js?v=20160720-2' charset='utf-8'></script>
 <script type="text/javascript" src="${request.contextPath}/js/crowdFunding/sm.js"></script>
 <script type="text/javascript" src="${request.contextPath}/js/crowdFunding/picker.js"></script>
 <script type="text/javascript" src="${request.contextPath}/js/crowdFunding/sm-extend.min.js"></script>
@@ -246,11 +246,12 @@
             imgTar: '#imageUpload',
             limitSize: 4,   // 兆
             showServer: true,
-            uploadUrl: '/time/upload/upload-img',
+            uploadUrl: '/time/zcupload/upload-img',
             data: {},
             uploadField: 'image',
             placeholader: '<p>请输入文章正文内容</p>',
             formInputId: 'target',
+            isReturnCutPath:'true',
             uploadSuccess: function (res) {
                 // 这里是处理返回数据业务逻辑的地方
                 // `res`为服务器返回`status==200`的`response`

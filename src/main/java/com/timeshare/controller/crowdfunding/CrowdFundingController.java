@@ -1,7 +1,5 @@
 package com.timeshare.controller.crowdfunding;
 
-import com.sun.tools.internal.jxc.ap.Const;
-import com.taobao.api.internal.toplink.embedded.websocket.util.StringUtil;
 import com.timeshare.controller.BaseController;
 import com.timeshare.domain.ImageObj;
 import com.timeshare.domain.UserInfo;

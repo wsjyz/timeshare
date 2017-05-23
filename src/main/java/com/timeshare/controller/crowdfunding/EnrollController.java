@@ -1,6 +1,5 @@
 package com.timeshare.controller.crowdfunding;
 
-import com.sun.tools.internal.jxc.ap.Const;
 import com.timeshare.controller.BaseController;
 import com.timeshare.domain.crowdfunding.CrowdFunding;
 import com.timeshare.domain.crowdfunding.Enroll;
@@ -9,7 +8,6 @@ import com.timeshare.service.crowdfunding.CrowdFundingService;
 import com.timeshare.service.crowdfunding.EnrollService;
 import com.timeshare.utils.CommonStringUtils;
 import com.timeshare.utils.Contants;
-import com.timeshare.utils.WeixinOauth;
 import com.timeshare.utils.WxPayUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
@@ -22,6 +20,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
+import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
@@ -134,13 +133,14 @@ public class EnrollController extends  BaseController{
         enroll.setPayTradeNo(outTradeNo);
         enrollService.modifyEnroll(enroll);
 
-
-        String payMessageTitle = "金额："+crowdFunding.getReservationCost();
+        //应付预约费用
+        BigDecimal payAmount=crowdFunding.getReservationCost().multiply(BigDecimal.valueOf(Long.parseLong(enroll.getQuantity())));
+        String payMessageTitle = "金额："+payAmount;
         //封装支付参数
-        String jsApiParams = WxPayUtils.userPayToCorp(code,payMessageTitle,crowdFunding.getReservationCost(),outTradeNo);
+        String jsApiParams = WxPayUtils.userPayToCorp(code,payMessageTitle,payAmount,outTradeNo);
 
         attr.addAttribute("jsApiParams",jsApiParams);
-        attr.addAttribute("payTip","你确定要支付"+crowdFunding.getReservationCost()+"元吗");
+        attr.addAttribute("payTip","你确定要支付"+payAmount+"元吗");
         attr.addAttribute("okUrl",request.getContextPath()+"/enroll/payComplete/"+enrollId);
         attr.addAttribute("backUrl",request.getContextPath()+"/enroll/yy?enrollId="+enrollId+"&crowdFundingId=");
 
