@@ -370,7 +370,7 @@ public class AssemblyController extends  BaseController {
     }
 
     @RequestMapping(value = "/saveAttender")
-    public String saveAttender(@RequestParam String assemblyId, @RequestParam String feeId, @RequestParam String questionAnswer, @RequestParam String userId, Model model) {
+    public String saveAttender(@RequestParam String assemblyId, @RequestParam String feeId, @RequestParam String questionAnswer, @RequestParam String userId,@RequestParam String userCount, Model model) {
         String resultId = "";
         try {
             Attender attender = new Attender();
@@ -378,6 +378,7 @@ public class AssemblyController extends  BaseController {
             attender.setAssemblyId(assemblyId);
             attender.setQuestionAnswer(questionAnswer);
             attender.setUserId(userId);
+            attender.setUserCount(userCount);
             Calendar cal = Calendar.getInstance();
             SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
             attender.setCreateTime(sdf.format(cal.getTime()));
@@ -528,7 +529,7 @@ public class AssemblyController extends  BaseController {
         String feeId = states[0];
         String assemblyId = states[1];
         String questionAnswer = states[2];
-
+        String userCount = states[3];
         Fee fee = feeService.findFeeById(feeId);
         WeixinOauth weixinOauth=new WeixinOauth();
         AccessTokenBean accessTokenBean = weixinOauth.obtainOauthAccessToken(code);
@@ -555,8 +556,8 @@ public class AssemblyController extends  BaseController {
         String payMessageTitle = "您在邂逅活动的报名款项：" + fee.getFeeTitle();
         String jsApiParams = userPayToCorpByHuodong(code, payMessageTitle, fee.getFee(),weixinOauth,accessTokenBean.getOpenid());
         attr.addAttribute("jsApiParams", jsApiParams);
-        attr.addAttribute("payTip", "你确定要支付" + fee.getFee() + "元吗");
-        attr.addAttribute("okUrl", request.getContextPath() + "/assembly/saveAttender?assemblyId=" + assemblyId + "&feeId=" + feeId + "&questionAnswer=" + questionAnswer+"&userId="+userId);
+        attr.addAttribute("payTip", "你确定要支付" + fee.getFee().multiply(new BigDecimal(userCount)) + "元吗");
+        attr.addAttribute("okUrl", request.getContextPath() + "/assembly/saveAttender?assemblyId=" + assemblyId + "&feeId=" + feeId + "&questionAnswer=" + questionAnswer+"&userId="+userId+"&userCount="+userCount);
         attr.addAttribute("backUrl", request.getContextPath() + "/assembly/to-detail?assemblyId=" + assemblyId);
 
         return "redirect:/wxPay/to-pay/";

@@ -24,7 +24,7 @@ public class AttenderDAOImpl extends BaseDAO implements AttenderDAO {
 
     @Override
     public String saveAttender(Attender Attender) {
-        StringBuilder sql = new StringBuilder("INSERT INTO t_attender (attender_id, user_id, assembly_id, fee_id,create_time,question_answer,user_name,phone,wx,email,company) VALUES (?, ?, ?, ?,?,?,?,?,?,?,?);");
+        StringBuilder sql = new StringBuilder("INSERT INTO t_attender (attender_id, user_id, assembly_id, fee_id,create_time,question_answer,user_name,phone,wx,email,company,user_count) VALUES (?, ?, ?, ?,?,?,?,?,?,?,?,?);");
         final String id = CommonStringUtils.genPK();
         int result = getJdbcTemplate().update(sql.toString(), new PreparedStatementSetter() {
             @Override
@@ -40,6 +40,7 @@ public class AttenderDAOImpl extends BaseDAO implements AttenderDAO {
                 ps.setString(9,Attender.getWx());
                 ps.setString(10,Attender.getEmail());
                 ps.setString(11,Attender.getCompany());
+                ps.setString(12,Attender.getUserCount());
             }
         });
         if(result > 0){
@@ -120,6 +121,7 @@ public class AttenderDAOImpl extends BaseDAO implements AttenderDAO {
             attender.setUserId(rs.getString("user_id"));
             attender.setCreateTime(rs.getString("create_time"));
             attender.setQuestionAnswer(rs.getString("question_answer"));
+            attender.setUserCount(rs.getString("user_count"));
             return attender;
         }
     }
