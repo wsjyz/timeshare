@@ -212,7 +212,7 @@ public class AssemblyController extends  BaseController {
                    pushJson.put("title", assembly.getTitle());
                    pushJson.put("description", assembly.getDescription());
                    pushJson.put("thumbUrl",imageTitleUrl);
-                   pushJson.put("url", "http://jk.zhangqidong.cn"+request.getContextPath() + "/assembly/to-detail?assemblyId=" + assemblyId);
+                   pushJson.put("url", "http://www.xiehoushike.com"+request.getContextPath() + "/assembly/to-detail?assemblyId=" + assemblyId);
                    CommonStringUtils.sendMessage("sendShare", pushJson.toJSONString(), userAccount);
                }catch (Exception e){
                    e.printStackTrace();

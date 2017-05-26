@@ -251,7 +251,7 @@
         shareImgUrl="${assembly.titleImg}";
             //    </#if>
         if(shareImgUrl.indexOf('http') == -1){
-            shareImgUrl = 'http://jk.zhangqidong.cn'+shareImgUrl;
+            shareImgUrl = 'http://www.xiehoushike.com'+shareImgUrl;
         }
         wx.ready(function(){
             wx.onMenuShareAppMessage({
@@ -592,7 +592,7 @@
                                 //</#if>
                            //     window.location.href = "${request.contextPath}/assembly/saveAttender?assemblyId=${assembly.assemblyId}&questionAnswer="+questionAnswer+"&feeId="+feeId;
                                     window.location.href = "https://open.weixin.qq.com/connect/oauth2/authorize?appid=wxcd8903dd6a9552eb" +
-                                            "&redirect_uri=http%3A%2F%2Fjk.zhangqidong.cn%2Ftime%2Fassembly%2Fto-pay-for-confirm%2F&response_type=code&scope=snsapi_base&state=" +feeId+"_${assembly.assemblyId}_"+questionAnswer+"#wechat_redirect";
+                                            "&redirect_uri=http%3A%2F%2Fwww.xiehoushike.com%2Ftime%2Fassembly%2Fto-pay-for-confirm%2F&response_type=code&scope=snsapi_base&state=" +feeId+"_${assembly.assemblyId}_"+questionAnswer+"#wechat_redirect";
                             }
                         },
                     ]

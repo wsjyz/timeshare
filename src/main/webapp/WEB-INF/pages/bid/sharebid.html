@@ -62,7 +62,7 @@
 <script>
     var shareImgUrl = $('#headImgPath').val();
     if(shareImgUrl.indexOf('http') == -1){
-        shareImgUrl = 'http://jk.zhangqidong.cn'+shareImgUrl;
+        shareImgUrl = 'http://www.xiehoushike.com'+shareImgUrl;
     }
     wx.config({
         appId: "${parmsMap['appId']}", // 必填，公众号的唯一标识
@@ -257,12 +257,12 @@ $(function(){
         var bidId = $(this).attr('bidid');
         //window.location.href = '${request.contextPath}/bid/to-audit?bidId='+bidId;
         var contextPath = encodeURIComponent('${request.contextPath}');
-        window.location.href = "https://open.weixin.qq.com/connect/oauth2/authorize?appid=wxcd8903dd6a9552eb&redirect_uri=http%3A%2F%2Fjk.zhangqidong.cn"+contextPath+"%2Fbid%2Fto-audit%2F&response_type=code&scope=snsapi_base&state="+bidId+"#wechat_redirect";
+        window.location.href = "https://open.weixin.qq.com/connect/oauth2/authorize?appid=wxcd8903dd6a9552eb&redirect_uri=http%3A%2F%2Fwww.xiehoushike.com"+contextPath+"%2Fbid%2Fto-audit%2F&response_type=code&scope=snsapi_base&state="+bidId+"#wechat_redirect";
     } );
     $("body").on( "click", "#toSubmitBtn", function(){
         var bidId = $(this).attr('bidid');
         var contextPath = encodeURIComponent('${request.contextPath}');
-        //window.location.href = "https://open.weixin.qq.com/connect/oauth2/authorize?appid=wxcd8903dd6a9552eb&redirect_uri=http%3A%2F%2Fjk.zhangqidong.cn"+contextPath+"%2Fbid%2Fto-audit%2F&response_type=code&scope=snsapi_base&state="+bidId+"#wechat_redirect";
+        //window.location.href = "https://open.weixin.qq.com/connect/oauth2/authorize?appid=wxcd8903dd6a9552eb&redirect_uri=http%3A%2F%2Fwww.xiehoushike.com"+contextPath+"%2Fbid%2Fto-audit%2F&response_type=code&scope=snsapi_base&state="+bidId+"#wechat_redirect";
         var backUrl = '/bidsubmit/to-submit/'+bidId;
         window.location.href = '${request.contextPath}/wx/to-get-open-id?backUrl='+encodeURIComponent(backUrl);
 
