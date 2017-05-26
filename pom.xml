@@ -145,6 +145,17 @@
         <!--<version>3.1</version>-->
         <!--</dependency>-->
         <dependency>
+            <groupId>com.xiaomi</groupId>
+            <artifactId>push-server</artifactId>
+            <version>2.2.17</version>
+        </dependency>
+        <dependency>
+            <groupId>com.xiaomi</groupId>
+            <artifactId>push-server</artifactId>
+            <version>2.2.17</version>
+            <classifier>json</classifier>
+        </dependency>
+        <dependency>
             <groupId>com.alibaba</groupId>
             <artifactId>fastjson</artifactId>
             <version>1.1.41</version>
@@ -181,7 +192,17 @@
             <version>1.1.1</version>
             <scope>system</scope>
             <!--本地jar的路径,相对或者绝对都可以-->
-            <systemPath>D:/workspace/other/timeshare/lib/taobao-sdk-java-auto_1455552377940-20160607.jar</systemPath>
+            <systemPath>D:/jyz/timeshare/lib/taobao-sdk-java-auto_1455552377940-20160607.jar</systemPath>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.poi</groupId>
+            <artifactId>poi</artifactId>
+            <version>3.9</version>
+        </dependency>
+        <dependency>
+            <groupId>javax.mail</groupId>
+            <artifactId>mail</artifactId>
+            <version>1.4.1</version>
         </dependency>
         <dependency>
             <groupId>com.xiaomi</groupId>
