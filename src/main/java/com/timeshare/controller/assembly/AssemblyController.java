@@ -553,8 +553,10 @@ public class AssemblyController extends  BaseController {
             }
 
         }
+        System.out.println("shuliang :::::::::::::::::::::::::::::::"+userCount);
+        System.out.println("jine:::::::::::::::::::::::::::::"+fee.getFee().multiply(new BigDecimal(userCount)));
         String payMessageTitle = "您在邂逅活动的报名款项：" + fee.getFeeTitle();
-        String jsApiParams = userPayToCorpByHuodong(code, payMessageTitle, fee.getFee(),weixinOauth,accessTokenBean.getOpenid());
+        String jsApiParams = userPayToCorpByHuodong(code, payMessageTitle, fee.getFee().multiply(new BigDecimal(userCount)),weixinOauth,accessTokenBean.getOpenid());
         attr.addAttribute("jsApiParams", jsApiParams);
         attr.addAttribute("payTip", "你确定要支付" + fee.getFee().multiply(new BigDecimal(userCount)) + "元吗");
         attr.addAttribute("okUrl", request.getContextPath() + "/assembly/saveAttender?assemblyId=" + assemblyId + "&feeId=" + feeId + "&questionAnswer=" + questionAnswer+"&userId="+userId+"&userCount="+userCount);

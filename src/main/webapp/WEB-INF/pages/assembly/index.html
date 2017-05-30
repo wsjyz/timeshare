@@ -116,8 +116,11 @@
     <script type='text/javascript' src='http://g.alicdn.com/msui/sm/0.6.2/js/sm-extend.min.js' charset='utf-8'></script>
     <script>
         $(function(){
-            if("${type}"=="online" || "${type}"==""){
+            if("${type}"==""){
                 $("#tab1").load("${request.contextPath}/assembly/searchAssembly");
+            }
+            if("${type}"=="online"){
+                $("#tab1").load("${request.contextPath}/assembly/searchAssembly?type=online");
             }
             if("${type}"=="face"){
                 $("#tab2").load("${request.contextPath}/assembly/searchAssembly?type=train");
@@ -136,22 +139,6 @@
                 var searchBarWidth = (barWidth-searchIconWidth-cityWidth);
                 $('.searchbar').width(searchBarWidth);
                 $(document).on("click",".searchIcon",function () {
-                    var searchName=$("#search").val();
-                    var type=$("#searchType").val();
-                    var citySelect=$(".citySelect").val();
-                    $('.infinite-scroll-bottom.content-block').html('');
-                    if(type=="online"){
-                        $("#tab1").load("${request.contextPath}/assembly/searchAssembly?type=online&searchName="+searchName+"&citySelect="+citySelect);
-                    }
-                    if(type=="face"){
-                        $("#tab2").load("${request.contextPath}/assembly/searchAssembly?type=face&searchName="+searchName+"&citySelect="+citySelect);
-                    }
-                    if(type=="train"){
-                        $("#tab3").load("${request.contextPath}/assembly/searchAssembly?type=train&searchName="+searchName+"&citySelect="+citySelect);
-                    }
-                    if(type=="company"){
-                        $("#tab4").load("${request.contextPath}/assembly/searchAssembly?type=company&searchName="+searchName+"&citySelect="+citySelect);
-                    }
                 })
                 $(document).on("change",".citySelect",function () {
                     var type=$("#searchType").val();
@@ -169,15 +156,36 @@
                     if(type=="company"){
                         $("#tab4").load("${request.contextPath}/assembly/searchAssembly?type=company&citySelect="+citySelect);
                     }
+                    if(type==""){
+                        $("#tab1").load("${request.contextPath}/assembly/searchAssembly?type=&citySelect="+citySelect);
+                    }
                 })
             }());
 
         })
         $.init();
+        function select(){
+            var searchName=$("#search").val();
+            var type=$("#searchType").val();
+            var citySelect=$(".citySelect").val();
+            $('.infinite-scroll-bottom.content-block').html('');
+            if(type=="" || type=="online"){
+                $("#tab1").load("${request.contextPath}/assembly/searchAssembly?type="+type+"&searchName="+searchName);
+            }
+            if(type=="face"){
+                $("#tab2").load("${request.contextPath}/assembly/searchAssembly?type="+type+"&searchName="+searchName);
+            }
+            if(type=="train"){
+                $("#tab3").load("${request.contextPath}/assembly/searchAssembly?type="+type+"&searchName="+searchName);
+            }
+            if(type=="company"){
+                $("#tab4").load("${request.contextPath}/assembly/searchAssembly?type="+type+"&searchName="+searchName);
+            }
+        }
         function toAdd() {
-            //  var backUrl = 'http://www.xiehoushike.com'+'${request.contextPath}/assembly/to-add';
-            // window.location.href = '${request.contextPath}/wx/to-get-open-id?backUrl='+encodeURIComponent(backUrl);
-            window.location.href = '${request.contextPath}/assembly/to-add';
+            var backUrl = 'http://www.xiehoushike.com'+'${request.contextPath}/assembly/to-add';
+           window.location.href = '${request.contextPath}/wx/to-get-open-id?backUrl='+encodeURIComponent(backUrl);
+            //    window.location.href = '${request.contextPath}/assembly/to-add';
         }
         function  checkTab(type) {
             $("#searchType").val(type);
