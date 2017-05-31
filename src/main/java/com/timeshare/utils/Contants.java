@@ -22,7 +22,7 @@ public interface Contants {
 
     String FAILED = "failed";
 
-    String DOMAIN = "jk.zhangqidong.cn";
+    String DOMAIN = "www.xiehoushike.com";
 
     String FILE_SAVE_PATH = "/work/appfile";
 

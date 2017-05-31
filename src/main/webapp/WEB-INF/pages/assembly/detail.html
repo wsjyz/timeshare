@@ -75,6 +75,7 @@
               <div class="content-block">
                   <input type="hidden" name="feeId" value="">
                   <input type="hidden" name="price" value="">
+                  <input type="hidden" name="userCountSum" value="">
                   <#if assembly.titleImg=="">
                       <img style="width:100%;height: calc(460/750*100vw)" src="${request.contextPath}/images/assembly/default_tImage.jpg"  />
                       <#else>
@@ -251,7 +252,7 @@
         shareImgUrl="${assembly.titleImg}";
             //    </#if>
         if(shareImgUrl.indexOf('http') == -1){
-            shareImgUrl = 'http://jk.zhangqidong.cn'+shareImgUrl;
+            shareImgUrl = 'http://www.xiehoushike.com'+shareImgUrl;
         }
         wx.ready(function(){
             wx.onMenuShareAppMessage({
@@ -424,7 +425,7 @@
                     '</div>',
                     text: ''+
                     '  <div class="list-block"><ul>' +
-                    text+'</ul></div>',
+                    text+'</ul></div> <div class="item-content"><div class="item-inner"><div class="item-title label" style="float:left">报名数量：</div><input type="text" name="userCount" id="userCount"/></div></div>',
                     buttons: [
                         {
                             text: '下一步',
@@ -435,8 +436,19 @@
                                     $.alert("请选择一项报名费用!");
                                     return false;
                                 }
+                                var userCount=$("input[name='userCount']").val();
+                                var text=/^[1-9]*$/;
+                                if(userCount==undefined || userCount==""){
+                                    $.alert("请填写报名数量!");
+                                    return false;
+                                }
+                                if(!text.test(userCount)){
+                                    $.alert("请填写正确的数量!");
+                                    return false;
+                                }
                                 var price=$('label[radioname="priceType"].checked').attr('data-price');
                                 $("input[name='price']").val(price);
+                                $("input[name='userCountSum']").val(userCount);
                                 $("input[name='feeId']").val(feeId);
                                 showNextStep();
                             }
@@ -530,6 +542,8 @@
                             onClick:function(){
                                 var feeId=$("input[name='feeId']").val();
                                 var price=$("input[name='price']").val();
+                                var userCount=$("input[name='userCountSum']").val();
+
                                 var questionAnswer="";
                                 //  <#if assembly.showApplyProblem?contains("userName")>
                                 var userName=$("input[name='userName']").val();
@@ -562,7 +576,7 @@
                                     return false;
                                 }
                                 if(wxName!=""){
-                                    questionAnswer=questionAnswer+","+wxName;
+                                    questionAnswer=questionAnswer+"^"+wxName;
                                 }
                                 //</#if>
                                 //  <#if assembly.showApplyProblem?contains("email")>
@@ -592,7 +606,7 @@
                                 //</#if>
                            //     window.location.href = "${request.contextPath}/assembly/saveAttender?assemblyId=${assembly.assemblyId}&questionAnswer="+questionAnswer+"&feeId="+feeId;
                                     window.location.href = "https://open.weixin.qq.com/connect/oauth2/authorize?appid=wxcd8903dd6a9552eb" +
-                                            "&redirect_uri=http%3A%2F%2Fjk.zhangqidong.cn%2Ftime%2Fassembly%2Fto-pay-for-confirm%2F&response_type=code&scope=snsapi_base&state=" +feeId+"_${assembly.assemblyId}_"+questionAnswer+"#wechat_redirect";
+                                            "&redirect_uri=http%3A%2F%2Fjk.zhangqidong.cn%2Ftime%2Fassembly%2Fto-pay-for-confirm%2F&response_type=code&scope=snsapi_base&state=" +feeId+"_${assembly.assemblyId}_"+questionAnswer+"_"+userCount+"#wechat_redirect";
                             }
                         },
                     ]

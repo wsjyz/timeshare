@@ -1,12 +1,15 @@
 package com.timeshare.utils;
 
+import com.sun.image.codec.jpeg.JPEGCodec;
+import com.sun.image.codec.jpeg.JPEGImageEncoder;
+
 import java.io.*;
 import java.util.Date;
 import java.awt.*;
 import java.awt.image.*;
 import javax.imageio.ImageIO;
 
-import com.sun.image.codec.jpeg.*;
+
 
 
 /**

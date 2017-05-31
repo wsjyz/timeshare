@@ -196,8 +196,8 @@ public class WxPayUtils {
         config.setTrade_type("JSAPI");
         parameters.put("trade_type","JSAPI");
 
-        config.setNotify_url("http://jk.zhangqidong.cn/time/wxPay/notify-url");
-        parameters.put("notify_url","http://jk.zhangqidong.cn/time/wxPay/notify-url");
+        config.setNotify_url("http://www.xiehoushike.com/time/wxPay/notify-url");
+        parameters.put("notify_url","http://www.xiehoushike.com/time/wxPay/notify-url");
 
         config.setOpenid(openId);
         parameters.put("openid",openId);
@@ -299,8 +299,8 @@ public class WxPayUtils {
         config.setTrade_type("JSAPI");
         parameters.put("trade_type","JSAPI");
 
-        config.setNotify_url("http://jk.zhangqidong.cn/time/wxPay/notify-url");
-        parameters.put("notify_url","http://jk.zhangqidong.cn/time/wxPay/notify-url");
+        config.setNotify_url("http://www.xiehoushike.com/time/wxPay/notify-url");
+        parameters.put("notify_url","http://www.xiehoushike.com/time/wxPay/notify-url");
 
         config.setOpenid(openId);
         parameters.put("openid",openId);

@@ -78,6 +78,7 @@
             $('.no-record').hide();
             // 添加新条目
             $('.infinite-scroll-bottom .card-container').append(html);
+            $('.infinite-scroll-preloader').remove();
         }
         $.hideIndicator();
 
@@ -127,7 +128,7 @@
     $(function () {
         $(document).on("click",".card",function () {
            var assemblyId=$(this).attr("data-id");
-           var backUrl = 'http://jk.zhangqidong.cn'+'${request.contextPath}/assembly/to-detail?assemblyId='+assemblyId;
+           var backUrl = 'http://www.xiehoushike.com'+'${request.contextPath}/assembly/to-detail?assemblyId='+assemblyId;
           window.location.href = '${request.contextPath}/wx/to-get-open-id?backUrl='+encodeURIComponent(backUrl);
           //  window.location.href = '${request.contextPath}/assembly/to-detail?assemblyId='+assemblyId;
         });

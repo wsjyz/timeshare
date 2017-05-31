@@ -23,6 +23,15 @@ public class Attender extends BaseDomain {
     private String email;
     private String wx;
     private String company;
+    private String userCount;
+
+    public void setUserCount(String userCount) {
+        this.userCount = userCount;
+    }
+
+    public String getUserCount() {
+        return userCount;
+    }
 
     public String getUserNameTitle() {
         return userNameTitle;
