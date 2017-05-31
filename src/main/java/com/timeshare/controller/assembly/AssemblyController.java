@@ -57,7 +57,7 @@ public class AssemblyController extends  BaseController {
 
     @RequestMapping(value = "/to-index")
     public String index(@RequestParam(value = "searchName", defaultValue = "") String searchName,
-                        @RequestParam(value = "type", defaultValue = "") String type, Model model, @CookieValue(value = "time_sid", defaultValue = "admin") String userId) {
+                        @RequestParam(value = "type", defaultValue = "") String type, Model model, @CookieValue(value = "time_sid", defaultValue = "admin") String userId, HttpServletRequest request) {
         model.addAttribute("type", type);
         Assembly assembly = new Assembly();
         assembly.setStatus("PUBLISHED");
@@ -68,6 +68,10 @@ public class AssemblyController extends  BaseController {
 
         List<Assembly> assemblyList = assemblyService.findAssemblyList(assembly, 0, 10);
         model.addAttribute("assemblyList", assemblyList);
+        //微信jssdk相关代码
+        String url = WxUtils.getUrl(request);
+        Map<String, String> parmsMap = WxUtils.sign(url);
+        model.addAttribute("parmsMap", parmsMap);
         return "assembly/index";
     }
 
@@ -298,7 +302,8 @@ public class AssemblyController extends  BaseController {
                 }
             }
         }
-            if (!CollectionUtils.isEmpty(assembly.getFeeList())) {
+        int UserSumCount=0;
+        if (!CollectionUtils.isEmpty(assembly.getFeeList())) {
             for (Fee fee : assembly.getFeeList()) {
                 if (minMoney.compareTo(new BigDecimal(0)) == 0) {
                     minMoney = fee.getFee();
@@ -314,6 +319,7 @@ public class AssemblyController extends  BaseController {
                 }
                 int count = 0;
                 for (Attender attender : attenderList) {
+                    UserSumCount+=Integer.parseInt(attender.getUserCount());
                     if (attender.getFeedId().equals(fee.getFeeId())) {
                         count++;
                     }
@@ -339,7 +345,7 @@ public class AssemblyController extends  BaseController {
         model.addAttribute("assembly", assembly);
         model.addAttribute("minMoney", minMoney);
         model.addAttribute("maxMoney", maxMoney);
-        model.addAttribute("userCount", attenderList.size());
+        model.addAttribute("userCount", UserSumCount);
         model.addAttribute("attenderList", attenderList);
         model.addAttribute("commentList", commentList);
         model.addAttribute("collectionCount", list.size());
