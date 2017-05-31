@@ -100,7 +100,7 @@ public class CrowdFundingDAOImpl extends BaseDAO implements CrowdFundingDAO {
 
 
     public List<CrowdFunding> findCrowdFundingToPay(String crowdfundingId) {
-        StringBuilder sql = new StringBuilder("select count(e.enroll_id) enroll_count,c.* ");
+        StringBuilder sql = new StringBuilder("select sum(e.quantity) enroll_count,c.* ");
         sql.append("from t_crowdfunding c ");
         sql.append("left join t_enroll e ");
         sql.append("on c.crowdfunding_id=e.crowdfunding_id ");
@@ -115,7 +115,7 @@ public class CrowdFundingDAOImpl extends BaseDAO implements CrowdFundingDAO {
 
 
     public List<CrowdFunding> findCrowdFundingToIndex(int startIndex, int loadSize,String crowdfundingId,String isShowFlag) {
-        StringBuilder sql = new StringBuilder("select count(e.enroll_id) enroll_count,o.image_url,o2.image_url user_head_image_url,c.* ");
+        StringBuilder sql = new StringBuilder("select sum(e.quantity) enroll_count,o.image_url,o2.image_url user_head_image_url,c.* ");
         sql.append("from t_crowdfunding c ");
         sql.append("left join t_enroll e ");
         sql.append("on c.crowdfunding_id=e.crowdfunding_id ");
@@ -149,7 +149,7 @@ public class CrowdFundingDAOImpl extends BaseDAO implements CrowdFundingDAO {
         return getJdbcTemplate().query(sql.toString(),new Object[]{},new CrowdFundingRowMapper());
     }
     public List<CrowdFunding> findCrowdFundingDetailByCrowdfundingId(String crowdfundingId) {
-        StringBuilder sql = new StringBuilder("select count(e.enroll_id) enroll_count,o.image_url,o2.image_url user_head_image_url,c.* ");
+        StringBuilder sql = new StringBuilder("select sum(e.quantity) enroll_count,o.image_url,o2.image_url user_head_image_url,c.* ");
         sql.append("from t_crowdfunding c ");
         sql.append("left join t_enroll e ");
         sql.append("on c.crowdfunding_id=e.crowdfunding_id ");
@@ -180,7 +180,7 @@ public class CrowdFundingDAOImpl extends BaseDAO implements CrowdFundingDAO {
 
 
     public List<CrowdFunding> findCrowdFundingToMyCrowdFunding(int startIndex, int loadSize,String userId) {
-        StringBuilder sql = new StringBuilder("select count(e.enroll_id) enroll_count,o.image_url,c.* ");
+        StringBuilder sql = new StringBuilder("select sum(e.quantity) enroll_count,o.image_url,c.* ");
         sql.append("from t_crowdfunding c ");
         sql.append("left join t_enroll e ");
         sql.append("on c.crowdfunding_id=e.crowdfunding_id ");
