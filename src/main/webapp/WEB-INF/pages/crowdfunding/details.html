@@ -85,7 +85,7 @@
                                         <#if crowdFunding.enrollCount==0>
                                             ${crowdFunding.costTotal!}
                                             <#else>
-                                                ${crowdFunding.costTotal/crowdFunding.enrollCount}
+                                                ${(crowdFunding.costTotal/crowdFunding.enrollCount)?string("0.00")}
                                         </#if>
 
                                 </#if>
