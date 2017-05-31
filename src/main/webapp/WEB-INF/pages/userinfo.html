@@ -307,7 +307,7 @@
                 if(response.messageType == 'success' ){
                     $.alert('保存成功！');
                     if(toUrl != null && toUrl != ''){
-                        window.location.href = '${request.contextPath}'+toUrl;
+                        window.location.href = toUrl;
                     }else{
                         window.location.href = '${request.contextPath}/user/to-my-page';
                     }
