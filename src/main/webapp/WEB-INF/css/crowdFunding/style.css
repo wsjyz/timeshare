@@ -196,3 +196,21 @@ textarea.form-control{height:auto;line-height:normal}
 .table-head span{width:50%;font-size:0.8rem}
 .btn-box{display:-webkit-box;display:-webkit-flex;display:flex;-webkit-box-pack:center;-webkit-justify-content:center;justify-content:center;-webkit-box-align:center;-webkit-align-items:center;align-items:center}
 .btn-box .button{margin:0 0.6rem;height:2rem; line-height:2rem;width:5rem}
+.userPhoto {
+    width: 1.8rem;
+    height: 1.8rem;
+}
+.userNum{
+    position:absolute;
+    top:1.3rem;
+    left:2rem;
+    text-align: center;
+    font-size:.55rem;
+    width:1.2rem;
+    height:1.2rem;
+    line-height: 1.2rem;
+    border-radius: .6rem;
+    background-color: red;
+    color:white;
+    vertical-align: middle;
+}
