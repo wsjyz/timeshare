@@ -2,6 +2,7 @@ package com.timeshare.service.assembly;
 
 import com.timeshare.domain.assembly.Attender;
 
+import java.io.IOException;
 import java.util.List;
 
 /**
@@ -20,4 +21,5 @@ public interface AttenderService {
     int findAttenderCount(Attender Attender);
     List<Attender> getListByAssemblyId(String assemblyId);
 
+    Boolean exportAttenderListToEmail(String assemblyId, String toEmailAddress) throws IOException;;
 }
