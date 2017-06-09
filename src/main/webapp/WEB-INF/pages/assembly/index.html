@@ -114,7 +114,58 @@
     <script src="${request.contextPath}/js/assembly/swiper.min.js"></script>
     <script type='text/javascript' src='http://g.alicdn.com/msui/sm/0.6.2/js/sm.min.js' charset='utf-8'></script>
     <script type='text/javascript' src='http://g.alicdn.com/msui/sm/0.6.2/js/sm-extend.min.js' charset='utf-8'></script>
-    <script>
+  <script type='text/javascript' src='https://res.wx.qq.com/open/js/jweixin-1.0.0.js'></script>
+
+  <script>
+        wx.config({
+            appId: "${parmsMap['appId']}", // 必填，公众号的唯一标识
+            timestamp:${parmsMap['timestamp']} , // 必填，生成签名的时间戳
+            nonceStr: "${parmsMap['nonceStr']}", // 必填，生成签名的随机串
+            signature: "${parmsMap['signature']}",// 必填，签名，见附录1
+            jsApiList: [
+                'checkJsApi',
+                'onMenuShareTimeline',
+                'onMenuShareAppMessage',
+                'onMenuShareQQ'
+            ] // 必填，需要使用的JS接口列表，所有JS接口列表见附录2
+        });
+        var shareImgUrl="";
+        shareImgUrl="${request.contextPath}/images/assembly/default_tImage.jpg";
+        if(shareImgUrl.indexOf('http') == -1){
+            shareImgUrl = 'http://www.xiehoushike.com'+shareImgUrl;
+        }
+        wx.ready(function(){
+            wx.onMenuShareAppMessage({
+                title: '邂逅拾刻-邂逅活动',
+                desc: "邂逅活动",
+                link: window.location.href,
+                imgUrl: shareImgUrl,
+                trigger: function (res) {
+                    //  alert('用户点击发送给朋友');
+                },
+                success: function (res) {
+                    //     $.toast('已分享');
+                },
+                cancel: function (res) {
+                    //      $.toast('已取消分享');
+                },
+                fail: function (res) {
+                    //      console.log('失败');
+                }
+            });
+            wx.onMenuShareTimeline({
+                title: "邂逅拾刻-邂逅活动", // 分享标题
+                link: window.location.href, // 分享链接
+                imgUrl: shareImgUrl, // 分享图标
+                success: function () {
+                    // 用户确认分享后执行的回调函数
+                },
+                cancel: function () {
+                    // 用户取消分享后执行的回调函数
+                }
+            });
+
+        });
         $(function(){
             if("${type}"==""){
                 $("#tab1").load("${request.contextPath}/assembly/searchAssembly");

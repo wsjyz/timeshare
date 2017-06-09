@@ -219,8 +219,15 @@
                     text: '下架',
                     bold: true,
                     color: 'danger',
+                    onClick: function () {
+                        window.location.href = "${request.contextPath}/assembly/to-result?assemblyId=" + assemblyId + "&type=MYASSEMBLY";
+                    }
+                },
+                {
+                    text: '报名名单',
+                    bold: true,
                     onClick: function() {
-                        window.location.href="${request.contextPath}/assembly/to-result?assemblyId="+assemblyId+"&type=MYASSEMBLY";
+                        window.location.href="${request.contextPath}/assembly/toAttendermd?assemblyId="+assemblyId;
                     }
                 },
                 {
@@ -278,6 +285,13 @@
                                 window.location.href="${request.contextPath}/assembly/myAssembly";
                             }
                         });
+                    }
+                },
+                {
+                    text: '报名名单',
+                    bold: true,
+                    onClick: function () {
+                        window.location.href = "${request.contextPath}/assembly/toAttendermd?assemblyId=" + assemblyId;
                     }
                 },
                 {

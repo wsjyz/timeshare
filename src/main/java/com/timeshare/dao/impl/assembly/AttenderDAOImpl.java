@@ -93,6 +93,9 @@ public class AttenderDAOImpl extends BaseDAO implements AttenderDAO {
     @Override
     public List<Attender> findAttenderList(Attender Attender, int startIndex, int loadSize) {
         StringBuilder sql = new StringBuilder("select * from t_attender where 1=1");
+        if (StringUtils.isNotEmpty(Attender.getAssemblyId())){
+            sql.append(" and assembly_id='"+Attender.getAssemblyId()+"'");
+        }
         sql.append("   limit ?,?");
         return getJdbcTemplate().query(sql.toString(),new Object[]{startIndex,loadSize},new AttenderRowMapper());
     }
@@ -122,6 +125,7 @@ public class AttenderDAOImpl extends BaseDAO implements AttenderDAO {
             attender.setCreateTime(rs.getString("create_time"));
             attender.setQuestionAnswer(rs.getString("question_answer"));
             attender.setUserCount(rs.getString("user_count"));
+            attender.setPhone(rs.getString("phone"));
             return attender;
         }
     }

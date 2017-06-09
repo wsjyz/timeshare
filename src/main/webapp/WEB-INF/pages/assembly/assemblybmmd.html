@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>报名名单</title>
+    <meta name="viewport" content="initial-scale=1, maximum-scale=1">
+    <link rel="shortcut icon" href="/favicon.ico">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+
+    <link rel="stylesheet" type="text/css" href="${request.contextPath}/css/crowdFunding/sm.min.css">
+    <link rel="stylesheet" type="text/css" href="${request.contextPath}/css/crowdFunding/sm-extend.min.css">
+    <link rel="stylesheet" type="text/css" href="${request.contextPath}/css/crowdFunding/style.css">
+    <script type="text/javascript" src="${request.contextPath}/js/zepto.min.js"></script>
+    <script type="text/javascript" src="${request.contextPath}/js/crowdFunding/config.js"></script>
+    <style>
+    </style>
+</head>
+<body>
+<div class="page-group">
+    <div class="page page-current">
+        <!--header start-->
+        <header class="bar bar-nav">
+            <a class="icon icon-left pull-left back" href="javascript:history.go(-1);"></a>
+            <a href="#" class="pull-right button export">导出</a>
+            <h1 class="title"></h1>
+        </header>
+        <!--header end-->
+        <div class="bar bar-header-secondary table-head">
+            <span>姓名</span>
+            <span>电话</span>
+            <span>报名数量</span>
+
+        </div>
+        <!--页面内容区域 start-->
+        <div class="content infinite-scroll bmmd-scroll" data-distance="100">
+            <div class="list-block bmmd-list">
+                <ul>
+                    <!--<li><span>周大唱</span><span>13663736423</span></li>-->
+                </ul>
+            </div>
+            <!-- 加载提示符 -->
+            <div class="infinite-scroll-preloader">
+                <div class="preloader"></div>
+            </div>
+            <div class="no-record" style="display: none;text-align: center">
+                没有更多记录了
+            </div>
+        </div>
+        <!-- 页面内容区域 end -->
+    </div>
+</div>
+
+<script type="text/javascript" src="${request.contextPath}/js/crowdFunding/sm.min.js"></script>
+<script type="text/javascript" src="${request.contextPath}/js/crowdFunding/sm-extend.min.js"></script>
+<script type="text/javascript" src="${request.contextPath}/js/crowdFunding/sm-city-picker.min.js"></script>
+<script type="text/javascript" src="${request.contextPath}/js/crowdFunding/my-js.js"></script>
+</body>
+<script>
+
+    $(document).on('click', '.export',function () {
+        $.prompt('我们会把名单发送到您的邮箱', '导出名单',
+                function (value) {
+                    //对电子邮件的验证
+                    var myreg = /^([a-zA-Z0-9]+[_|\_|\.]?)*[a-zA-Z0-9]+@([a-zA-Z0-9]+[_|\_|\.]?)*[a-zA-Z0-9]+\.[a-zA-Z]{2,3}$/;
+                    if(!myreg.test(value)) {
+                        $(".export").trigger("click");
+                        $.toast("请输入有效的邮箱地址");
+                        return ;
+                    }
+
+
+                    var assemblyId="${assemblyId!}";
+                    $.post('${request.contextPath}/assembly/exportEnrollListToEmail', {assemblyId:assemblyId,toEmailAddress: value}, function (response) {
+                        if(response=='success'){
+                            $.toast("已成功发送至您的邮箱，请查收");
+                        }
+                        else{
+                            $.toast("发送失败");
+                        }
+                    });
+                },
+                function (value) {
+                    //$.alert('取消');
+                }
+        );
+    });
+
+
+    // 下拉无限加载
+    var loading = false;
+    // 最多可加载的条目
+    var maxItems = 999;
+    // 每次加载添加多少条目
+    var itemsPerLoad = 20;
+    function addItems(data) {
+        // 生成新条目的HTML
+        var html = '';
+        var count=0;
+        $.each(data, function(i, attender){
+            //alert(enroll2.userName);
+            html += '<li><span>'+attender.userName+'</span><span>'+attender.phone+'</span><span>'+attender.userCount+'</span></li>';
+            count=i;
+        });
+        // 添加新条目
+        $('.bmmd-scroll .bmmd-list ul').append(html);
+
+
+        if(count+1 < itemsPerLoad){
+            // 加载完毕，则注销无限加载事件，以防不必要的加载
+            $.detachInfiniteScroll($('.infinite-scroll'));
+            // 删除加载提示符
+            $('.infinite-scroll-preloader').remove();
+            $('.no-record').show();
+        }else{
+            $('.infinite-scroll-preloader').remove();
+
+        }
+    }
+
+    //预先加载
+    var assemblyId="${assemblyId!}";
+    $.post('${request.contextPath}/assembly/findAttender', {assemblyId:assemblyId,startIndex: 0,loadSize:itemsPerLoad}, function (response) {
+        //预先加载
+        addItems(response);
+    });
+
+
+    // 上次加载的序号
+    var lastIndex = itemsPerLoad;
+    // 注册'infinite'事件处理函数
+    $(document).on('infinite', '.bmmd-scroll',function() {
+        // 如果正在加载，则退出
+        if (loading) return;
+        // 设置flag
+        loading = true;
+        // 模拟1s的加载过程
+        setTimeout(function() {
+            // 重置加载flag
+            loading = false;
+            if (lastIndex >= maxItems) {
+                // 加载完毕，则注销无限加载事件，以防不必要的加载
+                $.detachInfiniteScroll($('.infinite-scroll'));
+                // 删除加载提示符
+                $('.infinite-scroll-preloader').remove();
+                // 提示没有更多数据
+                $('.no-record').show();
+            }
+            // 添加新条目
+            var assemblyId="${assemblyId!}";
+            $.post('${request.contextPath}/assembly/findAttender', {assemblyId:assemblyId,startIndex: lastIndex,loadSize:itemsPerLoad}, function (response) {
+                if(response==null || response==undefined ||  response==''){
+                    // 加载完毕，则注销无限加载事件，以防不必要的加载
+                    $.detachInfiniteScroll($('.infinite-scroll'));
+                    // 删除加载提示符
+                    $('.infinite-scroll-preloader').remove();
+                    // 提示没有更多数据
+                    $('.no-record').show();
+                }
+                else{
+                    addItems(response);
+                }
+            });
+
+            // 更新最后加载的序号
+            lastIndex = lastIndex+itemsPerLoad;
+            //容器发生改变,如果是js滚动，需要刷新滚动
+            $.refreshScroller();
+        }, 1);
+    });
+
+
+</script>
+</html>

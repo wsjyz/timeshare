@@ -9,6 +9,7 @@ import com.timeshare.controller.BaseController;
 import com.timeshare.domain.*;
 import com.timeshare.domain.assembly.*;
 import com.timeshare.domain.assembly.Collection;
+import com.timeshare.domain.crowdfunding.Enroll;
 import com.timeshare.service.AuditorService;
 import com.timeshare.service.BidService;
 import com.timeshare.service.BidUserService;
@@ -27,6 +28,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.xml.bind.SchemaOutputResolver;
+import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
@@ -57,7 +59,7 @@ public class AssemblyController extends  BaseController {
 
     @RequestMapping(value = "/to-index")
     public String index(@RequestParam(value = "searchName", defaultValue = "") String searchName,
-                        @RequestParam(value = "type", defaultValue = "") String type, Model model, @CookieValue(value = "time_sid", defaultValue = "admin") String userId) {
+                        @RequestParam(value = "type", defaultValue = "") String type, Model model, @CookieValue(value = "time_sid", defaultValue = "admin") String userId, HttpServletRequest request) {
         model.addAttribute("type", type);
         Assembly assembly = new Assembly();
         assembly.setStatus("PUBLISHED");
@@ -68,6 +70,10 @@ public class AssemblyController extends  BaseController {
 
         List<Assembly> assemblyList = assemblyService.findAssemblyList(assembly, 0, 10);
         model.addAttribute("assemblyList", assemblyList);
+        //微信jssdk相关代码
+        String url = WxUtils.getUrl(request);
+        Map<String, String> parmsMap = WxUtils.sign(url);
+        model.addAttribute("parmsMap", parmsMap);
         return "assembly/index";
     }
 
@@ -298,7 +304,8 @@ public class AssemblyController extends  BaseController {
                 }
             }
         }
-            if (!CollectionUtils.isEmpty(assembly.getFeeList())) {
+        int UserSumCount=0;
+        if (!CollectionUtils.isEmpty(assembly.getFeeList())) {
             for (Fee fee : assembly.getFeeList()) {
                 if (minMoney.compareTo(new BigDecimal(0)) == 0) {
                     minMoney = fee.getFee();
@@ -314,6 +321,7 @@ public class AssemblyController extends  BaseController {
                 }
                 int count = 0;
                 for (Attender attender : attenderList) {
+                    UserSumCount+=Integer.parseInt(attender.getUserCount());
                     if (attender.getFeedId().equals(fee.getFeeId())) {
                         count++;
                     }
@@ -339,7 +347,7 @@ public class AssemblyController extends  BaseController {
         model.addAttribute("assembly", assembly);
         model.addAttribute("minMoney", minMoney);
         model.addAttribute("maxMoney", maxMoney);
-        model.addAttribute("userCount", attenderList.size());
+        model.addAttribute("userCount", UserSumCount);
         model.addAttribute("attenderList", attenderList);
         model.addAttribute("commentList", commentList);
         model.addAttribute("collectionCount", list.size());
@@ -759,5 +767,38 @@ public class AssemblyController extends  BaseController {
         Assembly assembly = new Assembly();
         List<Assembly> assemblyList = assemblyService.findCollectionAssemblyList(assembly, userId,startIndex, loadSize);
         return assemblyList;
+    }
+    @RequestMapping(value = "/toAttendermd")
+    public String toAttendermd(@RequestParam String assemblyId,Model model) {
+        model.addAttribute("assemblyId",assemblyId);
+        return "assembly/assemblybmmd";
+    }
+
+    //导出报名名单
+    @ResponseBody
+    @RequestMapping(value = "/exportEnrollListToEmail")
+    public String exportEnrollListToEmail(@RequestParam String assemblyId,@RequestParam String toEmailAddress) throws IOException {
+        if(StringUtils.isNotBlank(toEmailAddress) && StringUtils.isNotBlank(assemblyId)){
+            Boolean result= attenderService.exportAttenderListToEmail(assemblyId,toEmailAddress);
+            return result?Contants.SUCCESS:Contants.FAILED;
+        }
+        else{
+            return Contants.FAILED;
+        }
+
+    }
+    //获取已报名名单
+    @ResponseBody
+    @RequestMapping(value = "/findAttender")
+    public List<Attender> findAttender(@RequestParam String assemblyId, @RequestParam int startIndex, @RequestParam int loadSize){
+        try{
+            Attender Attender=new Attender();
+            Attender.setAssemblyId(assemblyId);
+            return attenderService.findAttenderList(Attender,startIndex,loadSize);
+        }
+        catch (Exception e){
+            e.printStackTrace();
+        }
+        return null;
     }
 }

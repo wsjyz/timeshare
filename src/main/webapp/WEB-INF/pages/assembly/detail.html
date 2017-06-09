@@ -141,6 +141,7 @@
                       <ul class="userList">
                           <#list attenderList as attender>
                           <li>
+                              <div class="userNum">${attender.userCount}</div>
                               <img src="${attender.userImg}" class="userPhoto" style="border-radius:35px"/>
                               <div>${attender.userName}</div>
                           </li>
@@ -247,7 +248,7 @@
         });
         var shareImgUrl="";
        // <#if assembly.titleImg=="">
-        shareImgUrl=="${request.contextPath}/images/assembly/default_tImage.jpg";
+        shareImgUrl="${request.contextPath}/images/assembly/default_tImage.jpg";
        //         <#else>
         shareImgUrl="${assembly.titleImg}";
             //    </#if>
@@ -256,7 +257,7 @@
         }
         wx.ready(function(){
             wx.onMenuShareAppMessage({
-                title: '邂逅活动',
+                title: '邂逅拾刻-邂逅活动',
                 desc: $('.title').text(),
                 link: window.location.href,
                 imgUrl: shareImgUrl,
@@ -274,7 +275,7 @@
                 }
             });
             wx.onMenuShareTimeline({
-                title: $('.title').text(), // 分享标题
+                title: '邂逅拾刻-邂逅活动',
                 link: window.location.href, // 分享链接
                 imgUrl: shareImgUrl, // 分享图标
                 success: function () {
@@ -604,10 +605,14 @@
                                     questionAnswer=questionAnswer+"^"+companyName;
                                 }
                                 //</#if>
-                           //     window.location.href = "${request.contextPath}/assembly/saveAttender?assemblyId=${assembly.assemblyId}&questionAnswer="+questionAnswer+"&feeId="+feeId;
+                                if(parseInt(price)==0){
+                                       window.location.href = "${request.contextPath}/assembly/saveAttender?assemblyId=${assembly.assemblyId}&questionAnswer="+questionAnswer+"&feeId="+feeId+"&userCount="+userCount+"&userId=${userInfo.userId}";
+                                }else{
                                     window.location.href = "https://open.weixin.qq.com/connect/oauth2/authorize?appid=wxcd8903dd6a9552eb" +
                                             "&redirect_uri=http%3A%2F%2Fwww.xiehoushike.com%2Ftime%2Fassembly%2Fto-pay-for-confirm%2F&response_type=code&scope=snsapi_base&state=" +feeId+"_${assembly.assemblyId}_"+questionAnswer+"_"+userCount+"#wechat_redirect";
-                            }
+
+                                }
+                                     }
                         },
                     ]
                 })
