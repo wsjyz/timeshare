@@ -155,6 +155,9 @@ public class EnrollController extends  BaseController{
         Enroll enroll=new Enroll();
         enroll.setEnrollId(enrollId);
         enroll.setPayStatus(Contants.ENROLL_PAY_STATUS.PAYED.name());
+        enroll.setUserId(userId);
+        enroll.setEnrollUserId(userId);
+        enroll.setOptTime(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date()));
         //更新支付状态为已支付
         enrollService.modifyEnroll(enroll);
         //支付成功跳转至我预约的众筹

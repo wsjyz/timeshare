@@ -98,6 +98,15 @@ public class EnrollDAOImpl extends BaseDAO implements EnrollDAO {
         if(StringUtils.isNotBlank(enroll.getPayTradeNo())){
             sql.append(" pay_trade_no = '"+enroll.getPayTradeNo()+"',");
         }
+        if(StringUtils.isNotBlank(enroll.getEnrollUserId())){
+            sql.append(" enroll_user_id = '"+enroll.getEnrollUserId()+"',");
+        }
+        if(StringUtils.isNotBlank(enroll.getUserId())){
+            sql.append(" user_id = '"+enroll.getUserId()+"',");
+        }
+        if(StringUtils.isNotBlank(enroll.getOptTime())){
+            sql.append(" opt_time = '"+enroll.getOptTime()+"',");
+        }
         if (sql.lastIndexOf(",") + 1 == sql.length()) {
             sql.delete(sql.lastIndexOf(","), sql.length());
         }

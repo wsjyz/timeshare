@@ -191,10 +191,11 @@
 <script>
     var projectName="${crowdFunding.projectName!}";
     var detail='${crowdFunding.createUserName!}'+'创建了一个众筹项目';
-    var shareImgUrl="${request.contextPath}/${crowdFunding.imageUrl!}.jpg";
+    var shareImgUrl="${request.contextPath}/${crowdFunding.imageUrl!'images/crowdFunding/pic'}.jpg";
     if(shareImgUrl.indexOf('http') == -1){
         shareImgUrl = 'http://www.xiehoushike.com'+shareImgUrl;
     }
+    //alert(shareImgUrl);
     wx.config({
         debug : false,
         appId: "${parmsMap['appId']}", // 必填，公众号的唯一标识
