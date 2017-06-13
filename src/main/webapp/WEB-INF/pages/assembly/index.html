@@ -87,9 +87,9 @@
                           <div class="swiper-wrapper">
                               <#list assemblyList as assembly>
                                   <div class="swiper-slide">
-                                      <a class="external" href="${request.contextPath}/assembly/to-detail?assemblyId=${assembly.assemblyId}">
+                                      <a class="external" href="#" onclick="toDetail('${assembly.assemblyId}')">
                                           <#if assembly.titleImg!="">
-                                              <img src="${assembly.titleImg}"  style="width:100%;height: calc(460/750*100vw)"/>
+                                              <img src="${assembly.titleImg}" data-id="${assembly.assemblyId}"  style="width:100%;height: calc(460/750*100vw)"/>
                                               <#else>
                                                   <img src="${request.contextPath}/images/assembly/default_tImage.jpg" />
                                           </#if>
@@ -259,6 +259,12 @@
                 $("#tab4").load("${request.contextPath}/assembly/searchAssembly?type=company&citySelect="+citySelect);
             }
         }
+      function toDetail(assemblyId) {
+          var backUrl = 'http://www.xiehoushike.com'+'${request.contextPath}/assembly/to-detail?assemblyId='+assemblyId;
+           window.location.href = '${request.contextPath}/assembly/to-detail?assemblyId='+assemblyId;
+
+          // window.location.href = '${request.contextPath}/wx/to-get-open-id?backUrl='+encodeURIComponent(backUrl);
+      }
     </script>
   </body>
 </html>

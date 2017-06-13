@@ -41,7 +41,7 @@
                           返回
                       </a>
               </#if>
-
+            <input type="hidden" id="userText" value="${userInfo.nickName}创建了一个活动"/>
           </div>
 
           <nav class="bar bar-tab activityFooter">
@@ -65,7 +65,9 @@
                   <span class="icon icon-me"></span>
                   <#if attenderTouser=="true">
                       <span>已报名</span>
-                      <#else>
+                      <#elseif attenderTouser=="guoqi">
+                          <span>已结束</span>
+                          <#else>
                           <span>我要报名</span>
                   </#if>
               </a>
@@ -257,8 +259,8 @@
         }
         wx.ready(function(){
             wx.onMenuShareAppMessage({
-                title: '邂逅拾刻-邂逅活动',
-                desc: $('.title').text(),
+                title:$('.activityTitle').text(),
+                desc:$('#userText').val() ,
                 link: window.location.href,
                 imgUrl: shareImgUrl,
                 trigger: function (res) {
@@ -275,7 +277,7 @@
                 }
             });
             wx.onMenuShareTimeline({
-                title: '邂逅拾刻-邂逅活动',
+                title: $('.activityTitle').text(),
                 link: window.location.href, // 分享链接
                 imgUrl: shareImgUrl, // 分享图标
                 success: function () {

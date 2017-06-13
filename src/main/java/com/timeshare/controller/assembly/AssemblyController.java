@@ -124,14 +124,10 @@ public class AssemblyController extends  BaseController {
                 fee.setFee(new BigDecimal(fees[i]));
                 fee.setQuota(Integer.parseInt(quotas[i]));
                 String feeId="";
-                if (feeIdStr.length>0){
-                    if(StringUtils.isNotEmpty(feeIdStr[i])){
-                        feeId=feeIdStr[i];
-                        fee.setFeeId(feeId);
-                        feeService.modifyFee(fee);
-                    }else{
-                        feeId = feeService.saveFee(fee);
-                    }
+                if(feeIdStr.length>i && StringUtils.isNotEmpty(feeIdStr[i])){
+                    feeId=feeIdStr[i];
+                    fee.setFeeId(feeId);
+                    feeService.modifyFee(fee);
                 }else{
                     feeId = feeService.saveFee(fee);
                 }
@@ -263,6 +259,7 @@ public class AssemblyController extends  BaseController {
         assemblyBrowers.setBrowseTimes(assembly.getBrowseTimes() + 1);
         assemblyService.modifyAssembly(assemblyBrowers);
         assembly.setBrowseTimes(assemblyBrowers.getBrowseTimes());
+        String attenderTouser = "farse";
         if(assembly.getCreateTime()!=null){
             try {
                 SimpleDateFormat format1 = new SimpleDateFormat("yyyy-MM-dd HH:mm");
@@ -285,7 +282,12 @@ public class AssemblyController extends  BaseController {
             try {
                 SimpleDateFormat format1 = new SimpleDateFormat("yyyy-MM-dd HH:mm");
                 SimpleDateFormat format2 = new SimpleDateFormat("MM月dd日 HH:mm");
-                assembly.setEndTime(format2.format(format1.parse(assembly.getEndTime())));
+                Date endTime=format1.parse(assembly.getEndTime());
+                assembly.setEndTime(format2.format(endTime));
+                Calendar cal=Calendar.getInstance();
+                if (cal.getTime().after(endTime)){
+                    attenderTouser="guoqi";
+                }
             }catch (Exception e){
                 e.printStackTrace();
             }
@@ -293,7 +295,6 @@ public class AssemblyController extends  BaseController {
         List<Attender> attenderList = attenderService.getListByAssemblyId(assemblyId);
         BigDecimal minMoney = new BigDecimal(0);
         BigDecimal maxMoney = new BigDecimal(0);
-        String attenderTouser = "farse";
         List<Collection> list = collectionService.getCollectionByAssemblyId(assemblyId);
         String collectionStr="false";
         if (!CollectionUtils.isEmpty(list)) {
