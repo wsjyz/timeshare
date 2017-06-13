@@ -81,6 +81,8 @@ public class WxController {
                 + Contants.APPID+"&redirect_uri=http%3A%2F%2F"+Contants.DOMAIN+contextPath+"%2Fwx%2Fget-open-id%2F&response_type=code&scope=snsapi_base&state="+backUrl+"#wechat_redirect";
         return "redirect:"+wxOauthUrl;
     }
+
+
     @RequestMapping(value = "/get-open-id")
     public String getOpenId(HttpServletRequest request, HttpServletResponse response,Model model){
 

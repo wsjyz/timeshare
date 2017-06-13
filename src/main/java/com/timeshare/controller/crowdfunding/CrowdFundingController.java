@@ -92,9 +92,12 @@ public class CrowdFundingController extends  BaseController{
     }
     //众筹详情页
     @RequestMapping(value = "/toDetail")
-    public String toDetail(@RequestParam String crowdFundingId,Model model,@RequestParam(defaultValue = "false" ,required = false) String commentFlag,@CookieValue(value = "time_sid", defaultValue = "00359e8721c44d168aac7d501177e314") String userId,HttpServletRequest request) {
+    public String toDetail(@RequestParam String crowdFundingId,Model model,@RequestParam(defaultValue = "false" ,required = false) String commentFlag,@RequestParam(defaultValue = "false" ,required = false) String oauthFlag,@CookieValue(value = "time_sid", defaultValue = "00359e8721c44d168aac7d501177e314") String userId,HttpServletRequest request) {
         //是否默认显示评论tab
         model.addAttribute("commentFlag",commentFlag);
+        //是否已经做过oauth鉴权
+        model.addAttribute("oauthFlag",oauthFlag);
+
         //众筹详情页
         CrowdFunding crowdFunding=crowdFundingService.findCrowdFundingDetailByCrowdfundingId(crowdFundingId);
         model.addAttribute("crowdFunding",crowdFunding);

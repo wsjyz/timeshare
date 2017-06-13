@@ -59,7 +59,7 @@ public class EnrollController extends  BaseController{
 
     //预约页面
     @RequestMapping(value = "/yy")
-    public String yy(@RequestParam String crowdFundingId,@RequestParam String enrollId, Model model,@CookieValue(value="time_sid", defaultValue="00359e8721c44d168aac7d501177e314") String userId)  {
+    public String yy(@RequestParam String crowdFundingId,@RequestParam(required = false) String enrollId, Model model,@CookieValue(value="time_sid", defaultValue="00359e8721c44d168aac7d501177e314") String userId)  {
         String crowdFundingIdTemp=crowdFundingId;
         //从支付返回回来的需要获取一次预约信息展示到页面
         if(StringUtils.isNotBlank(enrollId)){
@@ -155,11 +155,12 @@ public class EnrollController extends  BaseController{
         Enroll enroll=new Enroll();
         enroll.setEnrollId(enrollId);
         enroll.setPayStatus(Contants.ENROLL_PAY_STATUS.PAYED.name());
-        enroll.setUserId(userId);
-        enroll.setEnrollUserId(userId);
-        enroll.setOptTime(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date()));
+//        enroll.setUserId(userId);
+//        enroll.setEnrollUserId(userId);
+//        enroll.setOptTime(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date()));
         //更新支付状态为已支付
         enrollService.modifyEnroll(enroll);
+        System.out.println("payComplete--------------------------------------------------------------userID:"+userId);
         //支付成功跳转至我预约的众筹
         return "crowdfunding/gz";
     }

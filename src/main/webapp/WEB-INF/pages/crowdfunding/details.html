@@ -34,7 +34,7 @@
             <#if (crowdFunding.enrollCount >= crowdFunding.maxPeoples)>
                 <span class="cost">名额已满</span>
                 <#else>
-                    <a href="${request.contextPath}/enroll/yy?crowdFundingId=${crowdFunding.crowdfundingId}&enrollId="
+                    <a href="${request.contextPath}/wx/to-get-open-id?backUrl=/enroll/yy?crowdFundingId=${crowdFunding.crowdfundingId}&enrollId="
                        class="button button-fill button-round">报名参加</a>
                     <span class="cost">¥${crowdFunding.reservationCost!}</span>
             </#if>
@@ -261,6 +261,14 @@
         $("#detailTab").trigger("click");
         $("#detailTab").addClass("active");
     }
+
+
+    $("#commentTab").click(function (){
+        //如果进入页面还没有进行鉴权则进行鉴权
+        if ("${oauthFlag}" != 'true') {
+            window.location.href="${request.contextPath}/wx/to-get-open-id?backUrl="+encodeURIComponent("/crowdFunding/toDetail?crowdFundingId=${crowdFunding.crowdfundingId}&commentFlag=true&oauthFlag=true");
+        }
+    })
 
     // 下拉无限加载
     var loading = false;
