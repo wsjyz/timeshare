@@ -605,10 +605,14 @@
                                     questionAnswer=questionAnswer+"^"+companyName;
                                 }
                                 //</#if>
-                           //     window.location.href = "${request.contextPath}/assembly/saveAttender?assemblyId=${assembly.assemblyId}&questionAnswer="+questionAnswer+"&feeId="+feeId;
+                                if(parseInt(price)==0){
+                                       window.location.href = "${request.contextPath}/assembly/saveAttender?assemblyId=${assembly.assemblyId}&questionAnswer="+questionAnswer+"&feeId="+feeId+"&userCount="+userCount+"&userId=${userInfo.userId}";
+                                }else{
                                     window.location.href = "https://open.weixin.qq.com/connect/oauth2/authorize?appid=wxcd8903dd6a9552eb" +
                                             "&redirect_uri=http%3A%2F%2Fwww.xiehoushike.com%2Ftime%2Fassembly%2Fto-pay-for-confirm%2F&response_type=code&scope=snsapi_base&state=" +feeId+"_${assembly.assemblyId}_"+questionAnswer+"_"+userCount+"#wechat_redirect";
-                            }
+
+                                }
+                                     }
                         },
                     ]
                 })

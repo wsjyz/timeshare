@@ -9,6 +9,7 @@ import com.timeshare.controller.BaseController;
 import com.timeshare.domain.*;
 import com.timeshare.domain.assembly.*;
 import com.timeshare.domain.assembly.Collection;
+import com.timeshare.domain.crowdfunding.Enroll;
 import com.timeshare.service.AuditorService;
 import com.timeshare.service.BidService;
 import com.timeshare.service.BidUserService;
@@ -27,6 +28,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.xml.bind.SchemaOutputResolver;
+import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
@@ -765,5 +767,38 @@ public class AssemblyController extends  BaseController {
         Assembly assembly = new Assembly();
         List<Assembly> assemblyList = assemblyService.findCollectionAssemblyList(assembly, userId,startIndex, loadSize);
         return assemblyList;
+    }
+    @RequestMapping(value = "/toAttendermd")
+    public String toAttendermd(@RequestParam String assemblyId,Model model) {
+        model.addAttribute("assemblyId",assemblyId);
+        return "assembly/assemblybmmd";
+    }
+
+    //导出报名名单
+    @ResponseBody
+    @RequestMapping(value = "/exportEnrollListToEmail")
+    public String exportEnrollListToEmail(@RequestParam String assemblyId,@RequestParam String toEmailAddress) throws IOException {
+        if(StringUtils.isNotBlank(toEmailAddress) && StringUtils.isNotBlank(assemblyId)){
+            Boolean result= attenderService.exportAttenderListToEmail(assemblyId,toEmailAddress);
+            return result?Contants.SUCCESS:Contants.FAILED;
+        }
+        else{
+            return Contants.FAILED;
+        }
+
+    }
+    //获取已报名名单
+    @ResponseBody
+    @RequestMapping(value = "/findAttender")
+    public List<Attender> findAttender(@RequestParam String assemblyId, @RequestParam int startIndex, @RequestParam int loadSize){
+        try{
+            Attender Attender=new Attender();
+            Attender.setAssemblyId(assemblyId);
+            return attenderService.findAttenderList(Attender,startIndex,loadSize);
+        }
+        catch (Exception e){
+            e.printStackTrace();
+        }
+        return null;
     }
 }
