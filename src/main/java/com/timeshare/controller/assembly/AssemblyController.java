@@ -642,7 +642,7 @@ public class AssemblyController extends  BaseController {
     }
 
     @RequestMapping(value = "/to-pay-for-confirm")
-    public String toPayForConfirm(HttpServletRequest request, RedirectAttributes attr) {
+    public String toPayForConfirm(HttpServletRequest request, RedirectAttributes attr , @CookieValue(value = "time_sid", defaultValue = "admin") String userId) {
         String code = request.getParameter("code");
         String state = request.getParameter("state");
         String[] states = state.split("_");
@@ -651,32 +651,11 @@ public class AssemblyController extends  BaseController {
         String questionAnswer = states[2];
         String userCount = states[3];
         Fee fee = feeService.findFeeById(feeId);
-        WeixinOauth weixinOauth=new WeixinOauth();
-        AccessTokenBean accessTokenBean = weixinOauth.obtainOauthAccessToken(code);
-        WeixinUser weixinUser=weixinOauth.getUserInfo(accessTokenBean.getAccess_token(),accessTokenBean.getOpenid());
-        UserInfo user = new UserInfo();
-        String userId = CommonStringUtils.genPK();
-        if(weixinUser != null && StringUtils.isNotBlank(weixinUser.getOpenId())){
-            UserInfo userInfo = userService.findUserByOpenId(weixinUser.getOpenId());
-            if(userInfo == null){
-                user.setUserId(userId);
-                user.setOpenId(weixinUser.getOpenId());
-                user.setNickName(weixinUser.getNickname());
-                user.setSex(weixinUser.getSex());
-                user.setCity(weixinUser.getCity());
-                ImageObj imageObj = new ImageObj();
-                imageObj.setImageUrl(weixinUser.getHeadimgurl());
-                user.setImageObj(imageObj);
-                String result = userService.saveUser(user);
-            }else{
-                userId=userInfo.getUserId();
-            }
 
-        }
         System.out.println("shuliang :::::::::::::::::::::::::::::::"+userCount);
         System.out.println("jine:::::::::::::::::::::::::::::"+fee.getFee().multiply(new BigDecimal(userCount)));
         String payMessageTitle = "您在邂逅活动的报名款项：" + fee.getFeeTitle();
-        String jsApiParams = userPayToCorpByHuodong(code, payMessageTitle, fee.getFee().multiply(new BigDecimal(userCount)),weixinOauth,accessTokenBean.getOpenid());
+        String jsApiParams = userPayToCorp(code, payMessageTitle, fee.getFee().multiply(new BigDecimal(userCount)));
         attr.addAttribute("jsApiParams", jsApiParams);
         attr.addAttribute("payTip", "你确定要支付" + fee.getFee().multiply(new BigDecimal(userCount)) + "元吗");
         attr.addAttribute("okUrl", request.getContextPath() + "/assembly/saveAttender?assemblyId=" + assemblyId + "&feeId=" + feeId + "&questionAnswer=" + questionAnswer+"&userId="+userId+"&userCount="+userCount);
