@@ -57,13 +57,7 @@ public class AssemblyServiceImpl implements AssemblyService {
         UserInfo userInfo=userService.findUserByUserId(assembly.getUserId());
         assembly.setUserName(userInfo.getNickName());
         ImageObj userImg = userService.findUserImg(assembly.getUserId(), Contants.IMAGE_TYPE.USER_HEAD.toString());
-        if(userImg!=null && StringUtils.isNotEmpty(userImg.getImageId())){
-            String headImg = userImg.getImageUrl();
-            if(headImg.indexOf("http") == -1){//修改过头像
-                headImg = "/time"+headImg+"_320x240.jpg";
-            }
-            assembly.setUserImg(headImg);
-        }
+        getUserImg(assembly, userImg);
         List<ImageObj> imageObjList = imageObjDAO.findImgByObjIds("('"+assembly.getAssemblyId()+"')");
         if(!CollectionUtils.isEmpty(imageObjList)){
             List<ImageObj> contentImageList=new ArrayList<ImageObj>();
@@ -109,57 +103,7 @@ public class AssemblyServiceImpl implements AssemblyService {
     @Override
     public List<Assembly> findAssemblyList(Assembly Assembly, int startIndex, int loadSize) {
         List<Assembly> list= assemblyDAO.findAssemblyList(Assembly,startIndex,loadSize);
-        if (!CollectionUtils.isEmpty(list)){
-            for (Assembly assembly:list){
-                UserInfo userInfo=userService.findUserByUserId(assembly.getUserId());
-               if(userInfo!=null){
-                   assembly.setUserName(userInfo.getNickName());
-               }
-                ImageObj userImg = userService.findUserImg(assembly.getUserId(), Contants.IMAGE_TYPE.USER_HEAD.toString());
-                if(userImg!=null && StringUtils.isNotEmpty(userImg.getImageId())){
-                    String headImg = userImg.getImageUrl();
-                    if(headImg.indexOf("http") == -1){//修改过头像
-                        headImg = "/time"+headImg+"_320x240.jpg";
-                    }
-                    assembly.setUserImg(headImg);
-                }
-                ImageObj titleImg = userService.findUserImg(assembly.getAssemblyId(), Contants.IMAGE_TYPE.ASSEMBLY_SHOW_IMG.toString());
-                if(titleImg!=null && StringUtils.isNotEmpty(titleImg.getImageId())){
-                    assembly.setTitleImg("/time"+titleImg.getImageUrl()+".jpg");
-                }
-                List<Fee> feeList=feeService.findFeeByAssemblyId(assembly.getAssemblyId());
-                BigDecimal cost=new BigDecimal(0);
-                int quota=0;
-                if (!CollectionUtils.isEmpty(feeList)){
-
-                    for (int i=0;i<feeList.size();i++){
-                        Fee fee=feeList.get(i);
-                        if (i==0){
-                            cost=fee.getFee();
-                        }else{
-                            if (fee.getFee().compareTo(cost)<0){
-                                cost=fee.getFee();
-                            }
-                        }
-                        if (fee.getQuota()==0){
-                            quota=-1;
-                        }
-                        if (quota!=-1){
-                            quota=quota+fee.getQuota();
-                        }
-                    }
-                }
-                if (quota==-1){
-                    assembly.setQuota("不限制");
-                }else{
-                    assembly.setQuota(quota+"");
-                }
-                assembly.setCost(cost.toString());
-
-                List<Attender> attenderList = attenderService.getListByAssemblyId(assembly.getAssemblyId());
-                assembly.setAttentCount(attenderList.size());
-            }
-        }
+        getAssemblyList(list);
         return list;
     }
 
@@ -170,55 +114,8 @@ public class AssemblyServiceImpl implements AssemblyService {
 
     @Override
     public List<Assembly> findSignAssemblyList(Assembly Assembly, String userId, int startIndex, int loadSize) {
-
         List<Assembly> list=  assemblyDAO.findSignAssemblyList(Assembly,userId,startIndex,loadSize);
-        if (!CollectionUtils.isEmpty(list)){
-            for (Assembly assembly:list){
-                UserInfo userInfo=userService.findUserByUserId(assembly.getUserId());
-                assembly.setUserName(userInfo.getNickName());
-                ImageObj userImg = userService.findUserImg(assembly.getUserId(), Contants.IMAGE_TYPE.USER_HEAD.toString());
-                if(userImg!=null && StringUtils.isNotEmpty(userImg.getImageId())){
-                    String headImg = userImg.getImageUrl();
-                    if(headImg.indexOf("http") == -1){//修改过头像
-                        headImg = "/time"+headImg+"_320x240.jpg";
-                    }
-                    assembly.setUserImg(headImg);
-                }
-                ImageObj titleImg = userService.findUserImg(assembly.getAssemblyId(), Contants.IMAGE_TYPE.ASSEMBLY_SHOW_IMG.toString());
-                if(titleImg!=null && StringUtils.isNotEmpty(titleImg.getImageId())){
-                    assembly.setTitleImg("/time"+titleImg.getImageUrl()+".jpg");
-                }
-                List<Fee> feeList=feeService.findFeeByAssemblyId(assembly.getAssemblyId());
-                if (!CollectionUtils.isEmpty(feeList)){
-                    int quota=0;
-                    BigDecimal cost=new BigDecimal(0);
-                    for (int i=0;i<feeList.size();i++){
-                        Fee fee=feeList.get(i);
-                        if (i==0){
-                            cost=fee.getFee();
-                        }else{
-                            if (fee.getFee().compareTo(cost)<0){
-                                cost=fee.getFee();
-                            }
-                        }
-                        if (fee.getQuota()==0){
-                            quota=-1;
-                        }
-                        if (quota!=-1){
-                            quota=quota+fee.getQuota();
-                        }
-                    }
-                    assembly.setCost(cost.toString());
-                    if (quota==-1){
-                        assembly.setQuota("不限制");
-                    }else{
-                        assembly.setQuota(quota+"");
-                    }
-                }
-                List<Attender> attenderList = attenderService.getListByAssemblyId(assembly.getAssemblyId());
-                assembly.setAttentCount(attenderList.size());
-            }
-        }
+        getAssemblyList(list);
         return list;
     }
 
@@ -230,18 +127,19 @@ public class AssemblyServiceImpl implements AssemblyService {
     @Override
     public List<Assembly> findCollectionAssemblyList(Assembly Assembly, String userId, int startIndex, int loadSize) {
         List<Assembly> list=  assemblyDAO.findCollectionAssemblyList(Assembly,  userId,  startIndex,  loadSize);
+        getAssemblyList(list);
+        return list;
+    }
+
+    private void getAssemblyList(List<Assembly> list) {
         if (!CollectionUtils.isEmpty(list)){
             for (Assembly assembly:list){
                 UserInfo userInfo=userService.findUserByUserId(assembly.getUserId());
-                assembly.setUserName(userInfo.getNickName());
-                ImageObj userImg = userService.findUserImg(assembly.getUserId(), Contants.IMAGE_TYPE.USER_HEAD.toString());
-                if(userImg!=null && StringUtils.isNotEmpty(userImg.getImageId())){
-                    String headImg = userImg.getImageUrl();
-                    if(headImg.indexOf("http") == -1){//修改过头像
-                        headImg = "/time"+headImg+"_320x240.jpg";
-                    }
-                    assembly.setUserImg(headImg);
+                if (userInfo!=null) {
+                    assembly.setUserName(userInfo.getNickName());
                 }
+                 ImageObj userImg = userService.findUserImg(assembly.getUserId(), Contants.IMAGE_TYPE.USER_HEAD.toString());
+                getUserImg(assembly, userImg);
                 ImageObj titleImg = userService.findUserImg(assembly.getAssemblyId(), Contants.IMAGE_TYPE.ASSEMBLY_SHOW_IMG.toString());
                 if(titleImg!=null && StringUtils.isNotEmpty(titleImg.getImageId())){
                     assembly.setTitleImg("/time"+titleImg.getImageUrl()+".jpg");
@@ -277,6 +175,15 @@ public class AssemblyServiceImpl implements AssemblyService {
                 assembly.setAttentCount(attenderList.size());
             }
         }
-        return list;
+    }
+
+    private void getUserImg(Assembly assembly, ImageObj userImg) {
+        if(userImg!=null && StringUtils.isNotEmpty(userImg.getImageId())){
+            String headImg = userImg.getImageUrl();
+            if(headImg.indexOf("http") == -1){//修改过头像
+                headImg = "/time"+headImg+"_320x240.jpg";
+            }
+            assembly.setUserImg(headImg);
+        }
     }
 }

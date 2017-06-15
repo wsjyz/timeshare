@@ -380,8 +380,16 @@
                     ]
                 })
             }
+            if("${type}"!="attender"){
             //显示报名表单第一页
-            $(document).on('click', '.item-me', showEnrollForm);
+            $(document).on('click', '.item-me', function () {
+                 var backUrl= 'http://www.xiehoushike.com'+'${request.contextPath}/assembly/to-attender?assemblyId=${assembly.assemblyId}&type=attender';
+               window.location.href = '${request.contextPath}/wx/to-get-open-id?backUrl='+encodeURIComponent(backUrl);
+                //  window.location.href = '${request.contextPath}/assembly/to-attender?assemblyId=${assembly.assemblyId}&type=attender';
+            });
+            }else{
+                showEnrollForm()
+            }
 
             function showEnrollForm() {
                 //<#if attenderTouser=="true">

@@ -361,6 +361,117 @@ public class AssemblyController extends  BaseController {
         return "assembly/detail";
     }
 
+    @RequestMapping(value = "/to-attender")
+    public String attender(@RequestParam(value = "assemblyId", defaultValue = "") String assemblyId,String type, Model model, HttpServletRequest request, @CookieValue(value = "time_sid", defaultValue = "admin") String userId) {
+        Assembly assembly = assemblyService.findAssemblyById(assemblyId);
+        UserInfo userInfo = getCurrentUser(userId);
+        //浏览次数加1
+        Assembly assemblyBrowers = new Assembly();
+        assemblyBrowers.setAssemblyId(assemblyId);
+        assemblyBrowers.setBrowseTimes(assembly.getBrowseTimes() + 1);
+        assemblyService.modifyAssembly(assemblyBrowers);
+        assembly.setBrowseTimes(assemblyBrowers.getBrowseTimes());
+        String attenderTouser = "farse";
+        if(assembly.getCreateTime()!=null){
+            try {
+                SimpleDateFormat format1 = new SimpleDateFormat("yyyy-MM-dd HH:mm");
+                SimpleDateFormat format2 = new SimpleDateFormat("MM月dd日");
+                assembly.setCreateTime(format2.format(format1.parse(assembly.getCreateTime())));
+            }catch (Exception e){
+                e.printStackTrace();
+            }
+        }
+        if(assembly.getStartTime()!=null){
+            try {
+                SimpleDateFormat format1 = new SimpleDateFormat("yyyy-MM-dd HH:mm");
+                SimpleDateFormat format2 = new SimpleDateFormat("MM月dd日 HH:mm");
+                assembly.setStartTime(format2.format(format1.parse(assembly.getStartTime())));
+            }catch (Exception e){
+                e.printStackTrace();
+            }
+        }
+        if(assembly.getEndTime()!=null){
+            try {
+                SimpleDateFormat format1 = new SimpleDateFormat("yyyy-MM-dd HH:mm");
+                SimpleDateFormat format2 = new SimpleDateFormat("MM月dd日 HH:mm");
+                Date endTime=format1.parse(assembly.getEndTime());
+                assembly.setEndTime(format2.format(endTime));
+                Calendar cal=Calendar.getInstance();
+                if (cal.getTime().after(endTime)){
+                    attenderTouser="guoqi";
+                }
+            }catch (Exception e){
+                e.printStackTrace();
+            }
+        }
+        List<Attender> attenderList = attenderService.getListByAssemblyId(assemblyId);
+        BigDecimal minMoney = new BigDecimal(0);
+        BigDecimal maxMoney = new BigDecimal(0);
+        List<Collection> list = collectionService.getCollectionByAssemblyId(assemblyId);
+        String collectionStr="false";
+        if (!CollectionUtils.isEmpty(list)) {
+            for (Collection collection : list) {
+                if (collection.getUserId().equals(userId) && collection.getAssemblyId().equals(assemblyId)){
+                    collectionStr="true";
+                    break;
+                }
+            }
+        }
+        int UserSumCount=0;
+        if (!CollectionUtils.isEmpty(assembly.getFeeList())) {
+            for (Fee fee : assembly.getFeeList()) {
+                if (minMoney.compareTo(new BigDecimal(0)) == 0) {
+                    minMoney = fee.getFee();
+                }
+                if (maxMoney.compareTo(new BigDecimal(0)) == 0) {
+                    maxMoney = fee.getFee();
+                }
+                if (fee.getFee().compareTo(minMoney) < 0) {
+                    minMoney = fee.getFee();
+                }
+                if (fee.getFee().compareTo(maxMoney) > 0) {
+                    maxMoney = fee.getFee();
+                }
+                int count = 0;
+                for (Attender attender : attenderList) {
+                    UserSumCount+=Integer.parseInt(attender.getUserCount());
+                    if (attender.getFeedId().equals(fee.getFeeId())) {
+                        count++;
+                    }
+
+                    if (attender.getUserId().equals(userInfo.getUserId())) {
+                        attenderTouser = "true";
+                    }
+                }
+                if (fee.getQuota() == 0) {
+                    fee.setQuotaTitle("不限制人数");
+                } else {
+                    int userCount = fee.getQuota() - count;
+                    if (userCount <= 0) {
+                        fee.setQuota(-1);
+                    }
+                    fee.setQuotaTitle("剩余：" + userCount);
+                }
+            }
+        }
+        List<Comment> commentList = commentService.findCommentByObjId(assemblyId);
+        model.addAttribute("attenderTouser", attenderTouser);
+        model.addAttribute("userInfo", userInfo);
+        model.addAttribute("assembly", assembly);
+        model.addAttribute("minMoney", minMoney);
+        model.addAttribute("maxMoney", maxMoney);
+        model.addAttribute("userCount", UserSumCount);
+        model.addAttribute("attenderList", attenderList);
+        model.addAttribute("commentList", commentList);
+        model.addAttribute("collectionCount", list.size());
+        model.addAttribute("collectionStr", collectionStr);
+        model.addAttribute("type",type);
+        //微信jssdk相关代码
+        String url = WxUtils.getUrl(request);
+        Map<String, String> parmsMap = WxUtils.sign(url);
+        model.addAttribute("parmsMap", parmsMap);
+        return "assembly/detail";
+    }
     @RequestMapping(value = "/showAttender")
     public String showAttender(@RequestParam(value = "assemblyId", defaultValue = "") String assemblyId, Model model) {
         List<Attender> attenderList = attenderService.getListByAssemblyId(assemblyId);

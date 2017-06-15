@@ -67,13 +67,12 @@ public class AssemblyDAOImpl extends BaseDAO implements AssemblyDAO {
 
     @Override
     public String modifyAssembly(Assembly Assembly) {
-
         StringBuilder sql = new StringBuilder("update t_assembly set ");
-
+        List<Object> params=new ArrayList<Object>();
         if(StringUtils.isNotBlank(Assembly.getTitle())){
-            sql.append(" title = '"+Assembly.getTitle()+"',");
+            sql.append(" title = ?,");
+            params.add(Assembly.getTitle());
         }
-
         if(StringUtils.isNotBlank(Assembly.getStartTime())){
             sql.append(" start_time = '"+Assembly.getStartTime()+"',");
         }
@@ -81,10 +80,12 @@ public class AssemblyDAOImpl extends BaseDAO implements AssemblyDAO {
             sql.append(" end_time = '"+Assembly.getEndTime()+"',");
         }
         if(StringUtils.isNotBlank(Assembly.getRendezvous())){
-            sql.append(" rendezvous = '"+Assembly.getRendezvous()+"',");
+            sql.append(" rendezvous = ?,");
+            params.add(Assembly.getRendezvous());
         }
         if(StringUtils.isNotBlank(Assembly.getDescription())){
-            sql.append(" description = '"+Assembly.getDescription()+"',");
+            sql.append(" description = ?,");
+            params.add(Assembly.getDescription());
         }
         if(StringUtils.isNotBlank(Assembly.getUserId())){
             sql.append(" user_id = '"+Assembly.getUserId()+"',");
@@ -103,10 +104,11 @@ public class AssemblyDAOImpl extends BaseDAO implements AssemblyDAO {
             sql.append(" is_on_index = '"+Assembly.getIsOnIndex()+"',");
         }
         if(StringUtils.isNotBlank(Assembly.getIsOnApply())){
-        sql.append(" is_on_apply = '"+Assembly.getIsOnApply()+"',");
+             sql.append(" is_on_apply = '"+Assembly.getIsOnApply()+"',");
         }
         if(StringUtils.isNotBlank(Assembly.getShowApplyProblem())){
-            sql.append(" show_apply_problem = '"+Assembly.getShowApplyProblem()+"',");
+            sql.append(" show_apply_problem = ?,");
+            params.add(Assembly.getShowApplyProblem());
         }
         if(Assembly.getBrowseTimes()>0){
             sql.append(" browse_times = "+Assembly.getBrowseTimes()+",");
@@ -115,7 +117,8 @@ public class AssemblyDAOImpl extends BaseDAO implements AssemblyDAO {
             sql.append(" status = '"+Assembly.getStatus()+"',");
         }
         if(StringUtils.isNotBlank(Assembly.getResultContent())){
-            sql.append(" result_content = '"+Assembly.getResultContent()+"',");
+            sql.append(" result_content = ?,");
+            params.add(Assembly.getResultContent());
         }
         if(StringUtils.isNotBlank(Assembly.getCarousel())){
             sql.append(" carousel = '"+Assembly.getCarousel()+"',");
@@ -125,7 +128,7 @@ public class AssemblyDAOImpl extends BaseDAO implements AssemblyDAO {
             sql.delete(sql.lastIndexOf(","), sql.length());
         }
         sql.append(" where assembly_id='" + Assembly.getAssemblyId() + "'");
-        int result = getJdbcTemplate().update(sql.toString());
+        int result = getJdbcTemplate().update(sql.toString(),params.toArray());
         if(result > 0){
             return Assembly.getAssemblyId();
         }else{
