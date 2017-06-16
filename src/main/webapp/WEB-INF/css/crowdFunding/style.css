@@ -48,7 +48,7 @@ textarea.form-control{height:auto;line-height:normal}
 .radio-group label input{margin-right:5px}
 /*标题栏*/
 .bar .title{color:#21212d}
-.bar.bar-me{background:url(../../images/crowdFunding/pic.jpg) no-repeat 0 0;background-size:100%}
+.bar.bar-me{background:url(../../images/crowdFunding/pic2.jpg) no-repeat 0 0;background-size:100%}
 .bar.bar-me:after{background:none}
 .bar.bar-me .title{color:#fff}
 .bar.bar-list{background-image:-moz-linear-gradient( -14deg, rgb(62,67,96) 0%, rgb(177,185,206) 100%);background-image:-webkit-linear-gradient( -14deg, rgb(62,67,96) 0%, rgb(177,185,206) 100%);background-image:-ms-linear-gradient( -14deg, rgb(62,67,96) 0%, rgb(177,185,206) 100%)}
@@ -62,7 +62,7 @@ textarea.form-control{height:auto;line-height:normal}
 .i-reply{float:left;margin-top:0.2rem;margin-right:5px;display:block;width:0.8rem;height:0.8rem;background:url(../../images/crowdFunding/icon-reply.png) no-repeat center center;background-size:100%}
 .i-praise{float:left;margin-top:0.2rem;margin-right:5px;display:block;width:0.8rem;height:0.8rem;background:url(../../images/crowdFunding/icon-praise.png) no-repeat center center;background-size:100%}
 /*我的*/
-.me-bg{height:12rem;background:url(../../images/crowdFunding/pic.jpg) no-repeat 0 -2.2rem;background-size:100%}
+.me-bg{height:12rem;background:url(../../images/crowdFunding/pic2.jpg) no-repeat 0 -2.2rem;background-size:100%}
 .me-info{padding-top:2.5rem;font-size:0.8rem;text-align:center;color:#fff}
 .me-info .head{width:5.5rem;height:5.5rem;border-radius:5.5rem;margin:0 auto;position:relative}
 .me-info .head img{width:100%}
