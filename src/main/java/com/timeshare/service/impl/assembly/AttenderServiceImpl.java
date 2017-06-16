@@ -59,14 +59,16 @@ public class AttenderServiceImpl implements AttenderService {
         if (!CollectionUtils.isEmpty(list)){
             for (Attender attender:list){
                 UserInfo userInfo=userService.findUserByUserId(attender.getUserId());
-                attender.setUserName(userInfo.getNickName());
-                ImageObj userImg = userService.findUserImg(attender.getUserId(), Contants.IMAGE_TYPE.USER_HEAD.toString());
-                if(userImg!=null && StringUtils.isNotEmpty(userImg.getImageId())){
-                    String headImg = userImg.getImageUrl();
-                    if(headImg.indexOf("http") == -1){//修改过头像
-                        headImg = "/time"+headImg+"_320x240.jpg";
+                if (userInfo!=null){
+                    attender.setUserName(userInfo.getNickName());
+                    ImageObj userImg = userService.findUserImg(attender.getUserId(), Contants.IMAGE_TYPE.USER_HEAD.toString());
+                    if(userImg!=null && StringUtils.isNotEmpty(userImg.getImageId())){
+                        String headImg = userImg.getImageUrl();
+                        if(headImg.indexOf("http") == -1){//修改过头像
+                            headImg = "/time"+headImg+"_320x240.jpg";
+                        }
+                        attender.setUserImg(headImg);
                     }
-                    attender.setUserImg(headImg);
                 }
             }
         }else{
@@ -86,7 +88,9 @@ public class AttenderServiceImpl implements AttenderService {
         if (!CollectionUtils.isEmpty(list)){
             for (Attender attender:list){
                 UserInfo userInfo=userService.findUserByUserId(attender.getUserId());
-                attender.setUserName(userInfo.getNickName());
+                if (userInfo!=null){
+                    attender.setUserName(userInfo.getNickName());
+                }
                 ImageObj userImg = userService.findUserImg(attender.getUserId(), Contants.IMAGE_TYPE.USER_HEAD.toString());
                 if(userImg!=null && StringUtils.isNotEmpty(userImg.getImageId())){
                     String headImg = userImg.getImageUrl();
