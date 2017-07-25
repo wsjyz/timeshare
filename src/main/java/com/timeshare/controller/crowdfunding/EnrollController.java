@@ -134,6 +134,7 @@ public class EnrollController extends  BaseController{
         String outTradeNo = CommonStringUtils.gen18RandomNumber();
         enroll.setPayTradeNo(outTradeNo);
         enrollService.modifyEnroll(enroll);
+        System.out.println("生成支付交易号,enrollId:"+enroll.getEnrollId()+"outTradeNo:"+outTradeNo);
 
         //应付预约费用
         BigDecimal payAmount=crowdFunding.getReservationCost().multiply(BigDecimal.valueOf(Long.parseLong(enroll.getQuantity())));
@@ -160,6 +161,8 @@ public class EnrollController extends  BaseController{
 //        enroll.setOptTime(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date()));
         //更新支付状态为已支付
         enrollService.modifyEnroll(enroll);
+        System.out.println("支付成功,enrollId:"+enroll.getEnrollId()+"outTradeNo:"+enroll.getPayTradeNo());
+
 
         //支付成功跳转至我预约的众筹
         return "crowdfunding/gz";

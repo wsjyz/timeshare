@@ -182,6 +182,7 @@ public class WxPayUtils {
 
         config.setOut_trade_no(outTradeNo);
         parameters.put("out_trade_no",outTradeNo);
+        System.out.println("生成商户订单号与支付交易号，noceStr:"+noceStr+",outTradeNo:"+outTradeNo);
 
 
         int fenPrice = (price.multiply(new BigDecimal(100))).intValue();
